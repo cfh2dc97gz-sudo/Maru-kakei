@@ -19,7 +19,7 @@ const budgets = [
 ];
 
 let spent = 0;
-
+let history = [];
 const saved = localStorage.getItem("maru-kakei");
 
 if (saved) {
