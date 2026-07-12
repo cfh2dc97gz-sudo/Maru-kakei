@@ -1,4 +1,4 @@
-let monthlyBudget = 150000;
+let monthlyBudget = 320000;
 let spent = 0;
 
 function update() {
@@ -8,8 +8,18 @@ function update() {
     document.getElementById("remain").textContent = "¥" + remain.toLocaleString();
 
     const today = new Date();
-    const lastDay = new Date(today.getFullYear(), today.getMonth()+1,0).getDate();
-    const daysLeft = lastDay - today.getDate() + 1;
+
+    // 25日〜24日で計算
+    let end;
+
+    if (today.getDate() >= 25) {
+        end = new Date(today.getFullYear(), today.getMonth() + 1, 24);
+    } else {
+        end = new Date(today.getFullYear(), today.getMonth(), 24);
+    }
+
+    const daysLeft =
+        Math.ceil((end - today) / (1000 * 60 * 60 * 24)) + 1;
 
     const daily = Math.floor(remain / daysLeft);
 
@@ -17,13 +27,16 @@ function update() {
         "今日あと ¥" + daily.toLocaleString() + " 使えます";
 }
 
-function addExpense(){
-    const amount = prompt("支出を入力（円）");
+function addExpense() {
 
-    if(amount && !isNaN(amount)){
-        spent += Number(amount);
-        update();
-    }
+    const amount = prompt("金額");
+
+    if (!amount) return;
+
+    spent += Number(amount);
+
+    update();
+
 }
 
 update();
