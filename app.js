@@ -263,3 +263,47 @@ function resetMonth() {
     update();
 
 }
+function addSpent(index, isOverwrite = false) {
+
+    const amount = Number(prompt("金額を入力"));
+
+    if (!amount) return;
+
+    if (isOverwrite) {
+        app.budgets[index].spent = amount;
+    } else {
+        app.budgets[index].spent += amount;
+    }
+
+    app.history.push({
+        date: new Date().toLocaleDateString("ja-JP"),
+        category: app.budgets[index].name,
+        amount: amount
+    });
+
+    update();
+}
+
+function addFood() {
+    addSpent(5);
+}
+
+function addHoliday() {
+    addSpent(4);
+}
+
+function addGas() {
+    addSpent(6);
+}
+
+function addUtility() {
+    addSpent(1);
+}
+
+function setIwagin() {
+    addSpent(2, true);
+}
+
+function setRakuten() {
+    addSpent(3, true);
+}
