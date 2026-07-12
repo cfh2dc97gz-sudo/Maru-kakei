@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>まる家計</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>まる家計</title>
+
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>💰まる家計</h1>
+<h1>🐻 まる家計</h1>
 
-<h2>今日あと使える</h2>
-<p>¥0</p>
+<div class="card">
+    <h2>今月の支出</h2>
+    <p id="spent">¥0</p>
+</div>
 
-<h2>今月あと使える</h2>
-<p>¥0</p>
+<div class="card">
+    <h2>残り予算</h2>
+    <p id="remain">¥150,000</p>
+</div>
 
-<h2>年間目標</h2>
-<p>3,600,000円</p>
+<div class="card">
+    <h2 id="daily">今日あと ¥5,000 使えます</h2>
+</div>
 
-<button>支出を入力</button>
+<button onclick="addExpense()">
+支出を追加
+</button>
+
+<script src="app.js"></script>
 
 </body>
 </html>
