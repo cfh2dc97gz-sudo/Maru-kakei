@@ -61,9 +61,25 @@ budgets.forEach(item => {
 
 function addExpense() {
 
+    const category = prompt(
+`カテゴリ番号を入力
+
+1 家賃
+2 電気・水道
+3 岩銀
+4 楽天
+5 休日
+6 食費
+7 ガソリン`
+    );
+
+    if (!category) return;
+
     const amount = prompt("金額");
 
     if (!amount) return;
+
+    budgets[Number(category) - 1].spent += Number(amount);
 
     spent += Number(amount);
 
