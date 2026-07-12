@@ -115,3 +115,17 @@ function save() {
     );
 }
 update();
+function resetMonth() {
+
+    if (!confirm("今月のデータをリセットしますか？")) return;
+
+    spent = 0;
+
+    budgets.forEach(item => {
+        item.spent = 0;
+    });
+
+    save();
+    update();
+
+}
