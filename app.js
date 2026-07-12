@@ -1,9 +1,4 @@
-const saved = localStorage.getItem("maru-kakei");
 
-if (saved) {
-    const data = JSON.parse(saved);
-    spent = data.spent;
-}
 let monthlyBudget = 320000;
 const budgets = [
 
@@ -24,6 +19,21 @@ const budgets = [
 ];
 
 let spent = 0;
+
+const saved = localStorage.getItem("maru-kakei");
+
+if (saved) {
+    const data = JSON.parse(saved);
+
+    spent = data.spent || 0;
+
+    if (data.budgets) {
+        data.budgets.forEach((savedItem, index) => {
+            budgets[index].spent = savedItem.spent;
+        });
+    }
+}
+
 
 function update() {
     document.getElementById("spent").textContent = "¥" + spent.toLocaleString();
@@ -92,7 +102,7 @@ function addExpense() {
 save();
 update();
 
-    update();
+
 
 }
 function save() {
@@ -104,3 +114,4 @@ function save() {
         })
     );
 }
+update();
