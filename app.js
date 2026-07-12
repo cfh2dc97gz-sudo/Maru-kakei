@@ -1,3 +1,9 @@
+const saved = localStorage.getItem("maru-kakei");
+
+if (saved) {
+    const data = JSON.parse(saved);
+    spent = data.spent;
+}
 let monthlyBudget = 320000;
 const budgets = [
 
@@ -83,6 +89,18 @@ function addExpense() {
 
     spent += Number(amount);
 
+save();
+update();
+
     update();
 
+}
+function save() {
+    localStorage.setItem(
+        "maru-kakei",
+        JSON.stringify({
+            spent,
+            budgets
+        })
+    );
 }
