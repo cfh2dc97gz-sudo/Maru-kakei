@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f7fb;
+    color: #333;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    color: #4caf50;
+    font-size: 32px;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 15px rgba(0,0,0,.08);
+}
+
+h2 {
+    margin-bottom: 12px;
+    color: #555;
+}
+
+.big {
+    font-size: 34px;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.money {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.today {
+    color: #ff5722;
+}
+
+button {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 14px;
+    background: #4caf50;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#forecast {
+    margin-top: 12px;
+    font-size: 18px;
+}
+
+#need {
+    color: red;
+    margin-top: 6px;
+    font-weight: bold;
+}
