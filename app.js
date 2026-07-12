@@ -98,7 +98,11 @@ function addExpense() {
     budgets[Number(category) - 1].spent += Number(amount);
 
     spent += Number(amount);
-
+history.push({
+    date: new Date().toLocaleDateString("ja-JP"),
+    category: budgets[Number(category) - 1].name,
+    amount: Number(amount)
+});
 save();
 update();
 
