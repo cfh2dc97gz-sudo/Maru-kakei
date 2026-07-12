@@ -1,5 +1,5 @@
 const app = {
-    goal: 2414000,
+    goal: 3400000,
 
     income: {
         papa: 0,
