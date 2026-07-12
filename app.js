@@ -107,15 +107,28 @@ function update() {
         const color = remain < 0 ? "red" : "black";
 
         budgetList.innerHTML += `
-            <div style="margin-bottom:20px;">
-                <strong>${item.name}</strong><br>
-                予算 ¥${item.budget.toLocaleString()}<br>
-                使用 ¥${item.spent.toLocaleString()}<br>
-                <span style="color:${color}">
-                    残り ¥${remain.toLocaleString()}
-                </span>
-            </div>
-        `;
+<div class="card">
+
+<b>${item.name}</b><br>
+
+予算 ¥${item.budget.toLocaleString()}<br>
+
+使用 ¥${item.spent.toLocaleString()}<br>
+
+<span style="color:${color}">
+残り ¥${remain.toLocaleString()}
+</span>
+
+<br><br>
+
+<button onclick="addSpent(${app.budgets.indexOf(item)}, ${item.id === 'iwagin' || item.id === 'rakuten'})">
+
+＋入力
+
+</button>
+
+</div>
+`;
     });
 
     const forecast = incomeTotal - totalSpent;
