@@ -74,7 +74,29 @@ budgets.forEach(item => {
         </p>
     `;
 });}
+const historyList = document.getElementById("historyList");
 
+historyList.innerHTML = "";
+
+if (history.length === 0) {
+
+    historyList.innerHTML = "<p>まだ履歴はありません</p>";
+
+} else {
+
+    history.slice().reverse().forEach(item => {
+
+        historyList.innerHTML += `
+            <p>
+                ${item.date}<br>
+                ${item.category}　¥${item.amount.toLocaleString()}
+            </p>
+            <hr>
+        `;
+
+    });
+
+}
 function addExpense() {
 
     const category = prompt(
