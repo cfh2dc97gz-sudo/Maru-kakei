@@ -33,7 +33,9 @@ if (saved) {
         });
     }
 }
-
+if (data.history) {
+    history = data.history;
+}
 
 function update() {
     document.getElementById("spent").textContent = "¥" + spent.toLocaleString();
@@ -135,9 +137,10 @@ function save() {
     localStorage.setItem(
         "maru-kakei",
         JSON.stringify({
-            spent,
-            budgets
-        })
+    spent,
+    budgets,
+    history
+})
     );
 }
 update();
