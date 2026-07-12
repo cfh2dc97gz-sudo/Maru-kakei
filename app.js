@@ -1,160 +1,265 @@
+const app = {
+    goal: 2414000,
 
-let monthlyBudget = 320000;
-const budgets = [
+    income: {
+        papa: 0,
+        mama: 0,
+        extra: 0,
+        papaBonus: 0,
+        mamaBonus: 0
+    },
 
-    { name: "🏠 家賃", budget: 91000, spent: 0 },
+    bankBalance: 0,
 
-    { name: "💡 電気・水道", budget: 32000, spent: 0 },
+    budgets: [
+        {
+            id: "rent",
+            name: "🏠 家賃",
+            budget: 91000,
+            spent: 91000,
+            fixed: true,
+            enabled: true
+        },
+        {
+            id: "utility",
+            name: "💡 電気・水道",
+            budget: 32000,
+            spent: 0
+        },
+        {
+            id: "iwagin",
+            name: "🏦 岩銀",
+            budget: 40000,
+            spent: 0
+        },
+        {
+            id: "rakuten",
+            name: "💳 楽天",
+            budget: 20000,
+            spent: 0
+        },
+        {
+            id: "holiday",
+            name: "🎉 休日",
+            budget: 40000,
+            spent: 0
+        },
+        {
+            id: "food",
+            name: "🍚 食費",
+            budget: 80000,
+            spent: 0
+        },
+        {
+            id: "gas",
+            name: "⛽ ガソリン",
+            budget: 17000,
+            spent: 0
+        }
+    ],
 
-    { name: "🏦 岩銀", budget: 40000, spent: 0 },
+    history: []
+};
 
-    { name: "💳 楽天", budget: 20000, spent: 0 },
+load();
+update();
 
-    { name: "🎉 休日", budget: 40000, spent: 0 },
+function save() {
+    localStorage.setItem(
+        "maru-kakei-v2",
+        JSON.stringify(app)
+    );
+}
 
-    { name: "🍚 食費", budget: 80000, spent: 0 },
+function load() {
+    const saved = localStorage.getItem("maru-kakei-v2");
 
-    { name: "⛽ ガソリン", budget: 17000, spent: 0 }
+    if (!saved) return;
 
-];
-
-let spent = 0;
-let history = [];
-const saved = localStorage.getItem("maru-kakei");
-
-if (saved) {
     const data = JSON.parse(saved);
 
-    spent = data.spent || 0;
-
-    if (data.budgets) {
-        data.budgets.forEach((savedItem, index) => {
-            budgets[index].spent = savedItem.spent;
-        });
-    }
+    Object.assign(app, data);
 }
-if (data.history) {
-    history = data.history;
-}
-
 function update() {
-    document.getElementById("spent").textContent = "¥" + spent.toLocaleString();
 
-    const remain = monthlyBudget - spent;
-    document.getElementById("remain").textContent = "¥" + remain.toLocaleString();
+    const incomeTotal =
+        app.income.papa +
+        app.income.mama +
+        app.income.extra +
+        app.income.papaBonus +
+        app.income.mamaBonus;
 
-    const today = new Date();
+    document.getElementById("income").textContent =
+        "¥" + incomeTotal.toLocaleString();
 
-    // 25日〜24日で計算
-    let end;
+    const budgetList = document.getElementById("budgetList");
 
-    if (today.getDate() >= 25) {
-        end = new Date(today.getFullYear(), today.getMonth() + 1, 24);
+    budgetList.innerHTML = "";
+
+    let totalSpent = 0;
+
+    app.budgets.forEach(item => {
+
+        totalSpent += item.spent;
+
+        const remain = item.budget - item.spent;
+
+        const color = remain < 0 ? "red" : "black";
+
+        budgetList.innerHTML += `
+            <div style="margin-bottom:20px;">
+                <strong>${item.name}</strong><br>
+                予算 ¥${item.budget.toLocaleString()}<br>
+                使用 ¥${item.spent.toLocaleString()}<br>
+                <span style="color:${color}">
+                    残り ¥${remain.toLocaleString()}
+                </span>
+            </div>
+        `;
+    });
+
+    const forecast = incomeTotal - totalSpent;
+
+    document.getElementById("forecast").textContent =
+        "現在予測 ¥" + forecast.toLocaleString();
+
+    const diff = app.goal - forecast;
+
+    const advice = document.getElementById("advice");
+
+    if (diff <= 0) {
+
+        advice.textContent =
+            "🎉 目標達成ペースです！";
+
     } else {
-        end = new Date(today.getFullYear(), today.getMonth(), 24);
+
+        advice.textContent =
+            "あと ¥" +
+            diff.toLocaleString() +
+            " 改善すると目標達成です！";
+
     }
 
-    const daysLeft =
-        Math.ceil((end - today) / (1000 * 60 * 60 * 24)) + 1;
+    const historyList =
+        document.getElementById("historyList");
 
-    const daily = Math.floor(remain / daysLeft);
+    historyList.innerHTML = "";
 
-    document.getElementById("daily").textContent =
-        "今日あと ¥" + daily.toLocaleString() + " 使えます";
-const list = document.getElementById("budgetList");
+    if (app.history.length === 0) {
 
-list.innerHTML = "";
+        historyList.innerHTML =
+            "<p>まだ履歴はありません</p>";
 
-budgets.forEach(item => {
+    } else {
 
-    const color = item.spent > item.budget ? "red" : "black";
+        app.history
+            .slice()
+            .reverse()
+            .forEach(item => {
 
-    list.innerHTML += `
-        <p style="color:${color};font-size:20px;">
-            ${item.name}<br>
-            ¥${item.spent.toLocaleString()} / ¥${item.budget.toLocaleString()}
-        </p>
-    `;
-});}
-const historyList = document.getElementById("historyList");
+                historyList.innerHTML += `
+                    <p>
+                        ${item.date}<br>
+                        ${item.category}
+                        ¥${item.amount.toLocaleString()}
+                    </p>
+                    <hr>
+                `;
 
-historyList.innerHTML = "";
+            });
 
-if (history.length === 0) {
+    }
 
-    historyList.innerHTML = "<p>まだ履歴はありません</p>";
-
-} else {
-
-    history.slice().reverse().forEach(item => {
-
-        historyList.innerHTML += `
-            <p>
-                ${item.date}<br>
-                ${item.category}　¥${item.amount.toLocaleString()}
-            </p>
-            <hr>
-        `;
-
-    });
+    save();
 
 }
 function addExpense() {
 
-    const category = prompt(
-`カテゴリ番号を入力
+    let text = "";
 
-1 家賃
-2 電気・水道
-3 岩銀
-4 楽天
-5 休日
-6 食費
-7 ガソリン`
-    );
+    app.budgets.forEach((item, index) => {
+        text += (index + 1) + " " + item.name + "\n";
+    });
+
+    const category = prompt(text);
 
     if (!category) return;
 
-    const amount = prompt("金額");
+    const amount = Number(prompt("金額"));
 
     if (!amount) return;
 
-    budgets[Number(category) - 1].spent += Number(amount);
+    const budget = app.budgets[category - 1];
 
-    spent += Number(amount);
-history.push({
-    date: new Date().toLocaleDateString("ja-JP"),
-    category: budgets[Number(category) - 1].name,
-    amount: Number(amount)
-});
-save();
-update();
+    budget.spent += amount;
 
-
-
-}
-function save() {
-    localStorage.setItem(
-        "maru-kakei",
-        JSON.stringify({
-    spent,
-    budgets,
-    history
-})
-    );
-}
-update();
-function resetMonth() {
-
-    if (!confirm("今月のデータをリセットしますか？")) return;
-
-    spent = 0;
-
-    budgets.forEach(item => {
-        item.spent = 0;
+    app.history.push({
+        date: new Date().toLocaleDateString("ja-JP"),
+        category: budget.name,
+        amount: amount
     });
 
-    save();
+    update();
+
+}
+
+function addIncome(type) {
+
+    const amount = Number(prompt("収入金額"));
+
+    if (!amount) return;
+
+    switch (type) {
+
+        case "パパ":
+            app.income.papa += amount;
+            break;
+
+        case "ママ":
+            app.income.mama += amount;
+            break;
+
+        case "臨時":
+            app.income.extra += amount;
+            break;
+
+        case "パパボーナス":
+            app.income.papaBonus += amount;
+            break;
+
+        case "ママボーナス":
+            app.income.mamaBonus += amount;
+            break;
+
+    }
+
+    update();
+
+}
+
+function resetMonth() {
+
+    if (!confirm("今月をリセットしますか？")) return;
+
+    app.budgets.forEach(item => {
+
+        if (!item.fixed) {
+            item.spent = 0;
+        }
+
+    });
+
+    app.history = [];
+
+    app.income = {
+        papa: 0,
+        mama: 0,
+        extra: 0,
+        papaBonus: 0,
+        mamaBonus: 0
+    };
+
     update();
 
 }
