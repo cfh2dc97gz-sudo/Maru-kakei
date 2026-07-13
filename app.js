@@ -109,27 +109,29 @@ function update() {
         budgetList.innerHTML += `
 <div class="card">
 
-<b>${item.name}</b><br>
+budgetList.innerHTML += `
+<div class="input-card">
 
-予算 ¥${item.budget.toLocaleString()}<br>
+<div class="input-name">
+${item.name}
+</div>
 
-使用 ¥${item.spent.toLocaleString()}<br>
+<div class="input-used">
+¥${item.spent.toLocaleString()} / ¥${item.budget.toLocaleString()}
+</div>
 
-<span style="color:${color}">
-残り ¥${remain.toLocaleString()}
-</span>
+<div class="input-left ${remain < 0 ? "over" : ""}">
+残 ¥${remain.toLocaleString()}
+</div>
 
-<br><br>
+<br>
 
-<button onclick="addSpent(${app.budgets.indexOf(item)}, ${item.id === 'iwagin' || item.id === 'rakuten'})">
-
-＋入力
-
+<button onclick="addSpent(${app.budgets.indexOf(item)}, ${item.id === "iwagin" || item.id === "rakuten"})">
+＋
 </button>
 
 </div>
 `;
-    });
 
     const forecast = incomeTotal - totalSpent;
 
