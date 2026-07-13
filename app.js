@@ -157,11 +157,6 @@ const card = `
         ${item.name}
     </div>
 
-    <div class="input-used">
-        ¥${item.spent.toLocaleString()} /
-        ¥${item.budget.toLocaleString()}
-    </div>
-
     <div class="input-left ${remain < 0 ? "over" : ""}">
         残 ¥${remain.toLocaleString()}
     </div>
@@ -210,7 +205,7 @@ if (item.id === "food") {
 function addSpent(index, isOverwrite = false) {
 
     const input = prompt(
-        "金額 メモ\n例：5000 マック"
+        "金額 メモ"
     );
 
     if (!input) return;
