@@ -91,25 +91,24 @@ function load() {
 
     let totalSpent = 0;
 
-    app.budgets.forEach((item, index) => {
+  app.budgets.forEach((item, index) => {
 
-        totalSpent += item.spent;
+    totalSpent += item.spent;
 
-        const remain = item.budget - item.spent;
+    const remain = item.budget - item.spent;
 
-        const history = app.history
-            .filter(h => h.category === item.name)
-            .slice()
-            .reverse();
+    const history = app.history
+        .filter(h => h.category === item.name)
+        .slice()
+        .reverse();
 
-        let historyHtml = "";
+    let historyHtml = "";
 
-        if (
-            item.id !== "iwagin" &&
-            item.id !== "rakuten"
-        ) {
+    // 岩銀・楽天は履歴なし
+    if (item.id !== "iwagin" && item.id !== "rakuten") {
 
-            history.forEach(h => {
+        history.slice(0, item.id === "food" ? 5 : 2)
+            .forEach(h => {
 
                 historyHtml += `
                 <div class="mini-history">
@@ -126,17 +125,23 @@ function load() {
 
             });
 
-        }
+    }
 
-        budgetList.innerHTML += `
-<div class="input-card">
+    const foodClass =
+        item.id === "food"
+            ? "food-card"
+            : "small-card";
+
+    budgetList.innerHTML += `
+<div class="input-card ${foodClass}">
 
     <div class="input-name">
         ${item.name}
     </div>
 
     <div class="input-used">
-        ¥${item.spent.toLocaleString()} / ¥${item.budget.toLocaleString()}
+        ¥${item.spent.toLocaleString()} /
+        ¥${item.budget.toLocaleString()}
     </div>
 
     <div class="input-left ${remain < 0 ? "over" : ""}">
@@ -153,7 +158,7 @@ function load() {
 </div>
 `;
 
-    });
+});
 
     document.getElementById("spent").textContent =
         "¥" + totalSpent.toLocaleString();
