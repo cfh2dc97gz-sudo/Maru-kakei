@@ -87,11 +87,11 @@ function load() {
 const foodArea =
     document.getElementById("foodArea");
 
-const rightArea =
-    document.getElementById("rightArea");
+const gridArea =
+    document.getElementById("gridArea");
 
 foodArea.innerHTML = "";
-rightArea.innerHTML = "";
+gridArea.innerHTML = "";
 
     let totalSpent = 0;
 
@@ -123,7 +123,11 @@ budgets.forEach((item, index) => {
     let historyHtml = "";
 
     // 岩銀・楽天は履歴なし
-    if (item.id !== "iwagin" && item.id !== "rakuten") {
+   if (item.id === "food") {
+    foodArea.innerHTML = card;
+} else {
+    gridArea.innerHTML += card;
+}
 
         history.slice(0, item.id === "food" ? 5 : 2)
             .forEach(h => {
@@ -170,11 +174,11 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 `;
 
 if (item.id === "food") {
-    foodArea.innerHTML += card;
+    foodArea.innerHTML = card;
 } else {
-    rightArea.innerHTML += card;
+    gridArea.innerHTML += card;
 }
-
+    
 });
 
     document.getElementById("spent").textContent =
