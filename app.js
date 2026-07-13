@@ -91,7 +91,21 @@ function load() {
 
     let totalSpent = 0;
 
-  app.budgets.forEach((item, index) => {
+  const order = [
+    "food",
+    "utility",
+    "iwagin",
+    "rakuten",
+    "holiday",
+    "gas",
+    "other"
+];
+
+const budgets = order
+    .map(id => app.budgets.find(b => b.id === id))
+    .filter(Boolean);
+
+budgets.forEach((item, index) => {
 
     totalSpent += item.spent;
 
