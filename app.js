@@ -4,23 +4,26 @@ const app = {
     income: {
         papa: 0,
         mama: 0,
-        extra: 0,
-        papaBonus: 0,
-        mamaBonus: 0
+        extra: 0
     },
 
     budgets: [
         {
-            id: "rent",
-            name: "🏠 家賃",
-            budget: 91000,
-            spent: 91000,
-            fixed: true
+            id: "food",
+            name: "🍚 食費",
+            budget: 80000,
+            spent: 0
         },
         {
             id: "utility",
             name: "💡 電気・水道",
             budget: 32000,
+            spent: 0
+        },
+        {
+            id: "gas",
+            name: "⛽ ガソリン",
+            budget: 17000,
             spent: 0
         },
         {
@@ -42,15 +45,9 @@ const app = {
             spent: 0
         },
         {
-            id: "food",
-            name: "🍚 食費",
-            budget: 80000,
-            spent: 0
-        },
-        {
-            id: "gas",
-            name: "⛽ ガソリン",
-            budget: 17000,
+            id: "other",
+            name: "📦 その他",
+            budget: 30000,
             spent: 0
         }
     ],
@@ -63,7 +60,7 @@ update();
 
 function save() {
     localStorage.setItem(
-        "maru-kakei-v2",
+        "maru-kakei-v3",
         JSON.stringify(app)
     );
 }
@@ -71,13 +68,13 @@ function save() {
 function load() {
 
     const saved =
-        localStorage.getItem("maru-kakei-v2");
+        localStorage.getItem("maru-kakei-v3");
 
     if (!saved) return;
 
     Object.assign(app, JSON.parse(saved));
-}
-function update() {
+
+}function update() {
 
     const incomeTotal =
         app.income.papa +
@@ -96,32 +93,62 @@ function update() {
 
     app.budgets.forEach((item, index) => {
 
-        if (item.id === "rent") return;
-
         totalSpent += item.spent;
 
-        const remain =
-            item.budget - item.spent;
+        const remain = item.budget - item.spent;
+
+        const history = app.history
+            .filter(h => h.category === item.name)
+            .slice()
+            .reverse();
+
+        let historyHtml = "";
+
+        if (
+            item.id !== "iwagin" &&
+            item.id !== "rakuten"
+        ) {
+
+            history.forEach(h => {
+
+                historyHtml += `
+                <div class="mini-history">
+
+                    ${h.memo ? `<div class="history-memo">${h.memo}</div>` : ""}
+
+                    <div class="mini-row">
+                        <small>${h.date}</small>
+                        <b>¥${h.amount.toLocaleString()}</b>
+                    </div>
+
+                </div>
+                `;
+
+            });
+
+        }
 
         budgetList.innerHTML += `
 <div class="input-card">
 
-<div class="input-name">
-${item.name}
-</div>
+    <div class="input-name">
+        ${item.name}
+    </div>
 
-<div class="input-used">
-¥${item.spent.toLocaleString()} / ¥${item.budget.toLocaleString()}
-</div>
+    <div class="input-used">
+        ¥${item.spent.toLocaleString()} / ¥${item.budget.toLocaleString()}
+    </div>
 
-<div class="input-left ${remain < 0 ? "over" : ""}">
-残 ¥${remain.toLocaleString()}
-</div>
+    <div class="input-left ${remain < 0 ? "over" : ""}">
+        残 ¥${remain.toLocaleString()}
+    </div>
 
-<button class="mini-btn"
-onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
-＋
-</button>
+    ${historyHtml}
+
+    <button class="mini-btn"
+        onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
+        ＋
+    </button>
 
 </div>
 `;
@@ -141,86 +168,32 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
         "現在予測 ¥"
         + remainMoney.toLocaleString();
 
-    const diff =
-        app.goal - remainMoney;
+    const diff = app.goal - remainMoney;
 
     document.getElementById("advice").textContent =
         diff <= 0
             ? "🎉 このままなら目標達成！"
-            : "😊 あと ¥"
-            + diff.toLocaleString()
-            + " 改善で目標達成！";
-const history = app.history
-    .filter(h => h.category === item.name)
-    .slice()
-    .reverse();
-
-let historyHtml = "";
-
-if (
-    item.id !== "iwagin" &&
-    item.id !== "rakuten"
-) {
-
-    history.forEach(h => {
-
-        historyHtml += `
-        <div class="mini-history">
-
-            ${h.memo ? `<div class="history-memo">${h.memo}</div>` : ""}
-
-            <div class="mini-row">
-                <small>${h.date}</small>
-                <b>¥${h.amount.toLocaleString()}</b>
-            </div>
-
-        </div>
-        `;
-
-    });
-
-}
-
-budgetList.innerHTML += `
-<div class="input-card">
-
-<div class="input-name">
-${item.name}
-</div>
-
-<div class="input-used">
-¥${item.spent.toLocaleString()} / ¥${item.budget.toLocaleString()}
-</div>
-
-<div class="input-left ${remain < 0 ? "over" : ""}">
-残 ¥${remain.toLocaleString()}
-</div>
-
-${historyHtml}
-
-<button class="mini-btn"
-onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
-＋
-</button>
-
-</div>
-`;
+            : `😊 あと ¥${diff.toLocaleString()} 改善で目標達成！`;
 
     save();
 
 }
+function addSpent(index, isOverwrite = false) {
 
-    function addSpent(index, isOverwrite = false) {
+    const input = prompt(
+        "金額 メモ\n例：5000 マック"
+    );
 
-    const input = prompt("金額 メモ\n例：5000 マック");
-if (!input) return;
+    if (!input) return;
 
-const parts = input.trim().split(" ");
+    const parts = input.trim().split(" ");
 
-const amount = Number(parts[0]);
-if (!amount) return;
+    const amount = Number(parts[0]);
 
-const memo = parts.slice(1).join(" ");
+    if (!amount) return;
+
+    const memo = parts.slice(1).join(" ");
+
     if (isOverwrite) {
         app.budgets[index].spent = amount;
     } else {
@@ -228,18 +201,20 @@ const memo = parts.slice(1).join(" ");
     }
 
     app.history.push({
-    date: new Date().toLocaleDateString("ja-JP"),
-    category: app.budgets[index].name,
-    amount: amount,
-    memo: memo
-});
+        date: new Date().toLocaleDateString("ja-JP"),
+        category: app.budgets[index].name,
+        amount: amount,
+        memo: memo
+    });
 
     update();
+
 }
 
 function addIncome(type) {
 
-    const amount = Number(prompt("収入金額"));
+    const amount =
+        Number(prompt("収入金額"));
 
     if (!amount) return;
 
@@ -265,13 +240,12 @@ function addIncome(type) {
 
 function resetMonth() {
 
-    if (!confirm("今月をリセットしますか？")) return;
+    if (!confirm("今月をリセットしますか？"))
+        return;
 
     app.budgets.forEach(item => {
 
-        if (!item.fixed) {
-            item.spent = 0;
-        }
+        item.spent = 0;
 
     });
 
@@ -280,34 +254,9 @@ function resetMonth() {
     app.income = {
         papa: 0,
         mama: 0,
-        extra: 0,
-        papaBonus: 0,
-        mamaBonus: 0
+        extra: 0
     };
 
     update();
 
-}
-function addFood() {
-    addSpent(5);
-}
-
-function addHoliday() {
-    addSpent(4);
-}
-
-function addGas() {
-    addSpent(6);
-}
-
-function addUtility() {
-    addSpent(1);
-}
-
-function setIwagin() {
-    addSpent(2, true);
-}
-
-function setRakuten() {
-    addSpent(3, true);
 }
