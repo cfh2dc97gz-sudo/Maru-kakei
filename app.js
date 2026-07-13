@@ -64,14 +64,19 @@ const app = {
     history: []
 
 };
+let currentYear = 2026;
+let currentMonth = 4;
 
 load();
 update();
 
 function save(){
 
+    const key =
+        `maru-kakei-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
+
     localStorage.setItem(
-        "maru-kakei-v8",
+        key,
         JSON.stringify(app)
     );
 
@@ -79,8 +84,11 @@ function save(){
 
 function load(){
 
+    const key =
+        `maru-kakei-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
+
     const saved =
-        localStorage.getItem("maru-kakei-v8");
+        localStorage.getItem(key);
 
     if(!saved) return;
 
@@ -90,8 +98,12 @@ function load(){
     );
 
 }
-function update(){
 
+function update(){
+    
+     document.getElementById("period").textContent =
+    `${currentYear}年${currentMonth}月`;
+    
     const incomeTotal =
         app.income.papa +
         app.income.mama +
@@ -397,4 +409,42 @@ function addIncome(type){
     update();
 
 }
-    
+    function changeMonth(step){
+
+    save();
+
+    currentMonth += step;
+
+    if(currentMonth > 12){
+
+        currentMonth = 1;
+        currentYear++;
+
+    }
+
+    if(currentMonth < 1){
+
+        currentMonth = 12;
+        currentYear--;
+
+    }
+
+    app.income = {
+        papa:0,
+        mama:0,
+        extra:0
+    };
+
+    app.budgets.forEach(item=>{
+
+        item.spent = 0;
+
+    });
+
+    app.history = [];
+
+    load();
+    update();
+
+}
+
