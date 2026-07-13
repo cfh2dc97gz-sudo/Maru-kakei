@@ -150,54 +150,61 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
             : "😊 あと ¥"
             + diff.toLocaleString()
             + " 改善で目標達成！";
-const historyList =
-    document.getElementById("historyList");
+const history = app.history
+    .filter(h => h.category === item.name)
+    .slice()
+    .reverse();
 
-historyList.innerHTML = "";
+let historyHtml = "";
 
-const grouped = {};
+if (
+    item.id !== "iwagin" &&
+    item.id !== "rakuten"
+) {
 
-app.history.forEach(item => {
+    history.forEach(h => {
 
-    if (!grouped[item.category]) {
-        grouped[item.category] = [];
-    }
+        historyHtml += `
+        <div class="mini-history">
 
-    grouped[item.category].push(item);
+            ${h.memo ? `<div class="history-memo">${h.memo}</div>` : ""}
 
-});
-
-Object.keys(grouped).forEach(category => {
-
-    historyList.innerHTML += `
-    <div class="card">
-        <h3>${category}</h3>
-    `;
-
-    grouped[category].forEach(item => {
-
-        historyList.innerHTML += `
-        <div class="history-main">
-
-            <div>
-                <div class="history-memo">
-                    ${item.memo || "メモなし"}
-                </div>
-                <small>${item.date}</small>
+            <div class="mini-row">
+                <small>${h.date}</small>
+                <b>¥${h.amount.toLocaleString()}</b>
             </div>
-
-            <span class="history-amount">
-                ¥${item.amount.toLocaleString()}
-            </span>
 
         </div>
         `;
 
     });
 
-    historyList.innerHTML += `</div>`;
+}
 
-});
+budgetList.innerHTML += `
+<div class="input-card">
+
+<div class="input-name">
+${item.name}
+</div>
+
+<div class="input-used">
+¥${item.spent.toLocaleString()} / ¥${item.budget.toLocaleString()}
+</div>
+
+<div class="input-left ${remain < 0 ? "over" : ""}">
+残 ¥${remain.toLocaleString()}
+</div>
+
+${historyHtml}
+
+<button class="mini-btn"
+onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
+＋
+</button>
+
+</div>
+`;
 
     save();
 
