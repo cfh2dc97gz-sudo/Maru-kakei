@@ -188,9 +188,9 @@ app.history
     function addSpent(index, isOverwrite = false) {
 
     const amount = Number(prompt("金額を入力"));
-
     if (!amount) return;
 
+const memo = prompt("メモ（任意）") || "";
     if (isOverwrite) {
         app.budgets[index].spent = amount;
     } else {
@@ -198,10 +198,11 @@ app.history
     }
 
     app.history.push({
-        date: new Date().toLocaleDateString("ja-JP"),
-        category: app.budgets[index].name,
-        amount: amount
-    });
+    date: new Date().toLocaleDateString("ja-JP"),
+    category: app.budgets[index].name,
+    amount: amount,
+    memo: memo
+});
 
     update();
 }
