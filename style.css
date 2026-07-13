@@ -210,3 +210,45 @@ li {
     font-weight:bold;
     color:#4caf50;
 }
+/* ===== カテゴリ履歴 ===== */
+
+.mini-history{
+    margin-top:10px;
+    padding-top:8px;
+    border-top:1px solid #eee;
+    text-align:left;
+}
+
+.mini-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:3px;
+    font-size:13px;
+}
+
+.history-memo{
+    font-size:15px;
+    font-weight:bold;
+}
+
+.input-card{
+    display:flex;
+    flex-direction:column;
+}
+
+.mini-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    font-size:20px;
+    padding:0;
+    margin-top:10px;
+    margin-left:auto;
+}
+
+.input-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
