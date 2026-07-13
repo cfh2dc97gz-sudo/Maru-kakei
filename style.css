@@ -188,3 +188,25 @@ li {
 .history-amount{
     color:#4caf50;
 }
+.history-item{
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+}
+
+.history-date{
+    font-size:12px;
+    color:#888;
+    margin-bottom:4px;
+}
+
+.history-main{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:16px;
+}
+
+.history-amount{
+    font-weight:bold;
+    color:#4caf50;
+}
