@@ -266,3 +266,10 @@ button:hover{
     word-break:break-all;
 
 }
+.plus{
+    color:#1976d2;
+}
+
+.minus{
+    color:#d32f2f;
+}
