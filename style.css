@@ -260,8 +260,9 @@ button:hover{
 
 .summary-money{
 
-    font-size:26px;
+    font-size:16px;
     font-weight:700;
-    color:#2e7d32;
+    line-height:1.2;
+    word-break:break-all;
 
 }
