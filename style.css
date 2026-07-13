@@ -135,3 +135,16 @@ li {
     margin-left:auto;
     display:block;
 }
+.input-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.mini-btn{
+    width:100%;
+    min-height:70px;
+    border-radius:16px;
+    font-size:18px;
+    font-weight:bold;
+}
