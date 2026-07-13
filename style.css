@@ -148,3 +148,20 @@ li {
     font-size:18px;
     font-weight:bold;
 }
+/* ===== 収入ボタン ===== */
+
+.income-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:15px;
+}
+
+.income-grid button{
+    width:100%;
+    min-height:70px;
+    border-radius:16px;
+    font-size:18px;
+    font-weight:bold;
+    padding:12px;
+}
