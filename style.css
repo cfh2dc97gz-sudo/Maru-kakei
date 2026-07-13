@@ -84,3 +84,43 @@ li {
     margin-top: 6px;
     font-weight: bold;
 }
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.input-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.input-card:active {
+    transform: scale(.96);
+}
+
+.input-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.input-used {
+    font-size: 14px;
+    color: #666;
+}
+
+.input-left {
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.over {
+    color: #e53935;
+}
