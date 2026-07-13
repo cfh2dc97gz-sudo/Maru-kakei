@@ -9,16 +9,13 @@ const app = {
         mamaBonus: 0
     },
 
-    bankBalance: 0,
-
     budgets: [
         {
             id: "rent",
             name: "🏠 家賃",
             budget: 91000,
             spent: 91000,
-            fixed: true,
-            enabled: true
+            fixed: true
         },
         {
             id: "utility",
@@ -72,44 +69,41 @@ function save() {
 }
 
 function load() {
-    const saved = localStorage.getItem("maru-kakei-v2");
+
+    const saved =
+        localStorage.getItem("maru-kakei-v2");
 
     if (!saved) return;
 
-    const data = JSON.parse(saved);
-
-    Object.assign(app, data);
+    Object.assign(app, JSON.parse(saved));
 }
 function update() {
 
     const incomeTotal =
         app.income.papa +
         app.income.mama +
-        app.income.extra +
-        app.income.papaBonus +
-        app.income.mamaBonus;
+        app.income.extra;
 
     document.getElementById("income").textContent =
         "¥" + incomeTotal.toLocaleString();
 
-    const budgetList = document.getElementById("budgetList");
+    const budgetList =
+        document.getElementById("budgetList");
 
     budgetList.innerHTML = "";
 
     let totalSpent = 0;
 
-    app.budgets.forEach(item => {
+    app.budgets.forEach((item, index) => {
+
+        if (item.id === "rent") return;
 
         totalSpent += item.spent;
 
-        const remain = item.budget - item.spent;
-
-        const color = remain < 0 ? "red" : "black";
+        const remain =
+            item.budget - item.spent;
 
         budgetList.innerHTML += `
-<div class="card">
-
-budgetList.innerHTML += `
 <div class="input-card">
 
 <div class="input-name">
@@ -124,99 +118,61 @@ ${item.name}
 残 ¥${remain.toLocaleString()}
 </div>
 
-<br>
-
-<button onclick="addSpent(${app.budgets.indexOf(item)}, ${item.id === "iwagin" || item.id === "rakuten"})">
+<button class="mini-btn"
+onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 ＋
 </button>
 
 </div>
 `;
 
-    const forecast = incomeTotal - totalSpent;
+    });
+
+    document.getElementById("spent").textContent =
+        "¥" + totalSpent.toLocaleString();
+
+    const remainMoney =
+        incomeTotal - totalSpent;
+
+    document.getElementById("remain").textContent =
+        "¥" + remainMoney.toLocaleString();
 
     document.getElementById("forecast").textContent =
-        "現在予測 ¥" + forecast.toLocaleString();
+        "現在予測 ¥"
+        + remainMoney.toLocaleString();
 
-    const diff = app.goal - forecast;
+    const diff =
+        app.goal - remainMoney;
 
-    const advice = document.getElementById("advice");
-
-    if (diff <= 0) {
-
-        advice.textContent =
-            "🎉 目標達成ペースです！";
-
-    } else {
-
-        advice.textContent =
-            "あと ¥" +
-            diff.toLocaleString() +
-            " 改善すると目標達成です！";
-
-    }
-
-    const historyList =
-        document.getElementById("historyList");
-
-    historyList.innerHTML = "";
-
-    if (app.history.length === 0) {
-
-        historyList.innerHTML =
-            "<p>まだ履歴はありません</p>";
-
-    } else {
-
-        app.history
-            .slice()
-            .reverse()
-            .forEach(item => {
-
-                historyList.innerHTML += `
-                    <p>
-                        ${item.date}<br>
-                        ${item.category}
-                        ¥${item.amount.toLocaleString()}
-                    </p>
-                    <hr>
-                `;
-
-            });
-
-    }
+    document.getElementById("advice").textContent =
+        diff <= 0
+            ? "🎉 このままなら目標達成！"
+            : "😊 あと ¥"
+            + diff.toLocaleString()
+            + " 改善で目標達成！";
 
     save();
 
 }
-function addExpense() {
+    function addSpent(index, isOverwrite = false) {
 
-    let text = "";
-
-    app.budgets.forEach((item, index) => {
-        text += (index + 1) + " " + item.name + "\n";
-    });
-
-    const category = prompt(text);
-
-    if (!category) return;
-
-    const amount = Number(prompt("金額"));
+    const amount = Number(prompt("金額を入力"));
 
     if (!amount) return;
 
-    const budget = app.budgets[category - 1];
-
-    budget.spent += amount;
+    if (isOverwrite) {
+        app.budgets[index].spent = amount;
+    } else {
+        app.budgets[index].spent += amount;
+    }
 
     app.history.push({
         date: new Date().toLocaleDateString("ja-JP"),
-        category: budget.name,
+        category: app.budgets[index].name,
         amount: amount
     });
 
     update();
-
 }
 
 function addIncome(type) {
@@ -237,14 +193,6 @@ function addIncome(type) {
 
         case "臨時":
             app.income.extra += amount;
-            break;
-
-        case "パパボーナス":
-            app.income.papaBonus += amount;
-            break;
-
-        case "ママボーナス":
-            app.income.mamaBonus += amount;
             break;
 
     }
@@ -278,27 +226,6 @@ function resetMonth() {
     update();
 
 }
-function addSpent(index, isOverwrite = false) {
-
-    const amount = Number(prompt("金額を入力"));
-
-    if (!amount) return;
-
-    if (isOverwrite) {
-        app.budgets[index].spent = amount;
-    } else {
-        app.budgets[index].spent += amount;
-    }
-
-    app.history.push({
-        date: new Date().toLocaleDateString("ja-JP"),
-        category: app.budgets[index].name,
-        amount: amount
-    });
-
-    update();
-}
-
 function addFood() {
     addSpent(5);
 }
