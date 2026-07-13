@@ -273,10 +273,32 @@ function addSpent(index, isOverwrite = false){
 
 function addIncome(type){
 
-    const amount =
-        Number(prompt("収入金額"));
+    let amount;
+    let memo = "";
 
-    if(!amount) return;
+    if(type === "臨時"){
+
+        const input = prompt(
+            "金額 メモ\n例：5000 お祝い"
+        );
+
+        if(!input) return;
+
+        const parts = input.trim().split(" ");
+
+        amount = Number(parts[0]);
+
+        if(!amount) return;
+
+        memo = parts.slice(1).join(" ");
+
+    }else{
+
+        amount = Number(prompt("収入金額"));
+
+        if(!amount) return;
+
+    }
 
     switch(type){
 
