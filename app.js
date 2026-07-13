@@ -150,10 +150,41 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
             : "😊 あと ¥"
             + diff.toLocaleString()
             + " 改善で目標達成！";
+const historyList =
+    document.getElementById("historyList");
+
+historyList.innerHTML = "";
+
+app.history
+    .slice()
+    .reverse()
+    .forEach(item => {
+
+        historyList.innerHTML += `
+<div class="history-item">
+
+    <div class="history-date">
+        ${item.date}
+    </div>
+
+    <div class="history-main">
+        <span>${item.category}</span>
+
+        <span class="history-amount">
+            ¥${item.amount.toLocaleString()}
+        </span>
+
+    </div>
+
+</div>
+`;
+
+    });
 
     save();
 
 }
+
     function addSpent(index, isOverwrite = false) {
 
     const amount = Number(prompt("金額を入力"));
