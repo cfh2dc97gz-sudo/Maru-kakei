@@ -193,10 +193,15 @@ historyList.innerHTML += `
 
     function addSpent(index, isOverwrite = false) {
 
-    const amount = Number(prompt("金額を入力"));
-    if (!amount) return;
+    const input = prompt("金額 メモ\n例：5000 マック");
+if (!input) return;
 
-const memo = prompt("メモ（任意）") || "";
+const parts = input.trim().split(" ");
+
+const amount = Number(parts[0]);
+if (!amount) return;
+
+const memo = parts.slice(1).join(" ");
     if (isOverwrite) {
         app.budgets[index].spent = amount;
     } else {
