@@ -166,3 +166,25 @@ li {
     padding:8px;
     line-height:1.3;
 }
+.history-item{
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+}
+
+.history-date{
+    font-size:13px;
+    color:#888;
+}
+
+.history-main{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:4px;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.history-amount{
+    color:#4caf50;
+}
