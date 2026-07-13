@@ -155,37 +155,49 @@ const historyList =
 
 historyList.innerHTML = "";
 
-app.history
-    .slice()
-    .reverse()
-    .forEach(item => {
+const grouped = {};
 
-historyList.innerHTML += `
-<div class="history-item">
+app.history.forEach(item => {
 
-    <div class="history-date">
-        ${item.date}
-    </div>
+    if (!grouped[item.category]) {
+        grouped[item.category] = [];
+    }
 
-    <div class="history-main">
+    grouped[item.category].push(item);
 
-        <div>
-            <div>${item.category}</div>
-            <div class="history-memo">
-                ${item.memo || ""}
+});
+
+Object.keys(grouped).forEach(category => {
+
+    historyList.innerHTML += `
+    <div class="card">
+        <h3>${category}</h3>
+    `;
+
+    grouped[category].forEach(item => {
+
+        historyList.innerHTML += `
+        <div class="history-main">
+
+            <div>
+                <div class="history-memo">
+                    ${item.memo || "メモなし"}
+                </div>
+                <small>${item.date}</small>
             </div>
+
+            <span class="history-amount">
+                ¥${item.amount.toLocaleString()}
+            </span>
+
         </div>
-
-        <span class="history-amount">
-            ¥${item.amount.toLocaleString()}
-        </span>
-
-    </div>
-
-</div>
-`;
+        `;
 
     });
+
+    historyList.innerHTML += `</div>`;
+
+});
 
     save();
 
