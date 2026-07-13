@@ -151,7 +151,8 @@ budgets.forEach((item, index) => {
             : "small-card";
 
 const card = `
-<div class="input-card ${foodClass}">
+<div class="input-card ${foodClass}"
+onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 
     <div class="input-name">
         ${item.name}
@@ -163,10 +164,7 @@ const card = `
 
     ${historyHtml}
 
-    <button class="mini-btn"
-        onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
-        ＋
-    </button>
+    
 
 </div>
 `;
