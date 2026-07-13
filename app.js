@@ -239,8 +239,24 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
         "¥" + remainMoney.toLocaleString();
 
     remainEl.className =
-        "
-        function addSpent(index, isOverwrite = false){
+    "summary-money " +
+    (remainMoney >= 0 ? "plus" : "minus");
+
+document.getElementById("forecast").textContent =
+    "現在予測 ¥" +
+    remainMoney.toLocaleString();
+
+const diff =
+    app.goal - remainMoney;
+
+document.getElementById("advice").textContent =
+    diff <= 0
+        ? "🎉 このままなら目標達成！"
+        : `😊 あと ¥${diff.toLocaleString()} 改善で目標達成！`;
+
+save();
+
+}
 
     const input = prompt(
         "金額 メモ\n例：5000 マック"
