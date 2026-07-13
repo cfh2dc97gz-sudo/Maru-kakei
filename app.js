@@ -84,10 +84,14 @@ function load() {
     document.getElementById("income").textContent =
         "¥" + incomeTotal.toLocaleString();
 
-    const budgetList =
-        document.getElementById("budgetList");
+const foodArea =
+    document.getElementById("foodArea");
 
-    budgetList.innerHTML = "";
+const rightArea =
+    document.getElementById("rightArea");
+
+foodArea.innerHTML = "";
+rightArea.innerHTML = "";
 
     let totalSpent = 0;
 
@@ -146,7 +150,7 @@ budgets.forEach((item, index) => {
             ? "food-card"
             : "small-card";
 
-    budgetList.innerHTML += `
+const card = `
 <div class="input-card ${foodClass}">
 
     <div class="input-name">
@@ -171,6 +175,12 @@ budgets.forEach((item, index) => {
 
 </div>
 `;
+
+if (item.id === "food") {
+    foodArea.innerHTML += card;
+} else {
+    rightArea.innerHTML += card;
+}
 
 });
 
