@@ -252,3 +252,54 @@ li {
     grid-template-columns:repeat(2,1fr);
     gap:12px;
 }
+/* ===== Ver4 レイアウト ===== */
+
+.input-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:12px;
+}
+
+.food-card{
+    grid-row:span 6;
+    min-height:650px;
+}
+
+.small-card{
+    min-height:100px;
+}
+
+.input-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+
+.mini-history{
+    margin-top:10px;
+    padding-top:8px;
+    border-top:1px solid #eee;
+    text-align:left;
+}
+
+.history-memo{
+    font-size:15px;
+    font-weight:bold;
+}
+
+.mini-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    margin-top:2px;
+}
+
+.mini-btn{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    font-size:18px;
+    padding:0;
+    margin-top:auto;
+    margin-left:auto;
+}
