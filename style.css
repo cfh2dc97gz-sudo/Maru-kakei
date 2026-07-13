@@ -235,3 +235,33 @@ button:hover{
     opacity:.95;
 
 }
+.summary-grid{
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:16px;
+
+}
+
+.summary-item{
+
+    text-align:center;
+
+}
+
+.summary-title{
+
+    font-size:14px;
+    color:#777;
+    margin-bottom:6px;
+
+}
+
+.summary-money{
+
+    font-size:26px;
+    font-weight:700;
+    color:#2e7d32;
+
+}
