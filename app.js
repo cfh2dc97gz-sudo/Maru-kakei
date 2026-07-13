@@ -202,8 +202,15 @@ onclick="addSpent(${index}, ${item.id==="iwagin" || item.id==="rakuten"})">
     const remainMoney =
         incomeTotal - totalSpent;
 
-    document.getElementById("remain").textContent =
-        "¥" + remainMoney.toLocaleString();
+   const remainEl =
+    document.getElementById("remain");
+
+remainEl.textContent =
+    "¥" + remainMoney.toLocaleString();
+
+remainEl.className =
+    "summary-money " +
+    (remainMoney >= 0 ? "plus" : "minus");
 
     document.getElementById("forecast").textContent =
         "現在予測 ¥" +
