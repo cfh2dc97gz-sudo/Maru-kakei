@@ -160,7 +160,7 @@ app.history
     .reverse()
     .forEach(item => {
 
-        historyList.innerHTML += `
+historyList.innerHTML += `
 <div class="history-item">
 
     <div class="history-date">
@@ -168,7 +168,13 @@ app.history
     </div>
 
     <div class="history-main">
-        <span>${item.category}</span>
+
+        <div>
+            <div>${item.category}</div>
+            <div class="history-memo">
+                ${item.memo || ""}
+            </div>
+        </div>
 
         <span class="history-amount">
             ¥${item.amount.toLocaleString()}
