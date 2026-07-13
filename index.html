@@ -2,11 +2,16 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐻 まる家計</title>
 
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>🐻 まる家計</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -15,96 +20,114 @@
 
 <div class="card">
 
-    <h2 id="period">6/25〜7/24</h2>
+<h2 id="period">
+6/25〜7/24
+</h2>
 
 </div>
 
 <div class="card">
 
-    <h2>🎯 年間目標</h2>
+<h2>
+🎯 年間目標
+</h2>
 
-    <div class="money" id="goal">
-        ¥3,400,000
-    </div>
+<div class="money" id="goal">
+¥3,400,000
+</div>
 
-    <p id="forecast">
-        現在予測 ¥0
-    </p>
+<p id="forecast">
+現在予測 ¥0
+</p>
 
-    <p id="advice">
-        まず収入を入力しましょう😊
-    </p>
+<p id="aiMessage">
+まず収入を入力しましょう😊
+</p>
 
 </div>
 
 <div class="card">
 
-    <h2>💰 収入</h2>
+<h2>
+💰 収入
+</h2>
 
-    <div class="income-grid">
+<div class="income-grid">
 
-        <button onclick="addIncome('パパ')">
-            👨<br>パパ
-        </button>
+<button onclick="addIncome('パパ')">
+👨<br>パパ
+</button>
 
-        <button onclick="addIncome('ママ')">
-            👩<br>ママ
-        </button>
+<button onclick="addIncome('ママ')">
+👩<br>ママ
+</button>
 
-        <button onclick="addIncome('臨時')">
-            🎁<br>臨時
-        </button>
+<button onclick="addIncome('臨時')">
+🎁<br>臨時
+</button>
 
-    </div>
+</div>
 
-    <div class="money" id="income">
-        ¥0
-    </div>
+<div class="money" id="income">
+¥0
+</div>
 
 </div>
 
 <div class="card">
 
-    <h2>📒 カテゴリ</h2>
+<h2>
+📒 カテゴリ
+</h2>
 
-    <div id="foodArea"></div>
+<div id="foodArea"></div>
 
-    <div id="gridArea"></div>
+<div id="gridArea"></div>
 
 </div>
 <div class="card">
 
-    <h2>💰 今月のお金</h2>
+<h2>
+💰 今月のお金
+</h2>
 
-    <p>
-        収入
-        <span id="incomeSummary">¥0</span>
-    </p>
+<p>
+収入
+<span id="incomeSummary">
+¥0
+</span>
+</p>
 
-    <p>
-        支出
-        <span id="spent">¥0</span>
-    </p>
+<p>
+支出
+<span id="spent">
+¥0
+</span>
+</p>
 
-    <p>
-        残り
-        <span id="remain">¥0</span>
-    </p>
+<p>
+残り
+<span id="remain">
+¥0
+</span>
+</p>
 
 </div>
 
 <div class="card">
 
-    <h2>🤖 AI提案</h2>
+<h2>
+🤖 AI提案
+</h2>
 
-    <p id="aiMessage">
-        今日もおつかれさま😊
-    </p>
+<p id="advice">
+今日もおつかれさま😊
+</p>
 
 </div>
 
 <button onclick="resetMonth()">
-    🗑 今月をリセット
+🗑 今月をリセット
 </button>
 
 <script src="app.js"></script>
