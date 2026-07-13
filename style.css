@@ -106,10 +106,11 @@ li {
     transform: scale(.96);
 }
 
-.input-name {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 8px;
+.input-name{
+    font-size:24px;
+    font-weight:bold;
+    color:#2e7d32;
+    margin-bottom:12px;
 }
 
 .input-used{
@@ -118,15 +119,14 @@ li {
 
 .input-left{
     background:#eef8ea;
-    color:#4caf50;
-    border-radius:12px;
-    padding:10px;
+    color:#2e7d32;
+    border-radius:14px;
+    padding:12px;
     text-align:center;
-    font-size:18px;
+    font-size:20px;
     font-weight:bold;
-    margin-bottom:14px;
+    margin-bottom:16px;
 }
-
 .over {
     color: #e53935;
 }
@@ -233,8 +233,9 @@ li {
 }
 
 .history-memo{
-    font-size:15px;
-    font-weight:bold;
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:3px;
 }
 
 .input-card{
@@ -291,12 +292,11 @@ li {
     font-size:15px;
     font-weight:bold;
 }
-
 .mini-row{
     display:flex;
     justify-content:space-between;
+    color:#777;
     font-size:13px;
-    margin-top:2px;
 }
 
 .mini-btn{
