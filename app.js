@@ -66,6 +66,27 @@ const app = {
 };
 
 load();
+app.history.push({
+
+    date:new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            month:"numeric",
+            day:"numeric"
+        }
+    ),
+
+    category:"収入",
+
+    amount:amount,
+
+    memo:
+        type === "臨時"
+            ? `🎁 ${memo || "臨時収入"}`
+            : `💰 ${type}`
+
+});
+
 update();
 
 function save(){
@@ -99,7 +120,34 @@ function update(){
 
     document.getElementById("income").textContent =
         "¥" + incomeTotal.toLocaleString();
+const incomeHistory =
+    document.getElementById("incomeHistory");
 
+incomeHistory.innerHTML = "";
+
+app.history
+    .filter(h => h.category === "収入")
+    .slice()
+    .reverse()
+    .forEach(h => {
+
+        incomeHistory.innerHTML += `
+<div class="mini-history">
+
+    <div class="history-memo">
+        ${h.memo}
+    </div>
+
+    <div class="mini-row">
+        <small>${h.date}</small>
+        <b>¥${h.amount.toLocaleString()}</b>
+    </div>
+
+</div>
+`;
+
+    });
+    
     document.getElementById("incomeSummary").textContent =
         "¥" + incomeTotal.toLocaleString();
 
@@ -279,7 +327,7 @@ function addIncome(type){
     if(type === "臨時"){
 
         const input = prompt(
-            "金額 メモ\n例：5000 お祝い"
+            "金額 メモ"
         );
 
         if(!input) return;
