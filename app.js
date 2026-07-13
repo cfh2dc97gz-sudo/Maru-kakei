@@ -66,33 +66,12 @@ const app = {
 };
 
 load();
-app.history.push({
-
-    date:new Date().toLocaleDateString(
-        "ja-JP",
-        {
-            month:"numeric",
-            day:"numeric"
-        }
-    ),
-
-    category:"収入",
-
-    amount:amount,
-
-    memo:
-        type === "臨時"
-            ? `🎁 ${memo || "臨時収入"}`
-            : `💰 ${type}`
-
-});
-
 update();
 
 function save(){
 
     localStorage.setItem(
-        "maru-kakei-v7",
+        "maru-kakei-v8",
         JSON.stringify(app)
     );
 
@@ -101,7 +80,7 @@ function save(){
 function load(){
 
     const saved =
-        localStorage.getItem("maru-kakei-v7");
+        localStorage.getItem("maru-kakei-v8");
 
     if(!saved) return;
 
@@ -120,18 +99,22 @@ function update(){
 
     document.getElementById("income").textContent =
         "¥" + incomeTotal.toLocaleString();
-const incomeHistory =
-    document.getElementById("incomeHistory");
 
-incomeHistory.innerHTML = "";
+    document.getElementById("incomeSummary").textContent =
+        "¥" + incomeTotal.toLocaleString();
 
-app.history
-    .filter(h => h.category === "収入")
-    .slice()
-    .reverse()
-    .forEach(h => {
+    const incomeHistory =
+        document.getElementById("incomeHistory");
 
-        incomeHistory.innerHTML += `
+    incomeHistory.innerHTML = "";
+
+    app.history
+        .filter(h => h.category === "収入")
+        .slice()
+        .reverse()
+        .forEach(h => {
+
+            incomeHistory.innerHTML += `
 <div class="mini-history">
 
     <div class="history-memo">
@@ -146,10 +129,7 @@ app.history
 </div>
 `;
 
-    });
-    
-    document.getElementById("incomeSummary").textContent =
-        "¥" + incomeTotal.toLocaleString();
+        });
 
     const foodArea =
         document.getElementById("foodArea");
@@ -190,12 +170,13 @@ app.history
 
         let historyHtml = "";
 
-        if(item.id !== "iwagin" &&
-           item.id !== "rakuten"){
-
-            history
+        if(
+            item.id !== "iwagin" &&
+            item.id !== "rakuten"
+        ){
+                        history
                 .slice(0, item.id === "food" ? 5 : 2)
-                .forEach(h=>{
+                .forEach(h => {
 
                     historyHtml += `
 <div class="mini-history">
@@ -213,14 +194,15 @@ app.history
                 });
 
         }
-                const foodClass =
+
+        const foodClass =
             item.id === "food"
                 ? "food-card"
                 : "small-card";
 
         const card = `
 <div class="input-card ${foodClass}"
-onclick="addSpent(${index}, ${item.id==="iwagin" || item.id==="rakuten"})">
+onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 
     <div class="input-name">
         ${item.name}
@@ -250,35 +232,18 @@ onclick="addSpent(${index}, ${item.id==="iwagin" || item.id==="rakuten"})">
     const remainMoney =
         incomeTotal - totalSpent;
 
-   const remainEl =
-    document.getElementById("remain");
+    const remainEl =
+        document.getElementById("remain");
 
-remainEl.textContent =
-    "¥" + remainMoney.toLocaleString();
+    remainEl.textContent =
+        "¥" + remainMoney.toLocaleString();
 
-remainEl.className =
-    "summary-money " +
-    (remainMoney >= 0 ? "plus" : "minus");
-
-    document.getElementById("forecast").textContent =
-        "現在予測 ¥" +
-        remainMoney.toLocaleString();
-
-    const diff =
-        app.goal - remainMoney;
-
-    document.getElementById("advice").textContent =
-        diff <= 0
-        ? "🎉 このままなら目標達成！"
-        : `😊 あと ¥${diff.toLocaleString()} 改善で目標達成！`;
-
-    save();
-
-}
-function addSpent(index, isOverwrite = false){
+    remainEl.className =
+        "
+        function addSpent(index, isOverwrite = false){
 
     const input = prompt(
-        "金額 メモ"
+        "金額 メモ\n例：5000 マック"
     );
 
     if(!input) return;
@@ -299,7 +264,7 @@ function addSpent(index, isOverwrite = false){
 
     app.history.push({
 
-        date: new Date().toLocaleDateString(
+        date:new Date().toLocaleDateString(
             "ja-JP",
             {
                 month:"numeric",
@@ -307,11 +272,11 @@ function addSpent(index, isOverwrite = false){
             }
         ),
 
-        category: app.budgets[index].name,
+        category:app.budgets[index].name,
 
-        amount: amount,
+        amount:amount,
 
-        memo: memo
+        memo:memo
 
     });
 
@@ -327,7 +292,7 @@ function addIncome(type){
     if(type === "臨時"){
 
         const input = prompt(
-            "金額 メモ"
+            "金額 メモ\n例：5000 お祝い"
         );
 
         if(!input) return;
@@ -342,7 +307,9 @@ function addIncome(type){
 
     }else{
 
-        amount = Number(prompt("収入金額"));
+        amount = Number(
+            prompt("収入金額")
+        );
 
         if(!amount) return;
 
@@ -364,10 +331,32 @@ function addIncome(type){
 
     }
 
+    if(type === "臨時"){
+
+        app.history.push({
+
+            date:new Date().toLocaleDateString(
+                "ja-JP",
+                {
+                    month:"numeric",
+                    day:"numeric"
+                }
+            ),
+
+            category:"収入",
+
+            amount:amount,
+
+            memo:memo || "臨時収入"
+
+        });
+
+    }
+
     update();
 
 }
-function resetMonth(){
+    function resetMonth(){
 
     if(!confirm("今月をリセットしますか？")){
         return;
@@ -392,3 +381,4 @@ function resetMonth(){
     update();
 
 }
+    
