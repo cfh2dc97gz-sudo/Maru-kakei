@@ -200,3 +200,14 @@ small{
         min-height:150px;
     }
 }
+.input-left small{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#7aa57b;
+
+    margin-bottom:6px;
+
+}
