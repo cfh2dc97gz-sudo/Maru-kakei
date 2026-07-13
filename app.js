@@ -257,7 +257,7 @@ document.getElementById("advice").textContent =
 save();
 
 }
-
+function addSpent(index, isOverwrite = false){
     const input = prompt(
         "金額 メモ\n例：5000 マック"
     );
