@@ -10,276 +10,125 @@ body{
 
     background:linear-gradient(
         180deg,
-        #FFFDF7 0%,
-        #FFF8EA 100%
+        #FFFDF8 0%,
+        #FFF9EC 45%,
+        #FFFDF8 100%
     );
 
     color:#2F2A24;
 
-    padding:18px;
+    padding:14px;
+
+    line-height:1.5;
 
 }
-
-h1{
-
-    text-align:center;
-
-    font-size:30px;
-
-    font-weight:800;
-
-    color:#8D6E63;
-
-    margin-bottom:22px;
-
-}
-
-h2{
-
-    color:#8D6E63;
-
-    margin-bottom:14px;
-
-}
-
-.card{
-
-    background:#ffffff;
-
-    border-radius:28px;
-
-    padding:22px;
-
-    margin-bottom:20px;
-
-    border:1px solid #FFF5D8;
-
-    box-shadow:
-        0 8px 24px rgba(255,212,80,.10),
-        0 2px 8px rgba(0,0,0,.03);
-
-}
-.money{
-    font-size:34px;
-    font-weight:800;
-    color:#1b5e20;
-    margin-top:6px;
-}
-
-button{
-
-    border:none;
-
-    background:#F6C453;
-
-    color:#5D4037;
-
-    border-radius:16px;
-
-    cursor:pointer;
-
-    transition:.15s;
-
-    font-weight:700;
-
-}
-
-button:active{
-    transform:scale(.98);
-}
-
-.income-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin:14px 0;
-}
-
-.income-grid button{
-    height:64px;
-    font-size:15px;
-    font-weight:700;
-}
-
 #foodArea{
-    margin-bottom:18px;
+
+    margin-bottom:12px;
+
 }
 
 #gridArea{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:14px;
-}
-/* ---------- カテゴリ ---------- */
 
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:12px;
+
+}
 .input-card{
+
     background:#fff;
-    border-radius:22px;
-    padding:18px;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
-    display:flex;
-    flex-direction:column;
-    cursor:pointer;
+
+    border-radius:20px;
+
+    padding:14px;
+
+    border:1px solid #F8F1D8;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.04);
+
     transition:.15s;
+
+    cursor:pointer;
+
 }
 
 .input-card:active{
+
     transform:scale(.98);
-}
 
+}
 .food-card{
-    min-height:100px;
-}
 
+    min-height:150px;
+
+}
 .small-card{
-    min-height:50px;
-}
 
+    min-height:120px;
+
+}
 .input-name{
-    font-size:12px;
-    font-weight:700;
-    color:#222;
-    margin-bottom:14px;
-}
-
-.input-left{
-    background:#eef8ea;
-    color:#2e7d32;
-    border-radius:16px;
-    padding:14px;
-    text-align:center;
-    font-size:22px;
-    font-weight:700;
-    margin-bottom:16px;
-}
-
-.over{
-    background:#ffebee;
-    color:#d32f2f;
-}
-
-/* ---------- 履歴 ---------- */
-
-.mini-history{
-    padding:12px 0;
-    border-top:1px solid #efefef;
-}
-
-.history-memo{
-    font-size:16px;
-    font-weight:700;
-    color:#222;
-    margin-bottom:4px;
-}
-
-.mini-row{
-    display:flex;
-    justify-content:space-between;
-    color:#888;
-    font-size:13px;
-}
-
-.mini-row b{
-    color:#2e7d32;
-}
-
-.input-used{
-    display:none;
-}
-/* ---------- 共通 ---------- */
-
-p{
-    line-height:1.8;
-}
-
-small{
-    color:#888;
-}
-
-#forecast{
-    margin-top:8px;
-    color:#666;
-}
-
-#advice,
-#aiMessage{
-    margin-top:8px;
-    line-height:1.7;
-}
-
-/* ---------- リセットボタン ---------- */
-
-body > button{
-
-    width:100%;
-    height:60px;
 
     font-size:18px;
-    font-weight:700;
 
-    border-radius:18px;
+    font-weight:800;
 
-    margin-top:10px;
+    color:#222;
 
-}
-
-/* ---------- スマホ ---------- */
-
-@media (max-width:480px){
-
-    body{
-        padding:14px;
-    }
-
-    .card{
-        padding:18px;
-    }
-
-    .money{
-        font-size:30px;
-    }
-
-    .food-card{
-        min-height:50px;
-    }
-
-    .small-card{
-        min-height:50px;
-    }
-
-    .input-name{
-        font-size:12px;
-    }
-
-    .input-left{
-        font-size:20px;
-    }
+    margin-bottom:12px;
 
 }
+.input-left{
 
-/* ---------- アニメーション ---------- */
+    background:#EEF8EA;
 
-.input-card:hover{
+    color:#2E7D32;
 
-    transform:translateY(-2px);
+    border-radius:16px;
+
+    padding:10px;
+
+    text-align:center;
+
+    font-size:17px;
+
+    font-weight:800;
+
+    line-height:1.4;
 
 }
+.over{
 
-button:hover{
+    background:#FFECEC;
 
-    opacity:.95;
+    color:#D32F2F;
 
 }
 .summary-grid{
 
     display:grid;
+
     grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-top:16px;
+
+    gap:10px;
+
+    margin-top:12px;
 
 }
 
 .summary-item{
+
+    background:#FFF9EB;
+
+    border-radius:16px;
+
+    padding:12px 8px;
+
+    border:1px solid #FFF0C9;
 
     text-align:center;
 
@@ -287,43 +136,75 @@ button:hover{
 
 .summary-title{
 
-    font-size:14px;
-    color:#777;
+    font-size:12px;
+
+    color:#8A7768;
+
     margin-bottom:6px;
+
+    font-weight:700;
 
 }
 
 .summary-money{
 
-    font-size:16px;
-    font-weight:700;
+    font-size:18px;
+
+    font-weight:800;
+
     line-height:1.2;
-    word-break:break-all;
 
 }
+.money{
+
+    color:#2E7D32;
+
+}
+
 .plus{
-    color:#1976d2;
+
+    color:#1976D2;
+
 }
 
 .minus{
-    color:#d32f2f;
+
+    color:#D32F2F;
+
+}
+#advice,
+#aiMessage{
+
+    margin-top:4px;
+
+    line-height:1.6;
+
+    font-size:14px;
+
+    color:#5C524A;
+
 }
 .month-header{
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
+    margin-bottom:4px;
 
 }
 
 .month-header button{
 
-    width:46px;
-    height:46px;
+    width:38px;
+
+    height:38px;
 
     border-radius:50%;
 
-    font-size:22px;
+    font-size:18px;
 
     padding:0;
 
@@ -332,7 +213,69 @@ button:hover{
 .month-header h2{
 
     margin:0;
-    font-size:24px;
-    color:#2e7d32;
+
+    font-size:20px;
+
+    color:#7B6258;
+
+}
+body > button{
+
+    width:100%;
+
+    height:54px;
+
+    font-size:16px;
+
+    border-radius:18px;
+
+    margin-top:6px;
+
+}
+@media (max-width:480px){
+
+    body{
+
+        padding:12px;
+
+    }
+
+    .card{
+
+        padding:14px;
+
+    }
+
+    .money{
+
+        font-size:28px;
+
+    }
+
+    .food-card{
+
+        min-height:140px;
+
+    }
+
+    .small-card{
+
+        min-height:110px;
+
+    }
+
+    .input-name{
+
+        font-size:17px;
+
+    }
+
+    .input-left{
+
+        font-size:16px;
+
+        padding:10px;
+
+    }
 
 }
