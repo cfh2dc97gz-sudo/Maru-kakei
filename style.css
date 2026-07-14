@@ -667,3 +667,86 @@ body{
     color:#D8A100;
 
 }
+/* ===========================
+   Ver10 修正①
+   カテゴリを一覧風にする
+=========================== */
+
+#gridArea{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:10px;
+
+}
+
+#foodArea{
+
+    margin-bottom:10px;
+
+}
+
+.food-card,
+.small-card{
+
+    min-height:64px;
+
+}
+
+.input-card{
+
+    display:flex;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:14px 16px;
+
+}
+
+.input-name{
+
+    margin:0;
+
+    font-size:16px;
+
+    font-weight:700;
+
+}
+
+.input-left{
+
+    margin:0;
+
+    padding:6px 10px;
+
+    background:none;
+
+    border:none;
+
+    color:#2E7D32;
+
+    font-size:17px;
+
+    font-weight:800;
+
+    text-align:right;
+
+    line-height:1;
+
+}
+
+.over{
+
+    color:#D32F2F;
+
+    background:none;
+
+    border:none;
+
+}
