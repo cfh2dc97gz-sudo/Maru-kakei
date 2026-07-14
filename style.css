@@ -1,5 +1,5 @@
 /* ===========================
-   Ver10 まる家計
+   Ver10.5
    ① リセット・全体
 =========================== */
 
@@ -7,6 +7,12 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
+}
+
+html{
+
+    scroll-behavior:smooth;
+
 }
 
 body{
@@ -22,13 +28,14 @@ body{
 
     color:#2F2A24;
 
-    padding:14px;
+    padding:12px;
 
     line-height:1.5;
 
+    -webkit-tap-highlight-color:transparent;
+
 }
 
-/* タイトルは非表示 */
 h1{
 
     display:none;
@@ -37,53 +44,180 @@ h1{
 
 h2{
 
-    font-size:19px;
+    font-size:18px;
 
     font-weight:800;
 
     color:#7B6258;
 
-    margin-bottom:14px;
+    margin-bottom:10px;
 
 }
 
+.money{
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:#2E7D32;
+
+}
 /* ===========================
-   カード
+   ② カード共通
 =========================== */
 
 .card{
 
     background:#FFFFFF;
 
-    border-radius:24px;
+    border:1px solid #F8E9B8;
 
-    padding:18px;
+    border-radius:22px;
 
-    margin-bottom:16px;
+    padding:16px;
 
-    border:1px solid #F9E9B7;
+    margin-bottom:14px;
 
     box-shadow:
-
-        0 6px 18px rgba(0,0,0,.04),
-
-        0 1px 8px rgba(246,203,99,.08);
+        0 4px 14px rgba(0,0,0,.04),
+        0 2px 8px rgba(246,203,99,.06);
 
 }
 
 /* ===========================
-   金額
+   ボタン共通
 =========================== */
 
-.money{
+button{
 
-    font-size:34px;
+    border:none;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+    font-weight:700;
+
+    border-radius:16px;
+
+    background:#FFF9EE;
+
+    color:#6D4C41;
+
+}
+
+button:active{
+
+    transform:scale(.98);
+
+}
+
+button:hover{
+
+    opacity:.96;
+
+}
+/* ===========================
+   ③ 月切替
+=========================== */
+
+.month-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    height:56px;
+
+    padding:0 14px;
+
+}
+
+.month-header h2{
+
+    margin:0;
+
+    font-size:18px;
 
     font-weight:800;
 
-    color:#2E7D32;
+    color:#7B6258;
 
-    margin-top:6px;
+}
+
+.month-header button{
+
+    width:36px;
+
+    height:36px;
+
+    border-radius:50%;
+
+    background:#FFF9EE;
+
+    border:1px solid #F4D77A;
+
+    color:#7B6258;
+
+    font-size:16px;
+
+    box-shadow:none;
+
+}
+/* ===========================
+   ④ 今月のお金
+=========================== */
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:8px;
+
+    margin-top:10px;
+
+}
+
+.summary-item{
+
+    background:#FFF9EE;
+
+    border:1px solid #F7E7B5;
+
+    border-radius:16px;
+
+    padding:10px 6px;
+
+    text-align:center;
+
+}
+
+.summary-title{
+
+    font-size:11px;
+
+    font-weight:700;
+
+    color:#8A7768;
+
+    margin-bottom:4px;
+
+}
+
+.summary-money{
+
+    font-size:17px;
+
+    font-weight:800;
+
+    line-height:1.2;
+
+    word-break:break-all;
 
 }
 
@@ -98,176 +232,62 @@ h2{
     color:#D32F2F;
 
 }
-
 /* ===========================
-   共通ボタン
+   ⑤ AI
 =========================== */
 
-button{
+#forecast{
 
-    border:none;
+    margin-top:4px;
 
-    cursor:pointer;
-
-    transition:.15s;
-
-    font-weight:700;
-
-    border-radius:18px;
-
-}
-
-button:active{
-
-    transform:scale(.98);
-
-}
-/* ===========================
-   ② 月切替
-=========================== */
-
-.month-header{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    margin-bottom:4px;
-
-}
-
-.month-header h2{
-
-    margin:0;
-
-    font-size:22px;
-
-    color:#7B6258;
-
-}
-
-.month-header button{
-
-    width:42px;
-
-    height:42px;
-
-    background:#FFF8E8;
-
-    border:1px solid #F4D77A;
-
-    color:#7B6258;
-
-    border-radius:50%;
-
-    font-size:20px;
-
-    box-shadow:none;
-
-}
-
-/* ===========================
-   ③ 収入
-=========================== */
-
-.income-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:12px;
-
-    margin:16px 0;
-
-}
-
-.income-grid button{
-
-    height:78px;
-
-    background:#FFF9EE;
-
-    border:1.5px solid #F4D77A;
-
-    color:#6D4C41;
-
-    font-size:17px;
-
-    border-radius:18px;
-
-    box-shadow:none;
-
-    line-height:1.35;
-
-}
-
-.income-grid button:hover{
-
-    background:#FFF6E3;
-
-}
-
-/* ===========================
-   ④ 今月のお金
-=========================== */
-
-.summary-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:10px;
-
-    margin-top:14px;
-
-}
-
-.summary-item{
-
-    background:#FFF9EE;
-
-    border:1px solid #F8E7AE;
-
-    border-radius:18px;
-
-    padding:14px 8px;
-
-    text-align:center;
-
-}
-
-.summary-title{
-
-    font-size:12px;
+    font-size:13px;
 
     color:#8A7768;
 
-    margin-bottom:6px;
+}
 
-    font-weight:700;
+#advice{
+
+    margin-top:8px;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    color:#5C524A;
 
 }
 
-.summary-money{
+#aiMessage{
 
-    font-size:19px;
+    margin-top:8px;
 
-    font-weight:800;
+    font-size:14px;
 
-    line-height:1.2;
+    line-height:1.6;
+
+    color:#5C524A;
+
+}
+
+p{
+
+    line-height:1.6;
+
+}
+
+small{
+
+    color:#999;
 
 }
 /* ===========================
-   ⑤ カテゴリ
+   ⑥ カテゴリ
 =========================== */
 
 #foodArea{
 
-    margin-bottom:12px;
+    margin-bottom:8px;
 
 }
 
@@ -277,22 +297,30 @@ button:active{
 
     grid-template-columns:repeat(2,1fr);
 
-    gap:12px;
+    gap:8px;
 
 }
 
 .input-card{
 
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
     background:#FFFFFF;
 
-    border:1px solid #F8EBC5;
+    border:1px solid #F7E7B5;
 
-    border-radius:20px;
+    border-radius:16px;
 
-    padding:14px;
+    padding:10px 12px;
+
+    min-height:58px;
 
     box-shadow:
-        0 3px 10px rgba(0,0,0,.03);
+        0 2px 8px rgba(0,0,0,.03);
 
     cursor:pointer;
 
@@ -312,91 +340,105 @@ button:active{
 
 }
 
-.food-card{
-
-    min-height:135px;
-
-}
-
+.food-card,
 .small-card{
 
-    min-height:110px;
+    min-height:58px;
 
 }
 
 .input-name{
 
-    font-size:17px;
+    font-size:14px;
 
-    font-weight:800;
+    font-weight:700;
 
     color:#3B312B;
 
-    margin-bottom:10px;
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
 
 }
 
 .input-left{
 
-    background:#F6FBF2;
+    margin-left:auto;
 
-    border:1px solid #DDEFD5;
+    background:none;
 
-    color:#2E7D32;
+    border:none;
 
-    border-radius:14px;
+    padding:0;
 
-    padding:10px;
-
-    text-align:center;
-
-    font-size:16px;
+    font-size:15px;
 
     font-weight:800;
 
-    line-height:1.4;
+    color:#2E7D32;
+
+    text-align:right;
 
 }
 
 .over{
 
-    background:#FFF1F1;
-
-    border:1px solid #FFD2D2;
-
     color:#D32F2F;
 
 }
 /* ===========================
-   ⑥ AI・履歴・共通
+   ⑦ 収入
 =========================== */
 
-#advice,
-#aiMessage{
+.income-grid{
 
-    margin-top:6px;
+    display:grid;
 
-    line-height:1.7;
+    grid-template-columns:repeat(3,1fr);
 
-    font-size:14px;
+    gap:10px;
 
-    color:#5C524A;
+    margin:12px 0;
 
 }
 
-#forecast{
+.income-grid button{
 
-    margin-top:6px;
+    height:68px;
 
-    color:#8A7768;
+    background:#FFF9EE;
 
-    font-size:14px;
+    border:1px solid #F4D77A;
+
+    color:#6D4C41;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    line-height:1.3;
+
+    box-shadow:none;
+
+}
+
+.income-grid button:hover{
+
+    background:#FFF5DD;
+
+}
+
+#income{
+
+    margin-top:8px;
 
 }
 
 #incomeHistory{
 
-    margin-top:12px;
+    margin-top:10px;
 
 }
 
@@ -404,25 +446,25 @@ button:active{
 
     background:#FFF9EE;
 
-    border:1px solid #F8E7AE;
+    border:1px solid #F7E7B5;
 
-    border-radius:14px;
+    border-radius:12px;
 
-    padding:10px 12px;
+    padding:8px 10px;
 
-    margin-bottom:8px;
+    margin-top:6px;
 
 }
 
 .history-memo{
 
-    font-size:14px;
+    font-size:13px;
 
     font-weight:700;
 
     color:#4E4037;
 
-    margin-bottom:4px;
+    margin-bottom:2px;
 
 }
 
@@ -432,9 +474,7 @@ button:active{
 
     justify-content:space-between;
 
-    align-items:center;
-
-    font-size:13px;
+    font-size:12px;
 
     color:#8A7768;
 
@@ -445,28 +485,15 @@ button:active{
     color:#2E7D32;
 
 }
-
-p{
-
-    line-height:1.7;
-
-}
-
-small{
-
-    color:#999;
-
-}
-
 /* ===========================
-   リセットボタン
+   ⑧ リセット・下メニュー
 =========================== */
 
 body > button{
 
     width:100%;
 
-    height:54px;
+    height:48px;
 
     margin-top:8px;
 
@@ -476,143 +503,11 @@ body > button{
 
     color:#6D4C41;
 
-    font-size:16px;
+    font-size:15px;
 
-    border-radius:18px;
-
-}
-/* ===========================
-   ⑦ スマホ最適化
-=========================== */
-
-@media (max-width:480px){
-
-    body{
-
-        padding:12px;
-
-    }
-
-    .card{
-
-        padding:14px;
-
-        margin-bottom:14px;
-
-        border-radius:22px;
-
-    }
-
-    h2{
-
-        font-size:17px;
-
-        margin-bottom:10px;
-
-    }
-
-    .money{
-
-        font-size:30px;
-
-    }
-
-    .summary-item{
-
-        padding:12px 6px;
-
-    }
-
-    .summary-money{
-
-        font-size:17px;
-
-    }
-
-    .income-grid{
-
-        gap:10px;
-
-    }
-
-    .income-grid button{
-
-        height:74px;
-
-        font-size:16px;
-
-        border-radius:16px;
-
-    }
-
-    .food-card{
-
-        min-height:125px;
-
-    }
-
-    .small-card{
-
-        min-height:100px;
-
-    }
-
-    .input-name{
-
-        font-size:16px;
-
-    }
-
-    .input-left{
-
-        font-size:15px;
-
-        padding:9px;
-
-    }
+    font-weight:700;
 
 }
-
-/* ===========================
-   アニメーション
-=========================== */
-
-button:hover{
-
-    opacity:.96;
-
-}
-
-.input-card:hover{
-
-    transform:translateY(-2px);
-
-}
-
-.input-card:active{
-
-    transform:scale(.98);
-
-}
-
-/* ===========================
-   スクロール
-=========================== */
-
-html{
-
-    scroll-behavior:smooth;
-
-}
-
-body{
-
-    -webkit-tap-highlight-color:transparent;
-
-}
-/* ===========================
-   下メニュー
-=========================== */
 
 .bottom-nav{
 
@@ -624,19 +519,19 @@ body{
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:10px;
+    gap:8px;
 
-    margin-top:18px;
+    margin-top:14px;
 
-    padding:12px;
+    padding:10px;
 
-    background:rgba(255,253,248,.92);
+    background:rgba(255,253,248,.95);
 
     backdrop-filter:blur(12px);
 
-    border-radius:24px;
-
     border:1px solid #F7E7B5;
+
+    border-radius:20px;
 
 }
 
@@ -644,21 +539,21 @@ body{
 
     background:transparent;
 
-    color:#8D6E63;
-
     border:none;
 
-    font-size:22px;
+    color:#8D6E63;
 
-    padding:8px 0;
+    font-size:20px;
 
-    line-height:1.4;
+    padding:6px 0;
+
+    line-height:1.3;
 
 }
 
 .bottom-nav span{
 
-    font-size:12px;
+    font-size:11px;
 
 }
 
@@ -667,147 +562,25 @@ body{
     color:#D8A100;
 
 }
+
 /* ===========================
-   Ver10 修正①
-   カテゴリを一覧風にする
+   ⑨ スマホ
 =========================== */
 
-#gridArea{
+@media (max-width:480px){
 
-    display:grid;
+    body{
 
-    grid-template-columns:repeat(2,1fr);
+        padding:10px;
 
-    gap:10px;
+    }
 
-}
+    .card{
 
-#foodArea{
+        padding:14px;
 
-    margin-bottom:10px;
+        margin-bottom:12px;
 
-}
-
-.food-card,
-.small-card{
-
-    min-height:64px;
-
-}
-
-.input-card{
-
-    display:flex;
-
-    flex-direction:row;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    padding:14px 16px;
-
-}
-
-.input-name{
-
-    margin:0;
-
-    font-size:16px;
-
-    font-weight:700;
-
-}
-
-.input-left{
-
-    margin:0;
-
-    padding:6px 10px;
-
-    background:none;
-
-    border:none;
-
-    color:#2E7D32;
-
-    font-size:17px;
-
-    font-weight:800;
-
-    text-align:right;
-
-    line-height:1;
-
-}
-
-.over{
-
-    color:#D32F2F;
-
-    background:none;
-
-    border:none;
-
-}
-.food-card,
-.small-card{
-
-    min-height:72px;
-
-}
-
-.input-card{
-
-    padding:10px 14px;
-
-}
-
-.input-name{
-
-    font-size:15px;
-
-}
-
-.input-left{
-
-    font-size:15px;
-
-    padding:0;
-
-}
-.input-name{
-
-    font-size:14px;
-
-    white-space:nowrap;
-
-}
-.month-header{
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    height:62px;
-    padding:0 18px;
-
-}
-
-.month-header button{
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
-
-    font-size:18px;
-
-}
-
-.month-header h2{
-
-    font-size:18px;
-    margin:0;
+    }
 
 }
