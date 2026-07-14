@@ -929,3 +929,52 @@ body{
     font-weight:800;
 
 }
+/* ===== Ver10.8 カテゴリ修正 ===== */
+
+#foodArea{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+}
+
+.category-family{
+    width:120px;
+    min-width:120px;
+    min-height:260px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    background:#FFF9EE;
+    border:1px solid #F7E7B5;
+    border-radius:18px;
+}
+
+.category-family p{
+    margin-top:10px;
+    font-size:15px;
+    font-weight:700;
+    color:#6D4C41;
+}
+
+#gridArea{
+    flex:1;
+
+    display:flex !important;
+    flex-direction:column;
+
+    gap:8px;
+}
+
+#gridArea .input-card{
+    width:100%;
+    min-height:46px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:10px 14px;
+}
