@@ -750,3 +750,36 @@ body{
     border:none;
 
 }
+.food-card,
+.small-card{
+
+    min-height:72px;
+
+}
+
+.input-card{
+
+    padding:10px 14px;
+
+}
+
+.input-name{
+
+    font-size:15px;
+
+}
+
+.input-left{
+
+    font-size:15px;
+
+    padding:0;
+
+}
+.input-name{
+
+    font-size:14px;
+
+    white-space:nowrap;
+
+}
