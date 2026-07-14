@@ -107,8 +107,8 @@ button:active{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:8px 0;
-    min-height:56px;
+    padding:2px 0;
+    min-height:36px;
 }
 
 .month-header button{
