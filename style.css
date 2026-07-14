@@ -687,3 +687,57 @@ body{
     font-size:9px;
 
 }
+/* Ver10.7 コンパクト収入 */
+
+.income-grid{
+
+    margin:6px 0;
+
+    gap:6px;
+
+}
+
+.income-grid button{
+
+    height:48px;
+
+    font-size:13px;
+
+    line-height:1.1;
+
+}
+
+.money{
+
+    font-size:22px;
+
+    margin-top:4px;
+
+    margin-bottom:4px;
+
+}
+
+.card{
+
+    margin-bottom:8px;
+
+    padding:10px;
+
+}
+
+#advice{
+
+    margin-top:2px;
+
+    font-size:12px;
+
+}
+
+#forecast{
+
+    font-size:12px;
+
+    margin-bottom:2px;
+
+}
+
