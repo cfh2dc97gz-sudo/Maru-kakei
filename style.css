@@ -459,3 +459,180 @@ small{
     }
 
 }
+/* ===========================
+   Ver10.7 コンパクト化
+   （style.cssの一番下に置き換え用）
+=========================== */
+
+/* 月カード */
+
+.month-header{
+
+    height:42px;
+
+    padding:0 6px;
+
+}
+
+.month-header h2{
+
+    font-size:16px;
+
+}
+
+.month-header button{
+
+    width:30px;
+
+    height:30px;
+
+    font-size:13px;
+
+}
+
+/* カード余白 */
+
+.card{
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+}
+
+/* 今月のお金 */
+
+.summary-grid{
+
+    gap:6px;
+
+}
+
+.summary-item{
+
+    padding:8px 4px;
+
+}
+
+.summary-title{
+
+    font-size:10px;
+
+}
+
+.summary-money{
+
+    font-size:15px;
+
+}
+
+/* AI */
+
+#forecast{
+
+    margin-top:2px;
+
+    font-size:12px;
+
+}
+
+#advice{
+
+    margin-top:4px;
+
+    font-size:13px;
+
+    line-height:1.45;
+
+}
+
+/* カテゴリ */
+
+#gridArea{
+
+    gap:6px;
+
+}
+
+.input-card{
+
+    min-height:48px;
+
+    padding:8px 10px;
+
+}
+
+.food-card,
+.small-card{
+
+    min-height:48px;
+
+}
+
+.input-name{
+
+    font-size:13px;
+
+}
+
+.input-left{
+
+    font-size:14px;
+
+}
+
+/* 収入 */
+
+.income-grid{
+
+    gap:8px;
+
+    margin:8px 0;
+
+}
+
+.income-grid button{
+
+    height:56px;
+
+    font-size:14px;
+
+}
+
+/* 収入合計 */
+
+.money{
+
+    font-size:26px;
+
+}
+
+/* リセット */
+
+.reset-btn{
+
+    height:40px;
+
+    font-size:14px;
+
+}
+
+/* 下メニュー */
+
+.bottom-nav{
+
+    padding:6px;
+
+}
+
+.bottom-nav button{
+
+    font-size:18px;
+
+}
+
+.bottom-nav span{
+
+    font-size:10px;
+
+}
