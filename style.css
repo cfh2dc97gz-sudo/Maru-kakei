@@ -104,22 +104,18 @@ button:active{
 =========================== */
 
 .month-header{
-
     display:flex;
-
-    align-items:center;
-
     justify-content:space-between;
-
-    height:42px;
-
+    align-items:center;
+    padding:8px 0;
+    min-height:56px;
 }
 
 .month-header button{
 
-    width:32px;
+    width:42px;
 
-    height:32px;
+    height:42px;
 
     border-radius:50%;
 
@@ -127,7 +123,7 @@ button:active{
 
     background:#FFF9EF;
 
-    font-size:15px;
+    font-size:18px;
 
 }
 
@@ -135,7 +131,7 @@ button:active{
 
     margin:0;
 
-    font-size:17px;
+    font-size:24px;
 
 }
 /* ===========================
