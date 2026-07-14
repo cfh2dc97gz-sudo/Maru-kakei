@@ -128,11 +128,11 @@ button:active{
 }
 
 .food-card{
-    min-height:220px;
+    min-height:100px;
 }
 
 .small-card{
-    min-height:170px;
+    min-height:50px;
 }
 
 .input-name{
