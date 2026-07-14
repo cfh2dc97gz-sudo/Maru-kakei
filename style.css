@@ -783,3 +783,31 @@ body{
     white-space:nowrap;
 
 }
+.month-header{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    height:62px;
+    padding:0 18px;
+
+}
+
+.month-header button{
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    font-size:18px;
+
+}
+
+.month-header h2{
+
+    font-size:18px;
+    margin:0;
+
+}
