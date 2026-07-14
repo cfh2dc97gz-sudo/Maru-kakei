@@ -104,14 +104,18 @@ button:active{
 =========================== */
 
 .month-header{
+
     display:flex;
     justify-content:space-between;
+
     align-items:center;
 
     height:44px;
-    padding:0;
-}
+    min-height:unset;
 
+    padding:0;
+
+}
 .month-header button{
 
     width:30px;
