@@ -144,12 +144,7 @@ function update(){
         });
 
     const foodArea =
-        document.getElementById("foodArea");
-
-    const gridArea =
-        document.getElementById("gridArea");
-
-    gridArea.innerHTML = "";
+    document.getElementById("foodArea");
 
 foodArea.innerHTML = `
 <div class="category-family">
@@ -159,8 +154,14 @@ foodArea.innerHTML = `
     <p>はる・りん</p>
 
 </div>
+
+<div id="gridArea"></div>
 `;
 
+const gridArea =
+    document.getElementById("gridArea");
+
+gridArea.innerHTML = "";
     let totalSpent = 0;
 
     const order = [
