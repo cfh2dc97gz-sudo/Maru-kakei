@@ -240,15 +240,15 @@ body > button{
     }
 
     .food-card{
-        min-height:320px;
+        min-height:180px;
     }
 
     .small-card{
-        min-height:140px;
+        min-height:120px;
     }
 
     .input-name{
-        font-size:22px;
+        font-size:18px;
     }
 
     .input-left{
