@@ -313,15 +313,23 @@ button:hover{
 
 /* ---------- 収入 ---------- */
 
-.income-grid{
+.income-grid button{
 
-    display:grid;
+    height:82px;
 
-    grid-template-columns:repeat(3,1fr);
+    border-radius:18px;
 
-    gap:12px;
+    background:#FFF9EC;
 
-    margin:14px 0;
+    border:1.5px solid #F6D36D;
+
+    color:#6D4C41;
+
+    font-size:18px;
+
+    line-height:1.4;
+
+    box-shadow:none;
 
 }
 
