@@ -1117,3 +1117,35 @@ body{
 .input-left{
     font-size:12px;
 }
+.month-header{
+    height:48px;
+    padding:0 10px;
+}
+
+.month-header button{
+    width:34px;
+    height:34px;
+}
+
+.month-header h2{
+    font-size:17px;
+}
+.summary-item{
+    padding:8px 6px;
+}
+
+.summary-title{
+    font-size:10px;
+}
+
+.summary-money{
+    font-size:16px;
+}
+.income-grid button{
+    height:58px;
+    font-size:15px;
+}
+
+.money{
+    font-size:26px;
+}
