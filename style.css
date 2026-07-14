@@ -978,3 +978,88 @@ body{
 
     padding:10px 14px;
 }
+/* ===========================
+   Ver10.9 カテゴリ2列
+=========================== */
+
+#foodArea{
+
+    display:grid;
+
+    grid-template-columns:120px 1fr;
+
+    gap:12px;
+
+    align-items:start;
+
+}
+
+.category-family{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:160px;
+
+    background:#FFF9EF;
+
+    border:1px solid #F7E8BA;
+
+    border-radius:18px;
+
+}
+
+#gridArea{
+
+    display:grid !important;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:8px;
+
+}
+
+.input-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    width:100%;
+
+    min-height:42px;
+
+    padding:8px 10px;
+
+    background:#FFF;
+
+    border:1px solid #F7E8BA;
+
+    border-radius:12px;
+
+}
+
+.input-name{
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+.input-left{
+
+    font-size:13px;
+
+    font-weight:800;
+
+    color:#2E7D32;
+
+}
