@@ -652,3 +652,36 @@ button:active{
     padding:6px;
 
 }
+.month-card{
+
+    padding:6px 10px !important;
+
+    margin-bottom:6px;
+
+}
+
+.month-card .month-header{
+
+    height:42px;
+
+    min-height:42px;
+
+    padding:0;
+
+}
+
+.month-card h2{
+
+    font-size:18px;
+
+    margin:0;
+
+}
+
+.month-card button{
+
+    width:36px;
+
+    height:36px;
+
+}
