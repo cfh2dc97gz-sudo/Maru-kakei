@@ -1,7 +1,8 @@
 /* ===========================
-   Ver10.5
-   ① リセット・全体
+   Ver10.6 style.css
 =========================== */
+
+/* ---------- リセット ---------- */
 
 *{
     margin:0;
@@ -10,9 +11,7 @@
 }
 
 html{
-
     scroll-behavior:smooth;
-
 }
 
 body{
@@ -22,13 +21,13 @@ body{
     background:linear-gradient(
         180deg,
         #FFFDF8 0%,
-        #FFF9EE 45%,
+        #FFF9EF 45%,
         #FFFDF8 100%
     );
 
     color:#2F2A24;
 
-    padding:12px;
+    padding:10px;
 
     line-height:1.5;
 
@@ -37,73 +36,79 @@ body{
 }
 
 h1{
-
     display:none;
-
 }
 
 h2{
 
-    font-size:18px;
+    font-size:17px;
 
     font-weight:800;
 
     color:#7B6258;
 
+    margin-bottom:8px;
+
+}
+
+/* ---------- 共通 ---------- */
+
+.card{
+
+    background:#FFF;
+
+    border:1px solid #F7E8BA;
+
+    border-radius:20px;
+
+    padding:14px;
+
     margin-bottom:10px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.03);
 
 }
 
 .money{
 
-    font-size:30px;
+    font-size:28px;
 
     font-weight:800;
 
     color:#2E7D32;
 
 }
-/* ===========================
-   ② カード共通
-=========================== */
 
-.card{
+.plus{
 
-    background:#FFFFFF;
-
-    border:1px solid #F8E9B8;
-
-    border-radius:22px;
-
-    padding:16px;
-
-    margin-bottom:14px;
-
-    box-shadow:
-        0 4px 14px rgba(0,0,0,.04),
-        0 2px 8px rgba(246,203,99,.06);
+    color:#1976D2;
 
 }
 
-/* ===========================
-   ボタン共通
-=========================== */
+.minus{
+
+    color:#D32F2F;
+
+}
+
+/* ---------- ボタン ---------- */
 
 button{
 
     border:none;
 
-    cursor:pointer;
-
-    transition:.15s;
-
-    font-weight:700;
-
-    border-radius:16px;
-
     background:#FFF9EE;
 
     color:#6D4C41;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:.15s;
 
 }
 
@@ -112,9 +117,8 @@ button:active{
     transform:scale(.98);
 
 }
-/* ===========================
-   ③ 月切替
-=========================== */
+
+/* ---------- 月 ---------- */
 
 .month-header{
 
@@ -124,9 +128,21 @@ button:active{
 
     justify-content:space-between;
 
-    height:56px;
+    height:48px;
 
-    padding:0 14px;
+}
+
+.month-header button{
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    border:1px solid #F4D77A;
+
+    font-size:15px;
 
 }
 
@@ -134,36 +150,12 @@ button:active{
 
     margin:0;
 
-    font-size:18px;
-
-    font-weight:800;
+    font-size:17px;
 
     color:#7B6258;
 
 }
-
-.month-header button{
-
-    width:36px;
-
-    height:36px;
-
-    border-radius:50%;
-
-    background:#FFF9EE;
-
-    border:1px solid #F4D77A;
-
-    color:#7B6258;
-
-    font-size:16px;
-
-    box-shadow:none;
-
-}
-/* ===========================
-   ④ 今月のお金
-=========================== */
+/* ---------- 今月のお金 ---------- */
 
 .summary-grid{
 
@@ -173,17 +165,17 @@ button:active{
 
     gap:8px;
 
-    margin-top:10px;
+    margin-top:8px;
 
 }
 
 .summary-item{
 
-    background:#FFF9EE;
+    background:#FFF9EF;
 
-    border:1px solid #F7E7B5;
+    border:1px solid #F7E8BA;
 
-    border-radius:16px;
+    border-radius:14px;
 
     padding:10px 6px;
 
@@ -199,54 +191,39 @@ button:active{
 
     color:#8A7768;
 
-    margin-bottom:4px;
+    margin-bottom:3px;
 
 }
 
 .summary-money{
 
-    font-size:17px;
+    font-size:16px;
 
     font-weight:800;
 
     line-height:1.2;
 
-    word-break:break-all;
-
 }
 
-.plus{
-
-    color:#1976D2;
-
-}
-
-.minus{
-
-    color:#D32F2F;
-
-}
-/* ===========================
-   ⑤ AI
-=========================== */
+/* ---------- AI ---------- */
 
 #forecast{
 
-    margin-top:4px;
+    margin-top:2px;
 
-    font-size:13px;
+    font-size:12px;
 
-    color:#8A7768;
+    color:#9A8A7B;
 
 }
 
 #advice{
 
-    margin-top:8px;
+    margin-top:6px;
 
     font-size:14px;
 
-    line-height:1.6;
+    line-height:1.5;
 
     color:#5C524A;
 
@@ -254,19 +231,13 @@ button:active{
 
 #aiMessage{
 
-    margin-top:8px;
-
-    font-size:14px;
-
-    line-height:1.6;
-
-    color:#5C524A;
+    display:none;
 
 }
 
 p{
 
-    line-height:1.6;
+    line-height:1.5;
 
 }
 
@@ -275,9 +246,7 @@ small{
     color:#999;
 
 }
-/* ===========================
-   ⑥ カテゴリ
-=========================== */
+/* ---------- カテゴリ ---------- */
 
 #foodArea{
 
@@ -303,35 +272,26 @@ small{
 
     justify-content:space-between;
 
-    background:#FFFFFF;
+    background:#FFF;
 
-    border:1px solid #F7E7B5;
+    border:1px solid #F7E8BA;
 
     border-radius:16px;
 
     padding:10px 12px;
 
-    min-height:58px;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,.03);
+    min-height:56px;
 
     cursor:pointer;
 
-    transition:.15s;
-
-}
-
-.input-card:active{
-
-    transform:scale(.98);
+    box-shadow:0 2px 6px rgba(0,0,0,.03);
 
 }
 
 .food-card,
 .small-card{
 
-    min-height:58px;
+    min-height:56px;
 
 }
 
@@ -345,21 +305,11 @@ small{
 
     white-space:nowrap;
 
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
 }
 
 .input-left{
 
     margin-left:auto;
-
-    background:none;
-
-    border:none;
-
-    padding:0;
 
     font-size:15px;
 
@@ -367,7 +317,11 @@ small{
 
     color:#2E7D32;
 
-    text-align:right;
+    background:none;
+
+    border:none;
+
+    padding:0;
 
 }
 
@@ -376,9 +330,7 @@ small{
     color:#D32F2F;
 
 }
-/* ===========================
-   ⑦ 収入
-=========================== */
+/* ---------- 収入 ---------- */
 
 .income-grid{
 
@@ -386,106 +338,17 @@ small{
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:10px;
+    gap:8px;
 
-    margin:12px 0;
+    margin:10px 0;
 
 }
 
 .income-grid button{
 
-    height:68px;
+    height:62px;
 
-    background:#FFF9EE;
-
-    border:1px solid #F4D77A;
-
-    color:#6D4C41;
-
-    font-size:16px;
-
-    font-weight:700;
-
-    line-height:1.3;
-
-    box-shadow:none;
-
-}
-
-.income-grid button:hover{
-
-    background:#FFF5DD;
-
-}
-
-#income{
-
-    margin-top:8px;
-
-}
-
-#incomeHistory{
-
-    margin-top:10px;
-
-}
-
-.mini-history{
-
-    background:#FFF9EE;
-
-    border:1px solid #F7E7B5;
-
-    border-radius:12px;
-
-    padding:8px 10px;
-
-    margin-top:6px;
-
-}
-
-.history-memo{
-
-    font-size:13px;
-
-    font-weight:700;
-
-    color:#4E4037;
-
-    margin-bottom:2px;
-
-}
-
-.mini-row{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    font-size:12px;
-
-    color:#8A7768;
-
-}
-
-.mini-row b{
-
-    color:#2E7D32;
-
-}
-/* ===========================
-   ⑧ リセット・下メニュー
-=========================== */
-
-body > button{
-
-    width:100%;
-
-    height:48px;
-
-    margin-top:8px;
-
-    background:#FFF9EE;
+    background:#FFF9EF;
 
     border:1px solid #F4D77A;
 
@@ -493,15 +356,55 @@ body > button{
 
     font-size:15px;
 
-    font-weight:700;
+    line-height:1.3;
+
+    box-shadow:none;
 
 }
 
+#income{
+
+    margin-top:6px;
+
+}
+
+#incomeHistory{
+
+    display:none;
+
+}
+
+/* ---------- リセット ---------- */
+
+.reset-btn{
+
+    width:100%;
+
+    height:44px;
+
+    margin-top:8px;
+
+    background:#FFF9EF;
+
+    border:1px solid #F4D77A;
+
+    color:#6D4C41;
+
+    font-size:15px;
+
+}
+
+/* ---------- 下メニュー ---------- */
+
 .bottom-nav{
 
-    position:sticky;
+    position:fixed;
 
-    bottom:0;
+    left:10px;
+
+    right:10px;
+
+    bottom:10px;
 
     display:grid;
 
@@ -509,17 +412,15 @@ body > button{
 
     gap:8px;
 
-    margin-top:14px;
+    padding:8px;
 
-    padding:10px;
+    background:rgba(255,253,248,.96);
 
-    background:rgba(255,253,248,.95);
+    border:1px solid #F7E8BA;
 
-    backdrop-filter:blur(12px);
+    border-radius:18px;
 
-    border:1px solid #F7E7B5;
-
-    border-radius:20px;
+    backdrop-filter:blur(10px);
 
 }
 
@@ -527,21 +428,17 @@ body > button{
 
     background:transparent;
 
-    border:none;
-
     color:#8D6E63;
 
-    font-size:20px;
+    font-size:19px;
 
-    padding:6px 0;
-
-    line-height:1.3;
+    line-height:1.2;
 
 }
 
 .bottom-nav span{
 
-    font-size:11px;
+    font-size:10px;
 
 }
 
@@ -551,23 +448,13 @@ body > button{
 
 }
 
-/* ===========================
-   ⑨ スマホ
-=========================== */
+/* ---------- スマホ ---------- */
 
 @media (max-width:480px){
 
     body{
 
-        padding:10px;
-
-    }
-
-    .card{
-
-        padding:14px;
-
-        margin-bottom:12px;
+        padding:10px 10px 88px;
 
     }
 
