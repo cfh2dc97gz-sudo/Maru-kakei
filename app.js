@@ -149,8 +149,17 @@ function update(){
     const gridArea =
         document.getElementById("gridArea");
 
-    foodArea.innerHTML = "";
     gridArea.innerHTML = "";
+
+foodArea.innerHTML = `
+<div class="category-family">
+
+    🧒👧
+
+    <p>はる・りん</p>
+
+</div>
+`;
 
     let totalSpent = 0;
 
@@ -228,10 +237,10 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 `;
 
         if(item.id === "food"){
-            foodArea.innerHTML = card;
-        }else{
-            gridArea.innerHTML += card;
-        }
+    gridArea.innerHTML += card;
+}else{
+    gridArea.innerHTML += card;
+}
 
     });
 
