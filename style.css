@@ -5,32 +5,52 @@
 }
 
 body{
+
     font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
-    background:#f4f7f5;
-    color:#222;
+
+    background:#FFF9E8;
+
+    color:#333;
+
     padding:16px;
+
 }
 
+
 h1{
+
     text-align:center;
+
     font-size:30px;
+
     font-weight:800;
-    color:#2e7d32;
-    margin-bottom:20px;
+
+    color:#8D6E63;
+
+    margin-bottom:22px;
+
 }
 
 h2{
-    font-size:20px;
-    color:#444;
+
+    color:#8D6E63;
+
     margin-bottom:14px;
+
 }
 
 .card{
+
     background:#fff;
-    border-radius:24px;
-    padding:20px;
+
+    border-radius:26px;
+
+    padding:22px;
+
     margin-bottom:18px;
-    box-shadow:0 6px 18px rgba(0,0,0,.06);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
 }
 
 .money{
@@ -41,12 +61,21 @@ h2{
 }
 
 button{
+
     border:none;
+
+    background:#F6C453;
+
+    color:#5D4037;
+
     border-radius:16px;
-    background:#4caf50;
-    color:#fff;
+
     cursor:pointer;
+
     transition:.15s;
+
+    font-weight:700;
+
 }
 
 button:active{
