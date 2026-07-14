@@ -225,8 +225,6 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
         ¥${remain.toLocaleString()}
     </div>
 
-    ${historyHtml}
-
 </div>
 `;
 
