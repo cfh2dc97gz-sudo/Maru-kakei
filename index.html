@@ -3,14 +3,14 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>まる家計 Ver10</title>
+    <title>まる家計 Ver11</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -22,13 +22,13 @@ content="width=device-width, initial-scale=1.0">
 
     <div class="month-header">
 
-        <button onclick="prevMonth()">◀</button>
+        <button id="prevMonth">◀</button>
 
         <h2 id="period">
             2026年4月
         </h2>
 
-        <button onclick="nextMonth()">▶</button>
+        <button id="nextMonth">▶</button>
 
     </div>
 
@@ -38,9 +38,7 @@ content="width=device-width, initial-scale=1.0">
 
 <div class="card">
 
-    <h2>
-        💰 今月のお金
-    </h2>
+    <h2>💰 今月のお金</h2>
 
     <div class="summary-grid">
 
@@ -50,8 +48,9 @@ content="width=device-width, initial-scale=1.0">
                 収入
             </div>
 
-            <div class="summary-money"
-            id="incomeSummary">
+            <div
+                class="summary-money"
+                id="incomeSummary">
 
                 ¥0
 
@@ -65,8 +64,9 @@ content="width=device-width, initial-scale=1.0">
                 支出
             </div>
 
-            <div class="summary-money"
-            id="spent">
+            <div
+                class="summary-money"
+                id="spent">
 
                 ¥0
 
@@ -80,8 +80,9 @@ content="width=device-width, initial-scale=1.0">
                 残り
             </div>
 
-            <div class="summary-money"
-            id="remain">
+            <div
+                class="summary-money"
+                id="remain">
 
                 ¥0
 
@@ -97,9 +98,7 @@ content="width=device-width, initial-scale=1.0">
 
 <div class="card">
 
-    <h2>
-        🤖 AI分析
-    </h2>
+    <h2>🤖 AI分析</h2>
 
     <p id="forecast">
 
@@ -118,19 +117,29 @@ content="width=device-width, initial-scale=1.0">
 
 <div class="card">
 
-    <h2>📒 カテゴリ</h2>
+    <div class="category-header">
 
-    <div id="foodArea">
+        <h2>📒 カテゴリ</h2>
 
-        <div class="category-family">
+        <div class="family-card">
 
-            🧒👧
+            <div class="family-image">
 
-            <p>はる・りん</p>
+                👧🧒
+
+            </div>
+
+            <div class="family-name">
+
+                はる・りん
+
+            </div>
 
         </div>
 
-        <div id="gridArea"></div>
+    </div>
+
+    <div id="gridArea">
 
     </div>
 
@@ -140,27 +149,25 @@ content="width=device-width, initial-scale=1.0">
 
 <div class="card">
 
-    <h2>
-        💰 収入
-    </h2>
+    <h2>💰 収入</h2>
 
     <div class="income-grid">
 
-        <button onclick="addIncome('パパ')">
+        <button id="incomePapa">
 
             👨<br>
             パパ
 
         </button>
 
-        <button onclick="addIncome('ママ')">
+        <button id="incomeMama">
 
             👩<br>
             ママ
 
         </button>
 
-        <button onclick="addIncome('臨時')">
+        <button id="incomeExtra">
 
             🎁<br>
             臨時
@@ -169,18 +176,18 @@ content="width=device-width, initial-scale=1.0">
 
     </div>
 
-    <div class="money" id="income">
+    <div
+        class="money"
+        id="income">
 
         ¥0
 
     </div>
 
-    <div id="incomeHistory"></div>
-
 </div>
-
-<button class="reset-btn"
-onclick="resetMonth()">
+<button
+    class="reset-btn"
+    id="resetMonth">
 
     🗑 今月をリセット
 
@@ -198,7 +205,7 @@ onclick="resetMonth()">
 
     <button>
 
-        📈<br>
+        📊<br>
 
         <span>年間</span>
 
