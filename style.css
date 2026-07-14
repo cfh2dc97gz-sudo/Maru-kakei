@@ -112,12 +112,6 @@ button:active{
     transform:scale(.98);
 
 }
-
-button:hover{
-
-    opacity:.96;
-
-}
 /* ===========================
    ③ 月切替
 =========================== */
@@ -325,12 +319,6 @@ small{
     cursor:pointer;
 
     transition:.15s;
-
-}
-
-.input-card:hover{
-
-    transform:translateY(-2px);
 
 }
 
