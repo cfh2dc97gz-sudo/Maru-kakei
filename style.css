@@ -636,3 +636,54 @@ small{
     font-size:10px;
 
 }
+body{
+
+    font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+
+    background:linear-gradient(
+        180deg,
+        #FFFDF8 0%,
+        #FFF9EF 45%,
+        #FFFDF8 100%
+    );
+
+    color:#2F2A24;
+
+    padding:10px;
+
+    padding-bottom:160px;
+
+    line-height:1.5;
+
+    -webkit-tap-highlight-color:transparent;
+
+}
+.bottom-nav{
+
+    position:fixed;
+
+    left:10px;
+
+    right:10px;
+
+    bottom:8px;
+
+    padding:5px;
+
+    border-radius:18px;
+
+}
+
+.bottom-nav button{
+
+    font-size:17px;
+
+    padding:4px 0;
+
+}
+
+.bottom-nav span{
+
+    font-size:9px;
+
+}
