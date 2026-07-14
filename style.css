@@ -1067,7 +1067,7 @@ body{
 
     display:grid;
 
-    grid-template-columns:110px 1fr;
+    grid-template-columns:95px 1fr;
 
     gap:10px;
 
@@ -1101,5 +1101,19 @@ body{
 
 .input-left{
 
+    font-size:12px;
+}
+#foodArea{
+    grid-template-columns:95px 1fr;
+}
+.input-card{
+    min-height:38px;
+    padding:6px 10px;
+}
+.input-name{
+    font-size:12px;
+}
+
+.input-left{
     font-size:12px;
 }
