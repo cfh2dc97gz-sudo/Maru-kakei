@@ -144,7 +144,11 @@ button:active{
 
 .summary-grid{
 
-    gap:2px;
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:6px;
 
     margin-top:6px;
 
@@ -152,15 +156,15 @@ button:active{
 
 .summary-item{
 
+    padding:6px;
+
     background:transparent;
 
     border:none;
 
-    padding:2px 2px;
-
-    border-radius:0;
-
     box-shadow:none;
+
+    text-align:center;
 
 }
 
