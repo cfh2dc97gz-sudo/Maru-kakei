@@ -580,3 +580,84 @@ button:active{
     transform:scale(.98);
 
 }
+/* ===== Ver11 コンパクト化 ===== */
+
+.month-header{
+
+    min-height:50px;
+
+}
+
+.month-right{
+
+    display:flex;
+
+    gap:6px;
+
+}
+
+.mini-reset{
+
+    width:32px;
+
+    height:32px;
+
+    font-size:14px;
+
+    border-radius:50%;
+
+}
+
+.summary-item{
+
+    padding:6px 4px;
+
+}
+
+.card{
+
+    padding:10px;
+
+    margin-bottom:8px;
+
+}
+
+#forecast{
+
+    margin-top:2px;
+
+}
+
+#advice{
+
+    margin-top:4px;
+
+}
+
+.input-card{
+
+    min-height:36px;
+
+    padding:6px 8px;
+
+}
+
+.income-grid button{
+
+    height:46px;
+
+}
+
+.money{
+
+    margin-top:6px;
+
+    font-size:22px;
+
+}
+
+.bottom-nav{
+
+    padding:6px;
+
+}
