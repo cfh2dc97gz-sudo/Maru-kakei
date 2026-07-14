@@ -8,7 +8,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>🐻 まる家計</title>
+<title>まる家計 Ver10</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -38,52 +38,58 @@ content="width=device-width, initial-scale=1.0">
 
 <div class="card">
 
-<h2>
-💰 今月のお金
-</h2>
+    <h2>
+        💰 今月のお金
+    </h2>
 
-<div class="summary-grid">
+    <div class="summary-grid">
 
-    <div class="summary-item">
+        <div class="summary-item">
 
-        <div class="summary-title">
-            収入
+            <div class="summary-title">
+                収入
+            </div>
+
+            <div class="summary-money"
+            id="incomeSummary">
+
+                ¥0
+
+            </div>
+
         </div>
 
-        <div class="summary-money"
-        id="incomeSummary">
-            ¥0
+        <div class="summary-item">
+
+            <div class="summary-title">
+                支出
+            </div>
+
+            <div class="summary-money"
+            id="spent">
+
+                ¥0
+
+            </div>
+
+        </div>
+
+        <div class="summary-item">
+
+            <div class="summary-title">
+                残り
+            </div>
+
+            <div class="summary-money"
+            id="remain">
+
+                ¥0
+
+            </div>
+
         </div>
 
     </div>
-
-    <div class="summary-item">
-
-        <div class="summary-title">
-            支出
-        </div>
-
-        <div class="summary-money"
-        id="spent">
-            ¥0
-        </div>
-
-    </div>
-
-    <div class="summary-item">
-
-        <div class="summary-title">
-            残り
-        </div>
-
-        <div class="summary-money"
-        id="remain">
-            ¥0
-        </div>
-
-    </div>
-
-</div>
 
 </div>
 
@@ -91,30 +97,30 @@ content="width=device-width, initial-scale=1.0">
 
 <div class="card">
 
-<h2>
-🤖 AI分析
-</h2>
+    <h2>
+        🤖 AI分析
+    </h2>
 
-<p id="forecast">
-現在予測 ¥0
-</p>
+    <p id="forecast">
 
-<p id="advice">
-今日もおつかれさま😊
-</p>
+        現在予測 ¥0
+
+    </p>
+
+    <p id="advice">
+
+        AI分析準備中
+
+    </p>
 
 </div>
 <!-- カテゴリ -->
 
 <div class="card">
 
-<h2>
-📒 カテゴリ
-</h2>
+    <div id="foodArea"></div>
 
-<div id="foodArea"></div>
-
-<div id="gridArea"></div>
+    <div id="gridArea"></div>
 
 </div>
 
@@ -122,78 +128,82 @@ content="width=device-width, initial-scale=1.0">
 
 <div class="card">
 
-<h2>
-💰 収入
-</h2>
+    <h2>
+        💰 収入
+    </h2>
 
-<div class="income-grid">
+    <div class="income-grid">
 
-<button onclick="addIncome('パパ')">
-👨<br>パパ
+        <button onclick="addIncome('パパ')">
+
+            👨<br>
+            パパ
+
+        </button>
+
+        <button onclick="addIncome('ママ')">
+
+            👩<br>
+            ママ
+
+        </button>
+
+        <button onclick="addIncome('臨時')">
+
+            🎁<br>
+            臨時
+
+        </button>
+
+    </div>
+
+    <div class="money" id="income">
+
+        ¥0
+
+    </div>
+
+    <div id="incomeHistory"></div>
+
+</div>
+
+<button class="reset-btn"
+onclick="resetMonth()">
+
+    🗑 今月をリセット
+
 </button>
 
-<button onclick="addIncome('ママ')">
-👩<br>ママ
-</button>
+<nav class="bottom-nav">
 
-<button onclick="addIncome('臨時')">
-🎁<br>臨時
-</button>
+    <button class="active">
 
-</div>
+        🏠<br>
 
-<div class="money" id="income">
-¥0
-</div>
+        <span>ホーム</span>
 
-<div id="incomeHistory"></div>
+    </button>
 
-</div>
+    <button>
 
-<!-- 年間目標（Ver11で年間ページへ移動予定） -->
+        📈<br>
 
-<!--
-<div class="card">
+        <span>年間</span>
 
-<h2>
-🎯 年間目標
-</h2>
+    </button>
 
-<div class="money" id="goal">
-¥3,400,000
-</div>
+    <button>
 
-</div>
--->
+        ⚙️<br>
 
-<button onclick="resetMonth()">
-🗑 今月をリセット
-</button>
+        <span>設定</span>
+
+    </button>
+
+</nav>
 
 <script src="app.js"></script>
 
 </body>
 
 </html>
-<!-- ===========================
-     下メニュー（Ver10）
-=========================== -->
-
-<nav class="bottom-nav">
-
-    <button class="active">
-        🏠<br>
-        <span>ホーム</span>
-    </button>
-
-    <button>
-        📈<br>
-        <span>年間</span>
-    </button>
-
-    <button>
-        ⚙️<br>
-        <span>設定</span>
-    </button>
-
-</nav>
