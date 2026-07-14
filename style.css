@@ -8,14 +8,17 @@ body{
 
     font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
 
-    background:#FFF9E8;
+    background:linear-gradient(
+        180deg,
+        #FFFDF7 0%,
+        #FFF8EA 100%
+    );
 
-    color:#333;
+    color:#2F2A24;
 
-    padding:16px;
+    padding:18px;
 
 }
-
 
 h1{
 
@@ -41,18 +44,21 @@ h2{
 
 .card{
 
-    background:#fff;
+    background:#ffffff;
 
-    border-radius:26px;
+    border-radius:28px;
 
     padding:22px;
 
-    margin-bottom:18px;
+    margin-bottom:20px;
 
-    box-shadow:0 8px 20px rgba(0,0,0,.05);
+    border:1px solid #FFF5D8;
+
+    box-shadow:
+        0 8px 24px rgba(255,212,80,.10),
+        0 2px 8px rgba(0,0,0,.03);
 
 }
-
 .money{
     font-size:34px;
     font-weight:800;
