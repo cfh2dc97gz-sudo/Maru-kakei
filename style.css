@@ -113,9 +113,9 @@ button:active{
 
 .month-header button{
 
-    width:42px;
+    width:30px;
 
-    height:42px;
+    height:30px;
 
     border-radius:50%;
 
@@ -123,7 +123,7 @@ button:active{
 
     background:#FFF9EF;
 
-    font-size:18px;
+    font-size:12px;
 
 }
 
