@@ -16,47 +16,109 @@ content="width=device-width, initial-scale=1.0">
 
 <body>
 
-<h1>🐻 まる家計</h1>
+<!-- 月 -->
 
 <div class="card">
 
-<div class="month-header">
+    <div class="month-header">
 
-    <button onclick="changeMonth(-1)">
-        ◀
-    </button>
+        <button onclick="prevMonth()">◀</button>
 
-    <h2 id="period">
-        2026年4月
-    </h2>
+        <h2 id="period">
+            2026年4月
+        </h2>
 
-    <button onclick="changeMonth(1)">
-        ▶
-    </button>
+        <button onclick="nextMonth()">▶</button>
+
+    </div>
 
 </div>
 
-</div>
+<!-- 今月のお金 -->
 
 <div class="card">
 
 <h2>
-🎯 年間目標
+💰 今月のお金
 </h2>
 
-<div class="money" id="goal">
-¥3,400,000
+<div class="summary-grid">
+
+    <div class="summary-item">
+
+        <div class="summary-title">
+            収入
+        </div>
+
+        <div class="summary-money"
+        id="incomeSummary">
+            ¥0
+        </div>
+
+    </div>
+
+    <div class="summary-item">
+
+        <div class="summary-title">
+            支出
+        </div>
+
+        <div class="summary-money"
+        id="spent">
+            ¥0
+        </div>
+
+    </div>
+
+    <div class="summary-item">
+
+        <div class="summary-title">
+            残り
+        </div>
+
+        <div class="summary-money"
+        id="remain">
+            ¥0
+        </div>
+
+    </div>
+
 </div>
+
+</div>
+
+<!-- AI -->
+
+<div class="card">
+
+<h2>
+🤖 AI分析
+</h2>
 
 <p id="forecast">
 現在予測 ¥0
 </p>
 
-<p id="aiMessage">
-まず収入を入力しましょう😊
+<p id="advice">
+今日もおつかれさま😊
 </p>
 
 </div>
+<!-- カテゴリ -->
+
+<div class="card">
+
+<h2>
+📒 カテゴリ
+</h2>
+
+<div id="foodArea"></div>
+
+<div id="gridArea"></div>
+
+</div>
+
+<!-- 収入 -->
 
 <div class="card">
 
@@ -83,59 +145,26 @@ content="width=device-width, initial-scale=1.0">
 <div class="money" id="income">
 ¥0
 </div>
+
 <div id="incomeHistory"></div>
-    
+
 </div>
 
+<!-- 年間目標（Ver11で年間ページへ移動予定） -->
+
+<!--
 <div class="card">
 
 <h2>
-📒 カテゴリ
+🎯 年間目標
 </h2>
 
-<div id="foodArea"></div>
-
-<div id="gridArea"></div>
-
-</div>
-<div class="card">
-
-<h2>
-💰 今月のお金
-</h2>
-
-<div class="summary-grid">
-
-    <div class="summary-item">
-        <div class="summary-title">収入</div>
-        <div class="summary-money" id="incomeSummary">¥0</div>
-    </div>
-
-    <div class="summary-item">
-        <div class="summary-title">支出</div>
-        <div class="summary-money" id="spent">¥0</div>
-    </div>
-
-    <div class="summary-item">
-        <div class="summary-title">残り</div>
-        <div class="summary-money" id="remain">¥0</div>
-    </div>
-
+<div class="money" id="goal">
+¥3,400,000
 </div>
 
 </div>
-
-<div class="card">
-
-<h2>
-🤖 AI提案
-</h2>
-
-<p id="advice">
-今日もおつかれさま😊
-</p>
-
-</div>
+-->
 
 <button onclick="resetMonth()">
 🗑 今月をリセット
@@ -144,4 +173,27 @@ content="width=device-width, initial-scale=1.0">
 <script src="app.js"></script>
 
 </body>
+
 </html>
+<!-- ===========================
+     下メニュー（Ver10）
+=========================== -->
+
+<nav class="bottom-nav">
+
+    <button class="active">
+        🏠<br>
+        <span>ホーム</span>
+    </button>
+
+    <button>
+        📈<br>
+        <span>年間</span>
+    </button>
+
+    <button>
+        ⚙️<br>
+        <span>設定</span>
+    </button>
+
+</nav>
