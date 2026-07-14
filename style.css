@@ -148,18 +148,15 @@ button:active{
 .summary-grid{
 
     display:grid;
-
     grid-template-columns:repeat(3,1fr);
-
     gap:6px;
-
-    margin-top:6px;
+    margin-top:0;
 
 }
 
 .summary-item{
 
-    padding:6px;
+    padding:2px 4px;
 
     background:transparent;
 
