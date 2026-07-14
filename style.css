@@ -1,6 +1,6 @@
 /* ===========================
    Ver11
-   ① リセット・全体
+   ① 共通設定
 =========================== */
 
 *{
@@ -26,9 +26,9 @@ body{
 
     color:#2F2A24;
 
-    padding:0px 10px 84px;
+    padding:4px 10px 82px;
 
-    line-height:1.45;
+    line-height:1.4;
 
     -webkit-tap-highlight-color:transparent;
 
@@ -40,7 +40,7 @@ h1{
 
 h2{
 
-    font-size:17px;
+    font-size:16px;
 
     font-weight:800;
 
@@ -50,7 +50,7 @@ h2{
 
 p{
 
-    line-height:1.55;
+    line-height:1.4;
 
 }
 
@@ -60,15 +60,21 @@ button{
 
     cursor:pointer;
 
-    transition:.15s;
-
-    font-weight:700;
-
-    border-radius:14px;
+    border-radius:12px;
 
     background:#FFF9EF;
 
     color:#6D4C41;
+
+    font-weight:700;
+
+    transition:.15s;
+
+}
+
+button:hover{
+
+    opacity:.96;
 
 }
 
@@ -84,37 +90,71 @@ button:active{
 
 .card{
 
-    background:#FFFFFF;
+    background:#FFF;
 
     border:1px solid #F7E7B5;
 
-    border-radius:20px;
+    border-radius:18px;
 
-    padding:4px 8px;
+    padding:8px;
 
-    margin-bottom:30px 0 8px;
+    margin-bottom:8px;
 
     box-shadow:
-        0 3px 10px rgba(0,0,0,.04);
+        0 2px 8px rgba(0,0,0,.04);
 
 }
-
-/* ===========================
-   月切替
+//* ===========================
+   ② 月カード
 =========================== */
 
-.month-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:2px 0;
-    min-height:40px;
+.month-card{
+
+    padding:2px 8px;
+
+    margin-bottom:8px;
+
 }
+
+.month-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    height:32px;
+
+}
+
+.month-header h2{
+
+    font-size:18px;
+
+    font-weight:800;
+
+    color:#7B6258;
+
+    line-height:1;
+
+}
+
+.month-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+}
+
 .month-header button{
 
-    width30px;
+    width:32px;
 
-    height:30px;
+    height:32px;
 
     border-radius:50%;
 
@@ -122,36 +162,54 @@ button:active{
 
     background:#FFF9EF;
 
-    font-size:12px;
+    font-size:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
 }
 
-.month-header h2{
-    margin:0;
-    font-size:10px;
-}
-.summary-card{
-    padding:2px 6px;
-}
+.mini-reset{
 
+    font-size:13px;
+
+}
 /* ===========================
-   ② 今月のお金
+   ③ 今月のお金
 =========================== */
+
+.summary-card{
+
+    padding:4px 8px;
+
+}
 
 .summary-grid{
 
     display:grid;
+
     grid-template-columns:repeat(3,1fr);
 
-    gap:2px;      /* 6→2 */
+    gap:2px;
 
-    margin-top:0;
+    margin:0;
 
 }
 
 .summary-item{
 
-    padding:0;
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:2px 0;
 
     background:transparent;
 
@@ -159,22 +217,31 @@ button:active{
 
     box-shadow:none;
 
-    text-align:center;
-
 }
 
 .summary-title{
 
     font-size:10px;
 
-    margin-bottom:0;
+    color:#8A7768;
+
+    margin-bottom:1px;
 
 }
 
 .summary-money{
 
-    font-size:10px;
-    line-height:1.1;
+    font-size:14px;
+
+    font-weight:800;
+
+    line-height:1;
+
+}
+
+.plus{
+
+    color:#2E7D32;
 
 }
 
@@ -183,12 +250,6 @@ button:active{
     color:#D32F2F;
 
 }
-.summary-card{
-
-    padding:4px 10px;
-
-}
-
 /* ===========================
    AI
 =========================== */
