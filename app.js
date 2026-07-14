@@ -143,22 +143,7 @@ function update(){
 
         });
 
-    const foodArea =
-    document.getElementById("foodArea");
-
-foodArea.innerHTML = `
-<div class="category-family">
-
-    🧒👧
-
-    <p>はる・りん</p>
-
-</div>
-
-<div id="gridArea"></div>
-`;
-
-const gridArea =
+   const gridArea =
     document.getElementById("gridArea");
 
 gridArea.innerHTML = "";
