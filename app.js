@@ -220,10 +220,9 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
         ${item.name}
     </div>
 
-    <div class="input-left ${remain < 0 ? "over" : ""}">
-        残高<br>
-        ¥${remain.toLocaleString()}
-    </div>
+<div class="input-left">
+    ¥${remain.toLocaleString()}
+</div>
 
 </div>
 `;
