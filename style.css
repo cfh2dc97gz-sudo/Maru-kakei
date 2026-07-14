@@ -149,14 +149,16 @@ button:active{
 
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:6px;
+
+    gap:2px;      /* 6→2 */
+
     margin-top:0;
 
 }
 
 .summary-item{
 
-    padding:2px 4px;
+    padding:0;
 
     background:transparent;
 
@@ -170,23 +172,27 @@ button:active{
 
 .summary-title{
 
-    font-size:11px;
+    font-size:10px;
 
-    margin-bottom:2px;
+    margin-bottom:0;
 
 }
 
 .summary-money{
 
-    font-size:15px;
-
-    font-weight:800;
+    font-size:14px;
+    line-height:1.1;
 
 }
 
 .minus{
 
     color:#D32F2F;
+
+}
+.summary-card{
+
+    padding:4px 10px;
 
 }
 
