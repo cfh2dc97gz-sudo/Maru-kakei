@@ -385,3 +385,15 @@ h2{
     color:#2E7D32;
 
 }
+.income-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+    margin:14px 0;
+
+}
+
