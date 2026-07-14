@@ -90,9 +90,9 @@ button:active{
 
     border-radius:20px;
 
-    padding:12px;
+    padding:8px 10px;
 
-    margin-bottom:10px;
+    margin-bottom:6px;
 
     box-shadow:
         0 3px 10px rgba(0,0,0,.04);
@@ -144,55 +144,39 @@ button:active{
 
 .summary-grid{
 
-    display:grid;
+    gap:2px;
 
-    grid-template-columns:repeat(3,1fr);
-
-    gap:8px;
-
-    margin-top:10px;
+    margin-top:6px;
 
 }
 
 .summary-item{
 
-    background:#FFF9EF;
+    background:transparent;
 
-    border:1px solid #F7E7B5;
+    border:none;
 
-    border-radius:16px;
+    padding:2px 2px;
 
-    padding:8px 4px;
+    border-radius:0;
 
-    text-align:center;
+    box-shadow:none;
 
 }
 
 .summary-title{
 
-    font-size:10px;
+    font-size:11px;
 
-    font-weight:700;
-
-    color:#8A7768;
-
-    margin-bottom:4px;
+    margin-bottom:2px;
 
 }
 
 .summary-money{
 
-    font-size:16px;
+    font-size:15px;
 
     font-weight:800;
-
-    line-height:1.2;
-
-}
-
-.plus{
-
-    color:#1976D2;
 
 }
 
