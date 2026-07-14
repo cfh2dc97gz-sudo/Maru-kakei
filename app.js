@@ -208,18 +208,19 @@ gridArea.innerHTML = "";
                 : "small-card";
 
         const card = `
-<div class="input-card ${foodClass}"
+<button
+class="input-card"
 onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 
-    <div class="input-name">
+    <span class="input-name">
         ${item.name}
-    </div>
+    </span>
 
-<div class="input-left">
-    ¥${remain.toLocaleString()}
-</div>
+    <span class="input-left">
+        ¥${remain.toLocaleString()}
+    </span>
 
-</div>
+</button>
 `;
 
         if(item.id === "food"){
