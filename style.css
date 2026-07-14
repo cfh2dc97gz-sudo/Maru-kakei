@@ -1063,3 +1063,43 @@ body{
     color:#2E7D32;
 
 }
+#foodArea{
+
+    display:grid;
+
+    grid-template-columns:110px 1fr;
+
+    gap:10px;
+
+}
+
+#gridArea{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+
+    min-width:0;
+}
+
+.input-card{
+
+    width:auto;
+
+    min-width:0;
+
+    padding:8px;
+
+}
+
+.input-name{
+
+    font-size:12px;
+}
+
+.input-left{
+
+    font-size:12px;
+}
