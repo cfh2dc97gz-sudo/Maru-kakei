@@ -741,3 +741,92 @@ body{
 
 }
 
+/* ===========================
+   Ver10.8 カテゴリコンパクト
+=========================== */
+
+#foodArea{
+
+    display:grid;
+
+    grid-template-columns:140px 1fr;
+
+    gap:10px;
+
+    align-items:stretch;
+
+    margin-bottom:8px;
+
+}
+
+.category-family{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border:1px solid #F7E8BA;
+
+    border-radius:18px;
+
+    background:#FFF9EF;
+
+    padding:10px;
+
+    min-height:150px;
+
+}
+
+.category-family img{
+
+    width:72px;
+
+    margin-bottom:8px;
+
+}
+
+.category-family p{
+
+    font-size:14px;
+
+    font-weight:700;
+
+    color:#6D4C41;
+
+}
+
+#gridArea{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:6px;
+
+}
+
+.input-card{
+
+    min-height:38px;
+
+    padding:6px 10px;
+
+    border-radius:14px;
+
+}
+
+.input-name{
+
+    font-size:13px;
+
+}
+
+.input-left{
+
+    font-size:14px;
+
+}
