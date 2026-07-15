@@ -434,18 +434,34 @@ function drawYearCategory(){
 
         let actual = 0;
 
-/* 全12か月分を合計 */
+for(let month=1; month<=12; month++){
 
-Object.keys(data).forEach(month=>{
+    const key =
+        `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
 
-    if(data[month].categories?.[name]){
+    const saved =
+        localStorage.getItem(key);
 
-        actual += Number(data[month].categories[name]) || 0;
+    if(!saved) continue;
+
+    const monthData =
+        JSON.parse(saved);
+
+    const budget =
+        monthData.budgets?.find(item=>
+
+            item.name.replace(/[^\u4E00-\u9FFFぁ-んァ-ヶー]/g,"").trim()
+            === name
+
+        );
+
+    if(budget){
+
+        actual += Number(budget.spent) || 0;
 
     }
 
-});
-
+}
         const diff =
             budget-actual;
 
