@@ -591,6 +591,10 @@ function drawYearChart(){
         const saved =
             localStorage.getItem(key);
 
+        let income = 0;
+
+        let spent = 0;
+
         let remain = 0;
 
         if(saved){
@@ -598,12 +602,12 @@ function drawYearChart(){
             const data =
                 JSON.parse(saved);
 
-            const income =
+            income =
                 (data.income?.papa || 0) +
                 (data.income?.mama || 0) +
                 (data.income?.extra || 0);
 
-            const spent =
+            spent =
                 (data.budgets || []).reduce(
 
                     (sum,item)=>sum+(item.spent || 0),
@@ -626,6 +630,10 @@ function drawYearChart(){
 
             month,
 
+            income,
+
+            spent,
+
             remain
 
         });
@@ -642,14 +650,16 @@ function drawYearChart(){
 
         const height =
             Math.max(
+
                 item.remain / maxRemain * 150,
+
                 2
+
             );
 
         chart.innerHTML += `
 
 <div class="chart-month">
-
 
     <div class="chart-bar-area">
 
@@ -674,6 +684,7 @@ function drawYearChart(){
     });
 
 }
+
 drawYearSummary();
 drawYearCategory();
 drawYearChart();
