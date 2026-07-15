@@ -568,5 +568,116 @@ function drawYearSummary(){
         percent + "%";
 
 }
+/* ===========================
+   月別グラフ
+=========================== */
+
+function drawYearChart(){
+
+    const chart =
+        document.getElementById("yearChart");
+
+    chart.innerHTML = "";
+
+    let maxRemain = 0;
+
+    const months = [];
+
+    for(let month=1; month<=12; month++){
+
+        const key =
+            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+
+        const saved =
+            localStorage.getItem(key);
+
+        let remain = 0;
+
+        if(saved){
+
+            const data =
+                JSON.parse(saved);
+
+            const income =
+                (data.income?.papa || 0) +
+                (data.income?.mama || 0) +
+                (data.income?.extra || 0);
+
+            const spent =
+                (data.budgets || []).reduce(
+
+                    (sum,item)=>sum+(item.spent || 0),
+
+                    0
+
+                );
+
+            remain = income - spent;
+
+        }
+
+        if(remain > maxRemain){
+
+            maxRemain = remain;
+
+        }
+
+        months.push({
+
+            month,
+
+            remain
+
+        });
+
+    }
+
+    if(maxRemain === 0){
+
+        maxRemain = 1;
+
+    }
+
+    months.forEach(item=>{
+
+        const height =
+            Math.max(
+                item.remain / maxRemain * 150,
+                2
+            );
+
+        chart.innerHTML += `
+
+<div class="chart-month">
+
+    <div class="chart-value">
+
+        ¥${item.remain.toLocaleString()}
+
+    </div>
+
+    <div class="chart-bar-area">
+
+        <div
+            class="chart-bar"
+            style="height:${height}px">
+
+        </div>
+
+    </div>
+
+    <div class="chart-label">
+
+        ${item.month}月
+
+    </div>
+
+</div>
+
+`;
+
+    });
+
+}
 drawYearSummary();
 drawYearCategory();
