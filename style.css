@@ -765,3 +765,92 @@ button:active{
     font-weight:800;
 
 }
+/* ===========================
+   月別グラフ
+=========================== */
+
+.year-chart{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+    gap:6px;
+
+    height:220px;
+
+    margin-top:12px;
+
+}
+
+.chart-month{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+.chart-value{
+
+    font-size:9px;
+
+    font-weight:700;
+
+    color:#8A7768;
+
+    margin-bottom:4px;
+
+}
+
+.chart-bar-area{
+
+    width:100%;
+
+    height:160px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:center;
+
+    border:1px dashed #F4D77A;
+
+    border-radius:8px;
+
+    background:#FFFDF8;
+
+}
+
+.chart-bar{
+
+    width:70%;
+
+    height:0;
+
+    background:#F4D77A;
+
+    border-radius:8px 8px 0 0;
+
+    transition:.3s;
+
+}
+
+.chart-label{
+
+    margin-top:6px;
+
+    font-size:11px;
+
+    color:#7B6258;
+
+    font-weight:700;
+
+}
