@@ -742,3 +742,26 @@ button:active{
     color:#D32F2F;
 
 }
+.year-line{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:8px;
+
+    font-size:14px;
+
+    gap:8px;
+
+}
+
+.year-line strong{
+
+    font-size:15px;
+
+    font-weight:800;
+
+}
