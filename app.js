@@ -432,8 +432,19 @@ function drawYearCategory(){
         const budget =
             yearlyBudget[name];
 
-        /* ここは後で本物の年間実績にする */
-        const actual = 0;
+        let actual = 0;
+
+/* 全12か月分を合計 */
+
+Object.keys(data).forEach(month=>{
+
+    if(data[month].categories?.[name]){
+
+        actual += Number(data[month].categories[name]) || 0;
+
+    }
+
+});
 
         const diff =
             budget-actual;
