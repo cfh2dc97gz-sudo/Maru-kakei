@@ -544,4 +544,13 @@ function drawYearSummary(){
         "summary-money " +
         (remain>=0 ? "plus" : "minus");
 
+    document.getElementById("yearGoal").textContent =
+        `¥${remain.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+
+    const percent =
+        Math.min(remain / app.goal * 100, 100);
+
+    document.getElementById("goalBar").style.width =
+        percent + "%";
+
 }
