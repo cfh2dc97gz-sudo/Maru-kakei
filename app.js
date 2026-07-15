@@ -492,3 +492,51 @@ for(let month=1; month<=12; month++){
 }
 
 drawYearCategory();
+function drawYearSummary(){
+
+    let income = 0;
+    let spent = 0;
+
+    for(let month=1; month<=12; month++){
+
+        const key =
+            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+
+        const saved = localStorage.getItem(key);
+
+        if(!saved) continue;
+
+        const data = JSON.parse(saved);
+
+        income +=
+            (data.income?.papa || 0) +
+            (data.income?.mama || 0) +
+            (data.income?.extra || 0);
+
+        spent +=
+            (data.budgets || []).reduce(
+                (sum,item)=>sum+(item.spent||0),
+                0
+            );
+
+    }
+
+    const remain = income - spent;
+
+    document.getElementById("yearIncome").textContent =
+        "¥" + income.toLocaleString();
+
+    document.getElementById("yearSpent").textContent =
+        "¥" + spent.toLocaleString();
+
+    const remainEl =
+        document.getElementById("yearRemain");
+
+    remainEl.textContent =
+        "¥" + remain.toLocaleString();
+
+    remainEl.className =
+        "summary-money " +
+        (remain>=0 ? "plus" : "minus");
+
+}
