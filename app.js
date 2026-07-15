@@ -451,7 +451,7 @@ function drawYearCategory(){
         <span>実績 ¥${actual.toLocaleString()}</span>
 
         <strong class="${diff>=0 ? "plus" : "minus"}">
-            ${diff>=0 ? "+" : "-"}¥${Math.abs(diff).toLocaleString()}
+            差額${diff>=0 ? "+" : "-"}¥${Math.abs(diff).toLocaleString()}
         </strong>
 
     </div>
