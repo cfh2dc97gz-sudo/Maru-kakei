@@ -404,3 +404,80 @@ navButtons[1].onclick = ()=>{
     navButtons[0].classList.remove("active");
 
 };
+/* ===========================
+   年間カテゴリ分析
+=========================== */
+
+const yearlyBudget = {
+
+    "食費":80000*12,
+    "電気・水道":32000*12,
+    "岩銀":40000*12,
+    "楽天":20000*12,
+    "休日":40000*12,
+    "ガソリン":17000*12,
+    "その他":30000*12
+
+};
+
+function drawYearCategory(){
+
+    const area =
+        document.getElementById("yearCategory");
+
+    area.innerHTML="";
+
+    Object.keys(yearlyBudget).forEach(name=>{
+
+        const budget =
+            yearlyBudget[name];
+
+        /* ここは後で本物の年間実績にする */
+        const actual = 0;
+
+        const diff =
+            budget-actual;
+
+        area.innerHTML+=`
+
+<div class="year-category">
+
+    <h3>${name}</h3>
+
+    <div class="year-row">
+
+        <span>年間予算</span>
+
+        <strong>¥${budget.toLocaleString()}</strong>
+
+    </div>
+
+    <div class="year-row">
+
+        <span>年間実績</span>
+
+        <strong>¥${actual.toLocaleString()}</strong>
+
+    </div>
+
+    <div class="year-row">
+
+        <span>差額</span>
+
+        <strong class="${diff>=0?"plus":"minus"}">
+
+            ${diff>=0?"+":"-"}¥${Math.abs(diff).toLocaleString()}
+
+        </strong>
+
+    </div>
+
+</div>
+
+`;
+
+    });
+
+}
+
+drawYearCategory();
