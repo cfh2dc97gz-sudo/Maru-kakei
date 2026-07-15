@@ -430,7 +430,7 @@ function drawYearCategory(){
     const area =
         document.getElementById("yearCategory");
 
-    area.innerHTML="";
+    area.innerHTML = "";
 
     Object.keys(yearlyBudget).forEach(name=>{
 
@@ -439,38 +439,39 @@ function drawYearCategory(){
 
         let actual = 0;
 
-for(let month=1; month<=12; month++){
+        for(let month=1; month<=12; month++){
 
-    const key =
-        `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+            const key =
+                `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
 
-    const saved =
-        localStorage.getItem(key);
+            const saved =
+                localStorage.getItem(key);
 
-    if(!saved) continue;
+            if(!saved) continue;
 
-    const monthData =
-        JSON.parse(saved);
+            const monthData =
+                JSON.parse(saved);
 
-    const budget =
-        monthData.budgets?.find(item=>
+            const item =
+                monthData.budgets?.find(data=>
 
-            item.name.replace(/[^\u4E00-\u9FFFぁ-んァ-ヶー]/g,"").trim()
-            === name
+                    data.name.replace(/[^\u4E00-\u9FFFぁ-んァ-ヶー]/g,"").trim()
+                    === name
 
-        );
+                );
 
-    if(budget){
+            if(item){
 
-        actual += Number(budget.spent) || 0;
+                actual += Number(item.spent) || 0;
 
-    }
+            }
 
-}
+        }
+
         const diff =
-            budget-actual;
+            budget - actual;
 
- area.innerHTML += `
+        area.innerHTML += `
 
 <div class="year-category">
 
@@ -483,7 +484,9 @@ for(let month=1; month<=12; month++){
         <span>実績 ¥${actual.toLocaleString()}</span>
 
         <strong class="${diff>=0 ? "plus" : "minus"}">
+
             差額${diff>=0 ? "+" : "-"}¥${Math.abs(diff).toLocaleString()}
+
         </strong>
 
     </div>
@@ -495,8 +498,10 @@ for(let month=1; month<=12; month++){
     });
 
 }
+/* ===========================
+   年間合計
+=========================== */
 
-drawYearCategory();
 function drawYearSummary(){
 
     let income = 0;
@@ -507,11 +512,13 @@ function drawYearSummary(){
         const key =
             `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
 
-        const saved = localStorage.getItem(key);
+        const saved =
+            localStorage.getItem(key);
 
         if(!saved) continue;
 
-        const data = JSON.parse(saved);
+        const data =
+            JSON.parse(saved);
 
         income +=
             (data.income?.papa || 0) +
@@ -520,13 +527,17 @@ function drawYearSummary(){
 
         spent +=
             (data.budgets || []).reduce(
-                (sum,item)=>sum+(item.spent||0),
+
+                (sum,item)=>sum+(item.spent || 0),
+
                 0
+
             );
 
     }
 
-    const remain = income - spent;
+    const remain =
+        income - spent;
 
     document.getElementById("yearIncome").textContent =
         "¥" + income.toLocaleString();
@@ -542,15 +553,20 @@ function drawYearSummary(){
 
     remainEl.className =
         "summary-money " +
-        (remain>=0 ? "plus" : "minus");
+        (remain >= 0 ? "plus" : "minus");
 
     document.getElementById("yearGoal").textContent =
         `¥${remain.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
 
     const percent =
-        Math.min(remain / app.goal * 100, 100);
+        Math.max(
+            0,
+            Math.min(remain / app.goal * 100, 100)
+        );
 
     document.getElementById("goalBar").style.width =
         percent + "%";
 
 }
+drawYearSummary();
+drawYearCategory();
