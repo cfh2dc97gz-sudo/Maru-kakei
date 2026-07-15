@@ -385,12 +385,7 @@ navButtons[0].onclick = ()=>{
 
     });
 
-    navButtons[0].classList.add("active");
-    navButtons[1].classList.remove("active");
-
-};
-
-navButtons[1].onclick = ()=>{
+    navButtons[1].onclick = ()=>{
 
     document.querySelectorAll("body > .card").forEach(card=>{
 
@@ -406,6 +401,8 @@ navButtons[1].onclick = ()=>{
     drawYearSummary();
 
     drawYearCategory();
+
+    drawYearChart();
 
 };
 
@@ -681,3 +678,4 @@ function drawYearChart(){
 }
 drawYearSummary();
 drawYearCategory();
+drawYearChart();
