@@ -679,3 +679,66 @@ button:active{
     color:#D32F2F;
 
 }
+/* ===========================
+   年間カテゴリ一覧
+=========================== */
+
+.year-header{
+
+    display:grid;
+
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#8A7768;
+
+    padding:0 4px 6px;
+
+    border-bottom:1px solid #F7E7B5;
+
+}
+
+.year-item{
+
+    display:grid;
+
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+
+    align-items:center;
+
+    padding:10px 4px;
+
+    border-bottom:1px solid #F5EFD8;
+
+    font-size:13px;
+
+}
+
+.year-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.year-item span:last-child{
+
+    font-weight:700;
+
+    text-align:right;
+
+}
+
+.plus{
+
+    color:#2E7D32;
+
+}
+
+.minus{
+
+    color:#D32F2F;
+
+}
