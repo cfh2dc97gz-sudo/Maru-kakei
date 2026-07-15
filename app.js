@@ -358,3 +358,49 @@ function addSpent(index,isOverwrite=false){
     update();
 
 }
+/* ===========================
+   年間ページ切替
+=========================== */
+
+const homePage =
+    document.body;
+
+const yearPage =
+    document.getElementById("yearPage");
+
+const navButtons =
+    document.querySelectorAll(".bottom-nav button");
+
+navButtons[0].onclick = ()=>{
+
+    yearPage.style.display = "none";
+
+    document.querySelectorAll(".card").forEach(card=>{
+
+        if(!card.closest("#yearPage")){
+
+            card.style.display = "";
+
+        }
+
+    });
+
+    navButtons[0].classList.add("active");
+    navButtons[1].classList.remove("active");
+
+};
+
+navButtons[1].onclick = ()=>{
+
+    document.querySelectorAll("body > .card").forEach(card=>{
+
+        card.style.display = "none";
+
+    });
+
+    yearPage.style.display = "block";
+
+    navButtons[1].classList.add("active");
+    navButtons[0].classList.remove("active");
+
+};
