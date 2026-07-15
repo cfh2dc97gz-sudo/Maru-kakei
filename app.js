@@ -438,36 +438,20 @@ function drawYearCategory(){
         const diff =
             budget-actual;
 
-        area.innerHTML+=`
+ area.innerHTML += `
 
 <div class="year-category">
 
     <h3>${name}</h3>
 
-    <div class="year-row">
+    <div class="year-line">
 
-        <span>年間予算</span>
+        <span>予算 ¥${budget.toLocaleString()}</span>
 
-        <strong>¥${budget.toLocaleString()}</strong>
+        <span>実績 ¥${actual.toLocaleString()}</span>
 
-    </div>
-
-    <div class="year-row">
-
-        <span>年間実績</span>
-
-        <strong>¥${actual.toLocaleString()}</strong>
-
-    </div>
-
-    <div class="year-row">
-
-        <span>差額</span>
-
-        <strong class="${diff>=0?"plus":"minus"}">
-
-            ${diff>=0?"+":"-"}¥${Math.abs(diff).toLocaleString()}
-
+        <strong class="${diff>=0 ? "plus" : "minus"}">
+            ${diff>=0 ? "+" : "-"}¥${Math.abs(diff).toLocaleString()}
         </strong>
 
     </div>
