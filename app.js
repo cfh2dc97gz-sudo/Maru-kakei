@@ -650,11 +650,6 @@ function drawYearChart(){
 
 <div class="chart-month">
 
-    <div class="chart-value">
-
-        ¥${item.remain.toLocaleString()}
-
-    </div>
 
     <div class="chart-bar-area">
 
