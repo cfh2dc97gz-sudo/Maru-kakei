@@ -403,7 +403,12 @@ navButtons[1].onclick = ()=>{
     navButtons[1].classList.add("active");
     navButtons[0].classList.remove("active");
 
+    drawYearSummary();
+
+    drawYearCategory();
+
 };
+
 /* ===========================
    年間カテゴリ分析
 =========================== */
