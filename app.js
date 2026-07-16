@@ -655,7 +655,10 @@ function drawYearChart(){
             Math.max(item.spent / maxValue * 140, 2);
 
         const remainHeight =
-            Math.max(item.remain / maxValue * 140, 2);
+    Math.max(
+        Math.abs(item.remain) / maxValue * 140,
+        2
+    );
 
         chart.innerHTML += `
 
