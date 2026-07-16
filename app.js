@@ -648,13 +648,22 @@ function drawYearChart(){
 
     months.forEach(item=>{
 
-        const height =
+        const incomeHeight =
             Math.max(
-
-                item.remain / maxRemain * 150,
-
+                item.income / maxRemain * 150,
                 2
+            );
 
+        const spentHeight =
+            Math.max(
+                item.spent / maxRemain * 150,
+                2
+            );
+
+        const remainHeight =
+            Math.max(
+                item.remain / maxRemain * 150,
+                2
             );
 
         chart.innerHTML += `
@@ -663,9 +672,25 @@ function drawYearChart(){
 
     <div class="chart-bar-area">
 
-        <div
-            class="chart-bar"
-            style="height:${height}px">
+        <div class="chart-bars">
+
+            <div
+                class="chart-bar income-bar"
+                style="height:${incomeHeight}px">
+
+            </div>
+
+            <div
+                class="chart-bar spent-bar"
+                style="height:${spentHeight}px">
+
+            </div>
+
+            <div
+                class="chart-bar remain-bar"
+                style="height:${remainHeight}px">
+
+            </div>
 
         </div>
 
