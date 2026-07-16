@@ -573,6 +573,19 @@ navButtons[0].onclick = ()=>{
 
     navButtons[0].classList.add("active");
 
+    const session =
+        JSON.parse(
+            localStorage.getItem(getSessionKey())
+            || "{}"
+        );
+
+    session.page = "home";
+
+    localStorage.setItem(
+        getSessionKey(),
+        JSON.stringify(session)
+    );
+
     save();
 
 };
@@ -600,6 +613,19 @@ navButtons[1].onclick = ()=>{
 
     drawYearChart();
 
+    const session =
+        JSON.parse(
+            localStorage.getItem(getSessionKey())
+            || "{}"
+        );
+
+    session.page = "year";
+
+    localStorage.setItem(
+        getSessionKey(),
+        JSON.stringify(session)
+    );
+
     save();
 
 };
@@ -622,6 +648,19 @@ navButtons[2].onclick = ()=>{
     navButtons[2].classList.add("active");
 
     drawBudgetList();
+
+    const session =
+        JSON.parse(
+            localStorage.getItem(getSessionKey())
+            || "{}"
+        );
+
+    session.page = "setting";
+
+    localStorage.setItem(
+        getSessionKey(),
+        JSON.stringify(session)
+    );
 
     save();
 
@@ -886,10 +925,30 @@ function changeMonthFromYear(month){
 
 }
 
+const sessionData = JSON.parse(
+
+    localStorage.getItem(getSessionKey())
+
+    || "{}"
+
+);
+
 drawYearSummary();
 
 drawYearCategory();
 
 drawYearChart();
 
-navButtons[0].click();
+if(sessionData.page==="year"){
+
+    navButtons[1].click();
+
+}else if(sessionData.page==="setting"){
+
+    navButtons[2].click();
+
+}else{
+
+    navButtons[0].click();
+
+}
