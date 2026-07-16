@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>まる家計 Ver11</title>
+    <title>まる家計 Ver12</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -16,31 +16,43 @@
 
 <body>
 
+<!-- ===========================
+     ホーム画面
+=========================== -->
+
 <!-- 月 -->
 
 <div class="card summary-card">
-    
-   <div class="month-header">
 
-    <button id="prevMonth">◀</button>
+    <div class="month-header">
 
-    <h2 id="period">
-        2026年4月
-    </h2>
+        <button id="prevMonth">◀</button>
 
-    <div class="month-right">
+        <h2 id="period">
 
-        <button id="resetMonth" class="mini-reset">
-            🗑
-        </button>
+            2026年4月
 
-        <button id="nextMonth">
-            ▶
-        </button>
+        </h2>
+
+        <div class="month-right">
+
+            <button
+                id="resetMonth"
+                class="mini-reset">
+
+                🗑
+
+            </button>
+
+            <button id="nextMonth">
+
+                ▶
+
+            </button>
+
+        </div>
 
     </div>
-
-</div>
 
 </div>
 
@@ -53,7 +65,9 @@
         <div class="summary-item">
 
             <div class="summary-title">
+
                 収入
+
             </div>
 
             <div
@@ -69,7 +83,9 @@
         <div class="summary-item">
 
             <div class="summary-title">
+
                 支出
+
             </div>
 
             <div
@@ -85,7 +101,9 @@
         <div class="summary-item">
 
             <div class="summary-title">
+
                 残り
+
             </div>
 
             <div
@@ -121,6 +139,7 @@
     </p>
 
 </div>
+
 <!-- カテゴリ -->
 
 <div class="card">
@@ -147,9 +166,7 @@
 
     </div>
 
-    <div id="gridArea">
-
-    </div>
+    <div id="gridArea"></div>
 
 </div>
 
@@ -193,8 +210,9 @@
     </div>
 
 </div>
-
-    <!-- 年間 -->
+<!-- ===========================
+     年間画面
+=========================== -->
 
 <div id="yearPage" class="page" style="display:none;">
 
@@ -209,7 +227,9 @@
         <h2>🎯 年間目標</h2>
 
         <div id="yearGoal">
+
             ¥0 / ¥3,400,000
+
         </div>
 
         <div class="progress">
@@ -228,7 +248,11 @@
 
             <div class="summary-item">
 
-                <div class="summary-title">収入</div>
+                <div class="summary-title">
+
+                    収入
+
+                </div>
 
                 <div class="summary-money" id="yearIncome">
 
@@ -240,7 +264,11 @@
 
             <div class="summary-item">
 
-                <div class="summary-title">支出</div>
+                <div class="summary-title">
+
+                    支出
+
+                </div>
 
                 <div class="summary-money" id="yearSpent">
 
@@ -252,7 +280,11 @@
 
             <div class="summary-item">
 
-                <div class="summary-title">残り</div>
+                <div class="summary-title">
+
+                    残り
+
+                </div>
 
                 <div class="summary-money" id="yearRemain">
 
@@ -276,25 +308,9 @@
 
             <span class="legend-item">
 
-                <span class="legend-color income-color"></span>
-
-                収入
-
-            </span>
-
-            <span class="legend-item">
-
-                <span class="legend-color spent-color"></span>
-
-                支出
-
-            </span>
-
-            <span class="legend-item">
-
                 <span class="legend-color remain-color"></span>
 
-                残り
+                残高
 
             </span>
 
@@ -306,15 +322,15 @@
 
         <h2>📒 カテゴリ分析</h2>
 
-        <div id="yearCategory">
-
-        </div>
+        <div id="yearCategory"></div>
 
     </div>
 
 </div>
 
-<!-- 設定 -->
+<!-- ===========================
+     設定画面
+=========================== -->
 
 <div id="settingPage" class="page" style="display:none;">
 
@@ -365,105 +381,10 @@
     </div>
 
 </div>
+<!-- ===========================
+     下メニュー
+=========================== -->
 
-    <div class="card">
-
-    <h2>📈 月別推移</h2>
-
-    <div id="yearChart" class="year-chart">
-
-    </div>
-
-    <div class="chart-legend">
-
-        <span class="legend-item">
-
-            <span class="legend-color income-color"></span>
-
-            収入
-
-        </span>
-
-        <span class="legend-item">
-
-            <span class="legend-color spent-color"></span>
-
-            支出
-
-        </span>
-
-        <span class="legend-item">
-
-            <span class="legend-color remain-color"></span>
-
-            残り
-
-        </span>
-
-    </div>
-
-</div>
-
-
-    <div class="card">
-
-        <h2>📒 カテゴリ分析</h2>
-
-        <div id="yearCategory">
-
-    <!-- JavaScriptでカテゴリを表示 -->
-
-</div>
-        <div id="settingPage" class="page" style="display:none;">
-
-    <div class="card">
-
-        <h2>⚙️ 設定</h2>
-
-    </div>
-
-    <div class="card">
-
-        <button class="setting-item" id="editGoal">
-
-            🎯 年間目標
-
-        </button>
-
-        <button class="setting-item" id="editBudget">
-
-            💰 月予算
-
-        </button>
-
-        <button class="setting-item" id="editName">
-
-            👨‍👩‍👧‍👧 名前変更
-
-        </button>
-
-        <button class="setting-item" id="exportData">
-
-            📤 データ書き出し
-
-        </button>
-
-        <button class="setting-item" id="importData">
-
-            📥 データ読み込み
-
-        </button>
-
-        <button class="setting-item danger" id="deleteAll">
-
-            🗑 全データ削除
-
-        </button>
-
-    </div>
-
-</div>
-        
 <nav class="bottom-nav">
 
     <button class="active">
@@ -482,10 +403,18 @@
 
     </button>
 
-  <button id="settingButton">
+    <button id="settingButton">
 
-    ⚙️<br>
+        ⚙️<br>
 
-    <span>設定</span>
+        <span>設定</span>
 
-</button>
+    </button>
+
+</nav>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
