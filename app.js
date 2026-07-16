@@ -433,6 +433,7 @@ navButtons[2].onclick = ()=>{
     navButtons[2].classList.add("active");
 
 };
+
 /* ===========================
    設定
 =========================== */
@@ -448,11 +449,38 @@ document.getElementById("editGoal").onclick = ()=>{
 
     update();
 
+    drawYearSummary();
+
 };
 
 document.getElementById("editBudget").onclick = ()=>{
 
-    alert("次のステップで作成します。");
+    app.budgets.forEach(item=>{
+
+        const budget =
+            Number(
+
+                prompt(
+
+                    `${item.name}の月予算`,
+
+                    item.budget
+
+                )
+
+            );
+
+        if(budget){
+
+            item.budget = budget;
+
+        }
+
+    });
+
+    update();
+
+    drawYearCategory();
 
 };
 
@@ -479,7 +507,6 @@ document.getElementById("deleteAll").onclick = ()=>{
     alert("次のステップで作成します。");
 
 };
-
 /* ===========================
    年間カテゴリ分析
 =========================== */
