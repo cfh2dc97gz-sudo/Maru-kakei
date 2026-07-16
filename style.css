@@ -805,12 +805,13 @@ button:active{
 
     display:flex;
 
-    align-items:flex-end;
+    align-items:center;
 
     justify-content:center;
 
-}
+    position:relative;
 
+}
 .chart-bars{
 
     display:flex;
