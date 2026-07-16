@@ -434,7 +434,7 @@ navButtons[2].onclick = ()=>{
 
 };
 
-//* ===========================
+/* ===========================
    設定
 =========================== */
 
@@ -467,9 +467,11 @@ document.getElementById("editBudget").onclick = ()=>{
                 )
             );
 
-        if(!budget) return;
+        if(budget){
 
-        item.budget = budget;
+            item.budget = budget;
+
+        }
 
     });
 
@@ -481,27 +483,17 @@ document.getElementById("editBudget").onclick = ()=>{
 
 };
 
-document.getElementById("editName").onclick = ()=>{
-
-    alert("Ver13で実装します。");
-
-};
-
-document.getElementById("exportData").onclick = ()=>{
-
-    alert("Ver13で実装します。");
-
-};
-
-document.getElementById("importData").onclick = ()=>{
-
-    alert("Ver13で実装します。");
-
-};
-
 document.getElementById("deleteAll").onclick = ()=>{
 
-    alert("Ver13で実装します。");
+    if(!confirm("すべてのデータを削除しますか？")){
+
+        return;
+
+    }
+
+    localStorage.clear();
+
+    location.reload();
 
 };
 
