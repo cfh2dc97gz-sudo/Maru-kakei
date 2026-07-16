@@ -16,197 +16,194 @@
 
 <body>
 
-<!-- ===========================
-     ホーム画面
-=========================== -->
+<!-- ホーム -->
 
-<!-- 月 -->
+<div id="homePage">
 
-<div class="card summary-card">
+    <!-- 月 -->
 
-    <div class="month-header">
+    <div class="card summary-card">
 
-        <button id="prevMonth">◀</button>
+        <div class="month-header">
 
-        <h2 id="period">
+            <button id="prevMonth">◀</button>
 
-            2026年4月
+            <h2 id="period">
 
-        </h2>
+                2026年4月
 
-        <div class="month-right">
+            </h2>
 
-            <button
-                id="resetMonth"
-                class="mini-reset">
+            <div class="month-right">
 
-                🗑
+                <button id="resetMonth" class="mini-reset">
+
+                    🗑
+
+                </button>
+
+                <button id="nextMonth">
+
+                    ▶
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 今月のお金 -->
+
+    <div class="card">
+
+        <div class="summary-grid">
+
+            <div class="summary-item">
+
+                <div class="summary-title">
+
+                    収入
+
+                </div>
+
+                <div
+                    class="summary-money"
+                    id="incomeSummary">
+
+                    ¥0
+
+                </div>
+
+            </div>
+
+            <div class="summary-item">
+
+                <div class="summary-title">
+
+                    支出
+
+                </div>
+
+                <div
+                    class="summary-money"
+                    id="spent">
+
+                    ¥0
+
+                </div>
+
+            </div>
+
+            <div class="summary-item">
+
+                <div class="summary-title">
+
+                    残り
+
+                </div>
+
+                <div
+                    class="summary-money"
+                    id="remain">
+
+                    ¥0
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AI -->
+
+    <div class="card ai-card">
+
+        <h2>🤖 AIコンサルタント</h2>
+
+        <div id="aiAdvice">
+
+            分析中...
+
+        </div>
+
+    </div>
+
+    <!-- カテゴリ -->
+
+    <div class="card">
+
+        <div class="category-header">
+
+            <h2>📒 カテゴリ</h2>
+
+            <div class="family-card">
+
+                <div class="family-image">
+
+                    👧🧒
+
+                </div>
+
+                <div class="family-name">
+
+                    はる・りん
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="gridArea">
+
+        </div>
+
+    </div>
+
+    <!-- 収入 -->
+
+    <div class="card income-card">
+
+        <h2>💰 収入</h2>
+
+        <div class="income-grid">
+
+            <button id="incomePapa">
+
+                👨<br>パパ
 
             </button>
 
-            <button id="nextMonth">
+            <button id="incomeMama">
 
-                ▶
+                👩<br>ママ
+
+            </button>
+
+            <button id="incomeExtra">
+
+                🎁<br>臨時
 
             </button>
 
         </div>
 
-    </div>
+        <div
+            class="money"
+            id="income">
 
-</div>
-
-<!-- 今月のお金 -->
-
-<div class="card">
-
-    <div class="summary-grid">
-
-        <div class="summary-item">
-
-            <div class="summary-title">
-
-                収入
-
-            </div>
-
-            <div
-                class="summary-money"
-                id="incomeSummary">
-
-                ¥0
-
-            </div>
-
-        </div>
-
-        <div class="summary-item">
-
-            <div class="summary-title">
-
-                支出
-
-            </div>
-
-            <div
-                class="summary-money"
-                id="spent">
-
-                ¥0
-
-            </div>
-
-        </div>
-
-        <div class="summary-item">
-
-            <div class="summary-title">
-
-                残り
-
-            </div>
-
-            <div
-                class="summary-money"
-                id="remain">
-
-                ¥0
-
-            </div>
+            ¥0
 
         </div>
 
     </div>
 
 </div>
-
-<!-- AI -->
-
-<div class="card ai-card">
-
-    <h2>🤖 AIコンサルタント</h2>
-
-    <div id="aiAdvice">
-
-        分析中...
-
-    </div>
-
-</div>
-    
-<!-- カテゴリ -->
-
-<div class="card">
-
-    <div class="category-header">
-
-        <h2>📒 カテゴリ</h2>
-
-        <div class="family-card">
-
-            <div class="family-image">
-
-                👧🧒
-
-            </div>
-
-            <div class="family-name">
-
-                はる・りん
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div id="gridArea"></div>
-
-</div>
-
-<!-- 収入 -->
-
-<div class="card income-card">
-
-    <h2>💰 収入</h2>
-
-    <div class="income-grid">
-
-        <button id="incomePapa">
-
-            👨<br>
-            パパ
-
-        </button>
-
-        <button id="incomeMama">
-
-            👩<br>
-            ママ
-
-        </button>
-
-        <button id="incomeExtra">
-
-            🎁<br>
-            臨時
-
-        </button>
-
-    </div>
-
-    <div
-        class="money"
-        id="income">
-
-        ¥0
-
-    </div>
-
-</div>
-<!-- ===========================
-     年間画面
-=========================== -->
+<!-- 年間 -->
 
 <div id="yearPage" class="page" style="display:none;">
 
@@ -242,11 +239,7 @@
 
             <div class="summary-item">
 
-                <div class="summary-title">
-
-                    収入
-
-                </div>
+                <div class="summary-title">収入</div>
 
                 <div class="summary-money" id="yearIncome">
 
@@ -258,11 +251,7 @@
 
             <div class="summary-item">
 
-                <div class="summary-title">
-
-                    支出
-
-                </div>
+                <div class="summary-title">支出</div>
 
                 <div class="summary-money" id="yearSpent">
 
@@ -274,11 +263,7 @@
 
             <div class="summary-item">
 
-                <div class="summary-title">
-
-                    残り
-
-                </div>
+                <div class="summary-title">残り</div>
 
                 <div class="summary-money" id="yearRemain">
 
@@ -296,17 +281,7 @@
 
         <h2>📈 月別推移</h2>
 
-        <div id="yearChart" class="year-chart"></div>
-
-        <div class="chart-legend">
-
-            <span class="legend-item">
-
-                <span class="legend-color remain-color"></span>
-
-                残高
-
-            </span>
+        <div id="yearChart" class="year-chart">
 
         </div>
 
@@ -316,15 +291,15 @@
 
         <h2>📒 カテゴリ分析</h2>
 
-        <div id="yearCategory"></div>
+        <div id="yearCategory">
+
+        </div>
 
     </div>
 
 </div>
 
-<!-- ===========================
-     設定画面
-=========================== -->
+<!-- 設定 -->
 
 <div id="settingPage" class="page" style="display:none;">
 
@@ -336,23 +311,23 @@
 
     <div class="card">
 
-        <div id="budgetList"></div>
-
-    </div>
-
-    <div class="card">
-
-        <button
-            class="setting-item"
-            id="editGoal">
+        <button class="setting-item" id="editGoal">
 
             🎯 年間目標
 
         </button>
 
-        <button
-            class="setting-item danger"
-            id="deleteAll">
+        <button class="setting-item" id="editBonus">
+
+            💴 ボーナス貯金
+
+        </button>
+
+        <div id="budgetList">
+
+        </div>
+
+        <button class="setting-item danger" id="deleteAll">
 
             🗑 全データ削除
 
@@ -361,10 +336,7 @@
     </div>
 
 </div>
-    
-<!-- ===========================
-     下メニュー
-=========================== -->
+<!-- ナビゲーション -->
 
 <nav class="bottom-nav">
 
@@ -384,7 +356,7 @@
 
     </button>
 
-    <button id="settingButton">
+    <button>
 
         ⚙️<br>
 
