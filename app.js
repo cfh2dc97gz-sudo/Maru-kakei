@@ -624,21 +624,13 @@ function drawYearChart(){
 
             maxValue,
 
-            income,
-
-            spent,
-
-            remain
+            Math.abs(remain)
 
         );
 
         months.push({
 
             month,
-
-            income,
-
-            spent,
 
             remain
 
@@ -648,41 +640,36 @@ function drawYearChart(){
 
     months.forEach(item=>{
 
-        const incomeHeight =
-            Math.max(item.income / maxValue * 140, 2);
-
-        const spentHeight =
-            Math.max(item.spent / maxValue * 140, 2);
-
         const remainHeight =
-    Math.max(
-        Math.abs(item.remain) / maxValue * 140,
-        2
-    );
+            Math.max(
+
+                Math.abs(item.remain) / maxValue * 140,
+
+                2
+
+            );
+
+        const color =
+            item.remain >= 0
+            ? "#6FCF97"
+            : "#EB5757";
 
         chart.innerHTML += `
 
-<div class="chart-month">
+<div
+class="chart-month"
+onclick="changeMonthFromYear(${item.month})">
 
     <div class="chart-area">
 
         <div class="chart-bars">
 
             <div
-                class="chart-bar income-bar"
-                style="height:${incomeHeight}px">
-
-            </div>
-
-            <div
-                class="chart-bar spent-bar"
-                style="height:${spentHeight}px">
-
-            </div>
-
-            <div
-                class="chart-bar remain-bar"
-                style="height:${remainHeight}px">
+                class="chart-bar"
+                style="
+                    height:${remainHeight}px;
+                    background:${color};
+                ">
 
             </div>
 
@@ -703,6 +690,3 @@ function drawYearChart(){
     });
 
 }
-drawYearSummary();
-drawYearCategory();
-drawYearChart();
