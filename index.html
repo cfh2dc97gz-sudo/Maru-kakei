@@ -228,36 +228,36 @@
 
             <div class="summary-item">
 
-                <div class="summary-title">
-                    収入
-                </div>
+                <div class="summary-title">収入</div>
 
                 <div class="summary-money" id="yearIncome">
+
                     ¥0
+
                 </div>
 
             </div>
 
             <div class="summary-item">
 
-                <div class="summary-title">
-                    支出
-                </div>
+                <div class="summary-title">支出</div>
 
                 <div class="summary-money" id="yearSpent">
+
                     ¥0
+
                 </div>
 
             </div>
 
             <div class="summary-item">
 
-                <div class="summary-title">
-                    残り
-                </div>
+                <div class="summary-title">残り</div>
 
                 <div class="summary-money" id="yearRemain">
+
                     ¥0
+
                 </div>
 
             </div>
@@ -265,6 +265,106 @@
         </div>
 
     </div>
+
+    <div class="card">
+
+        <h2>📈 月別推移</h2>
+
+        <div id="yearChart" class="year-chart"></div>
+
+        <div class="chart-legend">
+
+            <span class="legend-item">
+
+                <span class="legend-color income-color"></span>
+
+                収入
+
+            </span>
+
+            <span class="legend-item">
+
+                <span class="legend-color spent-color"></span>
+
+                支出
+
+            </span>
+
+            <span class="legend-item">
+
+                <span class="legend-color remain-color"></span>
+
+                残り
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📒 カテゴリ分析</h2>
+
+        <div id="yearCategory">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 設定 -->
+
+<div id="settingPage" class="page" style="display:none;">
+
+    <div class="card">
+
+        <h2>⚙️ 設定</h2>
+
+    </div>
+
+    <div class="card">
+
+        <button class="setting-item" id="editGoal">
+
+            🎯 年間目標
+
+        </button>
+
+        <button class="setting-item" id="editBudget">
+
+            💰 月予算
+
+        </button>
+
+        <button class="setting-item" id="editName">
+
+            👨‍👩‍👧‍👧 名前変更
+
+        </button>
+
+        <button class="setting-item" id="exportData">
+
+            📤 データ書き出し
+
+        </button>
+
+        <button class="setting-item" id="importData">
+
+            📥 データ読み込み
+
+        </button>
+
+        <button class="setting-item danger" id="deleteAll">
+
+            🗑 全データ削除
+
+        </button>
+
+    </div>
+
+</div>
 
     <div class="card">
 
