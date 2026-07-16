@@ -433,6 +433,52 @@ navButtons[2].onclick = ()=>{
     navButtons[2].classList.add("active");
 
 };
+/* ===========================
+   設定
+=========================== */
+
+document.getElementById("editGoal").onclick = ()=>{
+
+    const goal =
+        Number(prompt("年間目標を入力してください"));
+
+    if(!goal) return;
+
+    app.goal = goal;
+
+    update();
+
+};
+
+document.getElementById("editBudget").onclick = ()=>{
+
+    alert("次のステップで作成します。");
+
+};
+
+document.getElementById("editName").onclick = ()=>{
+
+    alert("次のステップで作成します。");
+
+};
+
+document.getElementById("exportData").onclick = ()=>{
+
+    alert("次のステップで作成します。");
+
+};
+
+document.getElementById("importData").onclick = ()=>{
+
+    alert("次のステップで作成します。");
+
+};
+
+document.getElementById("deleteAll").onclick = ()=>{
+
+    alert("次のステップで作成します。");
+
+};
 
 /* ===========================
    年間カテゴリ分析
