@@ -438,6 +438,66 @@ navButtons[2].onclick = ()=>{
    設定
 =========================== */
 
+function drawBudgetList(){
+
+    const area =
+        document.getElementById("budgetList");
+
+    area.innerHTML = "";
+
+    app.budgets.forEach((item,index)=>{
+
+        area.innerHTML += `
+
+<button
+class="setting-item"
+onclick="editBudget(${index})">
+
+    ${item.name}
+
+    <span>
+
+        ¥${item.budget.toLocaleString()}
+
+    </span>
+
+</button>
+
+`;
+
+    });
+
+}
+
+function editBudget(index){
+
+    const budget =
+        Number(
+
+            prompt(
+
+                `${app.budgets[index].name} の月予算`,
+
+                app.budgets[index].budget
+
+            )
+
+        );
+
+    if(!budget) return;
+
+    app.budgets[index].budget = budget;
+
+    save();
+
+    update();
+
+    drawBudgetList();
+
+    drawYearCategory();
+
+}
+
 document.getElementById("editGoal").onclick = ()=>{
 
     const goal =
@@ -455,34 +515,6 @@ document.getElementById("editGoal").onclick = ()=>{
 
 };
 
-document.getElementById("editBudget").onclick = ()=>{
-
-    app.budgets.forEach(item=>{
-
-        const budget =
-            Number(
-                prompt(
-                    `${item.name} の月予算`,
-                    item.budget
-                )
-            );
-
-        if(budget){
-
-            item.budget = budget;
-
-        }
-
-    });
-
-    save();
-
-    update();
-
-    drawYearCategory();
-
-};
-
 document.getElementById("deleteAll").onclick = ()=>{
 
     if(!confirm("すべてのデータを削除しますか？")){
@@ -494,6 +526,26 @@ document.getElementById("deleteAll").onclick = ()=>{
     localStorage.clear();
 
     location.reload();
+
+};
+
+navButtons[2].onclick = ()=>{
+
+    document.querySelectorAll("body > .card").forEach(card=>{
+
+        card.style.display = "none";
+
+    });
+
+    yearPage.style.display = "none";
+
+    settingPage.style.display = "block";
+
+    drawBudgetList();
+
+    navButtons[0].classList.remove("active");
+    navButtons[1].classList.remove("active");
+    navButtons[2].classList.add("active");
 
 };
 
