@@ -1,413 +1,707 @@
 /* ===========================
-   Ver12
-   リセット
+   Ver11
+   ① データ・初期化
 =========================== */
 
-*{
+const app = {
 
-    margin:0;
+    goal:3400000,
 
-    padding:0;
+    income:{
+        papa:0,
+        mama:0,
+        extra:0
+    },
 
-    box-sizing:border-box;
+    budgets:[
 
-}
+        {
+            id:"food",
+            name:"🍚 食費",
+            budget:80000,
+            spent:0
+        },
 
-body{
+        {
+            id:"utility",
+            name:"💡 電気・水道",
+            budget:32000,
+            spent:0
+        },
 
-    background:#F8F5EF;
+        {
+            id:"iwagin",
+            name:"🏦 岩銀",
+            budget:40000,
+            spent:0
+        },
 
-    color:#5E4B43;
+        {
+            id:"rakuten",
+            name:"💳 楽天",
+            budget:20000,
+            spent:0
+        },
 
-    font-family:
-        "Hiragino Sans",
-        "Yu Gothic",
-        sans-serif;
+        {
+            id:"holiday",
+            name:"🎉 休日",
+            budget:40000,
+            spent:0
+        },
 
-    padding:16px 16px 90px;
+        {
+            id:"gas",
+            name:"⛽ ガソリン",
+            budget:17000,
+            spent:0
+        },
 
-}
+        {
+            id:"other",
+            name:"📦 その他",
+            budget:30000,
+            spent:0
+        }
 
-button{
+    ],
 
-    font:inherit;
+    history:[]
 
-    cursor:pointer;
+};
 
-    border:none;
+let currentYear = 2026;
+let currentMonth = 4;
 
-}
+load();
 
-.card{
+update();
+/* ===========================
+   ② 保存・読込
+=========================== */
 
-    background:#FFF;
+function getKey(){
 
-    border:2px solid #F2D58A;
-
-    border-radius:24px;
-
-    padding:18px;
-
-    margin-bottom:18px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.05);
-
-}
-.month-header{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:12px;
-
-}
-
-.month-title{
-
-    flex:1;
-
-    text-align:center;
-
-    font-size:28px;
-
-    font-weight:700;
-
-}
-
-.month-btn{
-
-    width:56px;
-
-    height:56px;
-
-    border:2px solid #F2D58A;
-
-    border-radius:50%;
-
-    background:#FFF;
-
-    color:#7A5E52;
-
-    font-size:24px;
+    return `maru-kakei-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
 
 }
 
-.summary-grid{
+function save(){
 
-    display:grid;
+    localStorage.setItem(
 
-    grid-template-columns:repeat(3,1fr);
+        getKey(),
 
-    gap:10px;
+        JSON.stringify(app)
 
-    text-align:center;
-
-}
-
-.summary-title{
-
-    color:#8A7A73;
-
-    font-size:14px;
-
-    margin-bottom:8px;
+    );
 
 }
 
-.summary-money{
+function load(){
 
-    font-size:22px;
+    const saved =
 
-    font-weight:700;
+        localStorage.getItem(getKey());
 
-}
+    if(!saved) return;
 
-.plus{
+    const data = JSON.parse(saved);
 
-    color:#3A9A50;
+    app.goal = data.goal ?? app.goal;
 
-}
+    app.income = data.income ?? app.income;
 
-.minus{
+    app.budgets = data.budgets ?? app.budgets;
 
-    color:#D84A4A;
-
-}
-.category-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:flex-start;
-
-    margin-bottom:16px;
+    app.history = data.history ?? [];
 
 }
 
-.family-card{
+/* ===========================
+   月変更
+=========================== */
 
-    text-align:center;
+function changeMonth(step){
 
-}
+    save();
 
-.family-image{
+    currentMonth += step;
 
-    font-size:48px;
+    if(currentMonth > 12){
 
-    line-height:1;
+        currentMonth = 1;
 
-}
+        currentYear++;
 
-.family-name{
+    }
 
-    margin-top:4px;
+    if(currentMonth < 1){
 
-    font-size:14px;
+        currentMonth = 12;
 
-    font-weight:700;
+        currentYear--;
 
-    color:#7A5E52;
+    }
 
-}
+    load();
 
-#gridArea{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:12px;
+    update();
 
 }
 
-.input-card{
+document
+.getElementById("prevMonth")
+.onclick = ()=>changeMonth(-1);
 
-    background:#FFFDF8;
+document
+.getElementById("nextMonth")
+.onclick = ()=>changeMonth(1);
+/* ===========================
+   ③ 画面更新
+=========================== */
 
-    border:2px solid #F2D58A;
+function update(){
 
-    border-radius:18px;
+    document.getElementById("period").textContent =
+        `${currentYear}年${currentMonth}月`;
 
-    padding:14px 16px;
+    const incomeTotal =
+        app.income.papa +
+        app.income.mama +
+        app.income.extra;
 
-    display:flex;
+    const totalSpent =
+        app.budgets.reduce(
+            (sum,item)=>sum+item.spent,
+            0
+        );
 
-    justify-content:space-between;
+    const remain =
+        incomeTotal - totalSpent;
 
-    align-items:center;
+    document.getElementById("income").textContent =
+        "¥" + incomeTotal.toLocaleString();
+
+    document.getElementById("incomeSummary").textContent =
+        "¥" + incomeTotal.toLocaleString();
+
+    document.getElementById("spent").textContent =
+        "¥" + totalSpent.toLocaleString();
+
+    const remainEl =
+        document.getElementById("remain");
+
+    remainEl.textContent =
+        "¥" + remain.toLocaleString();
+
+    remainEl.className =
+        "summary-money " +
+        (remain >= 0 ? "plus" : "minus");
+
+    document.getElementById("forecast").textContent =
+        "現在予測 ¥"
+        + remain.toLocaleString();
+
+    const diff =
+        app.goal - remain;
+
+    document.getElementById("advice").textContent =
+        diff <= 0
+        ? "🎉 このままで目標達成！"
+        : `😊 あと¥${diff.toLocaleString()}で目標達成！`;
+
+    drawCategories();
+
+    save();
+
+}
+/* ===========================
+   ④ カテゴリ・収入・リセット
+=========================== */
+
+function drawCategories(){
+
+    const grid =
+        document.getElementById("gridArea");
+
+    grid.innerHTML = "";
+
+    app.budgets.forEach((item,index)=>{
+
+        const remain =
+            item.budget - item.spent;
+
+        grid.innerHTML += `
+
+<button
+class="input-card"
+onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
+
+    <span class="input-name">
+        ${item.name}
+    </span>
+
+    <span class="input-left ${remain<0?"over":""}">
+        ¥${remain.toLocaleString()}
+    </span>
+
+</button>
+
+`;
+
+    });
 
 }
 
-.input-name{
+function addIncome(type){
 
-    font-weight:700;
+    const amount =
+        Number(prompt("収入金額"));
 
-    font-size:16px;
+    if(!amount) return;
 
-    color:#5E4B43;
+    if(type==="パパ") app.income.papa += amount;
+    if(type==="ママ") app.income.mama += amount;
+    if(type==="臨時") app.income.extra += amount;
 
-}
-
-.input-left{
-
-    font-weight:700;
-
-    font-size:16px;
+    update();
 
 }
 
-.over{
+document
+.getElementById("incomePapa")
+.onclick = ()=>addIncome("パパ");
 
-    color:#D84A4A;
+document
+.getElementById("incomeMama")
+.onclick = ()=>addIncome("ママ");
 
-}
-.income-grid{
+document
+.getElementById("incomeExtra")
+.onclick = ()=>addIncome("臨時");
 
-    display:grid;
+document
+.getElementById("resetMonth")
+.onclick = ()=>{
 
-    grid-template-columns:repeat(3,1fr);
+    if(!confirm("今月をリセットしますか？"))
+        return;
 
-    gap:12px;
+    app.income = {
 
-    margin-top:14px;
+        papa:0,
+        mama:0,
+        extra:0
 
-}
+    };
 
-.income-grid button{
+    app.budgets.forEach(item=>{
 
-    background:#FFFDF8;
+        item.spent = 0;
 
-    border:2px solid #F2D58A;
+    });
 
-    border-radius:18px;
+    app.history = [];
 
-    padding:18px 10px;
+    update();
 
-    font-size:18px;
+};
+/* ===========================
+   ⑤ 支出入力
+=========================== */
 
-    font-weight:700;
+function addSpent(index,isOverwrite=false){
 
-    color:#5E4B43;
+    const input = prompt(
+        "金額 メモ\n例：5000 マック"
+    );
 
-}
+    if(!input) return;
 
-.money{
+    const parts = input.trim().split(" ");
 
-    text-align:center;
+    const amount = Number(parts[0]);
 
-    font-size:34px;
+    if(!amount) return;
 
-    font-weight:700;
+    const memo = parts.slice(1).join(" ");
 
-    margin-top:18px;
+    if(isOverwrite){
 
-    color:#5E4B43;
+        app.budgets[index].spent = amount;
 
-}
+    }else{
 
-.ai-card{
+        app.budgets[index].spent += amount;
 
-    line-height:1.8;
+    }
 
-}
+    app.history.push({
 
-#aiAdvice{
+        date:new Date().toLocaleDateString(
+            "ja-JP",
+            {
+                month:"numeric",
+                day:"numeric"
+            }
+        ),
 
-    margin-top:12px;
+        category:app.budgets[index].name,
 
-    color:#5E4B43;
+        amount:amount,
 
-    white-space:pre-line;
+        memo:memo
 
-}
+    });
 
-.setting-item{
-
-    width:100%;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    background:#FFFDF8;
-
-    border:2px solid #F2D58A;
-
-    border-radius:18px;
-
-    padding:16px;
-
-    margin-bottom:12px;
-
-    font-size:16px;
-
-    color:#5E4B43;
-
-}
-
-.danger{
-
-    color:#D84A4A;
+    update();
 
 }
-.year-chart{
+/* ===========================
+   年間ページ切替
+=========================== */
 
-    display:flex;
+const homePage =
+    document.body;
 
-    justify-content:space-between;
+const yearPage =
+    document.getElementById("yearPage");
 
-    align-items:flex-end;
+const navButtons =
+    document.querySelectorAll(".bottom-nav button");
 
-    gap:10px;
+navButtons[0].onclick = ()=>{
 
-    height:180px;
+    yearPage.style.display = "none";
 
-    margin-top:16px;
+    document.querySelectorAll(".card").forEach(card=>{
+
+        if(!card.closest("#yearPage")){
+
+            card.style.display = "";
+
+        }
+
+    });
+
+    navButtons[0].classList.add("active");
+    navButtons[1].classList.remove("active");
+
+};
+
+navButtons[1].onclick = ()=>{
+
+    document.querySelectorAll("body > .card").forEach(card=>{
+
+        card.style.display = "none";
+
+    });
+
+    yearPage.style.display = "block";
+
+    navButtons[1].classList.add("active");
+    navButtons[0].classList.remove("active");
+
+    drawYearSummary();
+    drawYearCategory();
+    drawYearChart();
+
+};
+
+/* ===========================
+   年間カテゴリ分析
+=========================== */
+
+const yearlyBudget = {
+
+    "食費":80000*12,
+    "電気・水道":32000*12,
+    "岩銀":40000*12,
+    "楽天":20000*12,
+    "休日":40000*12,
+    "ガソリン":17000*12,
+    "その他":30000*12
+
+};
+
+function drawYearCategory(){
+
+    const area =
+        document.getElementById("yearCategory");
+
+    area.innerHTML = "";
+
+    Object.keys(yearlyBudget).forEach(name=>{
+
+        const budget =
+            yearlyBudget[name];
+
+        let actual = 0;
+
+        for(let month=1; month<=12; month++){
+
+            const key =
+                `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+
+            const saved =
+                localStorage.getItem(key);
+
+            if(!saved) continue;
+
+            const monthData =
+                JSON.parse(saved);
+
+            const item =
+                monthData.budgets?.find(data=>
+
+                    data.name.replace(/[^\u4E00-\u9FFFぁ-んァ-ヶー]/g,"").trim()
+                    === name
+
+                );
+
+            if(item){
+
+                actual += Number(item.spent) || 0;
+
+            }
+
+        }
+
+        const diff =
+            budget - actual;
+
+        area.innerHTML += `
+
+<div class="year-category">
+
+    <h3>${name}</h3>
+
+    <div class="year-line">
+
+        <span>予算 ¥${budget.toLocaleString()}</span>
+
+        <span>実績 ¥${actual.toLocaleString()}</span>
+
+        <strong class="${diff>=0 ? "plus" : "minus"}">
+
+            差額${diff>=0 ? "+" : "-"}¥${Math.abs(diff).toLocaleString()}
+
+        </strong>
+
+    </div>
+
+</div>
+
+`;
+
+    });
+
+}
+/* ===========================
+   年間合計
+=========================== */
+
+function drawYearSummary(){
+
+    let income = 0;
+    let spent = 0;
+
+    for(let month=1; month<=12; month++){
+
+        const key =
+            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+
+        const saved =
+            localStorage.getItem(key);
+
+        if(!saved) continue;
+
+        const data =
+            JSON.parse(saved);
+
+        income +=
+            (data.income?.papa || 0) +
+            (data.income?.mama || 0) +
+            (data.income?.extra || 0);
+
+        spent +=
+            (data.budgets || []).reduce(
+
+                (sum,item)=>sum+(item.spent || 0),
+
+                0
+
+            );
+
+    }
+
+    const remain =
+        income - spent;
+
+    document.getElementById("yearIncome").textContent =
+        "¥" + income.toLocaleString();
+
+    document.getElementById("yearSpent").textContent =
+        "¥" + spent.toLocaleString();
+
+    const remainEl =
+        document.getElementById("yearRemain");
+
+    remainEl.textContent =
+        "¥" + remain.toLocaleString();
+
+    remainEl.className =
+        "summary-money " +
+        (remain >= 0 ? "plus" : "minus");
+
+    document.getElementById("yearGoal").textContent =
+        `¥${remain.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+
+    const percent =
+        Math.max(
+            0,
+            Math.min(remain / app.goal * 100, 100)
+        );
+
+    document.getElementById("goalBar").style.width =
+        percent + "%";
 
 }
 
-.chart-month{
+/* ===========================
+   月別推移
+=========================== */
 
-    flex:1;
+function drawYearChart(){
 
-    text-align:center;
+    const chart =
+        document.getElementById("yearChart");
+
+    chart.innerHTML = "";
+
+    const months = [];
+
+    let maxValue = 1;
+
+    for(let month=1; month<=12; month++){
+
+        const key =
+            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+
+        const saved =
+            localStorage.getItem(key);
+
+        let income = 0;
+        let spent = 0;
+        let remain = 0;
+
+        if(saved){
+
+            const data =
+                JSON.parse(saved);
+
+            income =
+                (data.income?.papa || 0) +
+                (data.income?.mama || 0) +
+                (data.income?.extra || 0);
+
+            spent =
+                (data.budgets || []).reduce(
+
+                    (sum,item)=>sum+(item.spent || 0),
+
+                    0
+
+                );
+
+            remain =
+                income - spent;
+
+        }
+
+        maxValue = Math.max(
+
+            maxValue,
+
+            Math.abs(remain)
+
+        );
+
+        months.push({
+
+            month,
+
+            remain
+
+        });
+
+    }
+
+    months.forEach(item=>{
+
+        const remainHeight =
+            Math.max(
+
+                Math.abs(item.remain) / maxValue * 140,
+
+                2
+
+            );
+
+        const color =
+            item.remain >= 0
+            ? "#6FCF97"
+            : "#EB5757";
+
+        chart.innerHTML += `
+
+<div
+class="chart-month"
+onclick="changeMonthFromYear(${item.month})">
+
+    <div class="chart-area">
+
+        <div class="chart-bars">
+
+            <div
+                class="chart-bar"
+                style="
+                    height:${remainHeight}px;
+                    background:${color};
+                ">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="chart-label">
+
+        ${item.month}月
+
+    </div>
+
+</div>
+
+`;
+
+    });
+
+}
+function changeMonthFromYear(month){
+
+    currentMonth = month;
+
+    load();
+
+    update();
+
+    navButtons[0].click();
 
 }
 
-.chart-area{
-
-    height:150px;
-
-    display:flex;
-
-    align-items:flex-end;
-
-    justify-content:center;
-
-}
-
-.chart-bar{
-
-    width:28px;
-
-    border-radius:12px 12px 0 0;
-
-}
-
-.chart-label{
-
-    margin-top:8px;
-
-    font-size:13px;
-
-    color:#7A5E52;
-
-}
-
-.bottom-nav{
-
-    position:fixed;
-
-    left:0;
-
-    right:0;
-
-    bottom:0;
-
-    display:flex;
-
-    background:#FFF;
-
-    border-top:2px solid #F2D58A;
-
-    box-shadow:0 -4px 12px rgba(0,0,0,.05);
-
-}
-
-.bottom-nav button{
-
-    flex:1;
-
-    background:#FFF;
-
-    padding:14px 0;
-
-    color:#8A7A73;
-
-    font-size:15px;
-
-}
-
-.bottom-nav button.active{
-
-    color:#D4A017;
-
-    font-weight:700;
-
-}
+drawYearSummary();
+drawYearCategory();
+drawYearChart();
