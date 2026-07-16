@@ -134,12 +134,7 @@ update();
 
 function getKey(){
 
-    const saveYear =
-        currentMonth <= 3
-        ? currentYear + 1
-        : currentYear;
-
-    return `maru-kakei-${saveYear}-${String(currentMonth).padStart(2,"0")}`;
+    return `maru-kakei-fiscal-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
 
 }
 
@@ -176,6 +171,24 @@ function save(){
 }
 function load(){
 
+    app.income = {
+
+        papa:0,
+
+        mama:0,
+
+        extra:0
+
+    };
+
+    app.budgets.forEach(item=>{
+
+        item.spent = 0;
+
+    });
+
+    app.history = [];
+
     const saved =
         localStorage.getItem(getKey());
 
@@ -195,6 +208,23 @@ function load(){
 
     }
 
+    const yearSaved =
+        localStorage.getItem(getYearKey());
+
+    if(yearSaved){
+
+        const yearData =
+            JSON.parse(yearSaved);
+
+        app.goal =
+            yearData.goal ?? app.goal;
+
+        app.bonusSaving =
+            yearData.bonusSaving ?? app.bonusSaving;
+
+    }
+
+}
     const yearSaved =
         localStorage.getItem(getYearKey());
 
