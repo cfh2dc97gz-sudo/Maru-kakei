@@ -939,3 +939,34 @@ button:active{
     background:#7ACB8C;
 
 }
+/* ===========================
+   設定画面
+=========================== */
+
+.setting-item{
+
+    width:100%;
+
+    margin:6px 0;
+
+    padding:14px;
+
+    text-align:left;
+
+    background:#FFF9EF;
+
+    border:1px solid #F7E7B5;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+
+.setting-item.danger{
+
+    color:#D32F2F;
+
+}
