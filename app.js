@@ -568,8 +568,9 @@ function drawYearSummary(){
         percent + "%";
 
 }
+
 /* ===========================
-   月別グラフ
+   月別推移
 =========================== */
 
 function drawYearChart(){
@@ -579,9 +580,9 @@ function drawYearChart(){
 
     chart.innerHTML = "";
 
-    let maxRemain = 0;
-
     const months = [];
+
+    let maxValue = 1;
 
     for(let month=1; month<=12; month++){
 
@@ -592,9 +593,7 @@ function drawYearChart(){
             localStorage.getItem(key);
 
         let income = 0;
-
         let spent = 0;
-
         let remain = 0;
 
         if(saved){
@@ -616,15 +615,22 @@ function drawYearChart(){
 
                 );
 
-            remain = income - spent;
+            remain =
+                income - spent;
 
         }
 
-        if(remain > maxRemain){
+        maxValue = Math.max(
 
-            maxRemain = remain;
+            maxValue,
 
-        }
+            income,
+
+            spent,
+
+            remain
+
+        );
 
         months.push({
 
@@ -640,37 +646,22 @@ function drawYearChart(){
 
     }
 
-    if(maxRemain === 0){
-
-        maxRemain = 1;
-
-    }
-
     months.forEach(item=>{
 
         const incomeHeight =
-            Math.max(
-                item.income / maxRemain * 150,
-                2
-            );
+            Math.max(item.income / maxValue * 140, 2);
 
         const spentHeight =
-            Math.max(
-                item.spent / maxRemain * 150,
-                2
-            );
+            Math.max(item.spent / maxValue * 140, 2);
 
         const remainHeight =
-            Math.max(
-                item.remain / maxRemain * 150,
-                2
-            );
+            Math.max(item.remain / maxValue * 140, 2);
 
         chart.innerHTML += `
 
 <div class="chart-month">
 
-    <div class="chart-bar-area">
+    <div class="chart-area">
 
         <div class="chart-bars">
 
@@ -709,7 +700,6 @@ function drawYearChart(){
     });
 
 }
-
 drawYearSummary();
 drawYearCategory();
 drawYearChart();
