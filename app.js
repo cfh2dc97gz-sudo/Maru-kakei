@@ -689,7 +689,7 @@ function drawYearSummary(){
 
     let spent = 0;
 
-    for(let month=1;month<=12;month++){
+    for(let month=1; month<=12; month++){
 
         const saved =
             localStorage.getItem(
@@ -722,33 +722,42 @@ function drawYearSummary(){
     const remain =
         income - spent;
 
+    const monthlyGoal =
+        Math.max(
+            app.goal - app.bonusSaving,
+            0
+        );
+
     document.getElementById("yearIncome").textContent =
-        "¥"+income.toLocaleString();
+        "¥" + income.toLocaleString();
 
     document.getElementById("yearSpent").textContent =
-        "¥"+spent.toLocaleString();
+        "¥" + spent.toLocaleString();
 
     const remainEl =
         document.getElementById("yearRemain");
 
     remainEl.textContent =
-        "¥"+remain.toLocaleString();
+        "¥" + remain.toLocaleString();
 
     remainEl.className =
         "summary-money " +
-        (remain>=0?"plus":"minus");
+        (remain>=0 ? "plus" : "minus");
 
     document.getElementById("yearGoal").textContent =
-        `¥${remain.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+        `¥${remain.toLocaleString()} / ¥${monthlyGoal.toLocaleString()}`;
+
+    const percent =
+        Math.max(
+            0,
+            Math.min(
+                remain / monthlyGoal * 100,
+                100
+            )
+        );
 
     document.getElementById("goalBar").style.width =
-        Math.min(
-
-            remain/app.goal*100,
-
-            100
-
-        ) + "%";
+        percent + "%";
 
 }
 
