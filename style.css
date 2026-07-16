@@ -1,5 +1,6 @@
 /* ===========================
    Ver12
+   リセット
 =========================== */
 
 *{
@@ -14,27 +15,83 @@
 
 body{
 
-    font-family:sans-serif;
+    background:#F8F5EF;
 
-    background:#F8F8F8;
+    color:#5E4B43;
 
-    padding:15px;
+    font-family:
+        "Hiragino Sans",
+        "Yu Gothic",
+        sans-serif;
 
-    padding-bottom:90px;
+    padding:16px 16px 90px;
+
+}
+
+button{
+
+    font:inherit;
+
+    cursor:pointer;
+
+    border:none;
 
 }
 
 .card{
 
-    background:#fff;
+    background:#FFF;
 
-    border-radius:16px;
+    border:2px solid #F2D58A;
 
-    padding:16px;
+    border-radius:24px;
 
-    margin-bottom:16px;
+    padding:18px;
 
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    margin-bottom:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+}
+.month-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+}
+
+.month-title{
+
+    flex:1;
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+.month-btn{
+
+    width:56px;
+
+    height:56px;
+
+    border:2px solid #F2D58A;
+
+    border-radius:50%;
+
+    background:#FFF;
+
+    color:#7A5E52;
+
+    font-size:24px;
 
 }
 
@@ -44,11 +101,7 @@ body{
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:12px;
-
-}
-
-.summary-item{
+    gap:10px;
 
     text-align:center;
 
@@ -56,9 +109,11 @@ body{
 
 .summary-title{
 
+    color:#8A7A73;
+
     font-size:14px;
 
-    color:#777;
+    margin-bottom:8px;
 
 }
 
@@ -66,112 +121,56 @@ body{
 
     font-size:22px;
 
-    font-weight:bold;
-
-    margin-top:6px;
+    font-weight:700;
 
 }
 
 .plus{
 
-    color:#27AE60;
+    color:#3A9A50;
 
 }
 
 .minus{
 
-    color:#EB5757;
+    color:#D84A4A;
 
 }
-
-.month-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-}
-
-.month-right{
-
-    display:flex;
-
-    gap:8px;
-
-}
-.summary-card{
-
-    padding:12px 16px;
-
-}
-
-button{
-
-    border:none;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    background:#F2F2F2;
-
-    padding:12px;
-
-    font-size:16px;
-
-}
-
-.income-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:10px;
-
-    margin-top:12px;
-
-}
-
-.money{
-
-    text-align:center;
-
-    font-size:28px;
-
-    font-weight:bold;
-
-    margin-top:18px;
-
-}
-
 .category-header{
 
     display:flex;
 
     justify-content:space-between;
 
-    align-items:center;
+    align-items:flex-start;
 
-    margin-bottom:14px;
+    margin-bottom:16px;
 
 }
 
 .family-card{
 
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
+    text-align:center;
 
 }
 
 .family-image{
 
-    font-size:22px;
+    font-size:48px;
+
+    line-height:1;
+
+}
+
+.family-name{
+
+    margin-top:4px;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    color:#7A5E52;
 
 }
 
@@ -179,13 +178,114 @@ button{
 
     display:grid;
 
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr 1fr;
 
-    gap:10px;
+    gap:12px;
 
 }
 
 .input-card{
+
+    background:#FFFDF8;
+
+    border:2px solid #F2D58A;
+
+    border-radius:18px;
+
+    padding:14px 16px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.input-name{
+
+    font-weight:700;
+
+    font-size:16px;
+
+    color:#5E4B43;
+
+}
+
+.input-left{
+
+    font-weight:700;
+
+    font-size:16px;
+
+}
+
+.over{
+
+    color:#D84A4A;
+
+}
+.income-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+    margin-top:14px;
+
+}
+
+.income-grid button{
+
+    background:#FFFDF8;
+
+    border:2px solid #F2D58A;
+
+    border-radius:18px;
+
+    padding:18px 10px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#5E4B43;
+
+}
+
+.money{
+
+    text-align:center;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-top:18px;
+
+    color:#5E4B43;
+
+}
+
+.ai-card{
+
+    line-height:1.8;
+
+}
+
+#aiAdvice{
+
+    margin-top:12px;
+
+    color:#5E4B43;
+
+    white-space:pre-line;
+
+}
+
+.setting-item{
 
     width:100%;
 
@@ -195,54 +295,40 @@ button{
 
     align-items:center;
 
-    padding:14px;
+    background:#FFFDF8;
+
+    border:2px solid #F2D58A;
+
+    border-radius:18px;
+
+    padding:16px;
+
+    margin-bottom:12px;
+
+    font-size:16px;
+
+    color:#5E4B43;
 
 }
 
-.input-name{
+.danger{
 
-    font-weight:bold;
-
-}
-
-.input-left{
-
-    font-weight:bold;
+    color:#D84A4A;
 
 }
-
-.over{
-
-    color:#EB5757;
-
-}
-.ai-card{
-
-    line-height:1.7;
-
-}
-
-#aiAdvice{
-
-    margin-top:10px;
-
-    white-space:pre-line;
-
-}
-
 .year-chart{
 
     display:flex;
 
-    align-items:flex-end;
-
     justify-content:space-between;
 
-    gap:8px;
+    align-items:flex-end;
+
+    gap:10px;
 
     height:180px;
 
-    margin-top:20px;
+    margin-top:16px;
 
 }
 
@@ -251,8 +337,6 @@ button{
     flex:1;
 
     text-align:center;
-
-    cursor:pointer;
 
 }
 
@@ -268,21 +352,11 @@ button{
 
 }
 
-.chart-bars{
-
-    width:100%;
-
-    display:flex;
-
-    justify-content:center;
-
-}
-
 .chart-bar{
 
-    width:24px;
+    width:28px;
 
-    border-radius:8px 8px 0 0;
+    border-radius:12px 12px 0 0;
 
 }
 
@@ -292,69 +366,7 @@ button{
 
     font-size:13px;
 
-}
-
-.year-category{
-
-    margin-bottom:16px;
-
-}
-
-.year-line{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    flex-wrap:wrap;
-
-    gap:8px;
-
-    margin-top:6px;
-
-}
-
-.progress{
-
-    height:12px;
-
-    background:#EAEAEA;
-
-    border-radius:999px;
-
-    overflow:hidden;
-
-    margin-top:12px;
-
-}
-
-#goalBar{
-
-    height:100%;
-
-    width:0;
-
-    background:#F2C94C;
-
-}
-
-.setting-item{
-
-    width:100%;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:10px;
-
-}
-
-.danger{
-
-    color:#EB5757;
+    color:#7A5E52;
 
 }
 
@@ -372,7 +384,9 @@ button{
 
     background:#FFF;
 
-    border-top:1px solid #DDD;
+    border-top:2px solid #F2D58A;
+
+    box-shadow:0 -4px 12px rgba(0,0,0,.05);
 
 }
 
@@ -380,18 +394,20 @@ button{
 
     flex:1;
 
-    border-radius:0;
-
     background:#FFF;
 
-    padding:12px;
+    padding:14px 0;
+
+    color:#8A7A73;
+
+    font-size:15px;
 
 }
 
-.bottom-nav .active{
+.bottom-nav button.active{
 
-    color:#F2C94C;
+    color:#D4A017;
 
-    font-weight:bold;
+    font-weight:700;
 
 }
