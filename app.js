@@ -157,6 +157,7 @@ document
 document
 .getElementById("nextMonth")
 .onclick = ()=>changeMonth(1);
+
 /* ===========================
    ③ 画面更新
 =========================== */
@@ -199,23 +200,14 @@ function update(){
         "summary-money " +
         (remain >= 0 ? "plus" : "minus");
 
-    document.getElementById("forecast").textContent =
-        "現在予測 ¥"
-        + remain.toLocaleString();
-
-    const diff =
-        app.goal - remain;
-
-    document.getElementById("advice").textContent =
-        diff <= 0
-        ? "🎉 このままで目標達成！"
-        : `😊 あと¥${diff.toLocaleString()}で目標達成！`;
-
     drawCategories();
 
-save();
+    updateAI();
+
+    save();
 
 }
+
 /* ===========================
    ④ カテゴリ・収入・リセット
 =========================== */
