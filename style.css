@@ -764,114 +764,137 @@ button:active{
 
     font-weight:800;
 
-}
-/* ===========================
+}/* ===========================
    月別グラフ
 =========================== */
 
-.year-chart{
+function drawYearChart(){
 
-    display:flex;
+    const chart =
+        document.getElementById("yearChart");
 
-    justify-content:space-between;
+    chart.innerHTML = "";
 
-    align-items:flex-end;
+    const months = [];
 
-    gap:6px;
+    let maxValue = 1;
 
-    height:220px;
+    for(let month=1; month<=12; month++){
 
-    margin-top:12px;
+        const key =
+            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
 
-}
+        const saved =
+            localStorage.getItem(key);
 
-.chart-month{
+        let income = 0;
+        let spent = 0;
+        let remain = 0;
 
-    flex:1;
+        if(saved){
 
-    display:flex;
+            const data =
+                JSON.parse(saved);
 
-    flex-direction:column;
+            income =
+                (data.income?.papa || 0) +
+                (data.income?.mama || 0) +
+                (data.income?.extra || 0);
 
-    align-items:center;
+            spent =
+                (data.budgets || []).reduce(
 
-    justify-content:flex-end;
+                    (sum,item)=>sum+(item.spent || 0),
 
-}
+                    0
 
-.chart-bar-area{
+                );
 
-    width:100%;
+            remain =
+                income - spent;
 
-    height:160px;
+        }
 
-    display:flex;
+        maxValue = Math.max(
 
-    align-items:flex-end;
+            maxValue,
 
-    justify-content:center;
+            income,
 
-    border:1px dashed #F4D77A;
+            spent,
 
-    border-radius:8px;
+            remain
 
-    background:#FFFDF8;
+        );
 
-}
-.chart-bars{
+        months.push({
 
-    width:100%;
+            month,
 
-    height:100%;
+            income,
 
-    display:flex;
+            spent,
 
-    align-items:flex-end;
+            remain
 
-    justify-content:center;
+        });
 
-    gap:2px;
+    }
 
-    padding:0 3px;
+    months.forEach(item=>{
 
-}
-.chart-bar{
+        const incomeHeight =
+            item.income / maxValue * 150;
 
-    flex:1;
+        const spentHeight =
+            item.spent / maxValue * 150;
 
-    height:0;
+        const remainHeight =
+            Math.max(
+                item.remain,
+                0
+            ) / maxValue * 150;
 
-    border-radius:6px 6px 0 0;
+        chart.innerHTML += `
 
-    transition:.4s;
+<div class="chart-month">
 
-}
+    <div class="chart-bar-area">
 
-.income-bar{
+        <div class="chart-bars">
 
-    background:#F4D77A;
+            <div
+                class="chart-bar income-bar"
+                style="height:${incomeHeight}px">
 
-}
+            </div>
 
-.spent-bar{
+            <div
+                class="chart-bar spent-bar"
+                style="height:${spentHeight}px">
 
-    background:#F2994A;
+            </div>
 
-}
+            <div
+                class="chart-bar remain-bar"
+                style="height:${remainHeight}px">
 
-.remain-bar{
+            </div>
 
-    background:#6FCF97;
+        </div>
 
-}
-.chart-label{
+    </div>
 
-    margin-top:6px;
+    <div class="chart-label">
 
-    font-size:11px;
+        ${item.month}月
 
-    color:#7B6258;
+    </div>
 
-    font-weight:700;
+</div>
+
+`;
+
+    });
 
 }
