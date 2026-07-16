@@ -812,6 +812,22 @@ button:active{
     position:relative;
 
 }
+.chart-area::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:50%;
+
+    border-top:1px dashed #E7D9A8;
+
+}
+
 .chart-bars{
 
     display:flex;
