@@ -28,11 +28,27 @@
 
             <button id="prevMonth">◀</button>
 
-            <h2 id="period">
+            <div class="period-area">
 
-                2026年4月
+                <select id="yearSelect">
 
-            </h2>
+                    <option value="2024">2024年度</option>
+
+                    <option value="2025">2025年度</option>
+
+                    <option value="2026" selected>2026年度</option>
+
+                    <option value="2027">2027年度</option>
+
+                </select>
+
+                <h2 id="period">
+
+                    4月
+
+                </h2>
+
+            </div>
 
             <div class="month-right">
 
@@ -68,9 +84,7 @@
 
                 </div>
 
-                <div
-                    class="summary-money"
-                    id="incomeSummary">
+                <div class="summary-money" id="incomeSummary">
 
                     ¥0
 
@@ -86,9 +100,7 @@
 
                 </div>
 
-                <div
-                    class="summary-money"
-                    id="spent">
+                <div class="summary-money" id="spent">
 
                     ¥0
 
@@ -104,9 +116,7 @@
 
                 </div>
 
-                <div
-                    class="summary-money"
-                    id="remain">
+                <div class="summary-money" id="remain">
 
                     ¥0
 
@@ -192,9 +202,7 @@
 
         </div>
 
-        <div
-            class="money"
-            id="income">
+        <div class="money" id="income">
 
             ¥0
 
