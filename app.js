@@ -299,6 +299,69 @@ document
     update();
 
 };
+function editBudget(index){
+
+    const budget =
+        Number(
+
+            prompt(
+
+                `${app.budgets[index].name} の月予算`,
+
+                app.budgets[index].budget
+
+            )
+
+        );
+
+    if(!budget) return;
+
+    app.budgets[index].budget = budget;
+
+    save();
+
+    update();
+
+    drawBudgetList();
+
+    drawYearCategory();
+
+}
+
+document.getElementById("deleteAll").onclick = ()=>{
+
+    if(!confirm("すべてのデータを削除しますか？")){
+
+        return;
+
+    }
+
+    localStorage.clear();
+
+    location.reload();
+
+};
+
+navButtons[2].onclick = ()=>{
+
+    document.querySelectorAll("body > .card").forEach(card=>{
+
+        card.style.display = "none";
+
+    });
+
+    yearPage.style.display = "none";
+
+    settingPage.style.display = "block";
+
+    drawBudgetList();
+
+    navButtons[0].classList.remove("active");
+    navButtons[1].classList.remove("active");
+    navButtons[2].classList.add("active");
+
+};
+
 /* ===========================
    ⑤ 支出入力
 =========================== */
@@ -464,13 +527,17 @@ onclick="editBudget(${index})">
 function editBudget(index){
 
     const budget =
-        Number(prompt(
+        Number(
 
-            `${app.budgets[index].name} の月予算`,
+            prompt(
 
-            app.budgets[index].budget
+                `${app.budgets[index].name} の月予算`,
 
-        ));
+                app.budgets[index].budget
+
+            )
+
+        );
 
     if(!budget) return;
 
@@ -485,99 +552,6 @@ function editBudget(index){
     drawYearCategory();
 
 }
-
-document.getElementById("editGoal").onclick = ()=>{
-
-    const goal =
-        Number(prompt(
-
-            "年間目標を入力してください",
-
-            app.goal
-
-        ));
-
-    if(!goal) return;
-
-    app.goal = goal;
-
-    save();
-
-    update();
-
-    drawYearSummary();
-
-};
-
-document.getElementById("deleteAll").onclick = ()=>{
-
-    if(!confirm("すべてのデータを削除しますか？")){
-
-        return;
-
-    }
-
-    localStorage.clear();
-
-    location.reload();
-
-};
-
-navButtons[2].onclick = ()=>{
-
-    document.querySelectorAll("body > .card").forEach(card=>{
-
-        card.style.display = "none";
-
-    });
-
-    yearPage.style.display = "none";
-
-    settingPage.style.display = "block";
-
-    drawBudgetList();
-
-    navButtons[0].classList.remove("active");
-    navButtons[1].classList.remove("active");
-    navButtons[2].classList.add("active");
-
-};
-
-/* ===========================
-   設定
-=========================== */
-
-function drawBudgetList(){
-
-    const area =
-        document.getElementById("budgetList");
-
-    area.innerHTML = "";
-
-    app.budgets.forEach((item,index)=>{
-
-        area.innerHTML += `
-
-<button
-class="setting-item"
-onclick="editBudget(${index})">
-
-    ${item.name}
-
-    <span>
-
-        ¥${item.budget.toLocaleString()}
-
-    </span>
-
-</button>
-
-`;
-
-    });
-
-}
-
 document.getElementById("editGoal").onclick = ()=>{
 
     const goal =
@@ -629,6 +603,40 @@ document.getElementById("editBonus").onclick = ()=>{
     update();
 
 };
+
+document.getElementById("deleteAll").onclick = ()=>{
+
+    if(!confirm("すべてのデータを削除しますか？")){
+
+        return;
+
+    }
+
+    localStorage.clear();
+
+    location.reload();
+
+};
+navButtons[2].onclick = ()=>{
+
+    document.querySelectorAll("body > .card").forEach(card=>{
+
+        card.style.display = "none";
+
+    });
+
+    yearPage.style.display = "none";
+
+    settingPage.style.display = "block";
+
+    drawBudgetList();
+
+    navButtons[0].classList.remove("active");
+    navButtons[1].classList.remove("active");
+    navButtons[2].classList.add("active");
+
+};
+
 /* ===========================
    年間カテゴリ分析
 =========================== */
