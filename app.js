@@ -112,22 +112,31 @@ function getSessionKey(){
 
 function save(){
 
-    localStorage.setItem(
+    const session =
 
-        getKey(),
+    JSON.parse(
 
-        JSON.stringify({
+        localStorage.getItem(getSessionKey())
 
-            income:app.income,
-
-            budgets:app.budgets,
-
-            history:app.history
-
-        })
+        || "{}"
 
     );
 
+session.year =
+
+    currentYear;
+
+session.month =
+
+    currentMonth;
+
+localStorage.setItem(
+
+    getSessionKey(),
+
+    JSON.stringify(session)
+
+);
     localStorage.setItem(
 
         getYearKey(),
@@ -216,51 +225,29 @@ function load(){
 
     }
 
-    const session =
-
-        localStorage.getItem(getSessionKey());
-
-    if(session){
-
-        const data =
-
-            JSON.parse(session);
-
-        currentYear =
-
-            data.year ?? currentYear;
-
-        currentMonth =
-
-            data.month ?? currentMonth;
-
-    }
-
-
+    
 }
        /* ===========================
    ③ 初期化・年度セレクト
 =========================== */
 
-const session =
+const sessionData =
 
-    localStorage.getItem(getSessionKey());
+    JSON.parse(
 
-if(session){
+        localStorage.getItem(getSessionKey())
 
-    const data =
+        || "{}"
 
-        JSON.parse(session);
+    );
 
-    currentYear =
+currentYear =
 
-        data.year ?? currentYear;
+    sessionData.year ?? currentYear;
 
-    currentMonth =
+currentMonth =
 
-        data.month ?? currentMonth;
-
-}
+    sessionData.month ?? currentMonth;
 
 const yearSelect =
 
@@ -925,6 +912,12 @@ function changeMonthFromYear(month){
 
 }
 
+drawYearSummary();
+
+drawYearCategory();
+
+drawYearChart();
+
 const sessionData = JSON.parse(
 
     localStorage.getItem(getSessionKey())
@@ -933,22 +926,26 @@ const sessionData = JSON.parse(
 
 );
 
-drawYearSummary();
+switch(sessionData.page){
 
-drawYearCategory();
+    case "year":
 
-drawYearChart();
+        navButtons[1].click();
 
-if(sessionData.page==="year"){
+        break;
 
-    navButtons[1].click();
+    case "setting":
 
-}else if(sessionData.page==="setting"){
+        navButtons[2].click();
 
-    navButtons[2].click();
+        break;
 
-}else{
+    default:
 
-    navButtons[0].click();
+        navButtons[0].click();
+
+        break;
 
 }
+
+update();
