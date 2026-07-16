@@ -434,18 +434,20 @@ navButtons[2].onclick = ()=>{
 
 };
 
-/* ===========================
+//* ===========================
    設定
 =========================== */
 
 document.getElementById("editGoal").onclick = ()=>{
 
     const goal =
-        Number(prompt("年間目標を入力してください"));
+        Number(prompt("年間目標を入力してください", app.goal));
 
     if(!goal) return;
 
     app.goal = goal;
+
+    save();
 
     update();
 
@@ -459,24 +461,19 @@ document.getElementById("editBudget").onclick = ()=>{
 
         const budget =
             Number(
-
                 prompt(
-
-                    `${item.name}の月予算`,
-
+                    `${item.name} の月予算`,
                     item.budget
-
                 )
-
             );
 
-        if(budget){
+        if(!budget) return;
 
-            item.budget = budget;
-
-        }
+        item.budget = budget;
 
     });
+
+    save();
 
     update();
 
@@ -486,27 +483,28 @@ document.getElementById("editBudget").onclick = ()=>{
 
 document.getElementById("editName").onclick = ()=>{
 
-    alert("次のステップで作成します。");
+    alert("Ver13で実装します。");
 
 };
 
 document.getElementById("exportData").onclick = ()=>{
 
-    alert("次のステップで作成します。");
+    alert("Ver13で実装します。");
 
 };
 
 document.getElementById("importData").onclick = ()=>{
 
-    alert("次のステップで作成します。");
+    alert("Ver13で実装します。");
 
 };
 
 document.getElementById("deleteAll").onclick = ()=>{
 
-    alert("次のステップで作成します。");
+    alert("Ver13で実装します。");
 
 };
+
 /* ===========================
    年間カテゴリ分析
 =========================== */
