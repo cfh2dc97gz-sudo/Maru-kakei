@@ -552,8 +552,65 @@ function updateAI(){
     const advice =
         document.getElementById("aiAdvice");
 
-    advice.innerHTML =
-        "家計データを分析しています...";
+    const income =
+        app.income.papa +
+        app.income.mama +
+        app.income.extra;
+
+    const spent =
+        app.budgets.reduce(
+
+            (sum,item)=>sum+item.spent,
+
+            0
+
+        );
+
+    const remain =
+        income - spent;
+
+    const remainMonths =
+        12 - currentMonth;
+
+    if(income===0){
+
+        advice.innerHTML =
+            "収入を入力すると分析を開始します。";
+
+        return;
+
+    }
+
+    if(remainMonths<=0){
+
+        advice.innerHTML =
+            "年間データを分析中です。";
+
+        return;
+
+    }
+
+    const forecast =
+        remain +
+        (remain / currentMonth * remainMonths);
+
+    const diff =
+        app.goal - forecast;
+
+    if(diff<=0){
+
+        advice.innerHTML =
+            "現在のペースでは年間目標を達成する見込みです。";
+
+    }else{
+
+        const need =
+            Math.ceil(diff / remainMonths);
+
+        advice.innerHTML =
+            `年間目標まで約¥${diff.toLocaleString()}不足する見込みです。<br><br>残り${remainMonths}か月は毎月約¥${need.toLocaleString()}改善すると目標達成圏内になります。`;
+
+    }
 
 }
 /* ===========================
