@@ -213,7 +213,7 @@ function update(){
 
     drawCategories();
 
-    save();
+save();
 
 }
 /* ===========================
@@ -472,17 +472,13 @@ onclick="editBudget(${index})">
 function editBudget(index){
 
     const budget =
-        Number(
+        Number(prompt(
 
-            prompt(
+            `${app.budgets[index].name} の月予算`,
 
-                `${app.budgets[index].name} の月予算`,
+            app.budgets[index].budget
 
-                app.budgets[index].budget
-
-            )
-
-        );
+        ));
 
     if(!budget) return;
 
@@ -501,7 +497,13 @@ function editBudget(index){
 document.getElementById("editGoal").onclick = ()=>{
 
     const goal =
-        Number(prompt("年間目標を入力してください", app.goal));
+        Number(prompt(
+
+            "年間目標を入力してください",
+
+            app.goal
+
+        ));
 
     if(!goal) return;
 
@@ -549,6 +551,19 @@ navButtons[2].onclick = ()=>{
 
 };
 
+/* ===========================
+   AIコンサルタント
+=========================== */
+
+function updateAI(){
+
+    const advice =
+        document.getElementById("aiAdvice");
+
+    advice.innerHTML =
+        "家計データを分析しています...";
+
+}
 /* ===========================
    年間カテゴリ分析
 =========================== */
