@@ -623,7 +623,29 @@ function updateAI(){
             (sum,item)=>sum+item.spent,
             0
         );
+const categoryForecast = app.budgets.map(item=>{
 
+    const yearlyBudget = item.budget * 12;
+
+    const yearlyForecast =
+        currentMonth > 0
+        ? Math.round(item.spent / currentMonth * 12)
+        : 0;
+
+    return{
+
+        name:item.name,
+
+        yearlyBudget,
+
+        yearlyForecast,
+
+        diff:yearlyForecast - yearlyBudget
+
+    };
+
+});
+   
     if(income===0){
 
         advice.innerHTML =
@@ -652,7 +674,30 @@ function updateAI(){
 
     const shortage =
         monthlyTarget - forecast;
+const overCategories = categoryForecast
+    .filter(item=>item.diff > 0)
+    .sort((a,b)=>b.diff-a.diff)
+    .slice(0,2);
 
+let categoryComment = "";
+
+if(overCategories.length){
+
+    categoryComment = "<br><br>📌 気になるカテゴリ<br>";
+
+    overCategories.forEach(item=>{
+
+        const monthlyOver =
+            Math.ceil(item.diff / 12);
+
+        categoryComment +=
+            `${item.name} は年間約¥${item.diff.toLocaleString()}オーバー見込みです。<br>` +
+            `毎月約¥${monthlyOver.toLocaleString()}抑えると予算内になります。<br><br>`;
+
+    });
+
+}
+   
     if(shortage<=0){
 
         advice.innerHTML =
@@ -661,8 +706,7 @@ function updateAI(){
 
 年間目標：¥${app.goal.toLocaleString()}
 ボーナス貯金：¥${app.bonusSaving.toLocaleString()}
-毎月の目標：¥${monthlyTarget.toLocaleString()}`;
-
+毎月の目標：¥${monthlyTarget.toLocaleString()}${categoryComment}`;
         return;
 
     }
@@ -676,7 +720,7 @@ function updateAI(){
 
 `📊 年間目標まで約¥${shortage.toLocaleString()}不足する見込みです。
 
-残り${remainMonths}か月は毎月約¥${improve.toLocaleString()}改善すると達成圏内になります。`;
+残り${remainMonths}か月は毎月約¥${improve.toLocaleString()}改善すると達成圏内になります。${categoryComment}`;
 
 }
 /* ===========================
