@@ -80,6 +80,33 @@ let currentYear = 2026;
 
 let currentMonth = 4;
 
+const yearSelect =
+    document.getElementById("yearSelect");
+
+yearSelect.value =
+    String(currentYear);
+
+yearSelect.onchange = ()=>{
+
+    save();
+
+    currentYear =
+        Number(yearSelect.value);
+
+    currentMonth = 4;
+
+    load();
+
+    update();
+
+    drawYearSummary();
+
+    drawYearCategory();
+
+    drawYearChart();
+
+};
+
 load();
 
 update();
@@ -93,6 +120,12 @@ function getKey(){
 
 }
 
+function getYearKey(){
+
+    return `maru-kakei-year-${currentYear}`;
+
+}
+
 function save(){
 
     localStorage.setItem(
@@ -103,35 +136,59 @@ function save(){
 
     );
 
-}
+    localStorage.setItem(
 
+        getYearKey(),
+
+        JSON.stringify({
+
+            goal:app.goal,
+
+            bonusSaving:app.bonusSaving
+
+        })
+
+    );
+
+}
 function load(){
 
     const saved =
         localStorage.getItem(getKey());
 
-    if(!saved) return;
+    if(saved){
 
-    const data =
-        JSON.parse(saved);
+        const data =
+            JSON.parse(saved);
 
-    app.goal =
-        data.goal ?? app.goal;
+        app.income =
+            data.income ?? app.income;
 
-    app.bonusSaving =
-        data.bonusSaving ?? 0;
+        app.budgets =
+            data.budgets ?? app.budgets;
 
-    app.income =
-        data.income ?? app.income;
+        app.history =
+            data.history ?? [];
 
-    app.budgets =
-        data.budgets ?? app.budgets;
+    }
 
-    app.history =
-        data.history ?? [];
+    const yearSaved =
+        localStorage.getItem(getYearKey());
+
+    if(yearSaved){
+
+        const yearData =
+            JSON.parse(yearSaved);
+
+        app.goal =
+            yearData.goal ?? app.goal;
+
+        app.bonusSaving =
+            yearData.bonusSaving ?? app.bonusSaving;
+
+    }
 
 }
-
 /* ===========================
    月変更
 =========================== */
@@ -146,15 +203,11 @@ function changeMonth(step){
 
         currentMonth = 1;
 
-        currentYear++;
-
     }
 
     if(currentMonth < 1){
 
         currentMonth = 12;
-
-        currentYear--;
 
     }
 
@@ -177,8 +230,11 @@ document
 
 function update(){
 
-    document.getElementById("period").textContent =
-        `${currentYear}年${currentMonth}月`;
+    yearSelect.value =
+    String(currentYear);
+
+document.getElementById("period").textContent =
+    `${currentMonth}月`;
 
     const incomeTotal =
         app.income.papa +
