@@ -796,7 +796,11 @@ button:active{
     align-items:center;
 
 }
+.chart-month{
 
+    cursor:pointer;
+
+}
 .chart-area{
 
     width:100%;
