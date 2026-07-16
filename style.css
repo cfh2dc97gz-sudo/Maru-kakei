@@ -795,6 +795,8 @@ button:active{
 
     align-items:center;
 
+    justify-content:flex-end;
+
 }
 
 .chart-bar-area{
@@ -828,10 +830,11 @@ button:active{
 
     justify-content:center;
 
-    gap:3px;
+    gap:2px;
+
+    padding:0 3px;
 
 }
-
 .chart-bar{
 
     flex:1;
