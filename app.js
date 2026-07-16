@@ -95,6 +95,24 @@ yearSelect.onchange = ()=>{
 
     currentMonth = 4;
 
+    app.income = {
+
+        papa:0,
+
+        mama:0,
+
+        extra:0
+
+    };
+
+    app.budgets.forEach(item=>{
+
+        item.spent = 0;
+
+    });
+
+    app.history = [];
+
     load();
 
     update();
@@ -116,7 +134,12 @@ update();
 
 function getKey(){
 
-    return `maru-kakei-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
+    const saveYear =
+        currentMonth <= 3
+        ? currentYear + 1
+        : currentYear;
+
+    return `maru-kakei-${saveYear}-${String(currentMonth).padStart(2,"0")}`;
 
 }
 
