@@ -544,79 +544,91 @@ navButtons[2].onclick = ()=>{
 };
 
 /* ===========================
-   AIコンサルタント
+   設定
 =========================== */
 
-function updateAI(){
+function drawBudgetList(){
 
-    const advice =
-        document.getElementById("aiAdvice");
+    const area =
+        document.getElementById("budgetList");
 
-    const income =
-        app.income.papa +
-        app.income.mama +
-        app.income.extra;
+    area.innerHTML = "";
 
-    const spent =
-        app.budgets.reduce(
-            (sum,item)=>sum+item.spent,
-            0
-        );
+    app.budgets.forEach((item,index)=>{
 
-    if(income===0){
+        area.innerHTML += `
 
-        advice.innerHTML =
-            "収入を入力すると分析を開始します。";
+<button
+class="setting-item"
+onclick="editBudget(${index})">
 
-        return;
+    ${item.name}
 
-    }
+    <span>
 
-    const remain =
-        income - spent;
+        ¥${item.budget.toLocaleString()}
 
-    const remainMonths =
-        12 - currentMonth;
+    </span>
 
-    const forecast =
-        remain +
-        (remain / currentMonth * remainMonths);
+</button>
 
-    const shortage =
-        app.goal - forecast;
+`;
 
-    if(shortage<=0){
-
-        advice.innerHTML =
-            "現在のペースでは年間目標を達成する見込みです。";
-
-        return;
-
-    }
-
-    const target =
-        [...app.budgets]
-        .sort((a,b)=>
-
-            (b.spent-b.budget)-
-            (a.spent-a.budget)
-
-        )[0];
-
-    const reduce =
-        Math.ceil(
-            shortage / remainMonths
-        );
-
-    advice.innerHTML =
-
-        `年間目標まで約¥${shortage.toLocaleString()}不足する見込みです。<br><br>
-
-改善効果が高いのは${target.name}です。<br>
-
-残り${remainMonths}か月は月約¥${reduce.toLocaleString()}の見直しをおすすめします。`;
+    });
 
 }
+
+document.getElementById("editGoal").onclick = ()=>{
+
+    const goal =
+        Number(
+
+            prompt(
+
+                "年間目標を入力してください",
+
+                app.goal
+
+            )
+
+        );
+
+    if(!goal) return;
+
+    app.goal = goal;
+
+    save();
+
+    update();
+
+    drawYearSummary();
+
+};
+
+document.getElementById("editBonus").onclick = ()=>{
+
+    const bonus =
+        Number(
+
+            prompt(
+
+                "年間ボーナス貯金額",
+
+                app.bonusSaving || 0
+
+            )
+
+        );
+
+    if(isNaN(bonus)) return;
+
+    app.bonusSaving = bonus;
+
+    save();
+
+    update();
+
+};
 /* ===========================
    年間カテゴリ分析
 =========================== */
