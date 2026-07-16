@@ -690,3 +690,18 @@ onclick="changeMonthFromYear(${item.month})">
     });
 
 }
+function changeMonthFromYear(month){
+
+    currentMonth = month;
+
+    load();
+
+    update();
+
+    navButtons[0].click();
+
+}
+
+drawYearSummary();
+drawYearCategory();
+drawYearChart();
