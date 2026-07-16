@@ -557,21 +557,6 @@ function updateAI(){
         app.income.mama +
         app.income.extra;
 
-    const spent =
-        app.budgets.reduce(
-
-            (sum,item)=>sum+item.spent,
-
-            0
-
-        );
-
-    const remain =
-        income - spent;
-
-    const remainMonths =
-        12 - currentMonth;
-
     if(income===0){
 
         advice.innerHTML =
@@ -581,36 +566,48 @@ function updateAI(){
 
     }
 
-    if(remainMonths<=0){
+    const remainMonths =
+        12 - currentMonth;
+
+    let messages = [];
+
+    app.budgets.forEach(item=>{
+
+        const yearlyBudget =
+            item.budget * 12;
+
+        const forecast =
+            item.spent / currentMonth * 12;
+
+        const over =
+            forecast - yearlyBudget;
+
+        if(over > 0){
+
+            const reduce =
+                Math.ceil(over / remainMonths);
+
+            messages.push(
+
+                `・${item.name}は年間約¥${Math.round(forecast).toLocaleString()}となる見込みです。残り${remainMonths}か月は月約¥${reduce.toLocaleString()}抑えると予算内になります。`
+
+            );
+
+        }
+
+    });
+
+    if(messages.length===0){
 
         advice.innerHTML =
-            "年間データを分析中です。";
+            "現在は大きな改善が必要なカテゴリはありません。";
 
         return;
 
     }
 
-    const forecast =
-        remain +
-        (remain / currentMonth * remainMonths);
-
-    const diff =
-        app.goal - forecast;
-
-    if(diff<=0){
-
-        advice.innerHTML =
-            "現在のペースでは年間目標を達成する見込みです。";
-
-    }else{
-
-        const need =
-            Math.ceil(diff / remainMonths);
-
-        advice.innerHTML =
-            `年間目標まで約¥${diff.toLocaleString()}不足する見込みです。<br><br>残り${remainMonths}か月は毎月約¥${need.toLocaleString()}改善すると目標達成圏内になります。`;
-
-    }
+    advice.innerHTML =
+        messages.slice(0,2).join("<br><br>");
 
 }
 /* ===========================
