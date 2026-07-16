@@ -620,11 +620,8 @@ function updateAI(){
 
     const spent =
         app.budgets.reduce(
-
             (sum,item)=>sum+item.spent,
-
             0
-
         );
 
     if(income===0){
@@ -639,44 +636,47 @@ function updateAI(){
     const remain =
         income - spent;
 
-    const remainMonths =
-        12 - currentMonth;
-
-    const targetGoal =
+    const monthlyTarget =
         Math.max(
             app.goal - app.bonusSaving,
             0
         );
 
+    const remainMonths =
+        12 - currentMonth;
+
     const forecast =
-        remain +
-        (remain / currentMonth * remainMonths);
+        Math.round(
+            remain / currentMonth * 12
+        );
 
     const shortage =
-        targetGoal - forecast;
+        monthlyTarget - forecast;
 
     if(shortage<=0){
 
         advice.innerHTML =
 
-            `現在のペースでは毎月の年間目標を達成する見込みです。<br><br>
+`✅ このペースなら年間目標を達成する見込みです。
 
-年間目標：¥${app.goal.toLocaleString()}<br>
-ボーナス予定：¥${app.bonusSaving.toLocaleString()}<br>
-毎月の目標：¥${targetGoal.toLocaleString()}`;
+年間目標：¥${app.goal.toLocaleString()}
+ボーナス貯金：¥${app.bonusSaving.toLocaleString()}
+毎月の目標：¥${monthlyTarget.toLocaleString()}`;
 
         return;
 
     }
 
-    const need =
-        Math.ceil(shortage / remainMonths);
+    const improve =
+        Math.ceil(
+            shortage / Math.max(remainMonths,1)
+        );
 
     advice.innerHTML =
 
-        `毎月の年間目標まで約¥${shortage.toLocaleString()}不足する見込みです。<br><br>
+`📊 年間目標まで約¥${shortage.toLocaleString()}不足する見込みです。
 
-残り${remainMonths}か月は毎月約¥${need.toLocaleString()}改善すると目標達成圏内になります。`;
+残り${remainMonths}か月は毎月約¥${improve.toLocaleString()}改善すると達成圏内になります。`;
 
 }
 /* ===========================
