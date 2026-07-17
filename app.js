@@ -947,17 +947,7 @@ function drawYearChart(){
     chart.innerHTML = html;
 
 }
-function drawYearChart(){
 
-    const chart =
-        document.getElementById("yearChart");
-
-    if(!chart) return;
-
-    chart.innerHTML =
-        "<div style='padding:40px;text-align:center;color:#888;'>Ver14.1で月別グラフを追加予定</div>";
-
-}
 
 function changeMonthFromYear(month){
 
