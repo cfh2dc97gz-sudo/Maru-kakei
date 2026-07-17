@@ -970,7 +970,7 @@ function drawYearChart(){
                 Math.round(
                     Math.abs(item.remain)
                     / max
-                    * 55
+                    * 70
                 )
             );
 
