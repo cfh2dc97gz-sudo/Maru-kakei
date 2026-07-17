@@ -1002,9 +1002,9 @@ button:active{
 
     align-items:center;
 
-    gap:10px;
+    gap:6px;
 
-    margin:10px 0;
+    margin:4px 0;
 
     cursor:pointer;
 
@@ -1018,7 +1018,7 @@ button:active{
 
 .year-month{
 
-    width:34px;
+    width:26px;
 
     text-align:center;
 
@@ -1042,17 +1042,7 @@ button:active{
 
     align-items:center;
 
-    height:22px;
-
-    border:1px solid #E6E6E6;
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-    background:#F8F8F8;
-
-}
+    height:14px;
 
 .year-left{
 
@@ -1125,11 +1115,11 @@ button:active{
 
 .year-money{
 
-    width:90px;
+    width:61px;
 
     text-align:right;
 
-    font-size:14px;
+    font-size:11px;
 
     font-weight:700;
 
