@@ -864,18 +864,89 @@ function drawYearSummary(){
 
 }
 
-function drawYearCategory(){
+function drawYearChart(){
 
-    const area =
-        document.getElementById("yearCategory");
+    const chart =
+        document.getElementById("yearChart");
 
-    if(!area) return;
+    if(!chart) return;
 
-    area.innerHTML =
-        "<div style='padding:20px;text-align:center;color:#888;'>Ver14.1でカテゴリ分析を追加予定</div>";
+    let html = "";
+
+    for(let month=1; month<=12; month++){
+
+        const key =
+            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+
+        const saved =
+            localStorage.getItem(key);
+
+        let income = 0;
+        let spent = 0;
+
+        if(saved){
+
+            const data =
+                JSON.parse(saved);
+
+            income =
+                (data.income?.papa || 0) +
+                (data.income?.mama || 0) +
+                (data.income?.extra || 0);
+
+            spent =
+                (data.budgets || []).reduce(
+
+                    (sum,item)=>sum+(item.spent||0),
+
+                    0
+
+                );
+
+        }
+
+        const remain =
+            income - spent;
+
+        const max =
+            Math.max(income, spent, 1);
+
+        const width =
+            Math.round(remain / max * 100);
+
+        html += `
+
+<div style="margin-bottom:14px;">
+
+    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px;">
+
+        <span>${month}月</span>
+
+        <span>¥${remain.toLocaleString()}</span>
+
+    </div>
+
+    <div style="height:12px;background:#ececec;border-radius:6px;overflow:hidden;">
+
+        <div
+            style="
+                width:${Math.min(Math.abs(width),100)}%;
+                height:100%;
+                background:${remain>=0 ? '#53c26b' : '#e05a5a'};
+            ">
+        </div>
+
+    </div>
+
+</div>
+
+`;
+
+    }
+
+    chart.innerHTML = html;
 
 }
-
 function drawYearChart(){
 
     const chart =
