@@ -904,8 +904,7 @@ function drawYearChart(){
 
         if(saved){
 
-            const d =
-                JSON.parse(saved);
+            const d = JSON.parse(saved);
 
             const income =
                 (d.income?.papa||0)+
@@ -919,43 +918,29 @@ function drawYearChart(){
                     0
                 );
 
-            remain =
-                income-spent;
+            remain = income - spent;
 
         }
 
-        if(Math.abs(remain)>max){
-
-            max=Math.abs(remain);
-
-        }
+        max = Math.max(
+            max,
+            Math.abs(remain)
+        );
 
         data.push({
-
-            month:month,
-
-            remain:remain
-
+            month,
+            remain
         });
 
     });
+       data.forEach(item=>{
 
-    data.forEach(item=>{
-
-        const percent = Math.max(
-    2,
-    Math.round(
-        Math.abs(item.remain) / max * 100
-    )
-);
-
-        const row =
+        const bar =
             document.createElement("div");
 
-        row.className =
-            "year-bar-row";
+        bar.className = "chart-month";
 
-        row.onclick = ()=>{
+        bar.onclick = ()=>{
 
             changeMonthFromYear(
                 item.month
@@ -963,53 +948,72 @@ function drawYearChart(){
 
         };
 
-        row.innerHTML = `
+        const height =
+            item.remain === 0
+            ? 2
+            : Math.max(
+                6,
+                Math.round(
+                    Math.abs(item.remain)
+                    / max
+                    * 50
+                )
+            );
 
-<div class="year-month">
+        bar.innerHTML = `
 
-${item.month}<br>月
+<div style="
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-end;
+height:100px;
+width:100%;
+">
 
-</div>
+    ${
+        item.remain > 0
+        ? `<div style="
+            width:10px;
+            height:${height}px;
+            background:#69C36D;
+            border-radius:5px 5px 0 0;
+        "></div>`
+        : `<div style="flex:1"></div>`
+    }
 
-<div class="year-graph">
+    <div style="
+        width:100%;
+        height:2px;
+        background:#BDBDBD;
+        margin:3px 0;
+    "></div>
 
-<div class="year-left">
+    ${
+        item.remain < 0
+        ? `<div style="
+            width:10px;
+            height:${height}px;
+            background:#E46B6B;
+            border-radius:0 0 5px 5px;
+        "></div>`
+        : `<div style="height:2px"></div>`
+    }
 
-${
-item.remain<0
-?
-`<div class="year-minus" style="width:${percent}%"></div>`
-:
-``
-}
-
-</div>
-
-<div class="year-center"></div>
-
-<div class="year-right">
-
-${
-item.remain>=0
-?
-`<div class="year-plus" style="width:${percent}%"></div>`
-:
-``
-}
-
-</div>
-
-</div>
-
-<div class="year-money">
-
-¥${item.remain.toLocaleString()}
+    <div style="
+        margin-top:4px;
+        font-size:10px;
+        font-weight:700;
+        color:#7B6258;
+    ">
+        ${item.month}
+    </div>
 
 </div>
 
 `;
 
-        chart.appendChild(row);
+        chart.appendChild(bar);
 
     });
 
