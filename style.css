@@ -784,6 +784,27 @@ button:active{
     position:relative;
 
 }
+.year-chart::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:50%;
+
+    height:2px;
+
+    background:#CFCFCF;
+
+    transform:translateY(-50%);
+
+    z-index:0;
+
+}
 .chart-area{
 
     width:100%;
