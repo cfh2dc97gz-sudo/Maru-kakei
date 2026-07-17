@@ -863,6 +863,17 @@ function drawYearSummary(){
         ) + "%";
 
 }
+function drawYearCategory(){
+
+    const area =
+        document.getElementById("yearCategory");
+
+    if(!area) return;
+
+    area.innerHTML =
+        "<div style='padding:20px;text-align:center;color:#888;'>Ver14.1でカテゴリ分析を追加予定</div>";
+
+}
 
 function drawYearChart(){
 
