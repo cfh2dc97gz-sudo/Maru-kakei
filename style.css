@@ -1077,7 +1077,7 @@ button:active{
 
 .year-left{
 
-    width:50%;
+    flex:1;
 
     height:100%;
 
@@ -1086,7 +1086,6 @@ button:active{
     overflow:hidden;
 
 }
-
 .year-center{
 
     width:2px;
@@ -1103,7 +1102,7 @@ button:active{
 
 .year-right{
 
-    width:50%;
+    flex:1;
 
     height:100%;
 
