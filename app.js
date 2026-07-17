@@ -966,9 +966,9 @@ function drawYearChart(){
 display:flex;
 flex-direction:column;
 align-items:center;
-justify-content:center;
 height:120px;
 width:100%;
+position:relative;
 ">
 
     ${
@@ -977,6 +977,9 @@ width:100%;
         width:10px;
         height:${height}px;
         background:#69C36D;
+        position:absolute;
+bottom:50%;
+transform:translateY(-1px);
         border-radius:5px 5px 0 0;
         margin-bottom:0;
         align-self:center;
@@ -985,12 +988,6 @@ width:100%;
         height:50px;
     "></div>`
 }
-    <div style="
-        width:100%;
-        height:2px;
-        background:#BDBDBD;
-        margin:3px 0;
-    "></div>
 
     ${
     item.remain < 0
@@ -998,6 +995,9 @@ width:100%;
         width:10px;
         height:${height}px;
         background:#E46B6B;
+        position:absolute;
+top:50%;
+transform:translateY(1px);
         border-radius:0 0 5px 5px;
         align-self:center;
     "></div>`
