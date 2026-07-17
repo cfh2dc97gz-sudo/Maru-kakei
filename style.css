@@ -1061,11 +1061,15 @@ button:active{
 
     display:flex;
 
+    align-items:center;
+
     height:22px;
 
-    border-radius:12px;
+    min-width:0;
 
     overflow:hidden;
+
+    border-radius:12px;
 
     border:1px solid #E6E6E6;
 
@@ -1073,6 +1077,55 @@ button:active{
 
 }
 
+.year-half{
+
+    flex:1;
+
+    height:100%;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.year-half:first-child{
+
+    border-right:1px solid #BDBDBD;
+
+}
+
+.year-plus{
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    height:100%;
+
+    max-width:100%;
+
+    background:#69C36D;
+
+}
+
+.year-minus{
+
+    position:absolute;
+
+    right:0;
+
+    top:0;
+
+    height:100%;
+
+    max-width:100%;
+
+    background:#E46B6B;
+
+}
 .year-half{
 
     width:50%;
