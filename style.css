@@ -1018,155 +1018,53 @@ button:active{
 
 }
 /* ===========================
-   Ver14.5 年間残高グラフ
+   年間グラフ
 =========================== */
 
-.year-bar-row{
+.year-chart{
 
     display:flex;
 
-    align-items:center;
+    justify-content:space-between;
 
-    gap:6px;
-
-    margin:4px 0;
-
-    cursor:pointer;
-
-}
-
-.year-bar-row:active{
-
-    transform:scale(.98);
-
-}
-
-.year-month{
-
-    width:26px;
-
-    text-align:center;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    line-height:1.1;
-
-    color:#6B5B53;
-
-    flex-shrink:0;
-
-}
-
-.year-graph{
-
-    flex:1;
-
-    display:flex;
-
-    align-items:center;
-
-    height:14px;
-
-.year-left{
-
-    flex:1;
-
-    height:100%;
+    align-items:stretch;
 
     position:relative;
 
-    overflow:hidden;
+    height:140px;
 
-}
-.year-center{
-
-    width:2px;
-
-    height:100%;
-
-    background:#A0A0A0;
-
-    flex-shrink:0;
-
-    z-index:2;
+    margin-top:12px;
 
 }
 
-.year-right{
+.year-chart::before{
 
-    flex:1;
-
-    height:100%;
-
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-.year-plus{
+    content:"";
 
     position:absolute;
 
-    left:0;
+    left:12px;
 
-    top:0;
+    right:12px;
 
-    height:100%;
+    top:50%;
 
-    background:#69C36D;
+    height:2px;
 
-    border-radius:0 12px 12px 0;
+    background:#D6D6D6;
 
-}
-
-.year-minus{
-
-    position:absolute;
-
-    right:0;
-
-    top:0;
-
-    height:100%;
-
-    background:#E46B6B;
-
-    border-radius:12px 0 0 12px;
+    transform:translateY(-50%);
 
 }
 
-.year-money{
-
-    width:61px;
-
-    text-align:right;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    color:#4D4038;
-
-    flex-shrink:0;
-
-}
 .chart-month{
 
     flex:1;
 
-    height:140px;
-
     position:relative;
 
-    display:flex;
-
-    justify-content:center;
-
     cursor:pointer;
-z-index:1;
+
 }
 
 .chart-bar{
@@ -1175,9 +1073,9 @@ z-index:1;
 
     left:50%;
 
-    width:10px;
-
     transform:translateX(-50%);
+
+    width:10px;
 
 }
 
