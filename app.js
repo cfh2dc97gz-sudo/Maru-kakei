@@ -942,10 +942,12 @@ function drawYearChart(){
 
     data.forEach(item=>{
 
-        const percent =
-            Math.round(
-                Math.abs(item.remain)/max*100
-            );
+        const percent = Math.max(
+    2,
+    Math.round(
+        Math.abs(item.remain) / max * 100
+    )
+);
 
         const row =
             document.createElement("div");
