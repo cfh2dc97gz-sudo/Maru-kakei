@@ -1014,7 +1014,7 @@ button:active{
 
 }
 /* ===========================
-   Ver14.4 年間残高グラフ
+   Ver14.5 年間残高グラフ
 =========================== */
 
 .year-bar-row{
@@ -1025,7 +1025,7 @@ button:active{
 
     gap:10px;
 
-    margin:12px 0;
+    margin:10px 0;
 
     cursor:pointer;
 
@@ -1047,9 +1047,9 @@ button:active{
 
     font-weight:700;
 
-    color:#6B5B53;
-
     line-height:1.1;
+
+    color:#6B5B53;
 
     flex-shrink:0;
 
@@ -1065,90 +1065,57 @@ button:active{
 
     height:22px;
 
-    min-width:0;
-
-    overflow:hidden;
+    border:1px solid #E6E6E6;
 
     border-radius:12px;
 
-    border:1px solid #E6E6E6;
-
-    background:#FFFFFF;
-
-}
-
-.year-half{
-
-    flex:1;
-
-    height:100%;
-
-    position:relative;
-
     overflow:hidden;
-
-}
-
-.year-half:first-child{
-
-    border-right:1px solid #BDBDBD;
-
-}
-
-.year-plus{
-
-    position:absolute;
-
-    left:0;
-
-    top:0;
-
-    height:100%;
-
-    max-width:100%;
-
-    background:#69C36D;
-
-}
-
-.year-minus{
-
-    position:absolute;
-
-    right:0;
-
-    top:0;
-
-    height:100%;
-
-    max-width:100%;
-
-    background:#E46B6B;
-
-}
-.year-half{
-
-    width:50%;
-
-    position:relative;
 
     background:#F8F8F8;
 
 }
 
-.year-half:first-child{
+.year-left{
 
-    border-right:1px solid #BDBDBD;
+    width:50%;
+
+    height:100%;
+
+    position:relative;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    overflow:hidden;
+
+}
+
+.year-center{
+
+    width:2px;
+
+    height:100%;
+
+    background:#A0A0A0;
+
+    flex-shrink:0;
+
+}
+
+.year-right{
+
+    width:50%;
+
+    height:100%;
+
+    position:relative;
+
+    overflow:hidden;
 
 }
 
 .year-plus{
-
-    position:absolute;
-
-    left:0;
-
-    top:0;
 
     height:100%;
 
@@ -1158,15 +1125,11 @@ button:active{
 
 .year-minus{
 
-    position:absolute;
-
-    right:0;
-
-    top:0;
-
     height:100%;
 
     background:#E46B6B;
+
+    margin-left:auto;
 
 }
 
