@@ -882,12 +882,14 @@ function drawYearChart(){
 
     if(!chart) return;
 
+    chart.innerHTML = "";
+
     const months =
         [4,5,6,7,8,9,10,11,12,1,2,3];
 
-    let max = 1;
+    const data = [];
 
-    const rows = [];
+    let max = 1;
 
     months.forEach(month=>{
 
@@ -897,30 +899,28 @@ function drawYearChart(){
         const saved =
             localStorage.getItem(key);
 
-        let income = 0;
-        let spent = 0;
+        let remain = 0;
 
         if(saved){
 
-            const data =
+            const d =
                 JSON.parse(saved);
 
-            income =
-                (data.income?.papa||0)+
-                (data.income?.mama||0)+
-                (data.income?.extra||0);
+            const income =
+                (d.income?.papa||0)+
+                (d.income?.mama||0)+
+                (d.income?.extra||0);
 
-            spent =
-                (data.budgets||[])
+            const spent =
+                (d.budgets||[])
                 .reduce(
                     (sum,item)=>sum+(item.spent||0),
                     0
                 );
 
-        }
+            remain = income - spent;
 
-        const remain =
-            income-spent;
+        }
 
         max =
             Math.max(
@@ -928,76 +928,95 @@ function drawYearChart(){
                 Math.abs(remain)
             );
 
-        rows.push({
+        data.push({
             month,
             remain
         });
 
     });
 
-    let html = "";
+    data.forEach(item=>{
 
-    rows.forEach(row=>{
+        const row =
+            document.createElement("div");
 
-        const width =
-            Math.round(
-                Math.abs(row.remain)/max*45
+        row.className =
+            "year-bar-row";
+
+        row.onclick = ()=>{
+
+            changeMonthFromYear(
+                item.month
             );
 
-        html += `
+        };
 
-<div
-class="year-bar-row"
-onclick="changeMonthFromYear(${row.month})">
+        const graph =
+            document.createElement("div");
+
+        graph.className =
+            "year-graph";
+
+        const center =
+            document.createElement("div");
+
+        center.className =
+            "year-center";
+
+        graph.appendChild(center);
+
+        const bar =
+            document.createElement("div");
+
+        if(item.remain>=0){
+
+            bar.className =
+                "year-plus";
+
+            bar.style.left = "50%";
+
+        }else{
+
+            bar.className =
+                "year-minus";
+
+            bar.style.right = "50%";
+
+        }
+
+        bar.style.width =
+            (Math.abs(item.remain)/max*50)+"%";
+
+        graph.appendChild(bar);
+
+        row.innerHTML = `
 
 <div class="year-month">
 
-${row.month}<br>月
-
-</div>
-
-<div class="year-bar">
-
-<div class="year-zero"></div>
-
-${
-row.remain>=0
-
-?
-
-`<div
-class="year-plus"
-style="width:${width}%">
-</div>`
-
-:
-
-`<div
-class="year-minus"
-style="width:${width}%">
-</div>`
-
-}
-
-</div>
-
-<div class="year-money">
-
-¥${row.remain.toLocaleString()}
-
-</div>
+${item.month}<br>月
 
 </div>
 
 `;
 
+        row.appendChild(graph);
+
+        const value =
+            document.createElement("div");
+
+        value.className =
+            "year-money";
+
+        value.textContent =
+            "¥"+item.remain.toLocaleString();
+
+        row.appendChild(value);
+
+        chart.appendChild(row);
+
     });
 
-    chart.innerHTML = html;
-
 }
-
-
 function changeMonthFromYear(month){
 
     currentMonth = month;
