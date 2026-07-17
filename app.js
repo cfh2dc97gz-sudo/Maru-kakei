@@ -921,71 +921,49 @@ months.forEach(month => {
    data.forEach(item => {
 
     const column = document.createElement("div");
-    column.className = "chart-month";
-    column.onclick = () => changeMonthFromYear(item.month);
+column.className = "chart-month";
+column.onclick = () => changeMonthFromYear(item.month);
 
-    const height = Math.round((Math.abs(item.remain) / max) * 50);
+const height = Math.max(
+    2,
+    Math.round((Math.abs(item.remain) / max) * 50)
+);
 
-    column.innerHTML = `
+let html = "";
 
-        <div style="
-            position:relative;
-            width:100%;
-            height:110px;
-        ">
+if(item.remain > 0){
 
-            ${
-                item.remain > 0
-                ? `<div style="
-                    position:absolute;
-                    left:50%;
-                    bottom:50%;
-                    transform:translateX(-50%);
-                    width:10px;
-                    height:${Math.max(2,height)}px;
-                    background:#69C36D;
-                    border-radius:5px 5px 0 0;
-                "></div>`
-                : ""
-            }
-
-            ${
-                item.remain < 0
-                ? `<div style="
-                    position:absolute;
-                    left:50%;
-                    top:50%;
-                    transform:translateX(-50%);
-                    width:10px;
-                    height:${Math.max(2,height)}px;
-                    background:#E46B6B;
-                    border-radius:0 0 5px 5px;
-                "></div>`
-                : ""
-            }
-
-            <div style="
-                position:absolute;
-                bottom:0;
-                left:50%;
-                transform:translateX(-50%);
-                font-size:10px;
-                font-weight:700;
-                color:#7B6258;
-            ">
-                ${item.month}
-            </div>
-
+    html += `
+        <div
+            class="chart-bar chart-positive"
+            style="height:${height}px;">
         </div>
-
     `;
-
-    chart.appendChild(column);
-
-});
 
 }
 
+if(item.remain < 0){
+
+    html += `
+        <div
+            class="chart-bar chart-negative"
+            style="height:${height}px;">
+        </div>
+    `;
+
+}
+
+html += `
+    <div class="chart-label">
+        ${item.month}
+    </div>
+`;
+
+column.innerHTML = html;
+
+chart.appendChild(column);}
+
+                });
 function changeMonthFromYear(month){
 
     currentMonth = month;
