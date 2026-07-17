@@ -1014,7 +1014,7 @@ button:active{
 
 }
 /* ===========================
-   Ver14.2 年間横棒グラフ
+   Ver14.3 年間残高グラフ
 =========================== */
 
 .year-bar-row{
@@ -1025,21 +1025,29 @@ button:active{
 
     gap:12px;
 
-    margin:14px 0;
+    margin:12px 0;
 
     cursor:pointer;
 
 }
 
+.year-bar-row:active{
+
+    transform:scale(.98);
+
+}
+
 .year-month{
 
-    width:32px;
+    width:34px;
 
     text-align:center;
 
+    font-size:13px;
+
     font-weight:700;
 
-    color:#6b5b53;
+    color:#6B5B53;
 
     line-height:1.1;
 
@@ -1047,23 +1055,23 @@ button:active{
 
 }
 
-.year-bar{
+.year-graph{
 
     flex:1;
 
-    height:20px;
-
     position:relative;
 
-    background:#f3f3f3;
+    height:22px;
 
-    border-radius:10px;
+    background:#F3F3F3;
+
+    border-radius:12px;
 
     overflow:hidden;
 
 }
 
-.year-zero{
+.year-center{
 
     position:absolute;
 
@@ -1075,7 +1083,9 @@ button:active{
 
     height:100%;
 
-    background:#999;
+    background:#9A9A9A;
+
+    transform:translateX(-1px);
 
     z-index:2;
 
@@ -1091,9 +1101,11 @@ button:active{
 
     height:100%;
 
-    background:#69c36d;
+    background:#69C36D;
 
-    border-radius:0 10px 10px 0;
+    border-radius:0 12px 12px 0;
+
+    z-index:1;
 
 }
 
@@ -1107,21 +1119,25 @@ button:active{
 
     height:100%;
 
-    background:#e46b6b;
+    background:#E46B6B;
 
-    border-radius:10px 0 0 10px;
+    border-radius:12px 0 0 12px;
+
+    z-index:1;
 
 }
 
 .year-money{
 
-    width:90px;
+    width:92px;
 
     text-align:right;
 
+    font-size:14px;
+
     font-weight:700;
 
-    font-size:14px;
+    color:#4D4038;
 
     flex-shrink:0;
 
