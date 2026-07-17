@@ -854,7 +854,7 @@ button:active{
 
     position:relative;
 
-    height:170px;
+    height:130px;
 
     margin-top:12px;
 
@@ -926,7 +926,7 @@ button:active{
 
     position:absolute;
 
-    bottom:8px;
+    bottom:-2px;
 
     left:50%;
 
