@@ -765,184 +765,7 @@ button:active{
     font-weight:800;
 
 }
-/* ===========================
-   月別推移
-=========================== */
 
-.year-chart{
-
-    display:flex;
-
-    align-items:flex-end;
-
-    justify-content:space-between;
-
-    height:120px;
-
-    margin-top:12px;
-
-    position:relative;
-
-}
-.year-chart::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:12px;
-
-    right:12px;
-
-    top:50%;
-
-    height:2px;
-
-    background:#D6D6D6;
-
-    transform:translateY(-50%);
-
-    z-index:0;
-
-}
-.chart-area{
-
-    width:100%;
-
-    height:150px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    position:relative;
-
-}
-.chart-area::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-
-    right:0;
-
-    top:50%;
-
-    border-top:1px dashed #E7D9A8;
-
-}
-
-.chart-bars{
-
-    display:flex;
-
-    align-items:flex-end;
-
-    gap:2px;
-
-    width:100%;
-
-    height:100%;
-
-}
-
-.chart-bar{
-
-    flex:1;
-
-    border-radius:5px 5px 0 0;
-
-    transition:.3s;
-
-}
-
-.income-bar{
-
-    background:#F4D77A;
-
-}
-
-.spent-bar{
-
-    background:#F2994A;
-
-}
-
-.remain-bar{
-
-    background:#7ACB8C;
-
-}
-
-.chart-label{
-
-    margin-top:6px;
-
-    font-size:10px;
-
-    font-weight:700;
-
-    color:#7B6258;
-
-}
-
-.chart-legend{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:16px;
-
-    margin-top:14px;
-
-    font-size:11px;
-
-    color:#7B6258;
-
-}
-
-.legend-item{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:4px;
-
-}
-
-.legend-color{
-
-    width:10px;
-
-    height:10px;
-
-    border-radius:50%;
-
-}
-
-.income-color{
-
-    background:#F4D77A;
-
-}
-
-.spent-color{
-
-    background:#F2994A;
-
-}
-
-.remain-color{
-
-    background:#7ACB8C;
-
-}
 /* ===========================
    設定画面
 =========================== */
@@ -1031,7 +854,7 @@ button:active{
 
     position:relative;
 
-    height:140px;
+    height:170px;
 
     margin-top:12px;
 
@@ -1103,7 +926,7 @@ button:active{
 
     position:absolute;
 
-    bottom:0;
+    bottom:8px;
 
     left:50%;
 
