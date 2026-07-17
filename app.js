@@ -966,22 +966,25 @@ function drawYearChart(){
 display:flex;
 flex-direction:column;
 align-items:center;
-justify-content:flex-end;
-height:100px;
+justify-content:center;
+height:120px;
 width:100%;
 ">
 
     ${
-        item.remain > 0
-        ? `<div style="
-            width:10px;
-            height:${height}px;
-            background:#69C36D;
-            border-radius:5px 5px 0 0;
-        "></div>`
-        : `<div style="flex:1"></div>`
-    }
-
+    item.remain > 0
+    ? `<div style="
+        width:10px;
+        height:${height}px;
+        background:#69C36D;
+        border-radius:5px 5px 0 0;
+        margin-bottom:0;
+        align-self:center;
+    "></div>`
+    : `<div style="
+        height:50px;
+    "></div>`
+}
     <div style="
         width:100%;
         height:2px;
@@ -990,16 +993,18 @@ width:100%;
     "></div>
 
     ${
-        item.remain < 0
-        ? `<div style="
-            width:10px;
-            height:${height}px;
-            background:#E46B6B;
-            border-radius:0 0 5px 5px;
-        "></div>`
-        : `<div style="height:2px"></div>`
-    }
-
+    item.remain < 0
+    ? `<div style="
+        width:10px;
+        height:${height}px;
+        background:#E46B6B;
+        border-radius:0 0 5px 5px;
+        align-self:center;
+    "></div>`
+    : `<div style="
+        height:50px;
+    "></div>`
+}
     <div style="
         margin-top:4px;
         font-size:10px;
