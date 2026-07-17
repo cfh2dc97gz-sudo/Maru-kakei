@@ -882,9 +882,14 @@ function drawYearChart(){
 
     if(!chart) return;
 
-    let html = "";
+    const months =
+        [4,5,6,7,8,9,10,11,12,1,2,3];
 
-    for(let month=1; month<=12; month++){
+    let max = 1;
+
+    const rows = [];
+
+    months.forEach(month=>{
 
         const key =
             `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
@@ -901,59 +906,92 @@ function drawYearChart(){
                 JSON.parse(saved);
 
             income =
-                (data.income?.papa || 0) +
-                (data.income?.mama || 0) +
-                (data.income?.extra || 0);
+                (data.income?.papa||0)+
+                (data.income?.mama||0)+
+                (data.income?.extra||0);
 
             spent =
-                (data.budgets || []).reduce(
-
+                (data.budgets||[])
+                .reduce(
                     (sum,item)=>sum+(item.spent||0),
-
                     0
-
                 );
 
         }
 
         const remain =
-            income - spent;
+            income-spent;
 
-        const max =
-            Math.max(income, spent, 1);
+        max =
+            Math.max(
+                max,
+                Math.abs(remain)
+            );
+
+        rows.push({
+            month,
+            remain
+        });
+
+    });
+
+    let html = "";
+
+    rows.forEach(row=>{
 
         const width =
-            Math.round(remain / max * 100);
+            Math.round(
+                Math.abs(row.remain)/max*45
+            );
 
         html += `
 
-<div style="margin-bottom:14px;">
+<div
+class="year-bar-row"
+onclick="changeMonthFromYear(${row.month})">
 
-    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px;">
+<div class="year-month">
 
-        <span>${month}月</span>
+${row.month}<br>月
 
-        <span>¥${remain.toLocaleString()}</span>
+</div>
 
-    </div>
+<div class="year-bar">
 
-    <div style="height:12px;background:#ececec;border-radius:6px;overflow:hidden;">
+<div class="year-zero"></div>
 
-        <div
-            style="
-                width:${Math.min(Math.abs(width),100)}%;
-                height:100%;
-                background:${remain>=0 ? '#53c26b' : '#e05a5a'};
-            ">
-        </div>
+${
+row.remain>=0
 
-    </div>
+?
+
+`<div
+class="year-plus"
+style="width:${width}%">
+</div>`
+
+:
+
+`<div
+class="year-minus"
+style="width:${width}%">
+</div>`
+
+}
+
+</div>
+
+<div class="year-money">
+
+¥${row.remain.toLocaleString()}
+
+</div>
 
 </div>
 
 `;
 
-    }
+    });
 
     chart.innerHTML = html;
 
