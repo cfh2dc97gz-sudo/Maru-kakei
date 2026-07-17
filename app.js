@@ -877,150 +877,112 @@ function drawYearCategory(){
 
 function drawYearChart(){
 
-    const chart =
-        document.getElementById("yearChart");
+    const chart = document.getElementById("yearChart");
+if (!chart) return;
 
-    if(!chart) return;
+chart.innerHTML = "";
 
-    chart.innerHTML = "";
+const months = [4,5,6,7,8,9,10,11,12,1,2,3];
+const data = [];
+let max = 1;
 
-    const months = [
-        4,5,6,7,8,9,10,11,12,1,2,3
-    ];
+months.forEach(month => {
 
-    const data = [];
+    const key = `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+    const saved = localStorage.getItem(key);
 
-    let max = 1;
+    let remain = 0;
 
-    months.forEach(month=>{
+    if(saved){
 
-        const key =
-            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+        const d = JSON.parse(saved);
 
-        const saved =
-            localStorage.getItem(key);
+        const income =
+            (d.income?.papa || 0) +
+            (d.income?.mama || 0) +
+            (d.income?.extra || 0);
 
-        let remain = 0;
+        const spent =
+            (d.budgets || [])
+            .reduce((sum,item)=>sum + (item.spent || 0),0);
 
-        if(saved){
+        remain = income - spent;
 
-            const d = JSON.parse(saved);
+    }
 
-            const income =
-                (d.income?.papa||0)+
-                (d.income?.mama||0)+
-                (d.income?.extra||0);
+    max = Math.max(max, Math.abs(remain));
 
-            const spent =
-                (d.budgets||[])
-                .reduce(
-                    (sum,item)=>sum+(item.spent||0),
-                    0
-                );
-
-            remain = income - spent;
-
-        }
-
-        max = Math.max(
-            max,
-            Math.abs(remain)
-        );
-
-        data.push({
-            month,
-            remain
-        });
-
+    data.push({
+        month,
+        remain
     });
-       data.forEach(item=>{
 
-        const bar =
-            document.createElement("div");
+});
+   data.forEach(item => {
 
-        bar.className = "chart-month";
+    const column = document.createElement("div");
+    column.className = "chart-month";
+    column.onclick = () => changeMonthFromYear(item.month);
 
-        bar.onclick = ()=>{
+    const height = Math.round((Math.abs(item.remain) / max) * 50);
 
-            changeMonthFromYear(
-                item.month
-            );
+    column.innerHTML = `
 
-        };
+        <div style="
+            position:relative;
+            width:100%;
+            height:110px;
+        ">
 
-        const height =
-            item.remain === 0
-            ? 2
-            : Math.max(
-                6,
-                Math.round(
-                    Math.abs(item.remain)
-                    / max
-                    * 50
-                )
-            );
+            ${
+                item.remain > 0
+                ? `<div style="
+                    position:absolute;
+                    left:50%;
+                    bottom:50%;
+                    transform:translateX(-50%);
+                    width:10px;
+                    height:${Math.max(2,height)}px;
+                    background:#69C36D;
+                    border-radius:5px 5px 0 0;
+                "></div>`
+                : ""
+            }
 
-        bar.innerHTML = `
+            ${
+                item.remain < 0
+                ? `<div style="
+                    position:absolute;
+                    left:50%;
+                    top:50%;
+                    transform:translateX(-50%);
+                    width:10px;
+                    height:${Math.max(2,height)}px;
+                    background:#E46B6B;
+                    border-radius:0 0 5px 5px;
+                "></div>`
+                : ""
+            }
 
-<div style="
-display:flex;
-flex-direction:column;
-align-items:center;
-height:120px;
-width:100%;
-position:relative;
-">
+            <div style="
+                position:absolute;
+                bottom:0;
+                left:50%;
+                transform:translateX(-50%);
+                font-size:10px;
+                font-weight:700;
+                color:#7B6258;
+            ">
+                ${item.month}
+            </div>
 
-    ${
-    item.remain > 0
-    ? `<div style="
-        width:10px;
-        height:${height}px;
-        background:#69C36D;
-        position:absolute;
-bottom:50%;
-transform:translateY(-1px);
-        border-radius:5px 5px 0 0;
-        margin-bottom:0;
-        align-self:center;
-    "></div>`
-    : `<div style="
-        height:50px;
-    "></div>`
-}
+        </div>
 
-    ${
-    item.remain < 0
-    ? `<div style="
-        width:10px;
-        height:${height}px;
-        background:#E46B6B;
-        position:absolute;
-top:50%;
-transform:translateY(1px);
-        border-radius:0 0 5px 5px;
-        align-self:center;
-    "></div>`
-    : `<div style="
-        height:50px;
-    "></div>`
-}
-    <div style="
-        margin-top:4px;
-        font-size:10px;
-        font-weight:700;
-        color:#7B6258;
-    ">
-        ${item.month}
-    </div>
+    `;
 
-</div>
+    chart.appendChild(column);
 
-`;
-
-        chart.appendChild(bar);
-
-    });
+});
 
 }
 
