@@ -1083,10 +1083,6 @@ button:active{
 
     position:relative;
 
-    display:flex;
-
-    justify-content:flex-end;
-
     overflow:hidden;
 
 }
@@ -1100,6 +1096,8 @@ button:active{
     background:#A0A0A0;
 
     flex-shrink:0;
+
+    z-index:2;
 
 }
 
@@ -1117,19 +1115,33 @@ button:active{
 
 .year-plus{
 
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
     height:100%;
 
     background:#69C36D;
+
+    border-radius:0 12px 12px 0;
 
 }
 
 .year-minus{
 
+    position:absolute;
+
+    right:0;
+
+    top:0;
+
     height:100%;
 
     background:#E46B6B;
 
-    margin-left:auto;
+    border-radius:12px 0 0 12px;
 
 }
 
