@@ -887,7 +887,7 @@ function drawYearChart(){
     const months =
         [4,5,6,7,8,9,10,11,12,1,2,3];
 
-    const data = [];
+    const rows = [];
 
     let max = 1;
 
@@ -903,22 +903,23 @@ function drawYearChart(){
 
         if(saved){
 
-            const d =
+            const data =
                 JSON.parse(saved);
 
             const income =
-                (d.income?.papa||0)+
-                (d.income?.mama||0)+
-                (d.income?.extra||0);
+                (data.income?.papa||0)+
+                (data.income?.mama||0)+
+                (data.income?.extra||0);
 
             const spent =
-                (d.budgets||[])
+                (data.budgets||[])
                 .reduce(
                     (sum,item)=>sum+(item.spent||0),
                     0
                 );
 
-            remain = income - spent;
+            remain =
+                income-spent;
 
         }
 
@@ -928,14 +929,14 @@ function drawYearChart(){
                 Math.abs(remain)
             );
 
-        data.push({
+        rows.push({
             month,
             remain
         });
 
     });
 
-    data.forEach(item=>{
+    rows.forEach(item=>{
 
         const row =
             document.createElement("div");
@@ -951,45 +952,91 @@ function drawYearChart(){
 
         };
 
+        const month =
+            document.createElement("div");
+
+        month.className =
+            "year-month";
+
+        month.innerHTML =
+            `${item.month}<br>月`;
+
+        row.appendChild(month);
+
         const graph =
             document.createElement("div");
 
         graph.className =
             "year-graph";
 
-        const center =
+        const left =
             document.createElement("div");
 
-        center.className =
-            "year-center";
+        left.className =
+            "year-half";
 
-        graph.appendChild(center);
-
-        const bar =
+        const right =
             document.createElement("div");
+
+        right.className =
+            "year-half";
+
+        const minus =
+            document.createElement("div");
+
+        minus.className =
+            "year-minus";
+
+        const plus =
+            document.createElement("div");
+
+        plus.className =
+            "year-plus";
+
+        const width =
+            Math.round(
+                Math.abs(item.remain)
+                /max
+                *100
+            );
 
         if(item.remain>=0){
 
-            bar.className =
-                "year-plus";
-
-            bar.style.left = "50%";
+            plus.style.width =
+                width+"%";
 
         }else{
 
-            bar.className =
-                "year-minus";
-
-            bar.style.right = "50%";
+            minus.style.width =
+                width+"%";
 
         }
 
-        bar.style.width =
-            (Math.abs(item.remain)/max*50)+"%";
+        left.appendChild(minus);
+        right.appendChild(plus);
 
-        graph.appendChild(bar);
+        graph.appendChild(left);
+        graph.appendChild(right);
 
-        row.innerHTML = `
+        row.appendChild(graph);
+
+        const money =
+            document.createElement("div");
+
+        money.className =
+            "year-money";
+
+        money.textContent =
+            "¥"+
+            item.remain.toLocaleString();
+
+        row.appendChild(money);
+
+        chart.appendChild(row);
+
+    });
+
+}
 
 <div class="year-month">
 
