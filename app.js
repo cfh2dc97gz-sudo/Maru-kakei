@@ -961,9 +961,11 @@ html += `
 
 column.innerHTML = html;
 
-chart.appendChild(column);}
+chart.appendChild(column);
 
-                });
+});
+   }
+
 function changeMonthFromYear(month){
 
     currentMonth = month;
