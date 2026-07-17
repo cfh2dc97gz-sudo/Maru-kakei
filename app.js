@@ -741,7 +741,7 @@ document
 
 };
 /* ===========================
-   ⑦ AI・年間画面・初期表示
+   ⑦ AI分析
 =========================== */
 
 function updateAI(){
@@ -758,21 +758,20 @@ function updateAI(){
 
     const spent =
         app.budgets.reduce(
-            (sum,item)=>sum+item.spent,
+            (sum,item)=>sum + item.spent,
             0
         );
 
-    if(income===0){
+    if(income === 0){
 
-        advice.innerHTML =
+        advice.textContent =
             "収入を入力すると分析を開始します。";
 
         return;
 
     }
 
-    const remain =
-        income - spent;
+    const remain = income - spent;
 
     const target =
         Math.max(
@@ -780,35 +779,35 @@ function updateAI(){
             0
         );
 
-    const forecast =
-        remain * 12;
+    const forecast = remain * 12;
 
     if(forecast >= target){
 
         advice.innerHTML =
-            `✅ このペースなら年間目標達成見込みです。<br><br>
+            `✅ このペースなら年間目標を達成できそうです。<br><br>
 年間目標：¥${app.goal.toLocaleString()}<br>
 ボーナス予定：¥${app.bonusSaving.toLocaleString()}`;
 
     }else{
 
-        const diff =
-            target - forecast;
+        const diff = target - forecast;
 
         advice.innerHTML =
-            `📊 年間目標まで約 ¥${diff.toLocaleString()} 不足見込みです。`;
+            `📊 年間目標まで約 ¥${diff.toLocaleString()} 足りない見込みです。`;
 
     }
 
 }
+/* ===========================
+   ⑧ 年間サマリー
+=========================== */
 
 function drawYearSummary(){
 
     let income = 0;
-
     let spent = 0;
 
-    for(let month=1; month<=12; month++){
+    for(let month = 1; month <= 12; month++){
 
         const key =
             `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
@@ -828,14 +827,16 @@ function drawYearSummary(){
 
         spent +=
             (data.budgets || []).reduce(
-                (sum,item)=>sum+(item.spent||0),
+
+                (sum,item)=>sum + (item.spent || 0),
+
                 0
+
             );
 
     }
 
-    const remain =
-        income - spent;
+    const remain = income - spent;
 
     document.getElementById("yearIncome").textContent =
         "¥" + income.toLocaleString();
@@ -863,6 +864,10 @@ function drawYearSummary(){
         ) + "%";
 
 }
+/* ===========================
+   ⑨ 年間カテゴリ
+=========================== */
+
 function drawYearCategory(){
 
     const area =
@@ -870,101 +875,139 @@ function drawYearCategory(){
 
     if(!area) return;
 
-    area.innerHTML =
-        "<div style='padding:20px;text-align:center;color:#888;'>Ver14.1でカテゴリ分析を追加予定</div>";
+    area.innerHTML = `
+        <div style="
+            padding:20px;
+            text-align:center;
+            color:#888;
+        ">
+            📒 年間カテゴリ分析は次回アップデート予定
+        </div>
+    `;
 
 }
+/* ===========================
+   ⑩ 年間グラフ
+=========================== */
 
 function drawYearChart(){
 
-    const chart = document.getElementById("yearChart");
-if (!chart) return;
+    const chart =
+        document.getElementById("yearChart");
 
-chart.innerHTML = "";
+    if(!chart) return;
 
-const months = [4,5,6,7,8,9,10,11,12,1,2,3];
-const data = [];
-let max = 1;
+    chart.innerHTML = "";
 
-months.forEach(month => {
+    const months =
+        [4,5,6,7,8,9,10,11,12,1,2,3];
 
-    const key = `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
-    const saved = localStorage.getItem(key);
+    const data = [];
 
-    let remain = 0;
+    let max = 1;
 
-    if(saved){
+    months.forEach(month=>{
 
-        const d = JSON.parse(saved);
+        const key =
+            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
 
-        const income =
-            (d.income?.papa || 0) +
-            (d.income?.mama || 0) +
-            (d.income?.extra || 0);
+        const saved =
+            localStorage.getItem(key);
 
-        const spent =
-            (d.budgets || [])
-            .reduce((sum,item)=>sum + (item.spent || 0),0);
+        let remain = 0;
 
-        remain = income - spent;
+        if(saved){
 
-    }
+            const d = JSON.parse(saved);
 
-    max = Math.max(max, Math.abs(remain));
+            const income =
+                (d.income?.papa || 0) +
+                (d.income?.mama || 0) +
+                (d.income?.extra || 0);
 
-    data.push({
-        month,
-        remain
+            const spent =
+                (d.budgets || []).reduce(
+
+                    (sum,item)=>sum + (item.spent || 0),
+
+                    0
+
+                );
+
+            remain = income - spent;
+
+        }
+
+        max = Math.max(
+            max,
+            Math.abs(remain)
+        );
+
+        data.push({
+            month,
+            remain
+        });
+
     });
 
-});
-   data.forEach(item => {
+    data.forEach(item=>{
 
-    const column = document.createElement("div");
-column.className = "chart-month";
-column.onclick = () => changeMonthFromYear(item.month);
+        const column =
+            document.createElement("div");
 
-const height = Math.max(
-    2,
-    Math.round((Math.abs(item.remain) / max) * 50)
-);
+        column.className =
+            "chart-month";
 
-let html = "";
+        column.onclick = ()=>{
 
-if(item.remain > 0){
+            changeMonthFromYear(item.month);
 
-    html += `
-        <div
-            class="chart-bar chart-positive"
-            style="height:${height}px;">
-        </div>
-    `;
+        };
+
+        const height =
+            Math.max(
+                2,
+                Math.round(
+                    Math.abs(item.remain)
+                    / max
+                    * 55
+                )
+            );
+
+        if(item.remain !== 0){
+
+            const bar =
+                document.createElement("div");
+
+            bar.className =
+                "chart-bar " +
+                (item.remain > 0
+                    ? "chart-positive"
+                    : "chart-negative");
+
+            bar.style.height =
+                height + "px";
+
+            column.appendChild(bar);
+
+        }
+
+        const label =
+            document.createElement("div");
+
+        label.className =
+            "chart-label";
+
+        label.textContent =
+            item.month;
+
+        column.appendChild(label);
+
+        chart.appendChild(column);
+
+    });
 
 }
-
-if(item.remain < 0){
-
-    html += `
-        <div
-            class="chart-bar chart-negative"
-            style="height:${height}px;">
-        </div>
-    `;
-
-}
-
-html += `
-    <div class="chart-label">
-        ${item.month}
-    </div>
-`;
-
-column.innerHTML = html;
-
-chart.appendChild(column);
-
-});
-   }
 
 function changeMonthFromYear(month){
 
@@ -977,6 +1020,9 @@ function changeMonthFromYear(month){
     showPage("home");
 
 }
+/* ===========================
+   ⑪ 初期表示
+=========================== */
 
 drawYearSummary();
 
