@@ -1153,3 +1153,68 @@ button:active{
     flex-shrink:0;
 
 }
+.chart-month{
+
+    flex:1;
+
+    height:140px;
+
+    position:relative;
+
+    display:flex;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+}
+
+.chart-bar{
+
+    position:absolute;
+
+    left:50%;
+
+    width:10px;
+
+    transform:translateX(-50%);
+
+}
+
+.chart-positive{
+
+    bottom:50%;
+
+    background:#69C36D;
+
+    border-radius:6px 6px 0 0;
+
+}
+
+.chart-negative{
+
+    top:50%;
+
+    background:#E46B6B;
+
+    border-radius:0 0 6px 6px;
+
+}
+
+.chart-label{
+
+    position:absolute;
+
+    bottom:0;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:10px;
+
+    font-weight:700;
+
+    color:#7B6258;
+
+}
