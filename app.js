@@ -876,6 +876,18 @@ function drawYearCategory(){
 }
 
 function drawYearChart(){
+   function changeMonthFromYear(month){
+
+    currentMonth = month;
+
+    load();
+
+    update();
+
+    showPage("home");
+
+}
+   
 
     const chart =
         document.getElementById("yearChart");
@@ -1038,32 +1050,7 @@ function drawYearChart(){
 
 }
 
-<div class="year-month">
 
-${item.month}<br>月
-
-</div>
-
-`;
-
-        row.appendChild(graph);
-
-        const value =
-            document.createElement("div");
-
-        value.className =
-            "year-money";
-
-        value.textContent =
-            "¥"+item.remain.toLocaleString();
-
-        row.appendChild(value);
-
-        chart.appendChild(row);
-
-    });
-
-}
 function changeMonthFromYear(month){
 
     currentMonth = month;
