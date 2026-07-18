@@ -841,65 +841,76 @@ button:active{
 
 }
 /* ===========================
-   年間グラフ
+   年間グラフ Ver15.1
 =========================== */
 
 .year-chart{
 
     display:flex;
 
-    position:relative;
-
-    height:130px;
+    height:160px;
 
     margin-top:12px;
 
 }
+
+/* 左の目盛り */
+
 .chart-scale{
 
-    width:34px;
+    width:42px;
 
-    height:100%;
+    display:flex;
 
-    position:relative;
+    flex-direction:column;
 
-    flex-shrink:0;
+    justify-content:space-between;
 
-}
-
-.chart-scale span{
-
-    position:absolute;
-
-    right:4px;
-
-    transform:translateY(-50%);
-
-    font-size:9px;
+    font-size:10px;
 
     color:#8A7768;
 
+    text-align:right;
+
+    padding-right:6px;
+
 }
 
-.year-chart::before{
+/* グラフ本体 */
+
+.year-chart-bars{
+
+    flex:1;
+
+    display:flex;
+
+    position:relative;
+
+    border-left:1px solid #DDD;
+
+}
+
+/* 0円ライン */
+
+.year-chart-bars::before{
 
     content:"";
 
     position:absolute;
 
-    left:12px;
+    left:0;
 
-    right:12px;
+    right:0;
 
     top:50%;
 
-    height:2px;
+    height:1px;
 
-    background:#D6D6D6;
-
-    transform:translateY(-50%);
+    background:#D8D8D8;
 
 }
+
+/* 月 */
 
 .chart-month{
 
@@ -907,13 +918,12 @@ button:active{
 
     position:relative;
 
-    display:flex;
-
-    justify-content:center;
-
     cursor:pointer;
 
 }
+
+/* バー */
+
 .chart-bar{
 
     position:absolute;
@@ -922,9 +932,11 @@ button:active{
 
     transform:translateX(-50%);
 
-    width:10px;
+    width:14px;
 
 }
+
+/* プラス */
 
 .chart-positive{
 
@@ -932,9 +944,11 @@ button:active{
 
     background:#69C36D;
 
-    border-radius:6px 6px 0 0;
+    border-radius:8px 8px 0 0;
 
 }
+
+/* マイナス */
 
 .chart-negative{
 
@@ -942,15 +956,17 @@ button:active{
 
     background:#E46B6B;
 
-    border-radius:0 0 6px 6px;
+    border-radius:0 0 8px 8px;
 
 }
+
+/* 月表示 */
 
 .chart-label{
 
     position:absolute;
 
-    bottom:-2px;
+    bottom:-18px;
 
     left:50%;
 
@@ -958,19 +974,8 @@ button:active{
 
     font-size:10px;
 
-    font-weight:700;
-
     color:#7B6258;
 
-}
-.year-chart-bars{
-
-    flex:1;
-
-    display:flex;
-
-    justify-content:space-around;
-
-    align-items:stretch;
+    font-weight:700;
 
 }
