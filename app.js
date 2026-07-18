@@ -899,12 +899,42 @@ function drawYearChart(){
 
     chart.innerHTML = "";
 
+    // 左側の目盛り
+    const scale =
+        document.createElement("div");
+
+    scale.className =
+        "chart-scale";
+
+    scale.innerHTML = `
+
+        <span style="top:0%">20万</span>
+        <span style="top:12.5%">15万</span>
+        <span style="top:25%">10万</span>
+        <span style="top:37.5%">5万</span>
+        <span style="top:50%">0</span>
+        <span style="top:62.5%">-5万</span>
+        <span style="top:75%">-10万</span>
+        <span style="top:87.5%">-15万</span>
+        <span style="top:100%">-20万</span>
+
+    `;
+
+    chart.appendChild(scale);
+
+    // グラフ本体
+    const graph =
+        document.createElement("div");
+
+    graph.className =
+        "year-chart-bars";
+
+    chart.appendChild(graph);
+
     const months =
         [4,5,6,7,8,9,10,11,12,1,2,3];
 
     const data = [];
-
-    let max = 1;
 
     months.forEach(month=>{
 
@@ -918,7 +948,8 @@ function drawYearChart(){
 
         if(saved){
 
-            const d = JSON.parse(saved);
+            const d =
+                JSON.parse(saved);
 
             const income =
                 (d.income?.papa || 0) +
@@ -934,18 +965,17 @@ function drawYearChart(){
 
                 );
 
-            remain = income - spent;
+            remain =
+                income - spent;
 
         }
 
-        max = Math.max(
-            max,
-            Math.abs(remain)
-        );
-
         data.push({
+
             month,
+
             remain
+
         });
 
     });
@@ -960,18 +990,30 @@ function drawYearChart(){
 
         column.onclick = ()=>{
 
-            changeMonthFromYear(item.month);
+            changeMonthFromYear(
+                item.month
+            );
 
         };
 
         const height =
             Math.max(
+
                 2,
+
                 Math.round(
-                    Math.abs(item.remain)
-                    / max
+
+                    Math.min(
+                        Math.abs(item.remain),
+                        200000
+                    )
+
+                    / 200000
+
                     * 70
+
                 )
+
             );
 
         if(item.remain !== 0){
@@ -981,9 +1023,16 @@ function drawYearChart(){
 
             bar.className =
                 "chart-bar " +
-                (item.remain > 0
+
+                (
+
+                    item.remain >= 0
+
                     ? "chart-positive"
-                    : "chart-negative");
+
+                    : "chart-negative"
+
+                );
 
             bar.style.height =
                 height + "px";
@@ -1003,7 +1052,7 @@ function drawYearChart(){
 
         column.appendChild(label);
 
-        chart.appendChild(column);
+        graph.appendChild(column);
 
     });
 
