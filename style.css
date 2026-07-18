@@ -873,7 +873,7 @@ button:active{
 
     right:4px;
 
-    transform:translateY(50%);
+    transform:translateY(-50%);
 
     font-size:9px;
 
