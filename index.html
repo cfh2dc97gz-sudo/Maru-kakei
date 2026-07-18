@@ -70,7 +70,7 @@
 
     </div>
 
-  <!-- 今月のお金 -->
+ <!-- 今月のお金 -->
 
 <div class="card">
 
@@ -114,36 +114,23 @@
 
     </div>
 
-   <div class="bank-summary" onclick="editBank()">
+    <div class="bank-row" onclick="editBank()">
 
-        <div class="bank-left">
+        <span class="bank-label">
+            🏦 銀行残高
+        </span>
 
-            <div class="summary-title">
-                🏦 銀行残高
-            </div>
+        <span class="bank-total" id="bankTotal">
+            ¥0
+        </span>
 
-            <div class="bank-money" id="bankTotal">
-                ¥0
-            </div>
-
-        </div>
-
-        <div class="bank-right">
-
-            <div class="summary-title">
-                4月からの貯金
-            </div>
-
-            <div class="bank-save plus" id="savingTotal">
-                ¥0
-            </div>
-
-        </div>
+        <span class="bank-saving plus" id="savingTotal">
+            ¥0
+        </span>
 
     </div>
 
 </div>
-
     <!-- AI -->
 
     <div class="card ai-card">
