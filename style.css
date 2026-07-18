@@ -278,6 +278,10 @@ button:active{
 
     margin-left:auto;
 
+    text-align:right;
+
+    min-width:70px;
+
     font-size:14px;
 
     font-weight:800;
