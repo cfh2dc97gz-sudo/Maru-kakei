@@ -238,45 +238,35 @@ button:active{
     line-height:1;
 
 }
-.bank-summary{
+.bank-row{
 
     display:flex;
 
-    justify-content:space-between;
+    align-items:center;
 
-    align-items:flex-end;
+    gap:8px;
 
-    margin-top:8px;
+    margin-top:6px;
 
-    padding-top:8px;
+    padding-top:6px;
 
     border-top:1px solid #F5EFD8;
 
-}
-
-.bank-left{
-
-    display:flex;
-
-    flex-direction:column;
+    font-size:12px;
 
 }
 
-.bank-right{
+.bank-label{
 
-    display:flex;
+    color:#7B6258;
 
-    flex-direction:column;
-
-    align-items:flex-end;
+    font-weight:700;
 
 }
 
-.bank-money{
+.bank-total{
 
-    margin-top:2px;
-
-    font-size:18px;
+    font-size:14px;
 
     font-weight:800;
 
@@ -284,25 +274,13 @@ button:active{
 
 }
 
-.bank-save{
+.bank-saving{
 
-    margin-top:2px;
+    margin-left:auto;
 
-    font-size:16px;
+    font-size:14px;
 
     font-weight:800;
-
-}
-
-.plus{
-
-    color:#2E7D32;
-
-}
-
-.minus{
-
-    color:#D32F2F;
 
 }
 /* ===========================
