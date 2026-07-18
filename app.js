@@ -121,17 +121,17 @@ function save(){
 
     localStorage.setItem(
 
-        getKey(),
+    getYearKey(),
 
-        JSON.stringify({
+    JSON.stringify({
 
-            income:app.income,
+        goal:app.goal,
 
-            budgets:app.budgets,
+        bonusSaving:app.bonusSaving,
 
-            history:app.history
+        startBank:app.startBank ?? 0
 
-        })
+    }）
 
     );
 
@@ -189,6 +189,7 @@ app.bank = {
     takizawa:0
 
 };
+   app.startBank = 0;
     app.income = {
 
         papa:0,
@@ -243,7 +244,8 @@ if(saved){
             data.goal ?? app.goal;
 
         app.bonusSaving =
-
+app.startBank =
+    data.startBank ?? 0;
             data.bonusSaving ?? app.bonusSaving;
 
     }
@@ -409,7 +411,21 @@ if(bankTotal){
 
 if(savingTotal){
 
-    savingTotal.textContent = "¥0";
+    const totalBank =
+        app.bank.mitake +
+        app.bank.takizawa;
+
+    const saving =
+        totalBank - app.startBank;
+
+    savingTotal.textContent =
+        (saving >= 0 ? "+" : "") +
+        "¥" +
+        saving.toLocaleString();
+
+    savingTotal.className =
+        "bank-saving " +
+        (saving >= 0 ? "plus" : "minus");
 
 }
     drawCategories();
@@ -552,7 +568,13 @@ function editBank(){
     app.bank.mitake = mitake;
 
     app.bank.takizawa = takizawa;
+if(app.startBank === 0){
 
+    app.startBank =
+        app.bank.mitake +
+        app.bank.takizawa;
+
+}
     update();
 
 }
