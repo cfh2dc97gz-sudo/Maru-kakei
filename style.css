@@ -907,10 +907,13 @@ button:active{
 
     position:relative;
 
+    display:flex;
+
+    justify-content:center;
+
     cursor:pointer;
 
 }
-
 .chart-bar{
 
     position:absolute;
