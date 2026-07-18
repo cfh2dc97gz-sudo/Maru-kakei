@@ -131,7 +131,7 @@ function save(){
 
         startBank:app.startBank ?? 0
 
-    }）
+    })
 
     );
 
@@ -247,6 +247,8 @@ if(saved){
 
     app.startBank =
         data.startBank ?? 0;
+
+}
 
 }
 /* ===========================
