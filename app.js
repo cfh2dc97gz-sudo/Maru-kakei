@@ -399,7 +399,11 @@ const savingTotal =
 
 if(bankTotal){
 
-    bankTotal.textContent = "¥0";
+    bankTotal.textContent =
+        "¥" + (
+            app.bank.mitake +
+            app.bank.takizawa
+        ).toLocaleString();
 
 }
 
