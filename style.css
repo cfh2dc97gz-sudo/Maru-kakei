@@ -848,15 +848,36 @@ button:active{
 
     display:flex;
 
-    justify-content:space-between;
-
-    align-items:stretch;
-
     position:relative;
 
     height:130px;
 
     margin-top:12px;
+
+}
+.chart-scale{
+
+    width:34px;
+
+    height:100%;
+
+    position:relative;
+
+    flex-shrink:0;
+
+}
+
+.chart-scale span{
+
+    position:absolute;
+
+    right:4px;
+
+    transform:translateY(50%);
+
+    font-size:9px;
+
+    color:#8A7768;
 
 }
 
