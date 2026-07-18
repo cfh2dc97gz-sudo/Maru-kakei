@@ -899,102 +899,106 @@ function drawYearChart(){
 
     chart.innerHTML = "";
 
-    // 左側の目盛り
-    const scale =
-        document.createElement("div");
-
-    scale.className =
-        "chart-scale";
-
-    scale.innerHTML = `
-
-        <span style="top:0%">20万</span>
-        <span style="top:12.5%">15万</span>
-        <span style="top:25%">10万</span>
-        <span style="top:37.5%">5万</span>
-        <span style="top:50%">0</span>
-        <span style="top:62.5%">-5万</span>
-        <span style="top:75%">-10万</span>
-        <span style="top:87.5%">-15万</span>
-        <span style="top:100%">-20万</span>
-
-    `;
-
-    chart.appendChild(scale);
-
-    // グラフ本体
-    const graph =
-        document.createElement("div");
-
-    graph.className =
-        "year-chart-bars";
-
-    chart.appendChild(graph);
-
-    const months =
-        [4,5,6,7,8,9,10,11,12,1,2,3];
-
     const data = [];
 
-    months.forEach(month=>{
+    for(let month=1; month<=12; month++){
 
         const key =
             `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
 
-        const saved =
-            localStorage.getItem(key);
+        const save =
+            JSON.parse(localStorage.getItem(key) || "{}");
 
-        let remain = 0;
+        const income =
+            Number(save.income || 0);
 
-        if(saved){
-
-            const d =
-                JSON.parse(saved);
-
-            const income =
-                (d.income?.papa || 0) +
-                (d.income?.mama || 0) +
-                (d.income?.extra || 0);
-
-            const spent =
-                (d.budgets || []).reduce(
-
-                    (sum,item)=>sum + (item.spent || 0),
-
-                    0
-
-                );
-
-            remain =
-                income - spent;
-
-        }
+        const spent =
+            (save.items || [])
+            .reduce((sum,item)=>
+                sum + Number(item.amount || 0),0);
 
         data.push({
 
             month,
 
-            remain
+            remain:income-spent
 
         });
 
+    }
+
+    // =====================
+    // 左目盛り
+    // =====================
+
+    const scale =
+        document.createElement("div");
+
+    scale.className = "chart-scale";
+
+    [
+
+        "20万",
+
+        "15万",
+
+        "10万",
+
+        "5万",
+
+        "0",
+
+        "-5万",
+
+        "-10万",
+
+        "-15万",
+
+        "-20万"
+
+    ].forEach(text=>{
+
+        const div =
+            document.createElement("div");
+
+        div.textContent = text;
+
+        scale.appendChild(div);
+
     });
+
+    chart.appendChild(scale);
+
+    // =====================
+    // バーエリア
+    // =====================
+
+    const bars =
+        document.createElement("div");
+
+    bars.className =
+        "year-chart-bars";
+
+    const MAX = 200000;
+
+    const AREA = 80;   // 160pxの半分
 
     data.forEach(item=>{
 
-        const column =
+        const month =
             document.createElement("div");
 
-        column.className =
+        month.className =
             "chart-month";
 
-        column.onclick = ()=>{
+        const bar =
+            document.createElement("div");
 
-            changeMonthFromYear(
-                item.month
-            );
-
-        };
+        bar.className =
+            "chart-bar " +
+            (item.remain>=0
+                ? "chart-positive"
+                : "chart-negative");
 
         const height =
             Math.max(
@@ -1005,41 +1009,21 @@ function drawYearChart(){
 
                     Math.min(
                         Math.abs(item.remain),
-                        200000
+                        MAX
                     )
 
-                    / 200000
+                    / MAX
 
-                    * 70
+                    * AREA
 
                 )
 
             );
 
-        if(item.remain !== 0){
+        bar.style.height =
+            height + "px";
 
-            const bar =
-                document.createElement("div");
-
-            bar.className =
-                "chart-bar " +
-
-                (
-
-                    item.remain >= 0
-
-                    ? "chart-positive"
-
-                    : "chart-negative"
-
-                );
-
-            bar.style.height =
-                height + "px";
-
-            column.appendChild(bar);
-
-        }
+        month.appendChild(bar);
 
         const label =
             document.createElement("div");
@@ -1048,16 +1032,25 @@ function drawYearChart(){
             "chart-label";
 
         label.textContent =
-            item.month;
+            item.month + "月";
 
-        column.appendChild(label);
+        month.appendChild(label);
 
-        graph.appendChild(column);
+        month.onclick=()=>{
+
+            changeMonthFromYear(
+                item.month
+            );
+
+        };
+
+        bars.appendChild(month);
 
     });
 
-}
+    chart.appendChild(bars);
 
+}
 function changeMonthFromYear(month){
 
     currentMonth = month;
