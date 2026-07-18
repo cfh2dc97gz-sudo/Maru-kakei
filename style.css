@@ -231,11 +231,66 @@ button:active{
 
 .summary-money{
 
-    font-size:14px;
+    font-size:13px;
 
     font-weight:800;
 
     line-height:1;
+
+}
+.bank-summary{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+    margin-top:8px;
+
+    padding-top:8px;
+
+    border-top:1px solid #F5EFD8;
+
+}
+
+.bank-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.bank-right{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-end;
+
+}
+
+.bank-money{
+
+    margin-top:2px;
+
+    font-size:18px;
+
+    font-weight:800;
+
+    color:#2F2A24;
+
+}
+
+.bank-save{
+
+    margin-top:2px;
+
+    font-size:16px;
+
+    font-weight:800;
 
 }
 
