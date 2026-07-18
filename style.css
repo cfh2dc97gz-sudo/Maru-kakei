@@ -966,13 +966,13 @@ button:active{
 
     position:absolute;
 
-    bottom:-18px;
+    bottom:-12px;
 
     left:50%;
 
     transform:translateX(-50%);
 
-    font-size:10px;
+    font-size:11px;
 
     color:#7B6258;
 
