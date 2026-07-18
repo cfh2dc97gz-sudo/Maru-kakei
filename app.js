@@ -69,7 +69,13 @@ const app = {
     goal:3400000,
 
     bonusSaving:0,
+bank:{
 
+    mitake:0,
+
+    takizawa:0
+
+},
     income:{
 
         papa:0,
@@ -131,17 +137,21 @@ function save(){
 
     localStorage.setItem(
 
-        getYearKey(),
+    getKey(),
 
-        JSON.stringify({
+    JSON.stringify({
 
-            goal:app.goal,
+        bank:app.bank,
 
-            bonusSaving:app.bonusSaving
+        income:app.income,
 
-        })
+        budgets:app.budgets,
 
-    );
+        history:app.history
+
+    })
+
+);
 
     const session = {
 
@@ -172,7 +182,13 @@ function save(){
 }
 
 function load(){
+app.bank = {
 
+    mitake:0,
+
+    takizawa:0
+
+};
     app.income = {
 
         papa:0,
@@ -193,25 +209,24 @@ function load(){
 
         localStorage.getItem(getKey());
 
-    if(saved){
+if(saved){
 
-        const data =
+    const data =
+        JSON.parse(saved);
 
-            JSON.parse(saved);
+    app.bank =
+        data.bank ?? app.bank;
 
-        app.income =
+    app.income =
+        data.income ?? app.income;
 
-            data.income ?? app.income;
+    app.budgets =
+        data.budgets ?? app.budgets;
 
-        app.budgets =
+    app.history =
+        data.history ?? [];
 
-            data.budgets ?? app.budgets;
-
-        app.history =
-
-            data.history ?? [];
-
-    }
+}
 
     const yearSaved =
 
@@ -376,7 +391,23 @@ function update(){
     remainEl.className =
         "summary-money " +
         (remain >= 0 ? "plus" : "minus");
+const bankTotal =
+    document.getElementById("bankTotal");
 
+const savingTotal =
+    document.getElementById("savingTotal");
+
+if(bankTotal){
+
+    bankTotal.textContent = "¥0";
+
+}
+
+if(savingTotal){
+
+    savingTotal.textContent = "¥0";
+
+}
     drawCategories();
 
     updateAI();
@@ -494,7 +525,33 @@ document
     update();
 
 };
+function editBank(){
 
+    const mitake = Number(
+        prompt(
+            "みたけ銀行残高",
+            app.bank.mitake
+        )
+    );
+
+    if(isNaN(mitake)) return;
+
+    const takizawa = Number(
+        prompt(
+            "滝沢銀行残高",
+            app.bank.takizawa
+        )
+    );
+
+    if(isNaN(takizawa)) return;
+
+    app.bank.mitake = mitake;
+
+    app.bank.takizawa = takizawa;
+
+    update();
+
+}
 function addSpent(index,isOverwrite=false){
 
     const input =
