@@ -910,13 +910,17 @@ function drawYearChart(){
             JSON.parse(localStorage.getItem(key) || "{}");
 
         const income =
-            Number(save.income || 0);
+    (save.income?.papa || 0) +
+    (save.income?.mama || 0) +
+    (save.income?.extra || 0);
 
-        const spent =
-            (save.items || [])
-            .reduce((sum,item)=>
-                sum + Number(item.amount || 0),0);
-
+const spent =
+    (save.budgets || [])
+        .reduce(
+            (sum,item)=>
+                sum + (item.spent || 0),
+            0
+        );
         data.push({
 
             month,
