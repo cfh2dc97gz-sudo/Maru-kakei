@@ -1032,7 +1032,7 @@ function drawYearChart(){
             "chart-label";
 
         label.textContent =
-            item.month + "月";
+            item.month;
 
         month.appendChild(label);
 
