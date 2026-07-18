@@ -960,3 +960,14 @@ button:active{
     color:#7B6258;
 
 }
+.year-chart-bars{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    align-items:stretch;
+
+}
