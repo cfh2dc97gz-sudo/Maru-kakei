@@ -233,22 +233,20 @@ if(saved){
 
         localStorage.getItem(getYearKey());
 
-    if(yearSaved){
+   if(yearSaved){
 
-        const data =
+    const data =
 
-            JSON.parse(yearSaved);
+        JSON.parse(yearSaved);
 
-        app.goal =
+    app.goal =
+        data.goal ?? app.goal;
 
-            data.goal ?? app.goal;
+    app.bonusSaving =
+        data.bonusSaving ?? app.bonusSaving;
 
-        app.bonusSaving =
-app.startBank =
-    data.startBank ?? 0;
-            data.bonusSaving ?? app.bonusSaving;
-
-    }
+    app.startBank =
+        data.startBank ?? 0;
 
 }
 /* ===========================
@@ -568,13 +566,16 @@ function editBank(){
     app.bank.mitake = mitake;
 
     app.bank.takizawa = takizawa;
-if(app.startBank === 0){
 
-    app.startBank =
-        app.bank.mitake +
-        app.bank.takizawa;
+    // 4月だけ今年の基準残高を更新
+    if(currentMonth === 4){
 
-}
+        app.startBank =
+            app.bank.mitake +
+            app.bank.takizawa;
+
+    }
+
     update();
 
 }
