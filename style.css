@@ -1374,3 +1374,91 @@ button:active{
         background .35s ease;
 
 }
+/* ===========================
+   年間カテゴリカード最終版
+=========================== */
+
+#yearCategory{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+#yearCategory .card{
+
+    padding:16px;
+
+    border-radius:18px;
+
+    background:#fff;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.06);
+
+}
+
+#yearCategory .setting-item{
+
+    width:100%;
+
+    padding:0;
+
+    border:none;
+
+    background:none;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    cursor:pointer;
+
+}
+
+#yearCategory .setting-item span:first-child{
+
+    text-align:left;
+
+    line-height:1.6;
+
+}
+
+#yearCategory .setting-item span:last-child{
+
+    text-align:right;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+
+}
+
+#yearCategory small{
+
+    display:block;
+
+    margin-top:2px;
+
+    color:#888;
+
+    font-size:11px;
+
+}
+
+.progress{
+
+    margin-top:12px;
+
+}
+
+.warning-text,
+.danger-text{
+
+    margin-top:10px;
+
+}
