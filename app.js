@@ -1,5 +1,5 @@
 /* ===========================
-   Ver14
+   Ver15
    ① データ・初期化
 =========================== */
 
@@ -68,14 +68,16 @@ const app = {
 
     goal:3400000,
 
-    bonusSaving:0,
-bank:{
+    bank:{
 
-    mitake:0,
+        mitake:0,
 
-    takizawa:0
+        takizawa:0
 
-},
+    },
+
+    startBank:0,
+
     income:{
 
         papa:0,
@@ -85,6 +87,20 @@ bank:{
         extra:0
 
     },
+
+    bonus:{
+
+        summerForecast:0,
+
+        summerActual:0,
+
+        winterForecast:0,
+
+        winterActual:0
+
+    },
+
+    annualItems:[],
 
     budgets:createDefaultBudgets(),
 
@@ -121,53 +137,53 @@ function save(){
 
     localStorage.setItem(
 
-    getYearKey(),
+        getYearKey(),
 
-    JSON.stringify({
+        JSON.stringify({
 
-        goal:app.goal,
+            goal:app.goal,
 
-        bonusSaving:app.bonusSaving,
+            startBank:app.startBank,
 
-        startBank:app.startBank ?? 0
+            bonus:app.bonus,
 
-    })
+            annualItems:app.annualItems
+
+        })
 
     );
 
     localStorage.setItem(
 
-    getKey(),
+        getKey(),
 
-    JSON.stringify({
+        JSON.stringify({
 
-        bank:app.bank,
+            bank:app.bank,
 
-        income:app.income,
+            income:app.income,
 
-        budgets:app.budgets,
+            budgets:app.budgets,
 
-        history:app.history
+            history:app.history
 
-    })
+        })
 
-);
+    );
 
-    const session = {
+    const session={
 
         year:currentYear,
 
         month:currentMonth,
 
-        page:
+        page:JSON.parse(
 
-            JSON.parse(
+            localStorage.getItem(getSessionKey())
 
-                localStorage.getItem(getSessionKey())
+            || "{}"
 
-                || "{}"
-
-            ).page || "home"
+        ).page || "home"
 
     };
 
@@ -182,15 +198,18 @@ function save(){
 }
 
 function load(){
-app.bank = {
 
-    mitake:0,
+    app.bank={
 
-    takizawa:0
+        mitake:0,
 
-};
-   app.startBank = 0;
-    app.income = {
+        takizawa:0
+
+    };
+
+    app.startBank=0;
+
+    app.income={
 
         papa:0,
 
@@ -200,55 +219,59 @@ app.bank = {
 
     };
 
-    app.budgets =
+    app.bonus={
 
-        createDefaultBudgets();
+        summerForecast:0,
 
-    app.history = [];
+        summerActual:0,
 
-    const saved =
+        winterForecast:0,
+
+        winterActual:0
+
+    };
+
+    app.annualItems=[];
+
+    app.budgets=createDefaultBudgets();
+
+    app.history=[];
+
+    const saved=
 
         localStorage.getItem(getKey());
 
-if(saved){
+    if(saved){
 
-    const data =
-        JSON.parse(saved);
+        const data=JSON.parse(saved);
 
-    app.bank =
-        data.bank ?? app.bank;
+        app.bank=data.bank ?? app.bank;
 
-    app.income =
-        data.income ?? app.income;
+        app.income=data.income ?? app.income;
 
-    app.budgets =
-        data.budgets ?? app.budgets;
+        app.budgets=data.budgets ?? app.budgets;
 
-    app.history =
-        data.history ?? [];
+        app.history=data.history ?? [];
 
-}
+    }
 
-    const yearSaved =
+    const yearSaved=
 
         localStorage.getItem(getYearKey());
 
-   if(yearSaved){
+    if(yearSaved){
 
-    const data =
+        const data=JSON.parse(yearSaved);
 
-        JSON.parse(yearSaved);
+        app.goal=data.goal ?? app.goal;
 
-    app.goal =
-        data.goal ?? app.goal;
+        app.startBank=data.startBank ?? 0;
 
-    app.bonusSaving =
-        data.bonusSaving ?? app.bonusSaving;
+        app.bonus=data.bonus ?? app.bonus;
 
-    app.startBank =
-        data.startBank ?? 0;
+        app.annualItems=data.annualItems ?? [];
 
-}
+    }
 
 }
 /* ===========================
@@ -700,9 +723,9 @@ const navButtons =
 
 function showPage(page){
 
-    homePage.style.display = "none";
-    yearPage.style.display = "none";
-    settingPage.style.display = "none";
+    homePage.style.display="none";
+    yearPage.style.display="none";
+    settingPage.style.display="none";
 
     navButtons.forEach(btn=>
         btn.classList.remove("active")
@@ -735,7 +758,7 @@ function showPage(page){
 
     }
 
-    const session = JSON.parse(
+    const session=JSON.parse(
 
         localStorage.getItem(getSessionKey())
 
@@ -743,7 +766,7 @@ function showPage(page){
 
     );
 
-    session.page = page;
+    session.page=page;
 
     localStorage.setItem(
 
@@ -756,14 +779,12 @@ function showPage(page){
 }
 
 navButtons[0].onclick=()=>showPage("home");
-
 navButtons[1].onclick=()=>showPage("year");
-
 navButtons[2].onclick=()=>showPage("setting");
 
 function drawBudgetList(){
 
-    const area =
+    const area=
         document.getElementById("budgetList");
 
     if(!area) return;
@@ -772,7 +793,7 @@ function drawBudgetList(){
 
     app.budgets.forEach((item,index)=>{
 
-        area.innerHTML += `
+        area.innerHTML+=`
 
 <button
 class="setting-item"
@@ -792,7 +813,7 @@ onclick="editBudget(${index})">
 
 function editBudget(index){
 
-    const value = Number(
+    const value=Number(
 
         prompt(
 
@@ -806,7 +827,7 @@ function editBudget(index){
 
     if(isNaN(value)) return;
 
-    app.budgets[index].budget = value;
+    app.budgets[index].budget=value;
 
     update();
 
@@ -842,21 +863,33 @@ document
 .getElementById("editBonus")
 .onclick=()=>{
 
-    const value=Number(
+    const summerForecast=Number(prompt("夏ボーナス予測",app.bonus.summerForecast));
 
-        prompt(
+    if(isNaN(summerForecast)) return;
 
-            "年間ボーナス貯金",
+    const summerActual=Number(prompt("夏ボーナス実績",app.bonus.summerActual));
 
-            app.bonusSaving
+    if(isNaN(summerActual)) return;
 
-        )
+    const winterForecast=Number(prompt("冬ボーナス予測",app.bonus.winterForecast));
 
-    );
+    if(isNaN(winterForecast)) return;
 
-    if(isNaN(value)) return;
+    const winterActual=Number(prompt("冬ボーナス実績",app.bonus.winterActual));
 
-    app.bonusSaving=value;
+    if(isNaN(winterActual)) return;
+
+    app.bonus={
+
+        summerForecast,
+
+        summerActual,
+
+        winterForecast,
+
+        winterActual
+
+    };
 
     update();
 
@@ -897,40 +930,89 @@ function updateAI(){
             0
         );
 
-    if(income === 0){
+    const saving =
+        (
+            app.bank.mitake +
+            app.bank.takizawa
+        ) -
+        (app.startBank || 0);
 
-        advice.textContent =
-            "収入を入力すると分析を開始します。";
+    const bonusTotal =
+        (app.bonus.summerActual || app.bonus.summerForecast || 0) +
+        (app.bonus.winterActual || app.bonus.winterForecast || 0);
 
-        return;
+    const progress =
+        saving + bonusTotal;
 
-    }
-
-    const remain = income - spent;
-
-    const target =
+    const remainGoal =
         Math.max(
-            app.goal - app.bonusSaving,
+            app.goal - progress,
             0
         );
 
-    const forecast = remain * 12;
+    const monthsLeft =
+        Math.max(
+            1,
+            12 -
+            ([4,5,6,7,8,9,10,11,12,1,2,3]
+            .indexOf(currentMonth))
+        );
 
-    if(forecast >= target){
+    const needPerMonth =
+        Math.ceil(remainGoal / monthsLeft);
 
-        advice.innerHTML =
-            `✅ このペースなら年間目標を達成できそうです。<br><br>
-年間目標：¥${app.goal.toLocaleString()}<br>
-ボーナス予定：¥${app.bonusSaving.toLocaleString()}`;
+    let worst =
+        app.budgets[0];
+
+    app.budgets.forEach(item=>{
+
+        const rate =
+            item.budget === 0
+                ? 0
+                : item.spent / item.budget;
+
+        const worstRate =
+            worst.budget === 0
+                ? 0
+                : worst.spent / worst.budget;
+
+        if(rate > worstRate){
+
+            worst = item;
+
+        }
+
+    });
+
+    let message = "";
+
+    if(progress >= app.goal){
+
+        message +=
+            "🎉 年間目標を達成しています！";
 
     }else{
 
-        const diff = target - forecast;
+        message +=
+            `🎯 年間目標まであと ¥${remainGoal.toLocaleString()}<br>`;
 
-        advice.innerHTML =
-            `📊 年間目標まで約 ¥${diff.toLocaleString()} 足りない見込みです。`;
+        message +=
+            `📅 毎月約 ¥${needPerMonth.toLocaleString()} の改善で達成できます。`;
 
     }
+
+    message += "<br><br>";
+
+    message +=
+        `⚠️ 気になるカテゴリ：${worst.name}<br>`;
+
+    message +=
+        `現在 ¥${worst.spent.toLocaleString()} / ¥${worst.budget.toLocaleString()}<br><br>`;
+
+    message +=
+        "💡 ボーナスは実績がある場合は実績、未入力なら予測を反映しています。";
+
+    advice.innerHTML = message;
 
 }
 /* ===========================
@@ -945,7 +1027,7 @@ function drawYearSummary(){
     if(title){
 
         title.textContent =
-    `${currentYear}年度`;
+            `${currentYear}年度`;
 
     }
 
@@ -987,17 +1069,19 @@ function drawYearSummary(){
     const remain =
         income - spent;
 
-    const bank =
-        app.bank.mitake +
-        app.bank.takizawa;
-
     const saving =
-        bank -
+        (
+            app.bank.mitake +
+            app.bank.takizawa
+        ) -
         (app.startBank || 0);
 
+    const bonusTotal =
+        (app.bonus.summerActual || app.bonus.summerForecast || 0) +
+        (app.bonus.winterActual || app.bonus.winterForecast || 0);
+
     const progress =
-        saving +
-        app.bonusSaving;
+        saving + bonusTotal;
 
     document.getElementById("yearIncome").textContent =
         "¥" + income.toLocaleString();
@@ -1038,15 +1122,94 @@ function drawYearCategory(){
 
     if(!area) return;
 
-    area.innerHTML = `
-        <div style="
-            padding:20px;
-            text-align:center;
-            color:#888;
-        ">
-            📒 年間カテゴリ分析は次回アップデート予定
-        </div>
-    `;
+    const totals = {};
+
+    app.budgets.forEach(item=>{
+
+        totals[item.id]={
+            name:item.name,
+            total:0,
+            count:0
+        };
+
+    });
+
+    for(const month of [4,5,6,7,8,9,10,11,12,1,2,3]){
+
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
+
+        const key =
+            `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
+
+        const saved =
+            localStorage.getItem(key);
+
+        if(!saved) continue;
+
+        const data =
+            JSON.parse(saved);
+
+        (data.budgets || []).forEach(item=>{
+
+            if(!totals[item.id]) return;
+
+            totals[item.id].total += item.spent || 0;
+
+            if((item.spent || 0) > 0){
+
+                totals[item.id].count++;
+
+            }
+
+        });
+
+    }
+
+    area.innerHTML="";
+
+    Object.values(totals).forEach(item=>{
+
+        const average =
+            Math.round(item.total / 12);
+
+        area.innerHTML += `
+
+<button
+class="setting-item"
+onclick="openCategoryDetail('${item.name}')">
+
+<span>${item.name}</span>
+
+<span>
+
+¥${item.total.toLocaleString()}<br>
+
+<small>
+
+月平均 ¥${average.toLocaleString()}
+
+</small>
+
+</span>
+
+</button>
+
+`;
+
+    });
+
+}
+
+function openCategoryDetail(name){
+
+    alert(
+`${name}
+
+詳細画面は次のセクションで追加します。`
+    );
 
 }
 /* ===========================
@@ -1060,41 +1223,40 @@ function drawYearChart(){
 
     if(!chart) return;
 
-    chart.innerHTML = "";
+    chart.innerHTML="";
 
-    const order = [
+    const months=[
         4,5,6,7,8,9,
         10,11,12,
         1,2,3
     ];
 
-    const data = [];
+    const data=[];
 
-    order.forEach(month=>{
+    months.forEach(month=>{
 
-        const year =
-            month <= 3
-                ? currentYear + 1
+        const year=
+            month<=3
+                ? currentYear+1
                 : currentYear;
 
-        const key =
+        const key=
             `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
 
-        const save =
+        const save=
             JSON.parse(
                 localStorage.getItem(key) || "{}"
             );
 
-        const income =
-            (save.income?.papa || 0) +
-            (save.income?.mama || 0) +
+        const income=
+            (save.income?.papa || 0)+
+            (save.income?.mama || 0)+
             (save.income?.extra || 0);
 
-        const spent =
-            (save.budgets || [])
-            .reduce(
+        const spent=
+            (save.budgets || []).reduce(
                 (sum,item)=>
-                    sum + (item.spent || 0),
+                    sum+(item.spent || 0),
                 0
             );
 
@@ -1110,10 +1272,9 @@ function drawYearChart(){
 
     });
 
-    const scale =
-        document.createElement("div");
+    const scale=document.createElement("div");
 
-    scale.className = "chart-scale";
+    scale.className="chart-scale";
 
     [
         "20万",
@@ -1125,12 +1286,12 @@ function drawYearChart(){
         "-10万",
         "-15万",
         "-20万"
+
     ].forEach(text=>{
 
-        const div =
-            document.createElement("div");
+        const div=document.createElement("div");
 
-        div.textContent = text;
+        div.textContent=text;
 
         scale.appendChild(div);
 
@@ -1138,60 +1299,56 @@ function drawYearChart(){
 
     chart.appendChild(scale);
 
-    const bars =
-        document.createElement("div");
+    const bars=document.createElement("div");
 
-    bars.className =
-        "year-chart-bars";
+    bars.className="year-chart-bars";
 
-    const MAX = 200000;
-    const AREA = 80;
+    const MAX=200000;
+
+    const AREA=80;
 
     data.forEach(item=>{
 
-        const month =
-            document.createElement("div");
+        const month=document.createElement("div");
 
-        month.className =
-            "chart-month";
+        month.className="chart-month";
 
-        const bar =
-            document.createElement("div");
+        const bar=document.createElement("div");
 
-        bar.className =
-            "chart-bar " +
-            (item.remain >= 0
+        bar.className=
+            "chart-bar "+
+            (item.remain>=0
                 ? "chart-positive"
                 : "chart-negative");
 
-        const height =
+        bar.style.height=
             Math.max(
                 2,
-                Math.round(
-                    Math.min(
-                        Math.abs(item.remain),
-                        MAX
-                    ) / MAX * AREA
-                )
-            );
+                Math.min(
+                    Math.abs(item.remain),
+                    MAX
+                )/MAX*AREA
+            )+"px";
 
-        bar.style.height =
-            height + "px";
+        const value=document.createElement("div");
 
+        value.className="chart-value";
+
+        value.textContent=
+            "¥"+
+            item.remain.toLocaleString();
+
+        const label=document.createElement("div");
+
+        label.className="chart-label";
+
+        label.textContent=item.month+"月";
+
+        month.appendChild(value);
         month.appendChild(bar);
-
-        const label =
-            document.createElement("div");
-
-        label.className =
-            "chart-label";
-
-        label.textContent =
-            item.month;
-
         month.appendChild(label);
 
-        month.onclick = ()=>{
+        month.onclick=()=>{
 
             changeMonthFromYear(
                 item.year,
@@ -1212,17 +1369,21 @@ function changeMonthFromYear(year,month){
 
     save();
 
-    currentYear = year;
-    currentMonth = month;
+    currentYear=year;
+
+    currentMonth=month;
 
     if(yearSelect){
 
-        yearSelect.value =
-            String(
-                month <= 3
-                    ? year - 1
-                    : year
-            );
+        yearSelect.value=String(
+
+            month<=3
+
+                ? year-1
+
+                : year
+
+        );
 
     }
 
@@ -1246,3 +1407,5 @@ drawYearChart();
 showPage(session.page || "home");
 
 update();
+
+console.log("🌸 まる家計 Ver15 起動");
