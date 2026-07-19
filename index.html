@@ -3,600 +3,499 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>
+    <title>まる家計 Ver12</title>
 
-まる家計 Ver20
-
-</title>
-
-<link
-    rel="stylesheet"
-    href="style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<!-- ==========================
-     ホーム
-========================== -->
+<!-- ホーム -->
 
-<div
-    id="homePage"
-    class="page active">
+<div id="homePage">
+
+    <!-- 月 -->
+
+    <div class="card summary-card">
+
+        <div class="month-header">
+
+            <button id="prevMonth">◀</button>
+
+            <div class="period-area">
+
+                <select id="yearSelect">
+
+                    <option value="2024">2024年度</option>
+
+                    <option value="2025">2025年度</option>
+
+                    <option value="2026" selected>2026年度</option>
+
+                    <option value="2027">2027年度</option>
+
+                </select>
+
+                <h2 id="period">
+
+                    4月
+
+                </h2>
+
+            </div>
+
+            <div class="month-right">
+
+                <button id="resetMonth" class="mini-reset">
+
+                    🗑
+
+                </button>
+
+                <button id="nextMonth">
+
+                    ▶
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+ <!-- 今月のお金 -->
 
 <div class="card">
 
-<div class="month-header">
+    <div class="summary-grid">
 
-<button id="prevMonth">
+        <div class="summary-item">
 
-◀
+            <div class="summary-title">
+                収入
+            </div>
+
+            <div class="summary-money" id="incomeSummary">
+                ¥0
+            </div>
+
+        </div>
+
+        <div class="summary-item">
+
+            <div class="summary-title">
+                支出
+            </div>
+
+            <div class="summary-money" id="spent">
+                ¥0
+            </div>
+
+        </div>
+
+        <div class="summary-item">
+
+            <div class="summary-title">
+                残り
+            </div>
+
+            <div class="summary-money" id="remain">
+                ¥0
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bank-row" onclick="editBank()">
+
+        <span class="bank-label">
+            🏦 銀行残高
+        </span>
+
+        <span class="bank-total" id="bankTotal">
+            ¥0
+        </span>
+
+        <span class="bank-saving plus" id="savingTotal">
+            ¥0
+        </span>
+
+    </div>
+
+</div>
+    <!-- AI -->
+
+    <div class="card ai-card">
+
+        <h2>🤖 AIコンサルタント</h2>
+
+        <div id="aiAdvice">
+
+            分析中...
+
+        </div>
+
+    </div>
+
+    <!-- カテゴリ -->
+
+    <div class="card">
+
+        <div class="category-header">
+
+            <h2>📒 カテゴリ</h2>
+
+       <div class="family-card">
+
+    <div
+        class="family-image"
+        id="familyImage">
+
+        🌸
+
+    </div>
+
+    <div
+        class="family-name"
+        id="familyName">
+
+        はる・りん
+
+    </div>
+
+    <div
+        class="family-comment"
+        id="familyComment">
+
+        今日もがんばろう♪
+
+    </div>
+
+</div>
+
+        </div>
+
+        <div id="gridArea">
+
+        </div>
+
+    </div>
+
+    <!-- 収入 -->
+
+    <div class="card income-card">
+
+        <h2>💰 収入</h2>
+
+        <div class="income-grid">
+
+            <button id="incomePapa">
+
+                👨<br>パパ
+
+            </button>
+
+            <button id="incomeMama">
+
+                👩<br>ママ
+
+            </button>
+
+            <button id="incomeExtra">
+
+                🎁<br>臨時
+
+            </button>
+
+        </div>
+
+        <div class="money" id="income">
+
+            ¥0
+
+        </div>
+
+    </div>
+
+</div>
+<!-- 年間 -->
+
+<div id="yearPage" class="page" style="display:none;">
+
+    <div class="card">
+<h2>📅 <span id="yearTitle">2026年度</span></h2>
+    </div>
+
+    <div class="card">
+
+        <h2>🎯 年間目標</h2>
+
+        <div id="yearGoal">
+
+            ¥0 / ¥3,400,000
+
+        </div>
+
+        <div class="progress">
+
+            <div id="goalBar"></div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>💰 年間合計</h2>
+
+        <div class="summary-grid">
+
+            <div class="summary-item">
+
+                <div class="summary-title">収入</div>
+
+                <div class="summary-money" id="yearIncome">
+
+                    ¥0
+
+                </div>
+
+            </div>
+
+            <div class="summary-item">
+
+                <div class="summary-title">支出</div>
+
+                <div class="summary-money" id="yearSpent">
+
+                    ¥0
+
+                </div>
+
+            </div>
+
+            <div class="summary-item">
+
+                <div class="summary-title">残り</div>
+
+                <div class="summary-money" id="yearRemain">
+
+                    ¥0
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📈 月別推移</h2>
+
+        <div id="yearChart" class="year-chart">
+
+        </div>
+
+    </div>
+
+<div class="card">
+
+    <h2>📒 カテゴリ分析</h2>
+
+    <div id="yearCategory">
+
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h2>💰 年間135万円管理</h2>
+
+    <div id="annualItemList">
+
+    </div>
+
+    <button
+        class="setting-item"
+        id="addAnnualItem">
+
+        ➕ 項目を追加
+
+    </button>
+
+</div>
+
+</div>
+<!-- 年間135万円管理 -->
+
+<div id="annualPage"
+     class="page"
+     style="display:none;">
+
+    <div class="card">
+
+        <h2>💰 年間135万円管理</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div id="annualManageList">
+
+        </div>
+
+        <button
+            class="setting-item"
+            id="addAnnualManage">
+
+            ➕ 項目を追加
+
+        </button>
+
+    </div>
+
+</div>
+    <!-- カテゴリ詳細 -->
+<div id="categoryPage"
+     class="page"
+     style="display:none;">
+
+    <div class="card">
+
+        <button
+            class="setting-item"
+            onclick="showPage('year')">
+
+            ← 年間ページへ戻る
+
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2 id="categoryTitle">
+
+            📒 カテゴリ
+
+        </h2>
+
+    </div>
+
+    <div class="card">
+
+        <div id="categorySummary">
+
+        </div>
+
+    </div>
+
+    <div id="categoryHistory">
+
+    </div>
+
+</div>
+<!-- 設定 -->
+
+<div id="settingPage" class="page" style="display:none;">
+
+    <div class="card">
+
+        <h2>⚙️ 設定</h2>
+
+    </div>
+
+    <div class="card">
+
+        <button class="setting-item" id="editGoal">
+
+            🎯 年間目標
+
+        </button>
+
+      <div class="setting-group">
+
+    <h3>💰 ボーナス管理</h3>
+
+    <button
+        class="setting-item"
+        id="editBonus">
+
+        <span>夏・冬ボーナス</span>
+
+        <span>編集</span>
+
+    </button>
+
+</div>
+
+        <div id="budgetList">
+
+        </div>
+<button
+    class="setting-item"
+    id="annualManage">
+
+    💰 年間135万円管理
 
 </button>
+        <button class="setting-item danger" id="deleteAll">
 
-<div class="period-area">
+            🗑 全データ削除
 
-<select id="yearSelect">
+        </button>
 
-<option value="2024">2024年度</option>
-<option value="2025">2025年度</option>
-<option value="2026" selected>2026年度</option>
-<option value="2027">2027年度</option>
-<option value="2028">2028年度</option>
-
-</select>
-
-<h2 id="period">
-
-2026年4月
-
-</h2>
+    </div>
 
 </div>
-
-<button id="nextMonth">
-
-▶
-
-</button>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="summary-grid">
-
-<div class="summary-item">
-
-<div class="summary-title">
-
-収入
-
-</div>
-
-<div
-class="summary-money"
-id="incomeSummary">
-
-¥0
-
-</div>
-
-</div>
-
-<div class="summary-item">
-
-<div class="summary-title">
-
-支出
-
-</div>
-
-<div
-class="summary-money"
-id="spentSummary">
-
-¥0
-
-</div>
-
-</div>
-
-<div class="summary-item">
-
-<div class="summary-title">
-
-残り
-
-</div>
-
-<div
-class="summary-money"
-id="remainSummary">
-
-¥0
-
-</div>
-
-</div>
-
-</div>
-
-<div
-class="bank-row"
-id="editBank">
-
-<span>
-
-🏦銀行残高
-
-</span>
-
-<span id="bankTotal">
-
-¥0
-
-</span>
-
-<span id="savingTotal">
-
-¥0
-
-</span>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>
-
-🤖 AIアドバイス
-
-</h2>
-
-<div id="aiComment">
-
-分析中...
-
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="category-header">
-
-<h2>
-
-📒 カテゴリ
-
-</h2>
-
-<div class="family-card">
-
-<div
-class="family-image"
-id="familyImage">
-
-🌸
-
-</div>
-
-<div
-class="family-name"
-id="familyName">
-
-はる・りん
-
-</div>
-
-<div
-class="family-comment"
-id="familyComment">
-
-今日もがんばろう♪
-
-</div>
-
-</div>
-
-</div>
-
-<div id="gridArea">
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>
-
-💰 収入登録
-
-</h2>
-
-<div class="income-grid">
-
-<button id="incomePapa">
-
-👨<br>
-
-パパ
-
-</button>
-
-<button id="incomeMama">
-
-👩<br>
-
-ママ
-
-</button>
-
-<button id="incomeExtra">
-
-🎁<br>
-
-臨時
-
-</button>
-
-</div>
-
-<div
-class="money"
-id="incomeTotal">
-
-¥0
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ==========================
-     年間
-========================== -->
-
-<div
-id="yearPage"
-class="page">
-
-<div class="card">
-
-<h2>
-
-📊
-
-<span id="yearTitle">
-
-2026年度
-
-</span>
-
-</h2>
-
-</div>
-
-<div class="card">
-
-<h2>
-
-🎯 年間目標
-
-</h2>
-
-<div id="yearGoal">
-
-¥0 / ¥3,400,000
-
-</div>
-
-<div class="progress">
-
-<div id="goalBar">
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="summary-grid">
-
-<div class="summary-item">
-
-<div class="summary-title">
-
-収入
-
-</div>
-
-<div
-class="summary-money"
-id="yearIncome">
-
-¥0
-
-</div>
-
-</div>
-
-<div class="summary-item">
-
-<div class="summary-title">
-
-支出
-
-</div>
-
-<div
-class="summary-money"
-id="yearSpent">
-
-¥0
-
-</div>
-
-</div>
-
-<div class="summary-item">
-
-<div class="summary-title">
-
-残り
-
-</div>
-
-<div
-class="summary-money"
-id="yearRemain">
-
-¥0
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>
-
-📈 年間グラフ
-
-</h2>
-
-<canvas
-id="yearChart"
-width="700"
-height="250">
-
-</canvas>
-
-</div>
-<div class="card">
-
-<h2>
-
-📒 カテゴリ分析
-
-</h2>
-
-<div id="categoryAnalysis">
-
-カテゴリ分析を表示します
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ==========================
-     135万円管理
-========================== -->
-
-<div
-id="taxPage"
-class="page">
-
-<div class="card">
-
-<h2>
-
-💴 135万円管理
-
-</h2>
-
-<div class="progress">
-
-<div id="taxBar">
-
-</div>
-
-</div>
-
-<p id="taxSummary">
-
-¥0 / ¥1,350,000
-
-</p>
-
-</div>
-
-<div class="card">
-
-<button id="addTaxItem">
-
-＋ 項目追加
-
-</button>
-
-<div id="taxList">
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ==========================
-     設定
-========================== -->
-
-<div
-id="settingPage"
-class="page">
-
-<div class="card">
-
-<h2>
-
-⚙️ 設定
-
-</h2>
-
-</div>
-
-<div class="card setting-list">
-
-<button id="editGoal">
-
-🎯 年間目標
-
-</button>
-
-<button id="editBonus">
-
-🎁 ボーナス
-
-</button>
-
-<button id="editBudget">
-
-📒 カテゴリ予算
-
-</button>
-
-<button id="editBankButton">
-
-🏦 銀行残高
-
-</button>
-
-<button id="deleteAll">
-
-🗑 全データ削除
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ==========================
-     フッター
-========================== -->
+<!-- ナビゲーション -->
 
 <nav class="bottom-nav">
 
-<button
-id="navHome"
-class="active">
+    <button class="active">
 
-🏠<br>
+        🏠<br>
 
-ホーム
+        <span>ホーム</span>
 
-</button>
+    </button>
 
-<button id="navYear">
+    <button>
 
-📊<br>
+        📊<br>
 
-年間
+        <span>年間</span>
 
-</button>
+    </button>
 
-<button id="navTax">
+    <button>
 
-💴<br>
+        💰<br>
 
-135万円
+        <span>135万円</span>
 
-</button>
+    </button>
 
-<button id="navSetting">
+    <button>
 
-⚙️<br>
+        ⚙️<br>
 
-設定
+        <span>設定</span>
 
-</button>
+    </button>
 
 </nav>
-
-<!-- ==========================
-     ダイアログ
-========================== -->
-
-<dialog id="inputDialog">
-
-<form method="dialog">
-
-<h3 id="dialogTitle">
-
-入力
-
-</h3>
-
-<input
-type="number"
-id="dialogValue"
-placeholder="金額">
-
-<div class="dialog-buttons">
-
-<button
-type="button"
-id="dialogCancel">
-
-キャンセル
-
-</button>
-
-<button
-type="button"
-id="dialogSave">
-
-保存
-
-</button>
-
-</div>
-
-</form>
-
-</dialog>
 
 <script src="app.js"></script>
 
