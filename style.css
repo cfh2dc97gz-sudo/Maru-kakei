@@ -1128,3 +1128,54 @@ button:active{
     line-height:1.4;
 
 }
+/* ===========================
+   カテゴリ詳細
+=========================== */
+
+#categorySummary{
+
+    line-height:1.8;
+
+    font-size:15px;
+
+}
+
+#categoryHistory{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+#categoryHistory .setting-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    text-align:left;
+
+}
+
+#categoryHistory .setting-item span:first-child{
+
+    line-height:1.5;
+
+}
+
+#categoryHistory .setting-item span:last-child{
+
+    font-weight:bold;
+
+}
+
+#categoryPage .card{
+
+    margin-bottom:16px;
+
+}
