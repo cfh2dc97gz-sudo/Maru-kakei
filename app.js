@@ -1823,28 +1823,32 @@ function initializeApp(){
 initializeApp();
 
 window.addEventListener(
-
     "beforeunload",
-
-    ()=>{
-
-        save();
-
-    }
-
+    save
 );
 
 console.log(
-
-    "%c🌸 まる家計 Ver18 Complete",
-
+    "%c🌸 まる家計 Ver18",
     "color:#4CAF50;font-size:16px;font-weight:bold;"
-
 );
 
 console.log({
 
     version:"18.0",
+
+    fiscalYear:currentYear,
+
+    month:currentMonth,
+
+    page:
+        JSON.parse(
+            localStorage.getItem(
+                getSessionKey()
+            ) || "{}"
+        ).page || "home"
+
+});
+
 /* ===========================
    設定画面
 =========================== */
@@ -1856,27 +1860,19 @@ function drawBudgetList(){
 
     if(!area) return;
 
-    area.innerHTML="";
+    area.innerHTML = "";
 
     app.budgets.forEach((item,index)=>{
 
-        area.innerHTML+=`
+        area.innerHTML += `
 
 <button
 class="setting-item"
 onclick="editBudget(${index})">
 
-<span>
+<span>${item.name}</span>
 
-${item.name}
-
-</span>
-
-<span>
-
-¥${item.budget.toLocaleString()}
-
-</span>
+<span>¥${item.budget.toLocaleString()}</span>
 
 </button>
 
@@ -1888,7 +1884,7 @@ ${item.name}
 
 function editBudget(index){
 
-    const value=
+    const value =
         Number(
             prompt(
                 "月予算",
@@ -1898,119 +1894,119 @@ function editBudget(index){
 
     if(isNaN(value)) return;
 
-    app.budgets[index].budget=value;
+    app.budgets[index].budget = value;
 
     update();
 
 }
 
-document
-.getElementById("editGoal")
-.onclick=()=>{
+const editGoalBtn =
+    document.getElementById("editGoal");
 
-    const goal=
-        Number(
-            prompt(
-                "年間目標",
-                app.goal
-            )
-        );
+if(editGoalBtn){
 
-    if(isNaN(goal)) return;
+    editGoalBtn.onclick = ()=>{
 
-    app.goal=goal;
+        const goal =
+            Number(
+                prompt(
+                    "年間目標",
+                    app.goal
+                )
+            );
 
-    update();
+        if(isNaN(goal)) return;
 
-};
+        app.goal = goal;
 
-document
-.getElementById("editBonus")
-.onclick=()=>{
+        update();
 
-    app.bonus.summerForecast=
-        Number(
-            prompt(
-                "夏予定",
-                app.bonus.summerForecast
-            )
-        )||0;
+    };
 
-    app.bonus.summerActual=
-        Number(
-            prompt(
-                "夏実績",
-                app.bonus.summerActual
-            )
-        )||0;
+}
 
-    app.bonus.winterForecast=
-        Number(
-            prompt(
-                "冬予定",
-                app.bonus.winterForecast
-            )
-        )||0;
+const editBonusBtn =
+    document.getElementById("editBonus");
 
-    app.bonus.winterActual=
-        Number(
-            prompt(
-                "冬実績",
-                app.bonus.winterActual
-            )
-        )||0;
+if(editBonusBtn){
 
-    update();
+    editBonusBtn.onclick = ()=>{
 
-};
+        app.bonus.summerForecast =
+            Number(prompt("夏予定",app.bonus.summerForecast)) || 0;
 
-document
-.getElementById("annualManage")
-.onclick=()=>{
+        app.bonus.summerActual =
+            Number(prompt("夏実績",app.bonus.summerActual)) || 0;
 
-    showPage("annual");
+        app.bonus.winterForecast =
+            Number(prompt("冬予定",app.bonus.winterForecast)) || 0;
 
-};
+        app.bonus.winterActual =
+            Number(prompt("冬実績",app.bonus.winterActual)) || 0;
 
-document
-.getElementById("deleteAll")
-.onclick=()=>{
+        update();
 
-    if(
-        !confirm(
-            "すべて削除しますか？"
-        )
-    ) return;
+    };
 
-    localStorage.clear();
+}
 
-    location.reload();
+const annualBtn =
+    document.getElementById("annualManage");
 
-};
+if(annualBtn){
+
+    annualBtn.onclick = ()=>{
+
+        showPage("annual");
+
+    };
+
+}
+
+const deleteBtn =
+    document.getElementById("deleteAll");
+
+if(deleteBtn){
+
+    deleteBtn.onclick = ()=>{
+
+        if(!confirm("すべて削除しますか？"))
+            return;
+
+        localStorage.clear();
+
+        location.reload();
+
+    };
+
+}
+
 /* ===========================
-   135万円管理ボタン修正
+   135万円管理追加
 =========================== */
 
-const addAnnualItemButton =
+const addAnnualBtn =
+    document.getElementById("addAnnualManage")
+    ||
     document.getElementById("addAnnualItem");
 
-if(addAnnualItemButton){
+if(addAnnualBtn){
 
-    addAnnualItemButton.onclick=()=>{
+    addAnnualBtn.onclick = ()=>{
 
-        const title=
+        const title =
             prompt("項目名");
 
         if(!title) return;
 
-        const amount=
+        const amount =
             Number(
                 prompt("金額")
             );
 
         if(isNaN(amount)) return;
 
-        const date=
+        const date =
             prompt(
                 "日付(YYYY-MM-DD)",
                 new Date()
@@ -2032,20 +2028,6 @@ if(addAnnualItemButton){
 
         update();
 
-        drawAnnualManage();
-
     };
 
 }
-    fiscalYear:currentYear,
-
-    month:currentMonth,
-
-    page:
-        JSON.parse(
-            localStorage.getItem(
-                getSessionKey()
-            ) || "{}"
-        ).page || "home"
-
-});
