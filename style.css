@@ -1333,3 +1333,44 @@ button:active{
         width .3s ease;
 
 }
+/* ===========================
+   年間カテゴリ進捗バー色分け
+=========================== */
+
+.progress-bar.warning{
+
+    background:linear-gradient(
+        90deg,
+        #ffd54f,
+        #ffb300
+    );
+
+}
+
+.progress-bar.danger{
+
+    background:linear-gradient(
+        90deg,
+        #ff8a80,
+        #e53935
+    );
+
+}
+
+.progress{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.progress-bar{
+
+    border-radius:999px;
+
+    transition:
+        width .35s ease,
+        background .35s ease;
+
+}
