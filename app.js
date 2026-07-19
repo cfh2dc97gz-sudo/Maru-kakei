@@ -266,21 +266,24 @@ const session =
     );
 
 currentYear =
-
     session.year ?? 2026;
 
 currentMonth =
-
     session.month ?? 4;
 
-const yearSelect =
+// 年度外の月を補正
+if(currentMonth < 4){
 
+    currentYear--;
+
+}
+
+const yearSelect =
     document.getElementById("yearSelect");
 
 if(yearSelect){
 
     yearSelect.value =
-
         String(currentYear);
 
     yearSelect.onchange = ()=>{
@@ -288,9 +291,9 @@ if(yearSelect){
         save();
 
         currentYear =
-
             Number(yearSelect.value);
 
+        // 年度変更時は必ず4月開始
         currentMonth = 4;
 
         load();
@@ -302,6 +305,13 @@ if(yearSelect){
         drawYearCategory();
 
         drawYearChart();
+
+        showPage(
+            JSON.parse(
+                localStorage.getItem(getSessionKey())
+                || "{}"
+            ).page || "home"
+        );
 
     };
 
@@ -319,6 +329,12 @@ function getDisplayYear(month = currentMonth){
     return month <= 3
         ? currentYear + 1
         : currentYear;
+
+}
+
+function getFiscalYear(){
+
+    return currentYear;
 
 }
 
@@ -363,8 +379,25 @@ function update(){
 
     }
 
-    document.getElementById("period").textContent =
-        `${currentYear}年度　${getDisplayYear()}年 ${currentMonth}月`;
+    const period =
+        document.getElementById("period");
+
+    if(period){
+
+        period.textContent =
+            `${getDisplayYear()}年 ${currentMonth}月`;
+
+    }
+
+    const fiscalTitle =
+        document.getElementById("fiscalYear");
+
+    if(fiscalTitle){
+
+        fiscalTitle.textContent =
+            `${getFiscalYear()}年度`;
+
+    }
 
     const incomeTotal =
         app.income.papa +
@@ -440,13 +473,9 @@ function update(){
 
     updateAI();
 
-    if(typeof drawYearSummary === "function"){
-        drawYearSummary();
-    }
+    drawYearSummary();
 
-    if(typeof drawYearChart === "function"){
-        drawYearChart();
-    }
+    drawYearChart();
 
     save();
 
@@ -906,39 +935,28 @@ function updateAI(){
 
 function drawYearSummary(){
 
-    let income = 0;
-    let spent = 0;
+    const title =
+        document.getElementById("yearTitle");
 
-    for(let month = 4; month <= 12; month++){
+    if(title){
 
-        const key =
-            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
-
-        const saved =
-            localStorage.getItem(key);
-
-        if(!saved) continue;
-
-        const data =
-            JSON.parse(saved);
-
-        income +=
-            (data.income?.papa || 0) +
-            (data.income?.mama || 0) +
-            (data.income?.extra || 0);
-
-        spent +=
-            (data.budgets || []).reduce(
-                (sum,item)=>sum + (item.spent || 0),
-                0
-            );
+        title.textContent =
+            `年間（${currentYear}年度）`;
 
     }
 
-    for(let month = 1; month <= 3; month++){
+    let income = 0;
+    let spent = 0;
+
+    for(const month of [4,5,6,7,8,9,10,11,12,1,2,3]){
+
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
 
         const key =
-            `maru-kakei-${currentYear + 1}-${String(month).padStart(2,"0")}`;
+            `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
 
         const saved =
             localStorage.getItem(key);
@@ -955,7 +973,8 @@ function drawYearSummary(){
 
         spent +=
             (data.budgets || []).reduce(
-                (sum,item)=>sum + (item.spent || 0),
+                (sum,item)=>
+                    sum + (item.spent || 0),
                 0
             );
 
@@ -964,12 +983,12 @@ function drawYearSummary(){
     const remain =
         income - spent;
 
-    const currentBank =
+    const bank =
         app.bank.mitake +
         app.bank.takizawa;
 
     const saving =
-        currentBank -
+        bank -
         (app.startBank || 0);
 
     const progress =
@@ -993,14 +1012,7 @@ function drawYearSummary(){
         (remain >= 0 ? "plus" : "minus");
 
     document.getElementById("yearGoal").textContent =
-        `2026年度`.replace(
-            "2026",
-            currentYear
-        ) +
-        "　¥" +
-        progress.toLocaleString() +
-        " / ¥" +
-        app.goal.toLocaleString();
+        `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
 
     document.getElementById("goalBar").style.width =
         Math.min(
