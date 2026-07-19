@@ -941,7 +941,7 @@ function drawYearSummary(){
     if(title){
 
         title.textContent =
-            `年間（${currentYear}年度）`;
+    `${currentYear}年度`;
 
     }
 
