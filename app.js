@@ -1100,7 +1100,7 @@ function drawYearSummary(){
 
 }
 /* ===========================
-   ⑨ 年間カテゴリ
+   ⑱ 年間カテゴリ
 =========================== */
 
 function drawYearCategory(){
@@ -1110,35 +1110,30 @@ function drawYearCategory(){
 
     if(!area) return;
 
-    area.innerHTML = "";
+    area.innerHTML="";
 
-    app.budgets.forEach(item=>{
+    app.budgets.forEach(budget=>{
 
-        let total = 0;
+        const list =
+            app.history.filter(
+                h=>h.category===budget.name
+            );
 
-        let count = 0;
-
-        app.history.forEach(h=>{
-
-            if(h.category===item.name){
-
-                total += h.amount;
-
-                count++;
-
-            }
-
-        });
+        const total =
+            list.reduce(
+                (sum,h)=>sum+h.amount,
+                0
+            );
 
         area.innerHTML += `
 
 <button
 class="setting-item"
-onclick="showCategoryHistory('${item.id}')">
+onclick="showCategoryHistory('${budget.id}')">
 
 <span>
 
-${item.name}
+${budget.name}
 
 </span>
 
@@ -1146,7 +1141,7 @@ ${item.name}
 
 ¥${total.toLocaleString()}<br>
 
-${count}件
+${list.length}件
 
 </span>
 
@@ -1160,26 +1155,7 @@ ${count}件
 
 function showCategoryHistory(categoryId){
 
-    const page =
-        document.getElementById("categoryPage");
-
-    document
-        .getElementById("homePage")
-        .style.display="none";
-
-    document
-        .getElementById("yearPage")
-        .style.display="none";
-
-    document
-        .getElementById("annualPage")
-        .style.display="none";
-
-    document
-        .getElementById("settingPage")
-        .style.display="none";
-
-    page.style.display="block";
+    showPage("category");
 
     const budget =
         app.budgets.find(
@@ -1192,8 +1168,13 @@ function showCategoryHistory(categoryId){
         budget.name;
 
     const list =
-        app.history.filter(
+        app.history
+        .filter(
             h=>h.category===budget.name
+        )
+        .sort(
+            (a,b)=>
+                new Date(b.date)-new Date(a.date)
         );
 
     const total =
@@ -1217,11 +1198,52 @@ function showCategoryHistory(categoryId){
     const history =
         document.getElementById("categoryHistory");
 
-    history.innerHTML = "";
+    history.innerHTML="";
+
+    const monthMap={};
 
     list.forEach(item=>{
 
+        const month =
+            item.date.substring(0,7);
+
+        if(!monthMap[month]){
+
+            monthMap[month]=[];
+
+        }
+
+        monthMap[month].push(item);
+
+    });
+
+    Object.keys(monthMap).forEach(month=>{
+
+        const monthTotal =
+            monthMap[month].reduce(
+                (sum,h)=>sum+h.amount,
+                0
+            );
+
         history.innerHTML += `
+
+<div class="card">
+
+<h3>
+
+${month}
+
+（¥${monthTotal.toLocaleString()}）
+
+</h3>
+
+</div>
+
+`;
+
+        monthMap[month].forEach(item=>{
+
+            history.innerHTML += `
 
 <div class="setting-item">
 
@@ -1242,6 +1264,8 @@ ${item.memo || ""}
 </div>
 
 `;
+
+        });
 
     });
 
