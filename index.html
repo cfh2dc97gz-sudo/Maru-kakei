@@ -1,1854 +1,605 @@
-/* ===========================
-   Ver15
-   ① データ・初期化
-=========================== */
+<!DOCTYPE html>
+<html lang="ja">
 
-const DEFAULT_BUDGETS = [
+<head>
 
-    {
-        id:"food",
-        name:"🍚 食費",
-        budget:80000,
-        spent:0
-    },
+<meta charset="UTF-8">
 
-    {
-        id:"utility",
-        name:"💡 電気・水道",
-        budget:32000,
-        spent:0
-    },
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0">
 
-    {
-        id:"iwagin",
-        name:"🏦 岩銀",
-        budget:40000,
-        spent:0
-    },
+<title>
 
-    {
-        id:"rakuten",
-        name:"💳 楽天",
-        budget:20000,
-        spent:0
-    },
+まる家計 Ver20
 
-    {
-        id:"holiday",
-        name:"🎉 休日",
-        budget:40000,
-        spent:0
-    },
+</title>
 
-    {
-        id:"gas",
-        name:"⛽ ガソリン",
-        budget:17000,
-        spent:0
-    },
+<link
+    rel="stylesheet"
+    href="style.css">
 
-    {
-        id:"other",
-        name:"📦 その他",
-        budget:30000,
-        spent:0
-    }
+</head>
 
-];
+<body>
 
-function createDefaultBudgets(){
+<!-- ==========================
+     ホーム
+========================== -->
 
-    return JSON.parse(
-        JSON.stringify(DEFAULT_BUDGETS)
-    );
-
-}
-
-const app = {
-
-    goal:3400000,
-
-    bank:{
-
-        mitake:0,
-
-        takizawa:0
-
-    },
-
-    startBank:0,
-
-    income:{
-
-        papa:0,
-
-        mama:0,
-
-        extra:0
-
-    },
-
-    bonus:{
-
-        summerForecast:0,
-
-        summerActual:0,
-
-        winterForecast:0,
-
-        winterActual:0
-
-    },
-
-    annualItems:[],
-
-    budgets:createDefaultBudgets(),
-
-    history:[]
-
-};
-
-let currentYear = 2026;
-
-let currentMonth = 4;
-/* ===========================
-   ② 保存・読込
-=========================== */
-
-function getKey(){
-
-    return `maru-kakei-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
-
-}
-
-function getYearKey(){
-
-    return `maru-kakei-year-${currentYear}`;
-
-}
-
-function getSessionKey(){
-
-    return "maru-kakei-session";
-
-}
-
-function save(){
-
-    const yearData={
-
-        goal:app.goal,
-
-        startBank:app.startBank,
-
-        bonus:{...app.bonus},
-
-        annualItems:[...app.annualItems]
-
-    };
-
-    localStorage.setItem(
-
-        getYearKey(),
-
-        JSON.stringify(yearData)
-
-    );
-
-    const monthData={
-
-        bank:{...app.bank},
-
-        income:{...app.income},
-
-        budgets:JSON.parse(
-            JSON.stringify(app.budgets)
-        ),
-
-        history:[...app.history]
-
-    };
-
-    localStorage.setItem(
-
-        getKey(),
-
-        JSON.stringify(monthData)
-
-    );
-
-    const session=
-
-        JSON.parse(
-            localStorage.getItem(getSessionKey())
-            || "{}"
-        );
-
-    session.year=currentYear;
-
-    session.month=currentMonth;
-
-    session.page=session.page || "home";
-
-    localStorage.setItem(
-
-        getSessionKey(),
-
-        JSON.stringify(session)
-
-    );
-
-}
-
-function load(){
-
-    app.bank={
-
-        mitake:0,
-
-        takizawa:0
-
-    };
-
-    app.income={
-
-        papa:0,
-
-        mama:0,
-
-        extra:0
-
-    };
-
-    app.startBank=0;
-
-    app.bonus={
-
-        summerForecast:0,
-
-        summerActual:0,
-
-        winterForecast:0,
-
-        winterActual:0
-
-    };
-
-    app.annualItems=[];
-
-    app.budgets=createDefaultBudgets();
-
-    app.history=[];
-
-    const monthSaved=
-
-        localStorage.getItem(getKey());
-
-    if(monthSaved){
-
-        const data=
-
-            JSON.parse(monthSaved);
-
-        app.bank=data.bank || app.bank;
-
-        app.income=data.income || app.income;
-
-        app.budgets=data.budgets || app.budgets;
-
-        app.history=data.history || [];
-
-    }
-
-    const yearSaved=
-
-        localStorage.getItem(getYearKey());
-
-    if(yearSaved){
-
-        const data=
-
-            JSON.parse(yearSaved);
-
-        app.goal=data.goal ?? app.goal;
-
-        app.startBank=data.startBank ?? 0;
-
-        app.bonus=data.bonus || app.bonus;
-
-        app.annualItems=data.annualItems || [];
-
-    }
-
-    app.budgets.forEach(item=>{
-
-        if(item.spent===undefined){
-
-            item.spent=0;
-
-        }
-
-    });
-
-}
-/* ===========================
-   ③ 初期化・年度セレクト
-=========================== */
-
-const session =
-
-    JSON.parse(
-
-        localStorage.getItem(getSessionKey())
-
-        || "{}"
-
-    );
-
-currentYear =
-    session.year ?? 2026;
-
-currentMonth =
-    session.month ?? 4;
-
-// 年度外の月を補正
-if(currentMonth < 4){
-
-    currentYear--;
-
-}
-
-const yearSelect =
-    document.getElementById("yearSelect");
-
-if(yearSelect){
-
-    yearSelect.value =
-        String(currentYear);
-
-    yearSelect.onchange = ()=>{
-
-        save();
-
-        currentYear =
-            Number(yearSelect.value);
-
-        // 年度変更時は必ず4月開始
-        currentMonth = 4;
-
-        load();
-
-        update();
-
-        drawYearSummary();
-
-        drawYearCategory();
-
-        drawYearChart();
-
-        showPage(
-            JSON.parse(
-                localStorage.getItem(getSessionKey())
-                || "{}"
-            ).page || "home"
-        );
-
-    };
-
-}
-
-load();
-
-update();
-/* ===========================
-   ④ 月変更・画面更新
-=========================== */
-
-function getDisplayYear(month=currentMonth){
-
-    return month<=3
-        ?currentYear+1
-        :currentYear;
-
-}
-
-function getFiscalYear(){
-
-    return currentYear;
-
-}
-
-function changeMonth(step){
-
-    save();
-
-    currentMonth+=step;
-
-    if(currentMonth>12){
-
-        currentMonth=1;
-
-    }else if(currentMonth<1){
-
-        currentMonth=12;
-
-    }
-
-    load();
-
-    update();
-
-}
-
-document
-.getElementById("prevMonth")
-.onclick=()=>changeMonth(-1);
-
-document
-.getElementById("nextMonth")
-.onclick=()=>changeMonth(1);
-
-function update(){
-
-    if(yearSelect){
-
-        yearSelect.value=String(currentYear);
-
-    }
-
-    const period=
-        document.getElementById("period");
-
-    if(period){
-
-        period.textContent=
-            `${getDisplayYear()}年 ${currentMonth}月`;
-
-    }
-
-    const fiscal=
-        document.getElementById("fiscalYear");
-
-    if(fiscal){
-
-        fiscal.textContent=
-            `${currentYear}年度`;
-
-    }
-
-    const income=
-
-        app.income.papa+
-        app.income.mama+
-        app.income.extra;
-
-    const spent=
-
-        app.budgets.reduce(
-            (sum,b)=>sum+b.spent,
-            0
-        );
-
-    const remain=
-
-        income-spent;
-
-    document
-        .getElementById("income")
-        .textContent=
-        "¥"+income.toLocaleString();
-
-    document
-        .getElementById("incomeSummary")
-        .textContent=
-        "¥"+income.toLocaleString();
-
-    document
-        .getElementById("spent")
-        .textContent=
-        "¥"+spent.toLocaleString();
-
-    const remainEl=
-        document.getElementById("remain");
-
-    remainEl.textContent=
-        "¥"+remain.toLocaleString();
-
-    remainEl.className=
-        "summary-money "+
-        (remain>=0
-            ?"plus"
-            :"minus");
-
-    const bankTotal=
-
-        app.bank.mitake+
-        app.bank.takizawa;
-
-    const bankEl=
-        document.getElementById("bankTotal");
-
-    if(bankEl){
-
-        bankEl.textContent=
-            "¥"+bankTotal.toLocaleString();
-
-    }
-
-    const savingEl=
-        document.getElementById("savingTotal");
-
-    if(savingEl){
-
-        const saving=
-
-            bankTotal-
-            app.startBank;
-
-        savingEl.textContent=
-
-            (saving>=0?"+":"")+
-            "¥"+
-            saving.toLocaleString();
-
-        savingEl.className=
-
-            "bank-saving "+
-
-            (saving>=0
-                ?"plus"
-                :"minus");
-
-    }
-
-    drawCategories();
-
-    drawAI();
-
-    drawYearSummary();
-
-    drawYearCategory();
-
-    drawYearChart();
-
-    drawAnnualManage();
-
-    save();
-
-}
-/* ===========================
-   ⑤ カテゴリ・収入・支出
-=========================== */
-
-function drawCategories(){
-
-    const grid =
-        document.getElementById("gridArea");
-
-    if(!grid) return;
-
-    grid.innerHTML = "";
-
-    app.budgets.forEach((item,index)=>{
-
-        const remain =
-            item.budget - item.spent;
-
-        grid.innerHTML += `
-
-<button
-class="input-card"
-onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
-
-    <span class="input-name">
-        ${item.name}
-    </span>
-
-    <span class="input-left ${remain<0?"over":""}">
-        ¥${remain.toLocaleString()}
-    </span>
-
-</button>
-
-`;
-
-    });
-
-}
-
-function addIncome(type){
-
-    const amount =
-        Number(prompt("収入金額"));
-
-    if(!amount) return;
-
-    switch(type){
-
-        case "パパ":
-
-            app.income.papa += amount;
-
-            break;
-
-        case "ママ":
-
-            app.income.mama += amount;
-
-            break;
-
-        case "臨時":
-
-            app.income.extra += amount;
-
-            break;
-
-    }
-
-    update();
-
-}
-
-document
-.getElementById("incomePapa")
-.onclick = ()=>addIncome("パパ");
-
-document
-.getElementById("incomeMama")
-.onclick = ()=>addIncome("ママ");
-
-document
-.getElementById("incomeExtra")
-.onclick = ()=>addIncome("臨時");
-
-document
-.getElementById("resetMonth")
-.onclick = ()=>{
-
-    if(!confirm("今月をリセットしますか？"))
-        return;
-
-    app.income = {
-
-        papa:0,
-
-        mama:0,
-
-        extra:0
-
-    };
-
-    app.budgets =
-        createDefaultBudgets();
-
-    app.history = [];
-
-    update();
-
-};
-
-function editBank(){
-
-    const mitakeText =
-        prompt("みたけ銀行残高");
-
-    if(mitakeText === null) return;
-
-    const mitake =
-        Number(mitakeText);
-
-    if(isNaN(mitake)) return;
-
-    const takizawaText =
-        prompt("滝沢銀行残高");
-
-    if(takizawaText === null) return;
-
-    const takizawa =
-        Number(takizawaText);
-
-    if(isNaN(takizawa)) return;
-
-    app.bank.mitake = mitake;
-
-    app.bank.takizawa = takizawa;
-
-    // 4月だけ今年の基準残高を更新
-    if(currentMonth === 4){
-
-        app.startBank =
-            mitake +
-            takizawa;
-
-    }
-
-    update();
-
-}
-
-function addSpent(index,isOverwrite=false){
-
-    const input =
-        prompt("金額 メモ\n例：5000 マック");
-
-    if(!input) return;
-
-    const parts =
-        input.trim().split(" ");
-
-    const amount =
-        Number(parts[0]);
-
-    if(!amount) return;
-
-    const memo =
-        parts.slice(1).join(" ");
-
-    if(isOverwrite){
-
-        app.budgets[index].spent =
-            amount;
-
-    }else{
-
-        app.budgets[index].spent +=
-            amount;
-
-    }
-
-    app.history.push({
-
-        date:new Date().toLocaleDateString(
-            "ja-JP",
-            {
-                month:"numeric",
-                day:"numeric"
-            }
-        ),
-
-        category:
-            app.budgets[index].name,
-
-        amount,
-
-        memo
-
-    });
-
-    update();
-
-}
-/* ===========================
-   ⑥ ページ切替・設定
-=========================== */
-
-const homePage =
-    document.getElementById("homePage");
-
-const yearPage =
-    document.getElementById("yearPage");
-
-const annualPage =
-    document.getElementById("annualPage");
-
-const categoryPage =
-    document.getElementById("categoryPage");
-
-const settingPage =
-    document.getElementById("settingPage");
-
-const pages = [
-    homePage,
-    yearPage,
-    annualPage,
-    categoryPage,
-    settingPage
-];
-
-const navButtons =
-    document.querySelectorAll(".bottom-nav button");
-
-let lastPage = "home";
-
-function showPage(page){
-
-    pages.forEach(p=>{
-
-        if(p){
-
-            p.style.display="none";
-
-        }
-
-    });
-
-    navButtons.forEach(btn=>
-        btn.classList.remove("active")
-    );
-
-    switch(page){
-
-        case "home":
-
-            homePage.style.display="block";
-            navButtons[0].classList.add("active");
-            lastPage="home";
-            break;
-
-        case "year":
-
-            yearPage.style.display="block";
-            navButtons[1].classList.add("active");
-
-            drawYearSummary();
-            drawYearCategory();
-            drawYearChart();
-
-            lastPage="year";
-            break;
-
-        case "annual":
-
-            annualPage.style.display="block";
-            navButtons[2].classList.add("active");
-
-            drawAnnualManage();
-
-            lastPage="annual";
-            break;
-
-        case "setting":
-
-            settingPage.style.display="block";
-            navButtons[3].classList.add("active");
-
-            drawBudgetList();
-
-            lastPage="setting";
-            break;
-
-        case "category":
-
-            categoryPage.style.display="block";
-            break;
-
-    }
-
-    if(page!=="category"){
-
-        const session =
-            JSON.parse(
-                localStorage.getItem(getSessionKey())
-                || "{}"
-            );
-
-        session.page = page;
-
-        localStorage.setItem(
-            getSessionKey(),
-            JSON.stringify(session)
-        );
-
-    }
-
-}
-
-function backPage(){
-
-    showPage(lastPage);
-
-}
-
-navButtons[0].onclick =
-()=>showPage("home");
-
-navButtons[1].onclick =
-()=>showPage("year");
-
-navButtons[2].onclick =
-()=>showPage("annual");
-
-navButtons[3].onclick =
-()=>showPage("setting");
-/* ===========================
-   ⑦ AI分析
-=========================== */
-
-function drawAI(){
-
-    const ai =
-        document.getElementById("aiComment");
-
-    if(!ai) return;
-
-    const bonus =
-        (app.bonus.summerActual || app.bonus.summerForecast || 0)
-        +
-        (app.bonus.winterActual || app.bonus.winterForecast || 0);
-
-    const saving =
-        app.income
-        -app.history.reduce(
-            (sum,h)=>sum+h.amount,
-            0
-        )
-        +bonus;
-
-    const remain =
-        app.goal-saving;
-
-    const monthBudget =
-        app.budgets.reduce(
-            (sum,b)=>sum+b.budget,
-            0
-        );
-
-    let worst = null;
-
-    app.budgets.forEach(b=>{
-
-        const total =
-            app.history
-            .filter(
-                h=>h.category===b.name
-            )
-            .reduce(
-                (sum,h)=>sum+h.amount,
-                0
-            );
-
-        const rate =
-            b.budget===0
-            ?0
-            :Math.round(
-                total/(b.budget*12)*100
-            );
-
-        if(!worst || rate>worst.rate){
-
-            worst={
-
-                name:b.name,
-
-                rate,
-
-                total
-
-            };
-
-        }
-
-    });
-
-    let message="";
-
-    if(remain<=0){
-
-        message+=`
-
-<h3>
-
-🎉 年間目標達成！
-
-</h3>
-
-<p>
-
-目標を達成しています。この調子で継続しましょう。
-
-</p>
-
-`;
-
-    }else{
-
-        const monthly =
-            Math.ceil(remain/12);
-
-        message+=`
-
-<h3>
-
-📈 年間目標まで
-
-¥${remain.toLocaleString()}
-
-</h3>
-
-<p>
-
-毎月あと
-
-<b>
-
-¥${monthly.toLocaleString()}
-
-</b>
-
-貯められると目標に近づきます。
-
-</p>
-
-`;
-
-    }
-
-    if(worst){
-
-        message+=`
-
-<hr>
-
-<p>
-
-<strong>
-
-見直し候補
-
-</strong>
-
-</p>
-
-<p>
-
-${worst.name}
-
-（${worst.rate}%）
-
-</p>
-
-<p>
-
-年間支出
-
-¥${worst.total.toLocaleString()}
-
-</p>
-
-`;
-
-        if(worst.rate>=100){
-
-            message+=`
-
-<p>
-
-🚨 年間予算を超えています。優先的に見直しましょう。
-
-</p>
-
-`;
-
-        }else if(worst.rate>=80){
-
-            message+=`
-
-<p>
-
-⚠ 予算の80%を超えています。使い過ぎに注意です。
-
-</p>
-
-`;
-
-        }else{
-
-            message+=`
-
-<p>
-
-😊 全体的に順調です。
-
-</p>
-
-`;
-
-        }
-
-    }
-
-    ai.innerHTML=message;
-
-}
-/* ===========================
-   ⑧ 年間サマリー
-=========================== */
-
-function drawYearSummary(){
-
-    const title =
-        document.getElementById("yearTitle");
-
-    if(title){
-
-        title.textContent =
-            `${currentYear}年度`;
-
-    }
-
-    let income = 0;
-    let spent = 0;
-
-    for(const month of [4,5,6,7,8,9,10,11,12,1,2,3]){
-
-        const year =
-            month <= 3
-                ? currentYear + 1
-                : currentYear;
-
-        const key =
-            `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
-
-        const saved =
-            localStorage.getItem(key);
-
-        if(!saved) continue;
-
-        const data =
-            JSON.parse(saved);
-
-        income +=
-            (data.income?.papa || 0) +
-            (data.income?.mama || 0) +
-            (data.income?.extra || 0);
-
-        spent +=
-            (data.budgets || []).reduce(
-                (sum,item)=>
-                    sum + (item.spent || 0),
-                0
-            );
-
-    }
-
-    const remain =
-        income - spent;
-
-    const saving =
-        (
-            app.bank.mitake +
-            app.bank.takizawa
-        ) -
-        (app.startBank || 0);
-
-    const bonusTotal =
-        (app.bonus.summerActual || app.bonus.summerForecast || 0) +
-        (app.bonus.winterActual || app.bonus.winterForecast || 0);
-
-    const progress =
-        saving + bonusTotal;
-
-    document.getElementById("yearIncome").textContent =
-        "¥" + income.toLocaleString();
-
-    document.getElementById("yearSpent").textContent =
-        "¥" + spent.toLocaleString();
-
-    const remainEl =
-        document.getElementById("yearRemain");
-
-    remainEl.textContent =
-        "¥" + remain.toLocaleString();
-
-    remainEl.className =
-        "summary-money " +
-        (remain >= 0 ? "plus" : "minus");
-
-    document.getElementById("yearGoal").textContent =
-        `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
-
-    document.getElementById("goalBar").style.width =
-        Math.min(
-            progress /
-            Math.max(app.goal,1)
-            * 100,
-            100
-        ) + "%";
-
-}
-/* ===========================
-   ⑱ 年間カテゴリ
-=========================== */
-
-function drawYearCategory(){
-
-    const area =
-        document.getElementById("yearCategory");
-
-    if(!area) return;
-
-    area.innerHTML = "";
-
-    const ranking =
-        app.budgets.map(budget=>{
-
-            const list =
-                app.history.filter(
-                    h=>h.category===budget.name
-                );
-
-            const total =
-                list.reduce(
-                    (sum,h)=>sum+h.amount,
-                    0
-                );
-
-            const yearlyBudget =
-                budget.budget * 12;
-
-            const percent =
-                yearlyBudget===0
-                ?0
-                :Math.round(total/yearlyBudget*100);
-
-            let advice =
-                "👍 この調子です";
-
-            if(percent>=120){
-
-                advice =
-                    "🚨 優先的に見直しましょう";
-
-            }else if(percent>=100){
-
-                advice =
-                    "⚠ 今月は支出を抑えましょう";
-
-            }else if(percent>=80){
-
-                advice =
-                    "💡 少し節約すると安心です";
-
-            }
-
-            return{
-
-                budget,
-                list,
-                total,
-                yearlyBudget,
-                percent,
-                diff: yearlyBudget-total,
-                advice
-
-            };
-
-        })
-        .sort((a,b)=>{
-
-            if(a.percent>=100 && b.percent<100) return -1;
-            if(a.percent<100 && b.percent>=100) return 1;
-
-            return b.percent-a.percent;
-
-        });
-
-    ranking.forEach((item,index)=>{
-
-        let medal="";
-
-        if(index===0) medal="🥇";
-        else if(index===1) medal="🥈";
-        else if(index===2) medal="🥉";
-
-        const diffText =
-            item.diff>=0
-            ?`残 ¥${item.diff.toLocaleString()}`
-            :`超過 ¥${Math.abs(item.diff).toLocaleString()}`;
-
-        let barClass =
-            "progress-bar";
-
-        if(item.percent>=100){
-
-            barClass+=" danger";
-
-        }else if(item.percent>=80){
-
-            barClass+=" warning";
-
-        }
-
-        area.innerHTML += `
+<div
+    id="homePage"
+    class="page active">
 
 <div class="card">
 
-<button
-class="setting-item"
-onclick="showCategoryHistory('${item.budget.id}')">
+<div class="month-header">
 
-<span>
+<button id="prevMonth">
 
-${medal} ${item.budget.name}<br>
-
-<small>
-
-年間予算 ¥${item.yearlyBudget.toLocaleString()}
-
-</small>
-
-</span>
-
-<span>
-
-¥${item.total.toLocaleString()}<br>
-
-${diffText}
-
-</span>
+◀
 
 </button>
+
+<div class="period-area">
+
+<select id="yearSelect">
+
+<option value="2024">2024年度</option>
+<option value="2025">2025年度</option>
+<option value="2026" selected>2026年度</option>
+<option value="2027">2027年度</option>
+<option value="2028">2028年度</option>
+
+</select>
+
+<h2 id="period">
+
+2026年4月
+
+</h2>
+
+</div>
+
+<button id="nextMonth">
+
+▶
+
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="summary-grid">
+
+<div class="summary-item">
+
+<div class="summary-title">
+
+収入
+
+</div>
+
+<div
+class="summary-money"
+id="incomeSummary">
+
+¥0
+
+</div>
+
+</div>
+
+<div class="summary-item">
+
+<div class="summary-title">
+
+支出
+
+</div>
+
+<div
+class="summary-money"
+id="spentSummary">
+
+¥0
+
+</div>
+
+</div>
+
+<div class="summary-item">
+
+<div class="summary-title">
+
+残り
+
+</div>
+
+<div
+class="summary-money"
+id="remainSummary">
+
+¥0
+
+</div>
+
+</div>
+
+</div>
+
+<div
+class="bank-row"
+id="editBank">
+
+<span>
+
+🏦銀行残高
+
+</span>
+
+<span id="bankTotal">
+
+¥0
+
+</span>
+
+<span id="savingTotal">
+
+¥0
+
+</span>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+🤖 AIアドバイス
+
+</h2>
+
+<div id="aiComment">
+
+分析中...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="category-header">
+
+<h2>
+
+📒 カテゴリ
+
+</h2>
+
+<div class="family-card">
+
+<div
+class="family-image"
+id="familyImage">
+
+🌸
+
+</div>
+
+<div
+class="family-name"
+id="familyName">
+
+はる・りん
+
+</div>
+
+<div
+class="family-comment"
+id="familyComment">
+
+今日もがんばろう♪
+
+</div>
+
+</div>
+
+</div>
+
+<div id="gridArea">
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+💰 収入登録
+
+</h2>
+
+<div class="income-grid">
+
+<button id="incomePapa">
+
+👨<br>
+
+パパ
+
+</button>
+
+<button id="incomeMama">
+
+👩<br>
+
+ママ
+
+</button>
+
+<button id="incomeExtra">
+
+🎁<br>
+
+臨時
+
+</button>
+
+</div>
+
+<div
+class="money"
+id="incomeTotal">
+
+¥0
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================
+     年間
+========================== -->
+
+<div
+id="yearPage"
+class="page">
+
+<div class="card">
+
+<h2>
+
+📊
+
+<span id="yearTitle">
+
+2026年度
+
+</span>
+
+</h2>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+🎯 年間目標
+
+</h2>
+
+<div id="yearGoal">
+
+¥0 / ¥3,400,000
+
+</div>
 
 <div class="progress">
 
-<div
-class="${barClass}"
-style="width:${Math.min(item.percent,100)}%">
+<div id="goalBar">
 
 </div>
 
 </div>
 
-<div
-style="
-display:flex;
-justify-content:space-between;
-margin-top:8px;
-font-size:12px;">
-
-<span>
-
-達成率 ${item.percent}%
-
-</span>
-
-<span>
-
-${item.advice}
-
-</span>
-
 </div>
-
-</div>
-
-`;
-
-    });
-
-}
-
-function showCategoryHistory(categoryId){
-
-    showPage("category");
-
-    const budget =
-        app.budgets.find(
-            b=>b.id===categoryId
-        );
-
-    if(!budget) return;
-
-    document
-        .getElementById("categoryTitle")
-        .textContent =
-        budget.name;
-
-    const list =
-        app.history
-        .filter(
-            h=>h.category===budget.name
-        )
-        .sort(
-            (a,b)=>
-                new Date(b.date)-
-                new Date(a.date)
-        );
-
-    const total =
-        list.reduce(
-            (sum,h)=>sum+h.amount,
-            0
-        );
-
-    const yearlyBudget =
-        budget.budget * 12;
-
-    const diff =
-        yearlyBudget-total;
-
-    const percent =
-        yearlyBudget===0
-        ?0
-        :Math.round(total/yearlyBudget*100);
-
-    document
-        .getElementById("categorySummary")
-        .innerHTML = `
-
-年間予算：¥${yearlyBudget.toLocaleString()}<br>
-
-年間支出：¥${total.toLocaleString()}<br>
-
-達成率：${percent}%<br>
-
-差額：¥${diff.toLocaleString()}<br>
-
-件数：${list.length}件<br>
-
-月平均：¥${Math.round(total/12).toLocaleString()}
-
-`;
-
-    const history =
-        document.getElementById("categoryHistory");
-
-    history.innerHTML="";
-
-    const monthMap={};
-
-    list.forEach(item=>{
-
-        const month =
-            item.date.substring(0,7);
-
-        if(!monthMap[month]){
-
-            monthMap[month]=[];
-
-        }
-
-        monthMap[month].push(item);
-
-    });
-
-    Object.keys(monthMap)
-        .sort()
-        .reverse()
-        .forEach(month=>{
-
-            const monthList =
-                monthMap[month];
-
-            const monthTotal =
-                monthList.reduce(
-                    (sum,h)=>sum+h.amount,
-                    0
-                );
-
-            history.innerHTML += `
 
 <div class="card">
 
-<h3>${month}</h3>
+<div class="summary-grid">
 
-<div>
+<div class="summary-item">
 
-合計：¥${monthTotal.toLocaleString()}　
-${monthList.length}件
+<div class="summary-title">
+
+収入
+
+</div>
+
+<div
+class="summary-money"
+id="yearIncome">
+
+¥0
 
 </div>
 
 </div>
 
-`;
+<div class="summary-item">
 
-            monthList.forEach(item=>{
+<div class="summary-title">
 
-                history.innerHTML += `
-
-<div class="setting-item">
-
-<span>
-
-${item.date}<br>
-
-${item.memo || ""}
-
-</span>
-
-<span>
-
-¥${item.amount.toLocaleString()}
-
-</span>
+支出
 
 </div>
 
-`;
+<div
+class="summary-money"
+id="yearSpent">
 
-            });
+¥0
 
-        });
+</div>
 
-}
-/* ===========================
-   ⑩ 年間グラフ
-=========================== */
+</div>
 
-function drawYearChart(){
+<div class="summary-item">
 
-    const canvas =
-        document.getElementById("yearChart");
+<div class="summary-title">
 
-    if(!canvas) return;
+残り
 
-    const ctx =
-        canvas.getContext("2d");
+</div>
 
-    const months = [
-        "4月","5月","6月","7月",
-        "8月","9月","10月","11月",
-        "12月","1月","2月","3月"
-    ];
+<div
+class="summary-money"
+id="yearRemain">
 
-    const values = [];
+¥0
 
-    months.forEach((m,index)=>{
+</div>
 
-        let month=index+4;
+</div>
 
-        if(month>12){
+</div>
 
-            month-=12;
-
-        }
-
-        const key =
-            String(month).padStart(2,"0");
-
-        const total =
-            app.history
-            .filter(h=>{
-
-                return h.date.substring(5,7)===key;
-
-            })
-            .reduce(
-                (sum,h)=>sum+h.amount,
-                0
-            );
-
-        values.push(total);
-
-    });
-
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-    const max =
-        Math.max(...values,1);
-
-    const barWidth =
-        canvas.width/months.length;
-
-    values.forEach((value,index)=>{
-
-        const height =
-            value/max*
-            (canvas.height-40);
-
-        ctx.fillStyle =
-            value>
-            app.budgets.reduce(
-                (s,b)=>s+b.budget,
-                0
-            )
-            ?"#ff6b6b"
-            :"#66bb6a";
-
-        ctx.fillRect(
-
-            index*barWidth+10,
-
-            canvas.height-height-20,
-
-            barWidth-20,
-
-            height
-
-        );
-
-        ctx.fillStyle="#444";
-
-        ctx.font="11px sans-serif";
-
-        ctx.textAlign="center";
-
-        ctx.fillText(
-
-            months[index],
-
-            index*barWidth+
-            barWidth/2,
-
-            canvas.height-5
-
-        );
-
-    });
-
-}
-/* ===========================
-   年間管理（135万円）
-=========================== */
-
-function drawAnnualManage(){
-
-    const area =
-        document.getElementById("annualManageList");
-
-    if(!area) return;
-
-    area.innerHTML="";
-
-    const total =
-        app.annualItems.reduce(
-            (sum,item)=>
-                sum+Number(item.amount||0),
-            0
-        );
-
-    const limit = 1350000;
-
-    const remain =
-        limit-total;
-
-    const percent =
-        Math.min(
-            Math.round(total/limit*100),
-            100
-        );
-
-    area.innerHTML += `
+</div>
 
 <div class="card">
 
-<h3>
+<h2>
 
-135万円管理
+📈 年間グラフ
 
-</h3>
+</h2>
 
-<p>
+<canvas
+id="yearChart"
+width="700"
+height="250">
 
-現在：¥${total.toLocaleString()}
+</canvas>
 
-</p>
+</div>
+<div class="card">
 
-<p>
+<h2>
 
-残り：¥${remain.toLocaleString()}
+📒 カテゴリ分析
 
-</p>
+</h2>
+
+<div id="categoryAnalysis">
+
+カテゴリ分析を表示します
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================
+     135万円管理
+========================== -->
+
+<div
+id="taxPage"
+class="page">
+
+<div class="card">
+
+<h2>
+
+💴 135万円管理
+
+</h2>
 
 <div class="progress">
 
-<div
-class="${
-percent>=100
-?"progress-bar danger"
-:percent>=80
-?"progress-bar warning"
-:"progress-bar"
-}"
-style="width:${percent}%">
+<div id="taxBar">
 
 </div>
 
 </div>
 
-<div
-style="margin-top:8px;
-text-align:right;
-font-size:12px;">
+<p id="taxSummary">
 
-${percent}%
+¥0 / ¥1,350,000
 
-</div>
+</p>
 
 </div>
 
-`;
+<div class="card">
 
-    app.annualItems
-        .sort(
-            (a,b)=>
-                a.date.localeCompare(b.date)
-        )
-        .forEach((item,index)=>{
+<button id="addTaxItem">
 
-            area.innerHTML += `
-
-<button
-class="setting-item"
-onclick="editAnnualItem(${index})">
-
-<span>
-
-${item.date}<br>
-
-${item.title}
-
-</span>
-
-<span>
-
-¥${Number(item.amount).toLocaleString()}
-
-</span>
+＋ 項目追加
 
 </button>
 
-`;
+<div id="taxList">
 
-        });
+</div>
 
-}
+</div>
 
-function editAnnualItem(index){
+</div>
 
-    const item =
-        app.annualItems[index];
+<!-- ==========================
+     設定
+========================== -->
 
-    if(!item) return;
+<div
+id="settingPage"
+class="page">
 
-    const title =
-        prompt(
-            "項目名",
-            item.title
-        );
+<div class="card">
 
-    if(title===null) return;
+<h2>
 
-    const amount =
-        Number(
-            prompt(
-                "金額",
-                item.amount
-            )
-        );
+⚙️ 設定
 
-    if(isNaN(amount)) return;
+</h2>
 
-    item.title = title;
+</div>
 
-    item.amount = amount;
+<div class="card setting-list">
 
-    update();
+<button id="editGoal">
 
-    drawAnnualManage();
+🎯 年間目標
 
-}
+</button>
 
-document
-.getElementById("addAnnualManage")
-.onclick=()=>{
+<button id="editBonus">
 
-    const title =
-        prompt("項目名");
+🎁 ボーナス
 
-    if(!title) return;
+</button>
 
-    const amount =
-        Number(
-            prompt("金額")
-        );
+<button id="editBudget">
 
-    if(isNaN(amount)) return;
+📒 カテゴリ予算
 
-    const date =
-        prompt(
-            "日付(YYYY-MM-DD)",
-            new Date()
-                .toISOString()
-                .slice(0,10)
-        );
+</button>
 
-    if(!date) return;
+<button id="editBankButton">
 
-    app.annualItems.push({
+🏦 銀行残高
 
-        title,
+</button>
 
-        amount,
+<button id="deleteAll">
 
-        date
+🗑 全データ削除
 
-    });
+</button>
 
-    update();
+</div>
 
-    drawAnnualManage();
+</div>
 
-};
-/* ===========================
-   ⑪ 初期表示
-=========================== */
+<!-- ==========================
+     フッター
+========================== -->
 
-function initializeApp(){
+<nav class="bottom-nav">
 
-    load();
+<button
+id="navHome"
+class="active">
 
-    drawCategories();
+🏠<br>
 
-    drawAI();
+ホーム
 
-    drawYearSummary();
+</button>
 
-    drawYearCategory();
+<button id="navYear">
 
-    drawYearChart();
+📊<br>
 
-    drawAnnualManage();
+年間
 
-    update();
+</button>
 
-    showPage(
-        session.page || "home"
-    );
+<button id="navTax">
 
-}
+💴<br>
 
-initializeApp();
+135万円
 
-window.addEventListener(
+</button>
 
-    "beforeunload",
+<button id="navSetting">
 
-    ()=>{
+⚙️<br>
 
-        save();
+設定
 
-    }
+</button>
 
-);
+</nav>
 
-console.log(
+<!-- ==========================
+     ダイアログ
+========================== -->
 
-    "%c🌸 まる家計 Ver18 Complete",
+<dialog id="inputDialog">
 
-    "color:#4CAF50;font-size:16px;font-weight:bold;"
+<form method="dialog">
 
-);
+<h3 id="dialogTitle">
 
-console.log({
+入力
 
-    version:"18.0",
+</h3>
 
-    fiscalYear:currentYear,
+<input
+type="number"
+id="dialogValue"
+placeholder="金額">
 
-    month:currentMonth,
+<div class="dialog-buttons">
 
-    page:
-        JSON.parse(
-            localStorage.getItem(
-                getSessionKey()
-            ) || "{}"
-        ).page || "home"
+<button
+type="button"
+id="dialogCancel">
 
-});
+キャンセル
+
+</button>
+
+<button
+type="button"
+id="dialogSave">
+
+保存
+
+</button>
+
+</div>
+
+</form>
+
+</dialog>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
