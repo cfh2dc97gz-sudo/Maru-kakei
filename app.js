@@ -1066,9 +1066,14 @@ function drawYearCategory(){
             };
 
         })
-        .sort(
-            (a,b)=>b.total-a.total
-        );
+        .sort((a,b)=>{
+
+            if(a.percent>=100 && b.percent<100) return -1;
+            if(a.percent<100 && b.percent>=100) return 1;
+
+            return b.percent-a.percent;
+
+        });
 
     ranking.forEach((item,index)=>{
 
@@ -1100,7 +1105,7 @@ function drawYearCategory(){
 
         const alert =
             item.percent>=100
-            ?`<div class="danger-text">⚠ 年間予算を超過しています</div>`
+            ?`<div class="danger-text">🚨 年間予算を超過しています</div>`
             :item.percent>=80
             ?`<div class="warning-text">⚠ 年間予算の80%を使用しています</div>`
             :"";
@@ -1146,7 +1151,8 @@ style="width:${bar}%">
 </div>
 
 <div
-style="text-align:right;
+style="
+text-align:right;
 font-size:12px;
 margin-top:4px;">
 
@@ -1198,7 +1204,7 @@ function showCategoryHistory(categoryId){
         );
 
     const yearlyBudget =
-        budget.budget * 12;
+        budget.budget*12;
 
     const diff =
         yearlyBudget-total;
@@ -1210,7 +1216,7 @@ function showCategoryHistory(categoryId){
 
     document
         .getElementById("categorySummary")
-        .innerHTML = `
+        .innerHTML=`
 
 年間予算：¥${yearlyBudget.toLocaleString()}<br>
 
@@ -1229,13 +1235,13 @@ function showCategoryHistory(categoryId){
     const history =
         document.getElementById("categoryHistory");
 
-    history.innerHTML = "";
+    history.innerHTML="";
 
-    const monthMap = {};
+    const monthMap={};
 
     list.forEach(item=>{
 
-        const month =
+        const month=
             item.date.substring(0,7);
 
         if(!monthMap[month]){
@@ -1253,16 +1259,16 @@ function showCategoryHistory(categoryId){
         .reverse()
         .forEach(month=>{
 
-            const monthList =
+            const monthList=
                 monthMap[month];
 
-            const monthTotal =
+            const monthTotal=
                 monthList.reduce(
                     (sum,h)=>sum+h.amount,
                     0
                 );
 
-            history.innerHTML += `
+            history.innerHTML+=`
 
 <div class="card">
 
@@ -1281,7 +1287,7 @@ ${monthList.length}件
 
             monthList.forEach(item=>{
 
-                history.innerHTML += `
+                history.innerHTML+=`
 
 <div class="setting-item">
 
@@ -1289,7 +1295,7 @@ ${monthList.length}件
 
 ${item.date}<br>
 
-${item.memo || ""}
+${item.memo||""}
 
 </span>
 
