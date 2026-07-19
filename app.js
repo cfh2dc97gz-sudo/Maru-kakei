@@ -314,6 +314,14 @@ update();
    ④ 月変更・画面更新
 =========================== */
 
+function getDisplayYear(month = currentMonth){
+
+    return month <= 3
+        ? currentYear + 1
+        : currentYear;
+
+}
+
 function changeMonth(step){
 
     save();
@@ -356,7 +364,7 @@ function update(){
     }
 
     document.getElementById("period").textContent =
-        `${currentMonth}月`;
+        `${currentYear}年度　${getDisplayYear()}年 ${currentMonth}月`;
 
     const incomeTotal =
         app.income.papa +
@@ -365,11 +373,8 @@ function update(){
 
     const totalSpent =
         app.budgets.reduce(
-
             (sum,item)=>sum+item.spent,
-
             0
-
         );
 
     const remain =
@@ -393,44 +398,55 @@ function update(){
     remainEl.className =
         "summary-money " +
         (remain >= 0 ? "plus" : "minus");
-const bankTotal =
-    document.getElementById("bankTotal");
 
-const savingTotal =
-    document.getElementById("savingTotal");
+    const bankTotal =
+        document.getElementById("bankTotal");
 
-if(bankTotal){
+    const savingTotal =
+        document.getElementById("savingTotal");
 
-    bankTotal.textContent =
-        "¥" + (
+    if(bankTotal){
+
+        bankTotal.textContent =
+            "¥" + (
+                app.bank.mitake +
+                app.bank.takizawa
+            ).toLocaleString();
+
+    }
+
+    if(savingTotal){
+
+        const totalBank =
             app.bank.mitake +
-            app.bank.takizawa
-        ).toLocaleString();
+            app.bank.takizawa;
 
-}
+        const saving =
+            totalBank -
+            (app.startBank || 0);
 
-if(savingTotal){
+        savingTotal.textContent =
+            (saving >= 0 ? "+" : "") +
+            "¥" +
+            saving.toLocaleString();
 
-    const totalBank =
-        app.bank.mitake +
-        app.bank.takizawa;
+        savingTotal.className =
+            "bank-saving " +
+            (saving >= 0 ? "plus" : "minus");
 
-    const saving =
-        totalBank - app.startBank;
+    }
 
-    savingTotal.textContent =
-        (saving >= 0 ? "+" : "") +
-        "¥" +
-        saving.toLocaleString();
-
-    savingTotal.className =
-        "bank-saving " +
-        (saving >= 0 ? "plus" : "minus");
-
-}
     drawCategories();
 
     updateAI();
+
+    if(typeof drawYearSummary === "function"){
+        drawYearSummary();
+    }
+
+    if(typeof drawYearChart === "function"){
+        drawYearChart();
+    }
 
     save();
 
@@ -893,7 +909,7 @@ function drawYearSummary(){
     let income = 0;
     let spent = 0;
 
-    for(let month = 1; month <= 12; month++){
+    for(let month = 4; month <= 12; month++){
 
         const key =
             `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
@@ -913,16 +929,52 @@ function drawYearSummary(){
 
         spent +=
             (data.budgets || []).reduce(
-
                 (sum,item)=>sum + (item.spent || 0),
-
                 0
-
             );
 
     }
 
-    const remain = income - spent;
+    for(let month = 1; month <= 3; month++){
+
+        const key =
+            `maru-kakei-${currentYear + 1}-${String(month).padStart(2,"0")}`;
+
+        const saved =
+            localStorage.getItem(key);
+
+        if(!saved) continue;
+
+        const data =
+            JSON.parse(saved);
+
+        income +=
+            (data.income?.papa || 0) +
+            (data.income?.mama || 0) +
+            (data.income?.extra || 0);
+
+        spent +=
+            (data.budgets || []).reduce(
+                (sum,item)=>sum + (item.spent || 0),
+                0
+            );
+
+    }
+
+    const remain =
+        income - spent;
+
+    const currentBank =
+        app.bank.mitake +
+        app.bank.takizawa;
+
+    const saving =
+        currentBank -
+        (app.startBank || 0);
+
+    const progress =
+        saving +
+        app.bonusSaving;
 
     document.getElementById("yearIncome").textContent =
         "¥" + income.toLocaleString();
@@ -941,11 +993,20 @@ function drawYearSummary(){
         (remain >= 0 ? "plus" : "minus");
 
     document.getElementById("yearGoal").textContent =
-        `¥${remain.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+        `2026年度`.replace(
+            "2026",
+            currentYear
+        ) +
+        "　¥" +
+        progress.toLocaleString() +
+        " / ¥" +
+        app.goal.toLocaleString();
 
     document.getElementById("goalBar").style.width =
         Math.min(
-            remain / Math.max(app.goal,1) * 100,
+            progress /
+            Math.max(app.goal,1)
+            * 100,
             100
         ) + "%";
 
@@ -985,29 +1046,45 @@ function drawYearChart(){
 
     chart.innerHTML = "";
 
+    const order = [
+        4,5,6,7,8,9,
+        10,11,12,
+        1,2,3
+    ];
+
     const data = [];
 
-    for(let month=1; month<=12; month++){
+    order.forEach(month=>{
+
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
 
         const key =
-            `maru-kakei-${currentYear}-${String(month).padStart(2,"0")}`;
+            `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
 
         const save =
-            JSON.parse(localStorage.getItem(key) || "{}");
+            JSON.parse(
+                localStorage.getItem(key) || "{}"
+            );
 
         const income =
-    (save.income?.papa || 0) +
-    (save.income?.mama || 0) +
-    (save.income?.extra || 0);
+            (save.income?.papa || 0) +
+            (save.income?.mama || 0) +
+            (save.income?.extra || 0);
 
-const spent =
-    (save.budgets || [])
-        .reduce(
-            (sum,item)=>
-                sum + (item.spent || 0),
-            0
-        );
+        const spent =
+            (save.budgets || [])
+            .reduce(
+                (sum,item)=>
+                    sum + (item.spent || 0),
+                0
+            );
+
         data.push({
+
+            year,
 
             month,
 
@@ -1015,11 +1092,7 @@ const spent =
 
         });
 
-    }
-
-    // =====================
-    // 左目盛り
-    // =====================
+    });
 
     const scale =
         document.createElement("div");
@@ -1027,25 +1100,15 @@ const spent =
     scale.className = "chart-scale";
 
     [
-
         "20万",
-
         "15万",
-
         "10万",
-
         "5万",
-
         "0",
-
         "-5万",
-
         "-10万",
-
         "-15万",
-
         "-20万"
-
     ].forEach(text=>{
 
         const div =
@@ -1059,10 +1122,6 @@ const spent =
 
     chart.appendChild(scale);
 
-    // =====================
-    // バーエリア
-    // =====================
-
     const bars =
         document.createElement("div");
 
@@ -1070,8 +1129,7 @@ const spent =
         "year-chart-bars";
 
     const MAX = 200000;
-
-    const AREA = 80;   // 160pxの半分
+    const AREA = 80;
 
     data.forEach(item=>{
 
@@ -1086,28 +1144,19 @@ const spent =
 
         bar.className =
             "chart-bar " +
-            (item.remain>=0
+            (item.remain >= 0
                 ? "chart-positive"
                 : "chart-negative");
 
         const height =
             Math.max(
-
                 2,
-
                 Math.round(
-
                     Math.min(
                         Math.abs(item.remain),
                         MAX
-                    )
-
-                    / MAX
-
-                    * AREA
-
+                    ) / MAX * AREA
                 )
-
             );
 
         bar.style.height =
@@ -1126,9 +1175,10 @@ const spent =
 
         month.appendChild(label);
 
-        month.onclick=()=>{
+        month.onclick = ()=>{
 
             changeMonthFromYear(
+                item.year,
                 item.month
             );
 
@@ -1141,9 +1191,24 @@ const spent =
     chart.appendChild(bars);
 
 }
-function changeMonthFromYear(month){
 
+function changeMonthFromYear(year,month){
+
+    save();
+
+    currentYear = year;
     currentMonth = month;
+
+    if(yearSelect){
+
+        yearSelect.value =
+            String(
+                month <= 3
+                    ? year - 1
+                    : year
+            );
+
+    }
 
     load();
 
