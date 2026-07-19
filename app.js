@@ -1086,6 +1086,18 @@ function drawYearCategory(){
         const bar =
             Math.min(item.percent,100);
 
+        let barClass="progress-bar";
+
+        if(item.percent>=100){
+
+            barClass+=" danger";
+
+        }else if(item.percent>=80){
+
+            barClass+=" warning";
+
+        }
+
         const alert =
             item.percent>=100
             ?`<div class="danger-text">⚠ 年間予算を超過しています</div>`
@@ -1126,7 +1138,7 @@ ${diffText}
 <div class="progress">
 
 <div
-class="progress-bar"
+class="${barClass}"
 style="width:${bar}%">
 
 </div>
