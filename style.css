@@ -1077,3 +1077,54 @@ button:active{
     gap:12px;
 
 }
+/* ===========================
+   はる・りん
+=========================== */
+
+.family-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:110px;
+
+    padding:10px;
+
+    border-radius:16px;
+
+    background:#fff7f9;
+
+}
+
+.family-image{
+
+    font-size:48px;
+
+    margin-bottom:6px;
+
+}
+
+.family-name{
+
+    font-weight:bold;
+
+    margin-bottom:4px;
+
+}
+
+.family-comment{
+
+    font-size:12px;
+
+    color:#666;
+
+    text-align:center;
+
+    line-height:1.4;
+
+}
