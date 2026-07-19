@@ -1287,3 +1287,49 @@ button:active{
     font-size:11px;
 
 }
+/* ===========================
+   年間カテゴリ警告表示
+=========================== */
+
+.warning-text{
+
+    margin-top:8px;
+
+    padding:8px 10px;
+
+    border-radius:10px;
+
+    background:#fff7d6;
+
+    color:#9a6b00;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.danger-text{
+
+    margin-top:8px;
+
+    padding:8px 10px;
+
+    border-radius:10px;
+
+    background:#ffe3e3;
+
+    color:#d63031;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.progress-bar{
+
+    transition:
+        width .3s ease;
+
+}
