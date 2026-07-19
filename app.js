@@ -1086,6 +1086,13 @@ function drawYearCategory(){
         const bar =
             Math.min(item.percent,100);
 
+        const alert =
+            item.percent>=100
+            ?`<div class="danger-text">⚠ 年間予算を超過しています</div>`
+            :item.percent>=80
+            ?`<div class="warning-text">⚠ 年間予算の80%を使用しています</div>`
+            :"";
+
         area.innerHTML += `
 
 <div class="card">
@@ -1131,11 +1138,11 @@ style="text-align:right;
 font-size:12px;
 margin-top:4px;">
 
-達成率
-
-${item.percent}%
+達成率 ${item.percent}%
 
 </div>
+
+${alert}
 
 </div>
 
