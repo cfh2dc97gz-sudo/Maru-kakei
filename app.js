@@ -135,57 +135,60 @@ function getSessionKey(){
 
 function save(){
 
+    const yearData={
+
+        goal:app.goal,
+
+        startBank:app.startBank,
+
+        bonus:{...app.bonus},
+
+        annualItems:[...app.annualItems]
+
+    };
+
     localStorage.setItem(
 
         getYearKey(),
 
-        JSON.stringify({
-
-            goal:app.goal,
-
-            startBank:app.startBank,
-
-            bonus:app.bonus,
-
-            annualItems:app.annualItems
-
-        })
+        JSON.stringify(yearData)
 
     );
+
+    const monthData={
+
+        bank:{...app.bank},
+
+        income:{...app.income},
+
+        budgets:JSON.parse(
+            JSON.stringify(app.budgets)
+        ),
+
+        history:[...app.history]
+
+    };
 
     localStorage.setItem(
 
         getKey(),
 
-        JSON.stringify({
-
-            bank:app.bank,
-
-            income:app.income,
-
-            budgets:app.budgets,
-
-            history:app.history
-
-        })
+        JSON.stringify(monthData)
 
     );
 
-    const session={
+    const session=
 
-        year:currentYear,
-
-        month:currentMonth,
-
-        page:JSON.parse(
-
+        JSON.parse(
             localStorage.getItem(getSessionKey())
-
             || "{}"
+        );
 
-        ).page || "home"
+    session.year=currentYear;
 
-    };
+    session.month=currentMonth;
+
+    session.page=session.page || "home";
 
     localStorage.setItem(
 
@@ -207,8 +210,6 @@ function load(){
 
     };
 
-    app.startBank=0;
-
     app.income={
 
         papa:0,
@@ -218,6 +219,8 @@ function load(){
         extra:0
 
     };
+
+    app.startBank=0;
 
     app.bonus={
 
@@ -237,21 +240,23 @@ function load(){
 
     app.history=[];
 
-    const saved=
+    const monthSaved=
 
         localStorage.getItem(getKey());
 
-    if(saved){
+    if(monthSaved){
 
-        const data=JSON.parse(saved);
+        const data=
 
-        app.bank=data.bank ?? app.bank;
+            JSON.parse(monthSaved);
 
-        app.income=data.income ?? app.income;
+        app.bank=data.bank || app.bank;
 
-        app.budgets=data.budgets ?? app.budgets;
+        app.income=data.income || app.income;
 
-        app.history=data.history ?? [];
+        app.budgets=data.budgets || app.budgets;
+
+        app.history=data.history || [];
 
     }
 
@@ -261,17 +266,29 @@ function load(){
 
     if(yearSaved){
 
-        const data=JSON.parse(yearSaved);
+        const data=
+
+            JSON.parse(yearSaved);
 
         app.goal=data.goal ?? app.goal;
 
         app.startBank=data.startBank ?? 0;
 
-        app.bonus=data.bonus ?? app.bonus;
+        app.bonus=data.bonus || app.bonus;
 
-        app.annualItems=data.annualItems ?? [];
+        app.annualItems=data.annualItems || [];
 
     }
+
+    app.budgets.forEach(item=>{
+
+        if(item.spent===undefined){
+
+            item.spent=0;
+
+        }
+
+    });
 
 }
 /* ===========================
@@ -347,11 +364,11 @@ update();
    ④ 月変更・画面更新
 =========================== */
 
-function getDisplayYear(month = currentMonth){
+function getDisplayYear(month=currentMonth){
 
-    return month <= 3
-        ? currentYear + 1
-        : currentYear;
+    return month<=3
+        ?currentYear+1
+        :currentYear;
 
 }
 
@@ -365,17 +382,15 @@ function changeMonth(step){
 
     save();
 
-    currentMonth += step;
+    currentMonth+=step;
 
-    if(currentMonth > 12){
+    if(currentMonth>12){
 
-        currentMonth = 1;
+        currentMonth=1;
 
-    }
+    }else if(currentMonth<1){
 
-    if(currentMonth < 1){
-
-        currentMonth = 12;
+        currentMonth=12;
 
     }
 
@@ -387,118 +402,136 @@ function changeMonth(step){
 
 document
 .getElementById("prevMonth")
-.onclick = ()=>changeMonth(-1);
+.onclick=()=>changeMonth(-1);
 
 document
 .getElementById("nextMonth")
-.onclick = ()=>changeMonth(1);
+.onclick=()=>changeMonth(1);
 
 function update(){
 
     if(yearSelect){
 
-        yearSelect.value =
-            String(currentYear);
+        yearSelect.value=String(currentYear);
 
     }
 
-    const period =
+    const period=
         document.getElementById("period");
 
     if(period){
 
-        period.textContent =
+        period.textContent=
             `${getDisplayYear()}年 ${currentMonth}月`;
 
     }
 
-    const fiscalTitle =
+    const fiscal=
         document.getElementById("fiscalYear");
 
-    if(fiscalTitle){
+    if(fiscal){
 
-        fiscalTitle.textContent =
-            `${getFiscalYear()}年度`;
+        fiscal.textContent=
+            `${currentYear}年度`;
 
     }
 
-    const incomeTotal =
-        app.income.papa +
-        app.income.mama +
+    const income=
+
+        app.income.papa+
+        app.income.mama+
         app.income.extra;
 
-    const totalSpent =
+    const spent=
+
         app.budgets.reduce(
-            (sum,item)=>sum+item.spent,
+            (sum,b)=>sum+b.spent,
             0
         );
 
-    const remain =
-        incomeTotal - totalSpent;
+    const remain=
 
-    document.getElementById("income").textContent =
-        "¥" + incomeTotal.toLocaleString();
+        income-spent;
 
-    document.getElementById("incomeSummary").textContent =
-        "¥" + incomeTotal.toLocaleString();
+    document
+        .getElementById("income")
+        .textContent=
+        "¥"+income.toLocaleString();
 
-    document.getElementById("spent").textContent =
-        "¥" + totalSpent.toLocaleString();
+    document
+        .getElementById("incomeSummary")
+        .textContent=
+        "¥"+income.toLocaleString();
 
-    const remainEl =
+    document
+        .getElementById("spent")
+        .textContent=
+        "¥"+spent.toLocaleString();
+
+    const remainEl=
         document.getElementById("remain");
 
-    remainEl.textContent =
-        "¥" + remain.toLocaleString();
+    remainEl.textContent=
+        "¥"+remain.toLocaleString();
 
-    remainEl.className =
-        "summary-money " +
-        (remain >= 0 ? "plus" : "minus");
+    remainEl.className=
+        "summary-money "+
+        (remain>=0
+            ?"plus"
+            :"minus");
 
-    const bankTotal =
+    const bankTotal=
+
+        app.bank.mitake+
+        app.bank.takizawa;
+
+    const bankEl=
         document.getElementById("bankTotal");
 
-    const savingTotal =
-        document.getElementById("savingTotal");
+    if(bankEl){
 
-    if(bankTotal){
-
-        bankTotal.textContent =
-            "¥" + (
-                app.bank.mitake +
-                app.bank.takizawa
-            ).toLocaleString();
+        bankEl.textContent=
+            "¥"+bankTotal.toLocaleString();
 
     }
 
-    if(savingTotal){
+    const savingEl=
+        document.getElementById("savingTotal");
 
-        const totalBank =
-            app.bank.mitake +
-            app.bank.takizawa;
+    if(savingEl){
 
-        const saving =
-            totalBank -
-            (app.startBank || 0);
+        const saving=
 
-        savingTotal.textContent =
-            (saving >= 0 ? "+" : "") +
-            "¥" +
+            bankTotal-
+            app.startBank;
+
+        savingEl.textContent=
+
+            (saving>=0?"+":"")+
+            "¥"+
             saving.toLocaleString();
 
-        savingTotal.className =
-            "bank-saving " +
-            (saving >= 0 ? "plus" : "minus");
+        savingEl.className=
+
+            "bank-saving "+
+
+            (saving>=0
+                ?"plus"
+                :"minus");
 
     }
 
     drawCategories();
 
-    updateAI();
+    drawAI();
 
     drawYearSummary();
 
+    drawYearCategory();
+
     drawYearChart();
+
+    drawAnnualManage();
 
     save();
 
@@ -841,86 +874,200 @@ navButtons[3].onclick =
    ⑦ AI分析
 =========================== */
 
-function updateAI(){
+function drawAI(){
 
-    const advice =
-        document.getElementById("aiAdvice");
+    const ai =
+        document.getElementById("aiComment");
 
-    if(!advice) return;
-
-    const saving =
-        (
-            app.bank.mitake +
-            app.bank.takizawa
-        ) -
-        (app.startBank || 0);
+    if(!ai) return;
 
     const bonus =
-        (app.bonus.summerActual || app.bonus.summerForecast || 0) +
+        (app.bonus.summerActual || app.bonus.summerForecast || 0)
+        +
         (app.bonus.winterActual || app.bonus.winterForecast || 0);
 
-    const progress =
-        saving + bonus;
+    const saving =
+        app.income
+        -app.history.reduce(
+            (sum,h)=>sum+h.amount,
+            0
+        )
+        +bonus;
 
     const remain =
-        Math.max(
-            app.goal - progress,
+        app.goal-saving;
+
+    const monthBudget =
+        app.budgets.reduce(
+            (sum,b)=>sum+b.budget,
             0
         );
 
-    const months = [
-        4,5,6,7,8,9,
-        10,11,12,
-        1,2,3
-    ];
+    let worst = null;
 
-    const index =
-        months.indexOf(currentMonth);
+    app.budgets.forEach(b=>{
 
-    const left =
-        Math.max(
-            1,
-            12 - index
-        );
+        const total =
+            app.history
+            .filter(
+                h=>h.category===b.name
+            )
+            .reduce(
+                (sum,h)=>sum+h.amount,
+                0
+            );
 
-    const need =
-        Math.ceil(remain / left);
+        const rate =
+            b.budget===0
+            ?0
+            :Math.round(
+                total/(b.budget*12)*100
+            );
 
-    const sorted =
-        [...app.budgets]
-        .sort(
-            (a,b)=>
-                (b.spent/b.budget) -
-                (a.spent/a.budget)
-        );
+        if(!worst || rate>worst.rate){
 
-    const top =
-        sorted[0];
+            worst={
 
-    advice.innerHTML = `
+                name:b.name,
 
-<b>🎯 年間目標</b><br>
+                rate,
 
-あと
-<b>¥${remain.toLocaleString()}</b><br><br>
+                total
 
-📅 毎月あと
-<b>¥${need.toLocaleString()}</b>
-改善すると達成できます。<br><br>
+            };
 
-⚠️ 気になるカテゴリ<br>
+        }
 
-${top.name}<br>
+    });
 
-¥${top.spent.toLocaleString()}
-／
-¥${top.budget.toLocaleString()}<br><br>
+    let message="";
 
-💰 ボーナスは
-実績優先、
-未入力は予測で計算しています。
+    if(remain<=0){
+
+        message+=`
+
+<h3>
+
+🎉 年間目標達成！
+
+</h3>
+
+<p>
+
+目標を達成しています。この調子で継続しましょう。
+
+</p>
 
 `;
+
+    }else{
+
+        const monthly =
+            Math.ceil(remain/12);
+
+        message+=`
+
+<h3>
+
+📈 年間目標まで
+
+¥${remain.toLocaleString()}
+
+</h3>
+
+<p>
+
+毎月あと
+
+<b>
+
+¥${monthly.toLocaleString()}
+
+</b>
+
+貯められると目標に近づきます。
+
+</p>
+
+`;
+
+    }
+
+    if(worst){
+
+        message+=`
+
+<hr>
+
+<p>
+
+<strong>
+
+見直し候補
+
+</strong>
+
+</p>
+
+<p>
+
+${worst.name}
+
+（${worst.rate}%）
+
+</p>
+
+<p>
+
+年間支出
+
+¥${worst.total.toLocaleString()}
+
+</p>
+
+`;
+
+        if(worst.rate>=100){
+
+            message+=`
+
+<p>
+
+🚨 年間予算を超えています。優先的に見直しましょう。
+
+</p>
+
+`;
+
+        }else if(worst.rate>=80){
+
+            message+=`
+
+<p>
+
+⚠ 予算の80%を超えています。使い過ぎに注意です。
+
+</p>
+
+`;
+
+        }else{
+
+            message+=`
+
+<p>
+
+😊 全体的に順調です。
+
+</p>
+
+`;
+
+        }
+
+    }
+
+    ai.innerHTML=message;
 
 }
 /* ===========================
@@ -1054,6 +1201,26 @@ function drawYearCategory(){
                 ?0
                 :Math.round(total/yearlyBudget*100);
 
+            let advice =
+                "👍 この調子です";
+
+            if(percent>=120){
+
+                advice =
+                    "🚨 優先的に見直しましょう";
+
+            }else if(percent>=100){
+
+                advice =
+                    "⚠ 今月は支出を抑えましょう";
+
+            }else if(percent>=80){
+
+                advice =
+                    "💡 少し節約すると安心です";
+
+            }
+
             return{
 
                 budget,
@@ -1061,7 +1228,8 @@ function drawYearCategory(){
                 total,
                 yearlyBudget,
                 percent,
-                diff: yearlyBudget-total
+                diff: yearlyBudget-total,
+                advice
 
             };
 
@@ -1088,10 +1256,8 @@ function drawYearCategory(){
             ?`残 ¥${item.diff.toLocaleString()}`
             :`超過 ¥${Math.abs(item.diff).toLocaleString()}`;
 
-        const bar =
-            Math.min(item.percent,100);
-
-        let barClass="progress-bar";
+        let barClass =
+            "progress-bar";
 
         if(item.percent>=100){
 
@@ -1102,13 +1268,6 @@ function drawYearCategory(){
             barClass+=" warning";
 
         }
-
-        const alert =
-            item.percent>=100
-            ?`<div class="danger-text">🚨 年間予算を超過しています</div>`
-            :item.percent>=80
-            ?`<div class="warning-text">⚠ 年間予算の80%を使用しています</div>`
-            :"";
 
         area.innerHTML += `
 
@@ -1144,7 +1303,7 @@ ${diffText}
 
 <div
 class="${barClass}"
-style="width:${bar}%">
+style="width:${Math.min(item.percent,100)}%">
 
 </div>
 
@@ -1152,15 +1311,24 @@ style="width:${bar}%">
 
 <div
 style="
-text-align:right;
-font-size:12px;
-margin-top:4px;">
+display:flex;
+justify-content:space-between;
+margin-top:8px;
+font-size:12px;">
+
+<span>
 
 達成率 ${item.percent}%
 
-</div>
+</span>
 
-${alert}
+<span>
+
+${item.advice}
+
+</span>
+
+</div>
 
 </div>
 
@@ -1204,7 +1372,7 @@ function showCategoryHistory(categoryId){
         );
 
     const yearlyBudget =
-        budget.budget*12;
+        budget.budget * 12;
 
     const diff =
         yearlyBudget-total;
@@ -1216,7 +1384,7 @@ function showCategoryHistory(categoryId){
 
     document
         .getElementById("categorySummary")
-        .innerHTML=`
+        .innerHTML = `
 
 年間予算：¥${yearlyBudget.toLocaleString()}<br>
 
@@ -1241,7 +1409,7 @@ function showCategoryHistory(categoryId){
 
     list.forEach(item=>{
 
-        const month=
+        const month =
             item.date.substring(0,7);
 
         if(!monthMap[month]){
@@ -1259,16 +1427,16 @@ function showCategoryHistory(categoryId){
         .reverse()
         .forEach(month=>{
 
-            const monthList=
+            const monthList =
                 monthMap[month];
 
-            const monthTotal=
+            const monthTotal =
                 monthList.reduce(
                     (sum,h)=>sum+h.amount,
                     0
                 );
 
-            history.innerHTML+=`
+            history.innerHTML += `
 
 <div class="card">
 
@@ -1287,7 +1455,7 @@ ${monthList.length}件
 
             monthList.forEach(item=>{
 
-                history.innerHTML+=`
+                history.innerHTML += `
 
 <div class="setting-item">
 
@@ -1295,7 +1463,7 @@ ${monthList.length}件
 
 ${item.date}<br>
 
-${item.memo||""}
+${item.memo || ""}
 
 </span>
 
@@ -1320,168 +1488,113 @@ ${item.memo||""}
 
 function drawYearChart(){
 
-    const chart =
+    const canvas =
         document.getElementById("yearChart");
 
-    if(!chart) return;
+    if(!canvas) return;
 
-    chart.innerHTML = "";
+    const ctx =
+        canvas.getContext("2d");
 
     const months = [
-        4,5,6,7,8,9,
-        10,11,12,
-        1,2,3
+        "4月","5月","6月","7月",
+        "8月","9月","10月","11月",
+        "12月","1月","2月","3月"
     ];
 
-    const MAX = 200000;
-    const AREA = 80;
+    const values = [];
 
-    const scale =
-        document.createElement("div");
+    months.forEach((m,index)=>{
 
-    scale.className = "chart-scale";
+        let month=index+4;
 
-    [
-        "20万",
-        "15万",
-        "10万",
-        "5万",
-        "0",
-        "-5万",
-        "-10万",
-        "-15万",
-        "-20万"
-    ].forEach(text=>{
+        if(month>12){
 
-        const div =
-            document.createElement("div");
+            month-=12;
 
-        div.textContent = text;
-
-        scale.appendChild(div);
-
-    });
-
-    chart.appendChild(scale);
-
-    const bars =
-        document.createElement("div");
-
-    bars.className =
-        "year-chart-bars";
-
-    months.forEach(month=>{
-
-        const year =
-            month<=3
-                ? currentYear+1
-                : currentYear;
+        }
 
         const key =
-            `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
+            String(month).padStart(2,"0");
 
-        const save =
-            JSON.parse(
-                localStorage.getItem(key) || "{}"
-            );
+        const total =
+            app.history
+            .filter(h=>{
 
-        const income =
-            (save.income?.papa || 0) +
-            (save.income?.mama || 0) +
-            (save.income?.extra || 0);
+                return h.date.substring(5,7)===key;
 
-        const spent =
-            (save.budgets || []).reduce(
-                (sum,item)=>
-                    sum + (item.spent || 0),
+            })
+            .reduce(
+                (sum,h)=>sum+h.amount,
                 0
             );
 
-        const remain =
-            income - spent;
-
-        const monthBox =
-            document.createElement("div");
-
-        monthBox.className =
-            "chart-month";
-
-        monthBox.onclick = ()=>{
-
-            changeMonthFromYear(
-                year,
-                month
-            );
-
-        };
-
-        const bar =
-            document.createElement("div");
-
-        bar.className =
-            "chart-bar " +
-            (remain>=0
-                ? "chart-positive"
-                : "chart-negative");
-
-        bar.style.height =
-            Math.max(
-                2,
-                Math.min(
-                    Math.abs(remain),
-                    MAX
-                ) / MAX * AREA
-            ) + "px";
-
-        const label =
-            document.createElement("div");
-
-        label.className =
-            "chart-label";
-
-        label.textContent =
-            month + "月";
-
-        monthBox.appendChild(bar);
-
-        monthBox.appendChild(label);
-
-        bars.appendChild(monthBox);
+        values.push(total);
 
     });
 
-    chart.appendChild(bars);
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
-}
+    const max =
+        Math.max(...values,1);
 
-function changeMonthFromYear(year,month){
+    const barWidth =
+        canvas.width/months.length;
 
-    save();
+    values.forEach((value,index)=>{
 
-    currentYear = year;
+        const height =
+            value/max*
+            (canvas.height-40);
 
-    currentMonth = month;
+        ctx.fillStyle =
+            value>
+            app.budgets.reduce(
+                (s,b)=>s+b.budget,
+                0
+            )
+            ?"#ff6b6b"
+            :"#66bb6a";
 
-    if(yearSelect){
+        ctx.fillRect(
 
-        yearSelect.value =
-            String(
-                month<=3
-                    ? year-1
-                    : year
-            );
+            index*barWidth+10,
 
-    }
+            canvas.height-height-20,
 
-    load();
+            barWidth-20,
 
-    update();
+            height
 
-    showPage("home");
+        );
+
+        ctx.fillStyle="#444";
+
+        ctx.font="11px sans-serif";
+
+        ctx.textAlign="center";
+
+        ctx.fillText(
+
+            months[index],
+
+            index*barWidth+
+            barWidth/2,
+
+            canvas.height-5
+
+        );
+
+    });
 
 }
 /* ===========================
-   ⑪ 年間135万円管理
+   年間管理（135万円）
 =========================== */
 
 function drawAnnualManage(){
@@ -1491,14 +1604,85 @@ function drawAnnualManage(){
 
     if(!area) return;
 
-    area.innerHTML = "";
+    area.innerHTML="";
 
-    app.annualItems.forEach((item,index)=>{
+    const total =
+        app.annualItems.reduce(
+            (sum,item)=>
+                sum+Number(item.amount||0),
+            0
+        );
 
-        const remain =
-            item.budget - item.used;
+    const limit = 1350000;
 
-        area.innerHTML += `
+    const remain =
+        limit-total;
+
+    const percent =
+        Math.min(
+            Math.round(total/limit*100),
+            100
+        );
+
+    area.innerHTML += `
+
+<div class="card">
+
+<h3>
+
+135万円管理
+
+</h3>
+
+<p>
+
+現在：¥${total.toLocaleString()}
+
+</p>
+
+<p>
+
+残り：¥${remain.toLocaleString()}
+
+</p>
+
+<div class="progress">
+
+<div
+class="${
+percent>=100
+?"progress-bar danger"
+:percent>=80
+?"progress-bar warning"
+:"progress-bar"
+}"
+style="width:${percent}%">
+
+</div>
+
+</div>
+
+<div
+style="margin-top:8px;
+text-align:right;
+font-size:12px;">
+
+${percent}%
+
+</div>
+
+</div>
+
+`;
+
+    app.annualItems
+        .sort(
+            (a,b)=>
+                a.date.localeCompare(b.date)
+        )
+        .forEach((item,index)=>{
+
+            area.innerHTML += `
 
 <button
 class="setting-item"
@@ -1506,16 +1690,15 @@ onclick="editAnnualItem(${index})">
 
 <span>
 
-${item.name}
+${item.date}<br>
+
+${item.title}
 
 </span>
 
 <span>
 
-¥${item.used.toLocaleString()} /
-¥${item.budget.toLocaleString()}<br>
-
-残り ¥${remain.toLocaleString()}
+¥${Number(item.amount).toLocaleString()}
 
 </span>
 
@@ -1523,79 +1706,149 @@ ${item.name}
 
 `;
 
-    });
+        });
+
+}
+
+function editAnnualItem(index){
+
+    const item =
+        app.annualItems[index];
+
+    if(!item) return;
+
+    const title =
+        prompt(
+            "項目名",
+            item.title
+        );
+
+    if(title===null) return;
+
+    const amount =
+        Number(
+            prompt(
+                "金額",
+                item.amount
+            )
+        );
+
+    if(isNaN(amount)) return;
+
+    item.title = title;
+
+    item.amount = amount;
+
+    update();
+
+    drawAnnualManage();
 
 }
 
 document
 .getElementById("addAnnualManage")
-.onclick = ()=>{
+.onclick=()=>{
 
-    const name =
+    const title =
         prompt("項目名");
 
-    if(!name) return;
+    if(!title) return;
 
-    const budget =
-        Number(prompt("年間予算"));
+    const amount =
+        Number(
+            prompt("金額")
+        );
 
-    if(isNaN(budget)) return;
+    if(isNaN(amount)) return;
+
+    const date =
+        prompt(
+            "日付(YYYY-MM-DD)",
+            new Date()
+                .toISOString()
+                .slice(0,10)
+        );
+
+    if(!date) return;
 
     app.annualItems.push({
 
-        name,
+        title,
 
-        budget,
+        amount,
 
-        used:0
+        date
 
     });
 
-    drawAnnualManage();
+    update();
 
-    save();
+    drawAnnualManage();
 
 };
-
-function editAnnualItem(index){
-
-    const used =
-        Number(prompt(
-
-            "使用額",
-
-            app.annualItems[index].used
-
-        ));
-
-    if(isNaN(used)) return;
-
-    app.annualItems[index].used = used;
-
-    drawAnnualManage();
-
-    save();
-
-}
-
 /* ===========================
    ⑪ 初期表示
 =========================== */
 
-drawYearSummary();
+function initializeApp(){
 
-drawYearCategory();
+    load();
 
-drawYearChart();
+    drawCategories();
 
-drawAnnualManage();
+    drawAI();
 
-showPage(
-    session.page || "home"
+    drawYearSummary();
+
+    drawYearCategory();
+
+    drawYearChart();
+
+    drawAnnualManage();
+
+    update();
+
+    showPage(
+        session.page || "home"
+    );
+
+}
+
+initializeApp();
+
+window.addEventListener(
+
+    "beforeunload",
+
+    ()=>{
+
+        save();
+
+    }
+
 );
-
-update();
 
 console.log(
-    "🌸 まる家計 Ver15 完成版 起動"
+
+    "%c🌸 まる家計 Ver18 Complete",
+
+    "color:#4CAF50;font-size:16px;font-weight:bold;"
+
 );
+
+console.log({
+
+    version:"18.0",
+
+    fiscalYear:currentYear,
+
+    month:currentMonth,
+
+    page:
+        JSON.parse(
+            localStorage.getItem(
+                getSessionKey()
+            ) || "{}"
+        ).page || "home"
+
+});
