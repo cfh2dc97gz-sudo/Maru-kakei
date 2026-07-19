@@ -296,18 +296,65 @@
 
     </div>
 
-    <div class="card">
+<div class="card">
 
-        <h2>📒 カテゴリ分析</h2>
+    <h2>📒 カテゴリ分析</h2>
 
-        <div id="yearCategory">
-
-        </div>
+    <div id="yearCategory">
 
     </div>
 
 </div>
 
+<div class="card">
+
+    <h2>💰 年間135万円管理</h2>
+
+    <div id="annualItemList">
+
+    </div>
+
+    <button
+        class="setting-item"
+        id="addAnnualItem">
+
+        ➕ 項目を追加
+
+    </button>
+
+</div>
+
+</div>
+<!-- 年間135万円管理 -->
+
+<div id="annualPage"
+     class="page"
+     style="display:none;">
+
+    <div class="card">
+
+        <h2>💰 年間135万円管理</h2>
+
+    </div>
+
+    <div class="card">
+
+        <div id="annualManageList">
+
+        </div>
+
+        <button
+            class="setting-item"
+            id="addAnnualManage">
+
+            ➕ 項目を追加
+
+        </button>
+
+    </div>
+
+</div>
+    
 <!-- 設定 -->
 
 <div id="settingPage" class="page" style="display:none;">
@@ -326,16 +373,32 @@
 
         </button>
 
-        <button class="setting-item" id="editBonus">
+      <div class="setting-group">
 
-            💴 ボーナス貯金
+    <h3>💰 ボーナス管理</h3>
 
-        </button>
+    <button
+        class="setting-item"
+        id="editBonus">
+
+        <span>夏・冬ボーナス</span>
+
+        <span>編集</span>
+
+    </button>
+
+</div>
 
         <div id="budgetList">
 
         </div>
+<button
+    class="setting-item"
+    id="annualManage">
 
+    💰 年間135万円管理
+
+</button>
         <button class="setting-item danger" id="deleteAll">
 
             🗑 全データ削除
@@ -362,6 +425,14 @@
         📊<br>
 
         <span>年間</span>
+
+    </button>
+
+    <button>
+
+        💰<br>
+
+        <span>135万円</span>
 
     </button>
 
