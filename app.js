@@ -1030,42 +1030,114 @@ function drawYearCategory(){
 
     if(!area) return;
 
-    area.innerHTML="";
+    area.innerHTML = "";
 
-    app.budgets.forEach(budget=>{
+    const ranking =
+        app.budgets.map(budget=>{
 
-        const list =
-            app.history.filter(
-                h=>h.category===budget.name
-            );
+            const list =
+                app.history.filter(
+                    h=>h.category===budget.name
+                );
 
-        const total =
-            list.reduce(
-                (sum,h)=>sum+h.amount,
-                0
-            );
+            const total =
+                list.reduce(
+                    (sum,h)=>sum+h.amount,
+                    0
+                );
+
+            const yearlyBudget =
+                budget.budget * 12;
+
+            const percent =
+                yearlyBudget===0
+                ?0
+                :Math.round(total/yearlyBudget*100);
+
+            return{
+
+                budget,
+                list,
+                total,
+                yearlyBudget,
+                percent,
+                diff: yearlyBudget-total
+
+            };
+
+        })
+        .sort(
+            (a,b)=>b.total-a.total
+        );
+
+    ranking.forEach((item,index)=>{
+
+        let medal="";
+
+        if(index===0) medal="🥇";
+        else if(index===1) medal="🥈";
+        else if(index===2) medal="🥉";
+
+        const diffText =
+            item.diff>=0
+            ?`残 ¥${item.diff.toLocaleString()}`
+            :`超過 ¥${Math.abs(item.diff).toLocaleString()}`;
+
+        const bar =
+            Math.min(item.percent,100);
 
         area.innerHTML += `
 
+<div class="card">
+
 <button
 class="setting-item"
-onclick="showCategoryHistory('${budget.id}')">
+onclick="showCategoryHistory('${item.budget.id}')">
 
 <span>
 
-${budget.name}
+${medal} ${item.budget.name}<br>
+
+<small>
+
+年間予算 ¥${item.yearlyBudget.toLocaleString()}
+
+</small>
 
 </span>
 
 <span>
 
-¥${total.toLocaleString()}<br>
+¥${item.total.toLocaleString()}<br>
 
-${list.length}件
+${diffText}
 
 </span>
 
 </button>
+
+<div class="progress">
+
+<div
+class="progress-bar"
+style="width:${bar}%">
+
+</div>
+
+</div>
+
+<div
+style="text-align:right;
+font-size:12px;
+margin-top:4px;">
+
+達成率
+
+${item.percent}%
+
+</div>
+
+</div>
 
 `;
 
@@ -1102,16 +1174,32 @@ function showCategoryHistory(categoryId){
 
     const total =
         list.reduce(
-            (sum,h)=>
-                sum+h.amount,
+            (sum,h)=>sum+h.amount,
             0
         );
+
+    const yearlyBudget =
+        budget.budget * 12;
+
+    const diff =
+        yearlyBudget-total;
+
+    const percent =
+        yearlyBudget===0
+        ?0
+        :Math.round(total/yearlyBudget*100);
 
     document
         .getElementById("categorySummary")
         .innerHTML = `
 
-年間合計：¥${total.toLocaleString()}<br>
+年間予算：¥${yearlyBudget.toLocaleString()}<br>
+
+年間支出：¥${total.toLocaleString()}<br>
+
+達成率：${percent}%<br>
+
+差額：¥${diff.toLocaleString()}<br>
 
 件数：${list.length}件<br>
 
@@ -1141,33 +1229,40 @@ function showCategoryHistory(categoryId){
 
     });
 
-    Object.keys(monthMap).forEach(month=>{
+    Object.keys(monthMap)
+        .sort()
+        .reverse()
+        .forEach(month=>{
 
-        const monthTotal =
-            monthMap[month].reduce(
-                (sum,h)=>sum+h.amount,
-                0
-            );
+            const monthList =
+                monthMap[month];
 
-        history.innerHTML += `
+            const monthTotal =
+                monthList.reduce(
+                    (sum,h)=>sum+h.amount,
+                    0
+                );
+
+            history.innerHTML += `
 
 <div class="card">
 
-<h3>
+<h3>${month}</h3>
 
-${month}
+<div>
 
-（¥${monthTotal.toLocaleString()}）
+合計：¥${monthTotal.toLocaleString()}　
+${monthList.length}件
 
-</h3>
+</div>
 
 </div>
 
 `;
 
-        monthMap[month].forEach(item=>{
+            monthList.forEach(item=>{
 
-            history.innerHTML += `
+                history.innerHTML += `
 
 <div class="setting-item">
 
@@ -1189,9 +1284,9 @@ ${item.memo || ""}
 
 `;
 
-        });
+            });
 
-    });
+        });
 
 }
 /* ===========================
