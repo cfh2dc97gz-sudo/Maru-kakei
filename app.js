@@ -724,16 +724,30 @@ const categoryPage =
 const settingPage =
     document.getElementById("settingPage");
 
+const pages = [
+    homePage,
+    yearPage,
+    annualPage,
+    categoryPage,
+    settingPage
+];
+
 const navButtons =
     document.querySelectorAll(".bottom-nav button");
 
+let lastPage = "home";
+
 function showPage(page){
 
-    homePage.style.display="none";
-    yearPage.style.display="none";
-    annualPage.style.display="none";
-    categoryPage.style.display="none";
-    settingPage.style.display="none";
+    pages.forEach(p=>{
+
+        if(p){
+
+            p.style.display="none";
+
+        }
+
+    });
 
     navButtons.forEach(btn=>
         btn.classList.remove("active")
@@ -745,6 +759,7 @@ function showPage(page){
 
             homePage.style.display="block";
             navButtons[0].classList.add("active");
+            lastPage="home";
             break;
 
         case "year":
@@ -755,6 +770,8 @@ function showPage(page){
             drawYearSummary();
             drawYearCategory();
             drawYearChart();
+
+            lastPage="year";
             break;
 
         case "annual":
@@ -763,6 +780,8 @@ function showPage(page){
             navButtons[2].classList.add("active");
 
             drawAnnualManage();
+
+            lastPage="annual";
             break;
 
         case "setting":
@@ -771,6 +790,8 @@ function showPage(page){
             navButtons[3].classList.add("active");
 
             drawBudgetList();
+
+            lastPage="setting";
             break;
 
         case "category":
@@ -799,124 +820,23 @@ function showPage(page){
 
 }
 
+function backPage(){
+
+    showPage(lastPage);
+
+}
+
 navButtons[0].onclick =
-    ()=>showPage("home");
+()=>showPage("home");
 
 navButtons[1].onclick =
-    ()=>showPage("year");
+()=>showPage("year");
 
 navButtons[2].onclick =
-    ()=>showPage("annual");
+()=>showPage("annual");
 
 navButtons[3].onclick =
-    ()=>showPage("setting");
-
-function drawBudgetList(){
-
-    const area =
-        document.getElementById("budgetList");
-
-    if(!area) return;
-
-    area.innerHTML="";
-
-    app.budgets.forEach((item,index)=>{
-
-        area.innerHTML += `
-
-<button
-class="setting-item"
-onclick="editBudget(${index})">
-
-<span>${item.name}</span>
-
-<span>¥${item.budget.toLocaleString()}</span>
-
-</button>
-
-`;
-
-    });
-
-}
-
-function editBudget(index){
-
-    const value =
-        Number(
-            prompt(
-                `${app.budgets[index].name} の月予算`,
-                app.budgets[index].budget
-            )
-        );
-
-    if(isNaN(value)) return;
-
-    app.budgets[index].budget = value;
-
-    update();
-
-    drawBudgetList();
-
-}
-
-document.getElementById("editGoal").onclick=()=>{
-
-    const value =
-        Number(prompt("年間目標",app.goal));
-
-    if(isNaN(value)) return;
-
-    app.goal = value;
-
-    update();
-
-};
-
-document.getElementById("editBonus").onclick=()=>{
-
-    const summerForecast =
-        Number(prompt("夏ボーナス予測",app.bonus.summerForecast));
-
-    if(isNaN(summerForecast)) return;
-
-    const summerActual =
-        Number(prompt("夏ボーナス実績",app.bonus.summerActual));
-
-    if(isNaN(summerActual)) return;
-
-    const winterForecast =
-        Number(prompt("冬ボーナス予測",app.bonus.winterForecast));
-
-    if(isNaN(winterForecast)) return;
-
-    const winterActual =
-        Number(prompt("冬ボーナス実績",app.bonus.winterActual));
-
-    if(isNaN(winterActual)) return;
-
-    app.bonus = {
-
-        summerForecast,
-        summerActual,
-        winterForecast,
-        winterActual
-
-    };
-
-    update();
-
-};
-
-document.getElementById("deleteAll").onclick=()=>{
-
-    if(!confirm("全データを削除しますか？")) return;
-
-    localStorage.clear();
-
-    location.reload();
-
-};
+()=>showPage("setting");
 /* ===========================
    ⑦ AI分析
 =========================== */
@@ -1162,6 +1082,8 @@ function showCategoryHistory(categoryId){
             b=>b.id===categoryId
         );
 
+    if(!budget) return;
+
     document
         .getElementById("categoryTitle")
         .textContent =
@@ -1174,12 +1096,14 @@ function showCategoryHistory(categoryId){
         )
         .sort(
             (a,b)=>
-                new Date(b.date)-new Date(a.date)
+                new Date(b.date)-
+                new Date(a.date)
         );
 
     const total =
         list.reduce(
-            (sum,h)=>sum+h.amount,
+            (sum,h)=>
+                sum+h.amount,
             0
         );
 
@@ -1198,9 +1122,9 @@ function showCategoryHistory(categoryId){
     const history =
         document.getElementById("categoryHistory");
 
-    history.innerHTML="";
+    history.innerHTML = "";
 
-    const monthMap={};
+    const monthMap = {};
 
     list.forEach(item=>{
 
@@ -1270,7 +1194,7 @@ ${item.memo || ""}
     });
 
 }
-}/* ===========================
+/* ===========================
    ⑩ 年間グラフ
 =========================== */
 
