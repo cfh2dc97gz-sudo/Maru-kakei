@@ -927,17 +927,6 @@ function updateAI(){
 
     if(!advice) return;
 
-    const income =
-        app.income.papa +
-        app.income.mama +
-        app.income.extra;
-
-    const spent =
-        app.budgets.reduce(
-            (sum,item)=>sum + item.spent,
-            0
-        );
-
     const saving =
         (
             app.bank.mitake +
@@ -945,82 +934,72 @@ function updateAI(){
         ) -
         (app.startBank || 0);
 
-    const bonusTotal =
+    const bonus =
         (app.bonus.summerActual || app.bonus.summerForecast || 0) +
         (app.bonus.winterActual || app.bonus.winterForecast || 0);
 
     const progress =
-        saving + bonusTotal;
+        saving + bonus;
 
-    const remainGoal =
+    const remain =
         Math.max(
             app.goal - progress,
             0
         );
 
-    const monthsLeft =
+    const months = [
+        4,5,6,7,8,9,
+        10,11,12,
+        1,2,3
+    ];
+
+    const index =
+        months.indexOf(currentMonth);
+
+    const left =
         Math.max(
             1,
-            12 -
-            ([4,5,6,7,8,9,10,11,12,1,2,3]
-            .indexOf(currentMonth))
+            12 - index
         );
 
-    const needPerMonth =
-        Math.ceil(remainGoal / monthsLeft);
+    const need =
+        Math.ceil(remain / left);
 
-    let worst =
-        app.budgets[0];
+    const sorted =
+        [...app.budgets]
+        .sort(
+            (a,b)=>
+                (b.spent/b.budget) -
+                (a.spent/a.budget)
+        );
 
-    app.budgets.forEach(item=>{
+    const top =
+        sorted[0];
 
-        const rate =
-            item.budget === 0
-                ? 0
-                : item.spent / item.budget;
+    advice.innerHTML = `
 
-        const worstRate =
-            worst.budget === 0
-                ? 0
-                : worst.spent / worst.budget;
+<b>🎯 年間目標</b><br>
 
-        if(rate > worstRate){
+あと
+<b>¥${remain.toLocaleString()}</b><br><br>
 
-            worst = item;
+📅 毎月あと
+<b>¥${need.toLocaleString()}</b>
+改善すると達成できます。<br><br>
 
-        }
+⚠️ 気になるカテゴリ<br>
 
-    });
+${top.name}<br>
 
-    let message = "";
+¥${top.spent.toLocaleString()}
+／
+¥${top.budget.toLocaleString()}<br><br>
 
-    if(progress >= app.goal){
+💰 ボーナスは
+実績優先、
+未入力は予測で計算しています。
 
-        message +=
-            "🎉 年間目標を達成しています！";
-
-    }else{
-
-        message +=
-            `🎯 年間目標まであと ¥${remainGoal.toLocaleString()}<br>`;
-
-        message +=
-            `📅 毎月約 ¥${needPerMonth.toLocaleString()} の改善で達成できます。`;
-
-    }
-
-    message += "<br><br>";
-
-    message +=
-        `⚠️ 気になるカテゴリ：${worst.name}<br>`;
-
-    message +=
-        `現在 ¥${worst.spent.toLocaleString()} / ¥${worst.budget.toLocaleString()}<br><br>`;
-
-    message +=
-        "💡 ボーナスは実績がある場合は実績、未入力なら予測を反映しています。";
-
-    advice.innerHTML = message;
+`;
 
 }
 /* ===========================
