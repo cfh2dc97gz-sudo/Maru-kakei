@@ -1016,3 +1016,64 @@ button:active{
     font-weight:700;
 
 }
+/* ===========================
+   年間135万円管理
+=========================== */
+
+.setting-group{
+
+    margin:20px 0;
+
+}
+
+.setting-group h3{
+
+    margin:0 0 10px;
+
+    font-size:16px;
+
+    color:#666;
+
+}
+
+#annualManageList{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+#annualManageList .setting-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    text-align:left;
+
+}
+
+#annualManageList .setting-item span:last-child{
+
+    text-align:right;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+}
+
+#annualItemList{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
