@@ -590,23 +590,26 @@ document
     update();
 
 };
+
 function editBank(){
 
-    const mitake = Number(
-        prompt(
-            "みたけ銀行残高",
-            app.bank.mitake
-        )
-    );
+    const mitakeText =
+        prompt("みたけ銀行残高");
+
+    if(mitakeText === null) return;
+
+    const mitake =
+        Number(mitakeText);
 
     if(isNaN(mitake)) return;
 
-    const takizawa = Number(
-        prompt(
-            "滝沢銀行残高",
-            app.bank.takizawa
-        )
-    );
+    const takizawaText =
+        prompt("滝沢銀行残高");
+
+    if(takizawaText === null) return;
+
+    const takizawa =
+        Number(takizawaText);
 
     if(isNaN(takizawa)) return;
 
@@ -618,14 +621,15 @@ function editBank(){
     if(currentMonth === 4){
 
         app.startBank =
-            app.bank.mitake +
-            app.bank.takizawa;
+            mitake +
+            takizawa;
 
     }
 
     update();
 
 }
+
 function addSpent(index,isOverwrite=false){
 
     const input =
