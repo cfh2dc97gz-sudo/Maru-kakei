@@ -877,51 +877,63 @@ navButtons[3].onclick =
 function drawAI(){
 
     const ai =
-        document.getElementById("aiComment");
+        document.getElementById("aiAdvice");
 
     if(!ai) return;
 
-    const bonus =
-        (app.bonus.summerActual || app.bonus.summerForecast || 0)
-        +
-        (app.bonus.winterActual || app.bonus.winterForecast || 0);
+    const income =
 
-    const saving =
-        app.income
-        -app.history.reduce(
+        app.income.papa +
+        app.income.mama +
+        app.income.extra;
+
+    const spent =
+        app.history.reduce(
             (sum,h)=>sum+h.amount,
-            0
-        )
-        +bonus;
-
-    const remain =
-        app.goal-saving;
-
-    const monthBudget =
-        app.budgets.reduce(
-            (sum,b)=>sum+b.budget,
             0
         );
 
-    let worst = null;
+    const bonus =
+
+        (app.bonus.summerActual ||
+         app.bonus.summerForecast || 0)
+
+        +
+
+        (app.bonus.winterActual ||
+         app.bonus.winterForecast || 0);
+
+    const saving =
+        income - spent + bonus;
+
+    const remain =
+        Math.max(
+            app.goal - saving,
+            0
+        );
+
+    let worst=null;
 
     app.budgets.forEach(b=>{
 
-        const total =
+        const total=
             app.history
             .filter(
                 h=>h.category===b.name
             )
             .reduce(
-                (sum,h)=>sum+h.amount,
+                (s,h)=>s+h.amount,
                 0
             );
 
-        const rate =
-            b.budget===0
+        const yearly=
+            b.budget*12;
+
+        const rate=
+            yearly===0
             ?0
             :Math.round(
-                total/(b.budget*12)*100
+                total/yearly*100
             );
 
         if(!worst || rate>worst.rate){
@@ -930,9 +942,9 @@ function drawAI(){
 
                 name:b.name,
 
-                rate,
+                total,
 
-                total
+                rate
 
             };
 
@@ -940,21 +952,17 @@ function drawAI(){
 
     });
 
-    let message="";
+    let html="";
 
-    if(remain<=0){
+    if(remain===0){
 
-        message+=`
+        html+=`
 
-<h3>
-
-🎉 年間目標達成！
-
-</h3>
+<h3>🎉 年間目標達成！</h3>
 
 <p>
 
-目標を達成しています。この調子で継続しましょう。
+年間目標を達成しています。
 
 </p>
 
@@ -962,10 +970,7 @@ function drawAI(){
 
     }else{
 
-        const monthly =
-            Math.ceil(remain/12);
-
-        message+=`
+        html+=`
 
 <h3>
 
@@ -981,11 +986,11 @@ function drawAI(){
 
 <b>
 
-¥${monthly.toLocaleString()}
+¥${Math.ceil(remain/12).toLocaleString()}
 
 </b>
 
-貯められると目標に近づきます。
+貯めると目標に近づきます。
 
 </p>
 
@@ -995,7 +1000,7 @@ function drawAI(){
 
     if(worst){
 
-        message+=`
+        html+=`
 
 <hr>
 
@@ -1013,8 +1018,6 @@ function drawAI(){
 
 ${worst.name}
 
-（${worst.rate}%）
-
 </p>
 
 <p>
@@ -1029,11 +1032,11 @@ ${worst.name}
 
         if(worst.rate>=100){
 
-            message+=`
+            html+=`
 
 <p>
 
-🚨 年間予算を超えています。優先的に見直しましょう。
+🚨 年間予算オーバーです。
 
 </p>
 
@@ -1041,11 +1044,11 @@ ${worst.name}
 
         }else if(worst.rate>=80){
 
-            message+=`
+            html+=`
 
 <p>
 
-⚠ 予算の80%を超えています。使い過ぎに注意です。
+⚠ 少し節約すると安心です。
 
 </p>
 
@@ -1053,7 +1056,7 @@ ${worst.name}
 
         }else{
 
-            message+=`
+            html+=`
 
 <p>
 
@@ -1067,7 +1070,7 @@ ${worst.name}
 
     }
 
-    ai.innerHTML=message;
+    ai.innerHTML=html;
 
 }
 /* ===========================
@@ -1493,45 +1496,14 @@ function drawYearChart(){
 
     if(!canvas) return;
 
+    if(
+        typeof canvas.getContext !== "function"
+    ){
+        return;
+    }
+
     const ctx =
         canvas.getContext("2d");
-
-    const months = [
-        "4月","5月","6月","7月",
-        "8月","9月","10月","11月",
-        "12月","1月","2月","3月"
-    ];
-
-    const values = [];
-
-    months.forEach((m,index)=>{
-
-        let month=index+4;
-
-        if(month>12){
-
-            month-=12;
-
-        }
-
-        const key =
-            String(month).padStart(2,"0");
-
-        const total =
-            app.history
-            .filter(h=>{
-
-                return h.date.substring(5,7)===key;
-
-            })
-            .reduce(
-                (sum,h)=>sum+h.amount,
-                0
-            );
-
-        values.push(total);
-
-    });
 
     ctx.clearRect(
         0,
@@ -1540,40 +1512,74 @@ function drawYearChart(){
         canvas.height
     );
 
+    const months=[
+        4,5,6,7,8,9,10,11,12,1,2,3
+    ];
+
+    const values=[];
+
+    months.forEach(month=>{
+
+        const year =
+            month<=3
+                ? currentYear+1
+                : currentYear;
+
+        const saved =
+            localStorage.getItem(
+                `maru-kakei-${year}-${String(month).padStart(2,"0")}`
+            );
+
+        if(!saved){
+
+            values.push(0);
+
+            return;
+
+        }
+
+        const data=
+            JSON.parse(saved);
+
+        const spent=
+            (data.budgets||[])
+            .reduce(
+                (sum,item)=>
+                    sum+(item.spent||0),
+                0
+            );
+
+        values.push(spent);
+
+    });
+
     const max =
         Math.max(...values,1);
 
-    const barWidth =
+    const width =
         canvas.width/months.length;
 
     values.forEach((value,index)=>{
 
         const height =
             value/max*
-            (canvas.height-40);
+            (canvas.height-30);
 
-        ctx.fillStyle =
-            value>
-            app.budgets.reduce(
-                (s,b)=>s+b.budget,
-                0
-            )
-            ?"#ff6b6b"
-            :"#66bb6a";
+        ctx.fillStyle="#66bb6a";
 
         ctx.fillRect(
 
-            index*barWidth+10,
+            index*width+10,
 
             canvas.height-height-20,
 
-            barWidth-20,
+            width-20,
 
             height
 
         );
 
-        ctx.fillStyle="#444";
+        ctx.fillStyle="#666";
 
         ctx.font="11px sans-serif";
 
@@ -1581,10 +1587,10 @@ function drawYearChart(){
 
         ctx.fillText(
 
-            months[index],
+            months[index]+"月",
 
-            index*barWidth+
-            barWidth/2,
+            index*width+
+            width/2,
 
             canvas.height-5
 
@@ -1839,7 +1845,198 @@ console.log(
 console.log({
 
     version:"18.0",
+/* ===========================
+   設定画面
+=========================== */
 
+function drawBudgetList(){
+
+    const area =
+        document.getElementById("budgetList");
+
+    if(!area) return;
+
+    area.innerHTML="";
+
+    app.budgets.forEach((item,index)=>{
+
+        area.innerHTML+=`
+
+<button
+class="setting-item"
+onclick="editBudget(${index})">
+
+<span>
+
+${item.name}
+
+</span>
+
+<span>
+
+¥${item.budget.toLocaleString()}
+
+</span>
+
+</button>
+
+`;
+
+    });
+
+}
+
+function editBudget(index){
+
+    const value=
+        Number(
+            prompt(
+                "月予算",
+                app.budgets[index].budget
+            )
+        );
+
+    if(isNaN(value)) return;
+
+    app.budgets[index].budget=value;
+
+    update();
+
+}
+
+document
+.getElementById("editGoal")
+.onclick=()=>{
+
+    const goal=
+        Number(
+            prompt(
+                "年間目標",
+                app.goal
+            )
+        );
+
+    if(isNaN(goal)) return;
+
+    app.goal=goal;
+
+    update();
+
+};
+
+document
+.getElementById("editBonus")
+.onclick=()=>{
+
+    app.bonus.summerForecast=
+        Number(
+            prompt(
+                "夏予定",
+                app.bonus.summerForecast
+            )
+        )||0;
+
+    app.bonus.summerActual=
+        Number(
+            prompt(
+                "夏実績",
+                app.bonus.summerActual
+            )
+        )||0;
+
+    app.bonus.winterForecast=
+        Number(
+            prompt(
+                "冬予定",
+                app.bonus.winterForecast
+            )
+        )||0;
+
+    app.bonus.winterActual=
+        Number(
+            prompt(
+                "冬実績",
+                app.bonus.winterActual
+            )
+        )||0;
+
+    update();
+
+};
+
+document
+.getElementById("annualManage")
+.onclick=()=>{
+
+    showPage("annual");
+
+};
+
+document
+.getElementById("deleteAll")
+.onclick=()=>{
+
+    if(
+        !confirm(
+            "すべて削除しますか？"
+        )
+    ) return;
+
+    localStorage.clear();
+
+    location.reload();
+
+};
+/* ===========================
+   135万円管理ボタン修正
+=========================== */
+
+const addAnnualItemButton =
+    document.getElementById("addAnnualItem");
+
+if(addAnnualItemButton){
+
+    addAnnualItemButton.onclick=()=>{
+
+        const title=
+            prompt("項目名");
+
+        if(!title) return;
+
+        const amount=
+            Number(
+                prompt("金額")
+            );
+
+        if(isNaN(amount)) return;
+
+        const date=
+            prompt(
+                "日付(YYYY-MM-DD)",
+                new Date()
+                    .toISOString()
+                    .slice(0,10)
+            );
+
+        if(!date) return;
+
+        app.annualItems.push({
+
+            title,
+
+            amount,
+
+            date
+
+        });
+
+        update();
+
+        drawAnnualManage();
+
+    };
+
+}
     fiscalYear:currentYear,
 
     month:currentMonth,
