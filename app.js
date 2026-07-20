@@ -1644,7 +1644,33 @@ function openAnnualCategory(index){
         );
 function addAnnualHistory(){
 function editAnnualCategory(){
+function deleteAnnualCategory(){
 
+    if(currentAnnualCategory<0) return;
+
+    const category =
+        app.annualCategories[currentAnnualCategory];
+
+    if(
+        !confirm(
+            `「${category.title}」を削除しますか？`
+        )
+    ){
+        return;
+    }
+
+    app.annualCategories.splice(
+        currentAnnualCategory,
+        1
+    );
+
+    currentAnnualCategory = -1;
+
+    update();
+
+    showPage("annual");
+
+}
     if(currentAnnualCategory<0) return;
 
     const category =
