@@ -499,40 +499,42 @@ button:active{
 .bottom-nav{
 
     position:fixed;
-
-    left:10px;
-
-    right:10px;
-
-    bottom:10px;
+    left:0;
+    right:0;
+    bottom:0;
 
     display:grid;
+    grid-template-columns:repeat(4,1fr);
 
-    grid-template-columns:repeat(3,1fr);
+    align-items:center;
+
+    background:#fff;
+
+    border-top:1px solid #e6d6a8;
+
+    z-index:999;
+
+    padding:8px 0;
+
+}
+.bottom-nav button{
+
+    border:none;
+    background:none;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
 
     gap:4px;
 
-    padding:6px;
+    font-size:14px;
 
-    background:rgba(255,253,248,.96);
+    width:100%;
 
-    border:1px solid #F7E7B5;
-
-    border-radius:18px;
-
-    backdrop-filter:blur(10px);
-
-}
-
-.bottom-nav button{
-
-    background:transparent;
-
-    color:#8D6E63;
-
-    font-size:17px;
-
-    line-height:1.15;
+    padding:8px 0;
 
 }
 
