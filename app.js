@@ -166,7 +166,9 @@ function save(){
 
         bonus:{...app.bonus},
 
-        annualItems:[...app.annualItems]
+        annualCategories: JSON.parse(
+    JSON.stringify(app.annualCategories)
+)
 
     };
 
@@ -1519,7 +1521,7 @@ function drawYearChart(){
 
 }
 /* ===========================
-   年間管理（135万円）
+   特別費管理
 =========================== */
 
 function drawAnnualManage(){
@@ -1529,188 +1531,70 @@ function drawAnnualManage(){
 
     if(!area) return;
 
-    area.innerHTML="";
+    area.innerHTML = "";
 
-    const total =
-        app.annualItems.reduce(
-            (sum,item)=>
-                sum+Number(item.amount||0),
-            0
-        );
+    app.annualCategories.forEach((category,index)=>{
 
-    const limit = 1350000;
+        const used =
+            category.history.reduce(
+                (sum,item)=>sum+item.amount,
+                0
+            );
 
-    const remain =
-        limit-total;
+        const remain =
+            category.budget-used;
 
-    const percent =
-        Math.min(
-            Math.round(total/limit*100),
-            100
-        );
+        const percent =
+            Math.min(
+                Math.round(
+                    used/category.budget*100
+                ),
+                100
+            );
 
-    area.innerHTML += `
+        area.innerHTML += `
 
-<div class="card">
+<button
+class="card"
+onclick="openAnnualCategory(${index})">
 
-<h3>
+<h3>${category.title}</h3>
 
-135万円管理
+<p>予算 ¥${category.budget.toLocaleString()}</p>
 
-</h3>
+<p>使用 ¥${used.toLocaleString()}</p>
 
-<p>
-
-現在：¥${total.toLocaleString()}
-
-</p>
-
-<p>
-
-残り：¥${remain.toLocaleString()}
-
-</p>
+<p>残り ¥${remain.toLocaleString()}</p>
 
 <div class="progress">
 
 <div
-class="${
-percent>=100
-?"progress-bar danger"
-:percent>=80
-?"progress-bar warning"
-:"progress-bar"
-}"
+class="progress-bar"
 style="width:${percent}%">
 
 </div>
 
 </div>
 
-<div
-style="margin-top:8px;
-text-align:right;
-font-size:12px;">
-
-${percent}%
-
-</div>
-
-</div>
+</button>
 
 `;
 
-    app.annualItems
-        .sort(
-            (a,b)=>
-                a.date.localeCompare(b.date)
-        )
-        .forEach((item,index)=>{
+    });
 
-            area.innerHTML += `
+    area.innerHTML += `
 
 <button
 class="setting-item"
-onclick="editAnnualItem(${index})">
+onclick="addAnnualCategory()">
 
-<span>
-
-${item.date}<br>
-
-${item.title}
-
-</span>
-
-<span>
-
-¥${Number(item.amount).toLocaleString()}
-
-</span>
+➕ カテゴリ追加
 
 </button>
 
 `;
 
-        });
-
 }
-
-function editAnnualItem(index){
-
-    const item =
-        app.annualItems[index];
-
-    if(!item) return;
-
-    const title =
-        prompt(
-            "項目名",
-            item.title
-        );
-
-    if(title===null) return;
-
-    const amount =
-        Number(
-            prompt(
-                "金額",
-                item.amount
-            )
-        );
-
-    if(isNaN(amount)) return;
-
-    item.title = title;
-
-    item.amount = amount;
-
-    update();
-
-    drawAnnualManage();
-
-}
-
-document
-.getElementById("addAnnualManage")
-.onclick=()=>{
-
-    const title =
-        prompt("項目名");
-
-    if(!title) return;
-
-    const amount =
-        Number(
-            prompt("金額")
-        );
-
-    if(isNaN(amount)) return;
-
-    const date =
-        prompt(
-            "日付(YYYY-MM-DD)",
-            new Date()
-                .toISOString()
-                .slice(0,10)
-        );
-
-    if(!date) return;
-
-    app.annualItems.push({
-
-        title,
-
-        amount,
-
-        date
-
-    });
-
-    update();
-
-    drawAnnualManage();
-
-};
 /* ===========================
    ⑪ 初期表示
 =========================== */
