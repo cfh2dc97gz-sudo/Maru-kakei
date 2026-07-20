@@ -875,11 +875,8 @@ navButtons[3].onclick =
 =========================== */
 function drawAI(){
 
- console.log("drawAI 実行");
-
-const ai = document.getElementById("aiComment");
-
-console.log(ai);
+    const ai =
+        document.getElementById("aiComment");
 
     if(!ai) return;
 
@@ -931,10 +928,7 @@ console.log(ai);
 
     }
 
-    ai.innerHTML = `
-        <h3>🤖 AI分析</h3>
-        <p>${comment}</p>
-    `;
+    ai.innerHTML = `<p>${comment}</p>`;
 
 }
 /* ===========================
