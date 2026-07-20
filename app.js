@@ -895,8 +895,14 @@ function drawAI(){
         Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
         Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
 
+    const bank =
+        Number(app.bank.mitake || 0) +
+        Number(app.bank.takizawa || 0);
+
     const saving =
-        income - spent + bonus;
+        bank -
+        Number(app.startBank || 0) +
+        bonus;
 
     const goal =
         Number(app.goal || 0);
@@ -904,31 +910,61 @@ function drawAI(){
     const remain =
         Math.max(goal - saving,0);
 
-    let comment = "";
+    const monthsLeft =
+        currentMonth <= 3
+            ? 4 - currentMonth
+            : 16 - currentMonth;
 
-    if(saving >= goal){
+    let html = "";
 
-        comment =
-        "🎉 年間目標を達成しています！この調子で続けましょう。";
+    html += `
+📊 <b>年間目標</b><br>
+年間目標まで約¥${remain.toLocaleString()}不足する見込みです。<br>
+残り${monthsLeft}か月は毎月約¥${Math.ceil(remain/Math.max(monthsLeft,1)).toLocaleString()}改善すると達成圏内になります。<br><br>
+`;
 
-    }else if(remain <= 100000){
+    const overList =
+        app.budgets
+        .map(item=>{
 
-        comment =
-        `🎯 年間目標まであと ¥${remain.toLocaleString()} です！`;
+            const yearly =
+                item.budget * 12;
 
-    }else if(spent > income){
+            const forecast =
+                item.spent * 12;
 
-        comment =
-        "⚠️ 今月は支出が収入を上回っています。支出を少し見直しましょう。";
+            return{
+
+                name:item.name,
+
+                over:forecast-yearly
+
+            };
+
+        })
+        .filter(item=>item.over>0)
+        .sort((a,b)=>b.over-a.over);
+
+    if(overList.length){
+
+        html += "📌 <b>気になるカテゴリ</b><br><br>";
+
+        overList.slice(0,2).forEach(item=>{
+
+            html += `
+${item.name} は年間約¥${item.over.toLocaleString()}オーバー見込みです。<br>
+毎月約¥${Math.ceil(item.over/12).toLocaleString()}抑えると予算内になります。<br><br>
+`;
+
+        });
 
     }else{
 
-        comment =
-        `😊 順調です。年間目標まであと ¥${remain.toLocaleString()} です。`;
+        html += "🎉 すべてのカテゴリが予算内ペースです！";
 
     }
 
-    ai.innerHTML = `<p>${comment}</p>`;
+    ai.innerHTML = html;
 
 }
 /* ===========================
