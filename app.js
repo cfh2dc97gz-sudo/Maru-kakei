@@ -1643,7 +1643,42 @@ function openAnnualCategory(index){
             0
         );
 function addAnnualHistory(){
+function editAnnualCategory(){
 
+    if(currentAnnualCategory<0) return;
+
+    const category =
+        app.annualCategories[currentAnnualCategory];
+
+    const title =
+        prompt(
+            "カテゴリ名",
+            category.title
+        );
+
+    if(!title) return;
+
+    const budget =
+        Number(
+            prompt(
+                "予算",
+                category.budget
+            )
+        );
+
+    if(isNaN(budget)) return;
+
+    category.title = title;
+
+    category.budget = budget;
+
+    update();
+
+    openAnnualCategory(
+        currentAnnualCategory
+    );
+
+}
     if(currentAnnualCategory<0) return;
 
     const category =
