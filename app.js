@@ -875,7 +875,8 @@ navButtons[3].onclick =
 =========================== */
 function drawAI(){
 
-    const ai = document.getElementById("aiAdvice");
+    const ai =
+    document.getElementById("aiComment");
 
     if(!ai) return;
 
