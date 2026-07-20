@@ -1524,24 +1524,17 @@ function drawYearChart(){
    特別費管理
 =========================== */
 
-function drawAnnualManage(){
 function addAnnualCategory(){
 
-    const title =
-        prompt("カテゴリ名");
-
+    const title = prompt("カテゴリ名");
     if(!title) return;
 
-    const budget =
-        Number(
-            prompt("予算")
-        );
-
+    const budget = Number(prompt("予算"));
     if(isNaN(budget)) return;
 
     app.annualCategories.push({
 
-        id:Date.now().toString(),
+        id: Date.now().toString(),
 
         title,
 
@@ -1554,6 +1547,9 @@ function addAnnualCategory(){
     update();
 
 }
+
+function drawAnnualManage(){
+
     const area =
         document.getElementById("annualManageList");
 
@@ -1573,10 +1569,10 @@ function addAnnualCategory(){
             category.budget-used;
 
         const percent =
-            Math.min(
-                Math.round(
-                    used/category.budget*100
-                ),
+            category.budget === 0
+            ? 0
+            : Math.min(
+                Math.round(used/category.budget*100),
                 100
             );
 
@@ -1584,11 +1580,38 @@ function addAnnualCategory(){
 
 <button
 class="card"
+onclick="openAnnualCategory(${index})">
+
+<h3>${category.title}</h3>
+
+<p>予算 ¥${category.budget.toLocaleString()}</p>
+
+<p>使用 ¥${used.toLocaleString()}</p>
+
+<p>残り ¥${remain.toLocaleString()}</p>
+
+<div class="progress">
+<div
+class="progress-bar"
+style="width:${percent}%">
+</div>
+</div>
+
+</button>
+
+`;
+
+    });
+
+    area.innerHTML += `
+
+<button
+class="card"
 onclick="addAnnualCategory()">
 
 <h3>➕ カテゴリ追加</h3>
 
-<p>新しい特別費カテゴリを追加します</p>
+<p>新しいカテゴリを追加</p>
 
 </button>
 
