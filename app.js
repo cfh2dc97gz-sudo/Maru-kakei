@@ -1736,9 +1736,11 @@ function addAnnualHistory(){
 
     });
 
-    update();
+save();
 
-    openAnnualCategory(currentAnnualCategory);
+openAnnualCategory(currentAnnualCategory);
+
+drawAnnualManage();
 
 }
 
