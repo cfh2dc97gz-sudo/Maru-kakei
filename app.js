@@ -1525,7 +1525,35 @@ function drawYearChart(){
 =========================== */
 
 function drawAnnualManage(){
+function addAnnualCategory(){
 
+    const title =
+        prompt("カテゴリ名");
+
+    if(!title) return;
+
+    const budget =
+        Number(
+            prompt("予算")
+        );
+
+    if(isNaN(budget)) return;
+
+    app.annualCategories.push({
+
+        id:Date.now().toString(),
+
+        title,
+
+        budget,
+
+        history:[]
+
+    });
+
+    update();
+
+}
     const area =
         document.getElementById("annualManageList");
 
@@ -1556,39 +1584,11 @@ function drawAnnualManage(){
 
 <button
 class="card"
-onclick="openAnnualCategory(${index})">
-
-<h3>${category.title}</h3>
-
-<p>予算 ¥${category.budget.toLocaleString()}</p>
-
-<p>使用 ¥${used.toLocaleString()}</p>
-
-<p>残り ¥${remain.toLocaleString()}</p>
-
-<div class="progress">
-
-<div
-class="progress-bar"
-style="width:${percent}%">
-
-</div>
-
-</div>
-
-</button>
-
-`;
-
-    });
-
-    area.innerHTML += `
-
-<button
-class="setting-item"
 onclick="addAnnualCategory()">
 
-➕ カテゴリ追加
+<h3>➕ カテゴリ追加</h3>
+
+<p>新しい特別費カテゴリを追加します</p>
 
 </button>
 
