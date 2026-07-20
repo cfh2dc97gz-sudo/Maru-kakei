@@ -350,6 +350,8 @@
 
 </div>
     <!-- カテゴリ詳細 -->
+<!-- 特別費カテゴリ詳細 -->
+
 <div id="categoryPage"
      class="page"
      style="display:none;">
@@ -358,9 +360,9 @@
 
         <button
             class="setting-item"
-            onclick="showPage('year')">
+            onclick="backPage()">
 
-            ← 年間ページへ戻る
+            ← 戻る
 
         </button>
 
@@ -368,23 +370,47 @@
 
     <div class="card">
 
-        <h2 id="categoryTitle">
-
-            📒 カテゴリ
-
-        </h2>
+        <h2 id="categoryTitle"></h2>
 
     </div>
 
     <div class="card">
 
-        <div id="categorySummary">
-
-        </div>
+        <div id="categorySummary"></div>
 
     </div>
 
-    <div id="categoryHistory">
+    <div class="card">
+
+        <button
+            class="setting-item"
+            onclick="addAnnualHistory()">
+
+            ➕ 支出追加
+
+        </button>
+
+        <button
+            class="setting-item"
+            onclick="editAnnualCategory()">
+
+            ✏️ カテゴリ編集
+
+        </button>
+
+        <button
+            class="setting-item danger"
+            onclick="deleteAnnualCategory()">
+
+            🗑️ カテゴリ削除
+
+        </button>
+
+    </div>
+
+    <div
+        class="card"
+        id="categoryHistory">
 
     </div>
 
