@@ -1569,11 +1569,11 @@ function drawAnnualManage(){
             category.budget - used;
 
         const percent =
-            category.budget === 0
-            ? 0
-            : Math.min(
+            category.budget===0
+            ?0
+            :Math.min(
                 Math.round(
-                    used / category.budget * 100
+                    used/category.budget*100
                 ),
                 100
             );
@@ -1644,12 +1644,12 @@ function openAnnualCategory(index){
 
     const used =
         category.history.reduce(
-            (sum,item)=>sum + item.amount,
+            (sum,item)=>sum+item.amount,
             0
         );
 
     const remain =
-        category.budget - used;
+        category.budget-used;
 
     document.getElementById("categorySummary").innerHTML = `
 
@@ -1666,17 +1666,18 @@ function openAnnualCategory(index){
 
     if(category.history.length===0){
 
-        history.innerHTML = `
-<p>まだ履歴はありません</p>
-`;
+        history.innerHTML =
+            "<p>まだ履歴はありません</p>";
 
     }else{
 
-        category.history.forEach(item=>{
+        category.history.forEach((item,index)=>{
 
             history.innerHTML += `
 
-<div class="setting-item">
+<button
+class="setting-item"
+onclick="deleteAnnualHistory(${index})">
 
 <span>
 
@@ -1691,7 +1692,7 @@ ${item.name}
 
 </span>
 
-</div>
+</button>
 
 `;
 
@@ -1714,9 +1715,7 @@ function addAnnualHistory(){
     if(!name) return;
 
     const amount =
-        Number(
-            prompt("金額")
-        );
+        Number(prompt("金額"));
 
     if(isNaN(amount)) return;
 
@@ -1736,11 +1735,11 @@ function addAnnualHistory(){
 
     });
 
-save();
+    save();
 
-openAnnualCategory(currentAnnualCategory);
+    openAnnualCategory(currentAnnualCategory);
 
-drawAnnualManage();
+    drawAnnualManage();
 
 }
 
@@ -1804,6 +1803,27 @@ function deleteAnnualCategory(){
     update();
 
     showPage("annual");
+
+}
+
+function deleteAnnualHistory(index){
+
+    if(currentAnnualCategory<0) return;
+
+    const category =
+        app.annualCategories[currentAnnualCategory];
+
+    if(!confirm("この履歴を削除しますか？")){
+        return;
+    }
+
+    category.history.splice(index,1);
+
+    save();
+
+    openAnnualCategory(currentAnnualCategory);
+
+    drawAnnualManage();
 
 }
 /* ===========================
