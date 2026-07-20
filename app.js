@@ -100,7 +100,30 @@ const app = {
 
     },
 
-    annualItems:[],
+    annualCategories:[
+
+    {
+        id:"birthday",
+        title:"🎂 誕生日",
+        budget:150000,
+        history:[]
+    },
+
+    {
+        id:"travel",
+        title:"✈️ 旅行",
+        budget:300000,
+        history:[]
+    },
+
+    {
+        id:"car",
+        title:"🚗 車検",
+        budget:120000,
+        history:[]
+    }
+
+],
 
     budgets:createDefaultBudgets(),
 
@@ -275,9 +298,9 @@ function load(){
         app.startBank=data.startBank ?? 0;
 
         app.bonus=data.bonus || app.bonus;
-
-        app.annualItems=data.annualItems || [];
-
+app.annualCategories =
+    data.annualCategories ||
+    app.annualCategories;
     }
 
     app.budgets.forEach(item=>{
