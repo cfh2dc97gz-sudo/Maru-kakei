@@ -1664,18 +1664,6 @@ function initializeApp(){
 
     load();
 
-    drawCategories();
-
-    drawAI();
-
-    drawYearSummary();
-
-    drawYearCategory();
-
-    drawYearChart();
-
-    drawAnnualManage();
-
     update();
 
     showPage(
@@ -1683,7 +1671,6 @@ function initializeApp(){
     );
 
 }
-
 initializeApp();
 
 window.addEventListener(
