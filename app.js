@@ -1569,9 +1569,9 @@ function drawAnnualManage(){
             category.budget-used;
 
         const percent =
-            category.budget === 0
-            ? 0
-            : Math.min(
+            category.budget===0
+            ?0
+            :Math.min(
                 Math.round(used/category.budget*100),
                 100
             );
@@ -1616,6 +1616,118 @@ onclick="addAnnualCategory()">
 </button>
 
 `;
+
+}
+
+let currentAnnualCategory = -1;
+
+function openAnnualCategory(index){
+
+    currentAnnualCategory = index;
+
+    const category =
+        app.annualCategories[index];
+
+    if(!category) return;
+
+    lastPage = "annual";
+
+    showPage("category");
+
+    document.getElementById("categoryTitle").textContent =
+        category.title;
+
+    const used =
+        category.history.reduce(
+            (sum,item)=>sum+item.amount,
+            0
+        );
+function addAnnualHistory(){
+
+    if(currentAnnualCategory<0) return;
+
+    const category =
+        app.annualCategories[currentAnnualCategory];
+
+    const name =
+        prompt("名前");
+
+    if(!name) return;
+
+    const amount =
+        Number(prompt("金額"));
+
+    if(isNaN(amount)) return;
+
+    category.history.push({
+
+        name,
+
+        amount,
+
+        date:new Date().toLocaleDateString(
+            "ja-JP",
+            {
+                month:"numeric",
+                day:"numeric"
+            }
+        )
+
+    });
+
+    update();
+
+    openAnnualCategory(currentAnnualCategory);
+
+}
+    const remain =
+        category.budget-used;
+
+    document.getElementById("categorySummary").innerHTML = `
+
+予算：¥${category.budget.toLocaleString()}<br>
+使用：¥${used.toLocaleString()}<br>
+残り：¥${remain.toLocaleString()}
+
+`;
+
+    const history =
+        document.getElementById("categoryHistory");
+
+    history.innerHTML = "";
+
+    if(category.history.length===0){
+
+        history.innerHTML = "<p>まだ履歴はありません</p>";
+
+        return;
+
+    }
+
+    category.history.forEach(item=>{
+
+        history.innerHTML += `
+
+<div class="setting-item">
+
+<span>
+
+${item.date}<br>
+${item.name}
+
+</span>
+
+<span>
+
+¥${item.amount.toLocaleString()}
+
+</span>
+
+</div>
+
+`;
+
+    });
 
 }
 /* ===========================
