@@ -873,204 +873,64 @@ navButtons[3].onclick =
 /* ===========================
    ⑦ AI分析
 =========================== */
-
 function drawAI(){
 
-    const ai =
-        document.getElementById("aiAdvice");
+    const ai = document.getElementById("aiAdvice");
 
     if(!ai) return;
 
     const income =
-
-        app.income.papa +
-        app.income.mama +
-        app.income.extra;
+        Number(app.income.papa || 0) +
+        Number(app.income.mama || 0) +
+        Number(app.income.extra || 0);
 
     const spent =
-        app.history.reduce(
-            (sum,h)=>sum+h.amount,
+        app.budgets.reduce(
+            (sum,item)=>sum + Number(item.spent || 0),
             0
         );
 
     const bonus =
-
-        (app.bonus.summerActual ||
-         app.bonus.summerForecast || 0)
-
-        +
-
-        (app.bonus.winterActual ||
-         app.bonus.winterForecast || 0);
+        Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
+        Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
 
     const saving =
         income - spent + bonus;
 
+    const goal =
+        Number(app.goal || 0);
+
     const remain =
-        Math.max(
-            app.goal - saving,
-            0
-        );
+        Math.max(goal - saving,0);
 
-    let worst=null;
+    let comment = "";
 
-    app.budgets.forEach(b=>{
+    if(saving >= goal){
 
-        const total=
-            app.history
-            .filter(
-                h=>h.category===b.name
-            )
-            .reduce(
-                (s,h)=>s+h.amount,
-                0
-            );
+        comment =
+        "🎉 年間目標を達成しています！この調子で続けましょう。";
 
-        const yearly=
-            b.budget*12;
+    }else if(remain <= 100000){
 
-        const rate=
-            yearly===0
-            ?0
-            :Math.round(
-                total/yearly*100
-            );
+        comment =
+        `🎯 年間目標まであと ¥${remain.toLocaleString()} です！`;
 
-        if(!worst || rate>worst.rate){
+    }else if(spent > income){
 
-            worst={
-
-                name:b.name,
-
-                total,
-
-                rate
-
-            };
-
-        }
-
-    });
-
-    let html="";
-
-    if(remain===0){
-
-        html+=`
-
-<h3>🎉 年間目標達成！</h3>
-
-<p>
-
-年間目標を達成しています。
-
-</p>
-
-`;
+        comment =
+        "⚠️ 今月は支出が収入を上回っています。支出を少し見直しましょう。";
 
     }else{
 
-        html+=`
-
-<h3>
-
-📈 年間目標まで
-
-¥${remain.toLocaleString()}
-
-</h3>
-
-<p>
-
-毎月あと
-
-<b>
-
-¥${Math.ceil(remain/12).toLocaleString()}
-
-</b>
-
-貯めると目標に近づきます。
-
-</p>
-
-`;
+        comment =
+        `😊 順調です。年間目標まであと ¥${remain.toLocaleString()} です。`;
 
     }
 
-    if(worst){
-
-        html+=`
-
-<hr>
-
-<p>
-
-<strong>
-
-見直し候補
-
-</strong>
-
-</p>
-
-<p>
-
-${worst.name}
-
-</p>
-
-<p>
-
-年間支出
-
-¥${worst.total.toLocaleString()}
-
-</p>
-
-`;
-
-        if(worst.rate>=100){
-
-            html+=`
-
-<p>
-
-🚨 年間予算オーバーです。
-
-</p>
-
-`;
-
-        }else if(worst.rate>=80){
-
-            html+=`
-
-<p>
-
-⚠ 少し節約すると安心です。
-
-</p>
-
-`;
-
-        }else{
-
-            html+=`
-
-<p>
-
-😊 全体的に順調です。
-
-</p>
-
-`;
-
-        }
-
-    }
-
-    ai.innerHTML=html;
+    ai.innerHTML = `
+        <h3>🤖 AI分析</h3>
+        <p>${comment}</p>
+    `;
 
 }
 /* ===========================
