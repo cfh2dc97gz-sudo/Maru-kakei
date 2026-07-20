@@ -1237,7 +1237,9 @@ ${item.advice}
 
 function showCategoryHistory(categoryId){
 
-    showPage("category");
+    lastPage = "year";
+
+showPage("category");
 
     const budget =
         app.budgets.find(
