@@ -1561,18 +1561,20 @@ function drawAnnualManage(){
 
         const used =
             category.history.reduce(
-                (sum,item)=>sum+item.amount,
+                (sum,item)=>sum + item.amount,
                 0
             );
 
         const remain =
-            category.budget-used;
+            category.budget - used;
 
         const percent =
-            category.budget===0
-            ?0
-            :Math.min(
-                Math.round(used/category.budget*100),
+            category.budget === 0
+            ? 0
+            : Math.min(
+                Math.round(
+                    used / category.budget * 100
+                ),
                 100
             );
 
@@ -1591,10 +1593,13 @@ onclick="openAnnualCategory(${index})">
 <p>残り ¥${remain.toLocaleString()}</p>
 
 <div class="progress">
+
 <div
 class="progress-bar"
 style="width:${percent}%">
+
 </div>
+
 </div>
 
 </button>
@@ -1639,38 +1644,106 @@ function openAnnualCategory(index){
 
     const used =
         category.history.reduce(
-            (sum,item)=>sum+item.amount,
+            (sum,item)=>sum + item.amount,
             0
         );
+
+    const remain =
+        category.budget - used;
+
+    document.getElementById("categorySummary").innerHTML = `
+
+予算：¥${category.budget.toLocaleString()}<br>
+使用：¥${used.toLocaleString()}<br>
+残り：¥${remain.toLocaleString()}
+
+`;
+
+    const history =
+        document.getElementById("categoryHistory");
+
+    history.innerHTML = "";
+
+    if(category.history.length===0){
+
+        history.innerHTML = `
+<p>まだ履歴はありません</p>
+`;
+
+    }else{
+
+        category.history.forEach(item=>{
+
+            history.innerHTML += `
+
+<div class="setting-item">
+
+<span>
+
+${item.date}<br>
+${item.name}
+
+</span>
+
+<span>
+
+¥${item.amount.toLocaleString()}
+
+</span>
+
+</div>
+
+`;
+
+        });
+
+    }
+
+}
+
 function addAnnualHistory(){
-function editAnnualCategory(){
-function deleteAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
 
     const category =
         app.annualCategories[currentAnnualCategory];
 
-    if(
-        !confirm(
-            `「${category.title}」を削除しますか？`
+    const name =
+        prompt("名前");
+
+    if(!name) return;
+
+    const amount =
+        Number(
+            prompt("金額")
+        );
+
+    if(isNaN(amount)) return;
+
+    category.history.push({
+
+        name,
+
+        amount,
+
+        date:new Date().toLocaleDateString(
+            "ja-JP",
+            {
+                month:"numeric",
+                day:"numeric"
+            }
         )
-    ){
-        return;
-    }
 
-    app.annualCategories.splice(
-        currentAnnualCategory,
-        1
-    );
-
-    currentAnnualCategory = -1;
+    });
 
     update();
 
-    showPage("annual");
+    openAnnualCategory(currentAnnualCategory);
 
 }
+
+function editAnnualCategory(){
+
     if(currentAnnualCategory<0) return;
 
     const category =
@@ -1700,95 +1773,35 @@ function deleteAnnualCategory(){
 
     update();
 
-    openAnnualCategory(
-        currentAnnualCategory
-    );
+    openAnnualCategory(currentAnnualCategory);
 
 }
+
+function deleteAnnualCategory(){
+
     if(currentAnnualCategory<0) return;
 
     const category =
         app.annualCategories[currentAnnualCategory];
 
-    const name =
-        prompt("名前");
-
-    if(!name) return;
-
-    const amount =
-        Number(prompt("金額"));
-
-    if(isNaN(amount)) return;
-
-    category.history.push({
-
-        name,
-
-        amount,
-
-        date:new Date().toLocaleDateString(
-            "ja-JP",
-            {
-                month:"numeric",
-                day:"numeric"
-            }
+    if(
+        !confirm(
+            `「${category.title}」を削除しますか？`
         )
+    ){
+        return;
+    }
 
-    });
+    app.annualCategories.splice(
+        currentAnnualCategory,
+        1
+    );
+
+    currentAnnualCategory = -1;
 
     update();
 
-    openAnnualCategory(currentAnnualCategory);
-
-}
-    const remain =
-        category.budget-used;
-
-    document.getElementById("categorySummary").innerHTML = `
-
-予算：¥${category.budget.toLocaleString()}<br>
-使用：¥${used.toLocaleString()}<br>
-残り：¥${remain.toLocaleString()}
-
-`;
-
-    const history =
-        document.getElementById("categoryHistory");
-
-    history.innerHTML = "";
-
-    if(category.history.length===0){
-
-        history.innerHTML = "<p>まだ履歴はありません</p>";
-
-        return;
-
-    }
-
-    category.history.forEach(item=>{
-
-        history.innerHTML += `
-
-<div class="setting-item">
-
-<span>
-
-${item.date}<br>
-${item.name}
-
-</span>
-
-<span>
-
-¥${item.amount.toLocaleString()}
-
-</span>
-
-</div>
-
-`;
-
-    });
+    showPage("annual");
 
 }
 /* ===========================
