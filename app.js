@@ -1795,13 +1795,31 @@ function openAnnualCategory(index){
     const remain=
         category.budget-used;
 
-    document.getElementById("categorySummary").innerHTML=`
+    let message=`
 
 予算：¥${category.budget.toLocaleString()}<br>
 使用：¥${used.toLocaleString()}<br>
 残り：¥${remain.toLocaleString()}
 
 `;
+
+    if(category.id==="otherReserve"){
+
+        message+=`
+
+<br><br>
+
+<small>
+📦 この金額は年間予算135万円から
+他カテゴリを差し引いて自動計算されます。
+</small>
+
+`;
+
+    }
+
+    document.getElementById("categorySummary").innerHTML=
+        message;
 
     const history=
         document.getElementById("categoryHistory");
@@ -1810,7 +1828,8 @@ function openAnnualCategory(index){
 
     if(category.history.length===0){
 
-        history.innerHTML="<p>まだ履歴はありません</p>";
+        history.innerHTML=
+            "<p>まだ履歴はありません</p>";
 
         return;
 
@@ -1844,7 +1863,6 @@ ${item.name}
     });
 
 }
-
 function addAnnualHistory(){
 
     if(currentAnnualCategory<0) return;
