@@ -1309,79 +1309,67 @@ ${item.advice}
 
 function showCategoryHistory(categoryId){
 
-    lastPage = "year";
+    lastPage="year";
 
-showPage("category");
+    showPage("category");
 
-    const budget =
+    const budget=
         app.budgets.find(
             b=>b.id===categoryId
         );
 
     if(!budget) return;
 
-    document
-        .getElementById("categoryTitle")
-        .textContent =
+    document.getElementById("categoryTitle").textContent=
         budget.name;
 
-    const list =
+    const list=
         app.history
-        .filter(
-            h=>h.category===budget.name
-        )
-        .sort(
-            (a,b)=>
-                new Date(b.date)-
-                new Date(a.date)
-        );
+            .filter(
+                h=>h.category===budget.name
+            )
+            .sort(
+                (a,b)=>
+                    new Date(b.date)-
+                    new Date(a.date)
+            );
 
-    const total =
+    const total=
         list.reduce(
             (sum,h)=>sum+h.amount,
             0
         );
 
-    const yearlyBudget =
-        budget.budget * 12;
+    const yearlyBudget=
+        budget.budget*12;
 
-    const diff =
-        yearlyBudget-total;
-
-    const percent =
+    const percent=
         yearlyBudget===0
         ?0
         :Math.round(total/yearlyBudget*100);
 
-    document
-        .getElementById("categorySummary")
-        .innerHTML = `
+    document.getElementById("categorySummary").innerHTML=`
 
 年間予算：¥${yearlyBudget.toLocaleString()}<br>
-
 年間支出：¥${total.toLocaleString()}<br>
-
 達成率：${percent}%<br>
-
-差額：¥${diff.toLocaleString()}<br>
-
-件数：${list.length}件<br>
-
-月平均：¥${Math.round(total/12).toLocaleString()}
+件数：${list.length}件
 
 `;
 
-    const history =
+    document.getElementById("editAnnualCategory").style.display="none";
+    document.getElementById("deleteAnnualCategory").style.display="none";
+    document.getElementById("addAnnualHistory").style.display="none";
+
+    const history=
         document.getElementById("categoryHistory");
 
     history.innerHTML="";
-
-    const monthMap={};
+       const monthMap={};
 
     list.forEach(item=>{
 
-        const month =
-            item.date.substring(0,7);
+        const month=item.date.substring(0,7);
 
         if(!monthMap[month]){
 
@@ -1398,35 +1386,19 @@ showPage("category");
         .reverse()
         .forEach(month=>{
 
-            const monthList =
-                monthMap[month];
-
-            const monthTotal =
-                monthList.reduce(
-                    (sum,h)=>sum+h.amount,
-                    0
-                );
-
-            history.innerHTML += `
+            history.innerHTML+=`
 
 <div class="card">
 
 <h3>${month}</h3>
 
-<div>
-
-合計：¥${monthTotal.toLocaleString()}　
-${monthList.length}件
-
-</div>
-
 </div>
 
 `;
 
-            monthList.forEach(item=>{
+            monthMap[month].forEach(item=>{
 
-                history.innerHTML += `
+                history.innerHTML+=`
 
 <div class="setting-item">
 
@@ -1434,7 +1406,7 @@ ${monthList.length}件
 
 ${item.date}<br>
 
-${item.memo || ""}
+${item.memo||""}
 
 </span>
 
