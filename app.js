@@ -1755,7 +1755,9 @@ function openAnnualCategory(index){
     lastPage="annual";
 
     showPage("category");
-
+document.getElementById("editAnnualCategory").style.display="block";
+document.getElementById("deleteAnnualCategory").style.display="block";
+document.getElementById("addAnnualHistory").style.display="block";
     document.getElementById("categoryTitle").textContent=
         category.title;
 
