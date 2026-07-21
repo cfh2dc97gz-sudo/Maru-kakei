@@ -1567,17 +1567,13 @@ function drawYearChart(){
     });
 
 }
-/* ===========================
-   特別費管理
-=========================== */
 function addAnnualCategory(){
 
     const title = prompt("カテゴリ名");
 
     if(!title) return;
 
-    const budget =
-        Number(prompt("予算"));
+    const budget = Number(prompt("予算"));
 
     if(isNaN(budget)) return;
 
@@ -1656,30 +1652,26 @@ function drawAnnualManage(){
 
     area.innerHTML = "";
 
-const TOTAL_BUDGET = 1350000;
+    const TOTAL_BUDGET = 1350000;
 
-refreshOtherReserve();
+    const totalUsed =
+        app.annualCategories.reduce(
 
-const totalBudget = TOTAL_BUDGET;
+            (sum,category)=>
 
-const totalUsed =
-    app.annualCategories.reduce(
+                sum+
 
-        (sum,category)=>
+                category.history.reduce(
+                    (s,h)=>s+h.amount,
+                    0
+                ),
 
-            sum+
+            0
 
-            category.history.reduce(
-                (s,h)=>s+h.amount,
-                0
-            ),
+        );
 
-        0
-
-    );
-
-const totalRemain =
-    totalBudget-totalUsed;
+    const totalRemain =
+        TOTAL_BUDGET-totalUsed;
 
     area.innerHTML += `
 
@@ -1697,75 +1689,67 @@ const totalRemain =
 
 `;
 
-const displayCategories = [
+    const displayCategories=[
 
-    ...app.annualCategories.filter(
-        c=>c.id!=="otherReserve"
-    ),
+        ...app.annualCategories.filter(
+            c=>c.id!=="otherReserve"
+        ),
 
-    app.annualCategories.find(
-        c=>c.id==="otherReserve"
-    )
+        app.annualCategories.find(
+            c=>c.id==="otherReserve"
+        )
 
-].filter(Boolean);
+    ].filter(Boolean);
+   
+/* ===========================
+   ⑪ 初期表示
+=========================== */
 
-displayCategories.forEach((category)=>{
+function initializeApp(){
 
-    const index =
-        app.annualCategories.findIndex(
-            c=>c.id===category.id
-        );
+    load();
 
-    const used =
-        category.history.reduce(
-            (sum,item)=>sum+item.amount,
-            0
-        );
+    update();
 
-    const remain =
-        category.budget-used;
+    showPage(
+        session.page || "home"
+    );
 
-    const percent =
-        category.budget===0
-        ?0
-        :Math.min(
-            Math.round(
-                used/category.budget*100
-            ),
-            100
-        );
+}
+initializeApp();
 
-    area.innerHTML += `
+window.addEventListener(
+    "beforeunload",
+    save
+);
 
-<button
-class="card"
-onclick="openAnnualCategory(${index})">
+console.log(
+    "%c🌸 まる家計 Ver18",
+    "color:#4CAF50;font-size:16px;font-weight:bold;"
+);
 
-<h3>${category.title}</h3>
+console.log({
 
-<p>予算 ¥${category.budget.toLocaleString()}</p>
+    version:"18.0",
 
-<p>使用 ¥${used.toLocaleString()}</p>
+    fiscalYear:currentYear,
 
-<p>残り ¥${remain.toLocaleString()}</p>
+    month:currentMonth,
 
-<div class="progress">
-
-<div
-class="progress-bar"
-style="width:${percent}%">
-
-</div>
-
-</div>
-
-</button>
-
-`;
+    page:
+        JSON.parse(
+            localStorage.getItem(
+                getSessionKey()
+            ) || "{}"
+        ).page || "home"
 
 });
+    displayCategories.forEach((category)=>{
 
-    app.annualCategories.forEach((category,index)=>{
+        const index =
+            app.annualCategories.findIndex(
+                c=>c.id===category.id
+            );
 
         const used =
             category.history.reduce(
@@ -1937,9 +1921,7 @@ function addAnnualHistory(){
     if(!name) return;
 
     const amount =
-        Number(
-            prompt("金額")
-        );
+        Number(prompt("金額"));
 
     if(isNaN(amount)) return;
 
@@ -2071,6 +2053,7 @@ function deleteAnnualCategory(){
     showPage("annual");
 
 }
+
 function deleteAnnualHistory(index){
 
     if(currentAnnualCategory<0) return;
@@ -2089,50 +2072,6 @@ function deleteAnnualHistory(index){
     drawAnnualManage();
 
 }
-/* ===========================
-   ⑪ 初期表示
-=========================== */
-
-function initializeApp(){
-
-    load();
-
-    update();
-
-    showPage(
-        session.page || "home"
-    );
-
-}
-initializeApp();
-
-window.addEventListener(
-    "beforeunload",
-    save
-);
-
-console.log(
-    "%c🌸 まる家計 Ver18",
-    "color:#4CAF50;font-size:16px;font-weight:bold;"
-);
-
-console.log({
-
-    version:"18.0",
-
-    fiscalYear:currentYear,
-
-    month:currentMonth,
-
-    page:
-        JSON.parse(
-            localStorage.getItem(
-                getSessionKey()
-            ) || "{}"
-        ).page || "home"
-
-});
-
 /* ===========================
    設定画面
 =========================== */
