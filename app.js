@@ -593,15 +593,12 @@ function update(){
 
     }
 
-drawCategories();
+    drawCategories();
 
-console.log("AIの前");
+    drawAI();
 
-drawAI();
+    drawYearSummary();
 
-console.log("AIの後");
-
-drawYearSummary();
     drawYearCategory();
 
     drawYearChart();
