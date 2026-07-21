@@ -1573,15 +1573,15 @@ function drawYearChart(){
 
 function addAnnualCategory(){
 
-    const title = prompt("カテゴリ名");
+    const title=prompt("カテゴリ名");
     if(!title) return;
 
-    const budget = Number(prompt("予算"));
+    const budget=Number(prompt("予算"));
     if(isNaN(budget)) return;
 
     app.annualCategories.push({
 
-        id: Date.now().toString(),
+        id:Date.now().toString(),
 
         title,
 
@@ -1597,25 +1597,61 @@ function addAnnualCategory(){
 
 function drawAnnualManage(){
 
-    const area =
+    const area=
         document.getElementById("annualManageList");
 
     if(!area) return;
 
-    area.innerHTML = "";
+    area.innerHTML="";
+
+    const totalBudget=
+        app.annualCategories.reduce(
+            (sum,item)=>sum+item.budget,
+            0
+        );
+
+    const totalUsed=
+        app.annualCategories.reduce(
+            (sum,item)=>
+                sum+
+                item.history.reduce(
+                    (s,h)=>s+h.amount,
+                    0
+                ),
+            0
+        );
+
+    const totalRemain=
+        totalBudget-totalUsed;
+
+    area.innerHTML+=`
+
+<div class="card">
+
+<h3>📊 特別費合計</h3>
+
+<p>予算合計：¥${totalBudget.toLocaleString()}</p>
+
+<p>使用合計：¥${totalUsed.toLocaleString()}</p>
+
+<p>残り：¥${totalRemain.toLocaleString()}</p>
+
+</div>
+
+`;
 
     app.annualCategories.forEach((category,index)=>{
 
-        const used =
+        const used=
             category.history.reduce(
-                (sum,item)=>sum + item.amount,
+                (sum,item)=>sum+item.amount,
                 0
             );
 
-        const remain =
-            category.budget - used;
+        const remain=
+            category.budget-used;
 
-        const percent =
+        const percent=
             category.budget===0
             ?0
             :Math.min(
@@ -1625,7 +1661,7 @@ function drawAnnualManage(){
                 100
             );
 
-        area.innerHTML += `
+        area.innerHTML+=`
 
 <button
 class="card"
@@ -1655,7 +1691,7 @@ style="width:${percent}%">
 
     });
 
-    area.innerHTML += `
+    area.innerHTML+=`
 
 <button
 class="card"
@@ -1671,34 +1707,34 @@ onclick="addAnnualCategory()">
 
 }
 
-let currentAnnualCategory = -1;
+let currentAnnualCategory=-1;
 
 function openAnnualCategory(index){
 
-    currentAnnualCategory = index;
+    currentAnnualCategory=index;
 
-    const category =
+    const category=
         app.annualCategories[index];
 
     if(!category) return;
 
-    lastPage = "annual";
+    lastPage="annual";
 
     showPage("category");
 
-    document.getElementById("categoryTitle").textContent =
+    document.getElementById("categoryTitle").textContent=
         category.title;
 
-    const used =
+    const used=
         category.history.reduce(
             (sum,item)=>sum+item.amount,
             0
         );
 
-    const remain =
+    const remain=
         category.budget-used;
 
-    document.getElementById("categorySummary").innerHTML = `
+    document.getElementById("categorySummary").innerHTML=`
 
 予算：¥${category.budget.toLocaleString()}<br>
 使用：¥${used.toLocaleString()}<br>
@@ -1706,21 +1742,22 @@ function openAnnualCategory(index){
 
 `;
 
-    const history =
+    const history=
         document.getElementById("categoryHistory");
 
-    history.innerHTML = "";
+    history.innerHTML="";
 
     if(category.history.length===0){
 
-        history.innerHTML =
-            "<p>まだ履歴はありません</p>";
+        history.innerHTML="<p>まだ履歴はありません</p>";
 
-    }else{
+        return;
 
-        category.history.forEach((item,index)=>{
+    }
 
-            history.innerHTML += `
+    category.history.forEach((item,index)=>{
+
+        history.innerHTML+=`
 
 <button
 class="setting-item"
@@ -1743,9 +1780,7 @@ ${item.name}
 
 `;
 
-        });
-
-    }
+    });
 
 }
 
@@ -1753,15 +1788,13 @@ function addAnnualHistory(){
 
     if(currentAnnualCategory<0) return;
 
-    const category =
+    const category=
         app.annualCategories[currentAnnualCategory];
 
-    const name =
-        prompt("名前");
-
+    const name=prompt("名前");
     if(!name) return;
 
-    const amount =
+    const amount=
         Number(prompt("金額"));
 
     if(isNaN(amount)) return;
@@ -1794,30 +1827,24 @@ function editAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
 
-    const category =
+    const category=
         app.annualCategories[currentAnnualCategory];
 
-    const title =
-        prompt(
-            "カテゴリ名",
-            category.title
-        );
+    const title=
+        prompt("カテゴリ名",category.title);
 
     if(!title) return;
 
-    const budget =
+    const budget=
         Number(
-            prompt(
-                "予算",
-                category.budget
-            )
+            prompt("予算",category.budget)
         );
 
     if(isNaN(budget)) return;
 
-    category.title = title;
+    category.title=title;
 
-    category.budget = budget;
+    category.budget=budget;
 
     update();
 
@@ -1829,23 +1856,15 @@ function deleteAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
 
-    const category =
-        app.annualCategories[currentAnnualCategory];
-
-    if(
-        !confirm(
-            `「${category.title}」を削除しますか？`
-        )
-    ){
+    if(!confirm("カテゴリを削除しますか？"))
         return;
-    }
 
     app.annualCategories.splice(
         currentAnnualCategory,
         1
     );
 
-    currentAnnualCategory = -1;
+    currentAnnualCategory=-1;
 
     update();
 
@@ -1857,14 +1876,12 @@ function deleteAnnualHistory(index){
 
     if(currentAnnualCategory<0) return;
 
-    const category =
-        app.annualCategories[currentAnnualCategory];
-
-    if(!confirm("この履歴を削除しますか？")){
+    if(!confirm("履歴を削除しますか？"))
         return;
-    }
 
-    category.history.splice(index,1);
+    app.annualCategories[currentAnnualCategory]
+        .history
+        .splice(index,1);
 
     save();
 
