@@ -1,5 +1,5 @@
 /* ===========================
-   Ver15
+   Ver19
    ① データ・初期化
 =========================== */
 
@@ -64,9 +64,21 @@ function createDefaultBudgets(){
 
 }
 
-const app = {
+const app={
 
     goal:3400000,
+
+    reserveMin:500000,
+
+    reserveFund:{
+
+        balance:0,
+
+        pending:0,
+
+        history:[]
+
+    },
 
     bank:{
 
@@ -102,28 +114,56 @@ const app = {
 
     annualCategories:[
 
-    {
-        id:"birthday",
-        title:"🎂 誕生日",
-        budget:150000,
-        history:[]
-    },
+        {
+            id:"birthday",
+            title:"🎂 誕生日",
+            budget:150000,
+            history:[]
+        },
 
-    {
-        id:"travel",
-        title:"✈️ 旅行",
-        budget:300000,
-        history:[]
-    },
+        {
+            id:"travel",
+            title:"✈️ 旅行",
+            budget:400000,
+            history:[]
+        },
 
-    {
-        id:"car",
-        title:"🚗 車検",
-        budget:120000,
-        history:[]
-    }
+        {
+            id:"car",
+            title:"🚗 車検",
+            budget:120000,
+            history:[]
+        },
 
-],
+        {
+            id:"property",
+            title:"🏠 固定資産税",
+            budget:70000,
+            history:[]
+        },
+
+        {
+            id:"kindergarten",
+            title:"🎒 幼稚園",
+            budget:235200,
+            history:[]
+        },
+
+        {
+            id:"medicine",
+            title:"💊 ピル",
+            budget:24000,
+            history:[]
+        },
+
+        {
+            id:"jokaso",
+            title:"🚰 集中浄化槽",
+            budget:48000,
+            history:[]
+        }
+
+    ],
 
     budgets:createDefaultBudgets(),
 
@@ -131,9 +171,9 @@ const app = {
 
 };
 
-let currentYear = 2026;
+let currentYear=2026;
 
-let currentMonth = 4;
+let currentMonth=4;
 /* ===========================
    ② 保存・読込
 =========================== */
