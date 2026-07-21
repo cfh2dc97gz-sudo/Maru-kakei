@@ -761,7 +761,7 @@ function editBank(){
 function addSpent(index,isOverwrite=false){
 
     const input =
-        prompt("金額 メモ\n例：5000 マック");
+        prompt("金額 メモ");
 
     if(!input) return;
 
@@ -2174,7 +2174,7 @@ if(deleteBtn){
 }
 
 /* ===========================
-   135万円管理追加
+   特別費管理
 =========================== */
 
 const addAnnualBtn =
