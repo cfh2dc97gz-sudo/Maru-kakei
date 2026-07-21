@@ -204,20 +204,23 @@ function save(){
 
         startBank:app.startBank,
 
+        reserveMin:app.reserveMin,
+
+        reserveFund:JSON.parse(
+            JSON.stringify(app.reserveFund)
+        ),
+
         bonus:{...app.bonus},
 
-        annualCategories: JSON.parse(
-    JSON.stringify(app.annualCategories)
-)
+        annualCategories:JSON.parse(
+            JSON.stringify(app.annualCategories)
+        )
 
     };
 
     localStorage.setItem(
-
         getYearKey(),
-
         JSON.stringify(yearData)
-
     );
 
     const monthData={
@@ -235,15 +238,11 @@ function save(){
     };
 
     localStorage.setItem(
-
         getKey(),
-
         JSON.stringify(monthData)
-
     );
 
     const session=
-
         JSON.parse(
             localStorage.getItem(getSessionKey())
             || "{}"
@@ -256,11 +255,8 @@ function save(){
     session.page=session.page || "home";
 
     localStorage.setItem(
-
         getSessionKey(),
-
         JSON.stringify(session)
-
     );
 
 }
@@ -287,6 +283,18 @@ function load(){
 
     app.startBank=0;
 
+    app.reserveMin=500000;
+
+    app.reserveFund={
+
+        balance:0,
+
+        pending:0,
+
+        history:[]
+
+    };
+
     app.bonus={
 
         summerForecast:0,
@@ -299,20 +307,16 @@ function load(){
 
     };
 
-    app.annualItems=[];
-
     app.budgets=createDefaultBudgets();
 
     app.history=[];
 
     const monthSaved=
-
         localStorage.getItem(getKey());
 
     if(monthSaved){
 
         const data=
-
             JSON.parse(monthSaved);
 
         app.bank=data.bank || app.bank;
@@ -326,23 +330,27 @@ function load(){
     }
 
     const yearSaved=
-
         localStorage.getItem(getYearKey());
 
     if(yearSaved){
 
         const data=
-
             JSON.parse(yearSaved);
 
         app.goal=data.goal ?? app.goal;
 
         app.startBank=data.startBank ?? 0;
 
+        app.reserveMin=data.reserveMin ?? 500000;
+
+        app.reserveFund=data.reserveFund || app.reserveFund;
+
         app.bonus=data.bonus || app.bonus;
-app.annualCategories =
-    data.annualCategories ||
-    app.annualCategories;
+
+        app.annualCategories=
+            data.annualCategories ||
+            app.annualCategories;
+
     }
 
     app.budgets.forEach(item=>{
