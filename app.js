@@ -406,7 +406,6 @@ if(yearSelect){
         currentYear =
             Number(yearSelect.value);
 
-        // 年度変更時は必ず4月開始
         currentMonth = 4;
 
         load();
@@ -419,6 +418,8 @@ if(yearSelect){
 
         drawYearChart();
 
+        drawAnnualManage();
+
         showPage(
             JSON.parse(
                 localStorage.getItem(getSessionKey())
@@ -429,6 +430,7 @@ if(yearSelect){
     };
 
 }
+
 // initializeApp()で読み込むため削除
 /* ===========================
    ④ 月変更・画面更新
