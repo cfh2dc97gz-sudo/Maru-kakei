@@ -1656,26 +1656,30 @@ function drawAnnualManage(){
 
     area.innerHTML = "";
 
-    const TOTAL_BUDGET = 1350000;
+const TOTAL_BUDGET = 1350000;
 
-    const totalUsed =
-        app.annualCategories.reduce(
+refreshOtherReserve();
 
-            (sum,category)=>
+const totalBudget = TOTAL_BUDGET;
 
-                sum+
+const totalUsed =
+    app.annualCategories.reduce(
 
-                category.history.reduce(
-                    (s,h)=>s+h.amount,
-                    0
-                ),
+        (sum,category)=>
 
-            0
+            sum+
 
-        );
+            category.history.reduce(
+                (s,h)=>s+h.amount,
+                0
+            ),
 
-    const totalRemain =
-        TOTAL_BUDGET-totalUsed;
+        0
+
+    );
+
+const totalRemain =
+    totalBudget-totalUsed;
 
     area.innerHTML += `
 
@@ -1693,16 +1697,73 @@ function drawAnnualManage(){
 
 `;
 
-    app.annualCategories
-        .sort((a,b)=>{
+const displayCategories = [
 
-            if(a.id==="otherReserve") return 1;
+    ...app.annualCategories.filter(
+        c=>c.id!=="otherReserve"
+    ),
 
-            if(b.id==="otherReserve") return -1;
+    app.annualCategories.find(
+        c=>c.id==="otherReserve"
+    )
 
-            return 0;
+].filter(Boolean);
 
-        });
+displayCategories.forEach((category)=>{
+
+    const index =
+        app.annualCategories.findIndex(
+            c=>c.id===category.id
+        );
+
+    const used =
+        category.history.reduce(
+            (sum,item)=>sum+item.amount,
+            0
+        );
+
+    const remain =
+        category.budget-used;
+
+    const percent =
+        category.budget===0
+        ?0
+        :Math.min(
+            Math.round(
+                used/category.budget*100
+            ),
+            100
+        );
+
+    area.innerHTML += `
+
+<button
+class="card"
+onclick="openAnnualCategory(${index})">
+
+<h3>${category.title}</h3>
+
+<p>予算 ¥${category.budget.toLocaleString()}</p>
+
+<p>使用 ¥${used.toLocaleString()}</p>
+
+<p>残り ¥${remain.toLocaleString()}</p>
+
+<div class="progress">
+
+<div
+class="progress-bar"
+style="width:${percent}%">
+
+</div>
+
+</div>
+
+</button>
+
+`;
+
+});
 
     app.annualCategories.forEach((category,index)=>{
 
@@ -1867,16 +1928,43 @@ function addAnnualHistory(){
 
     if(currentAnnualCategory<0) return;
 
-    const category=
+    const category =
         app.annualCategories[currentAnnualCategory];
 
-    const name=prompt("名前");
+    const name =
+        prompt("名前");
+
     if(!name) return;
 
-    const amount=
-        Number(prompt("金額"));
+    const amount =
+        Number(
+            prompt("金額")
+        );
 
     if(isNaN(amount)) return;
+
+    const used =
+        category.history.reduce(
+            (sum,item)=>sum+item.amount,
+            0
+        );
+
+    if(used + amount > category.budget){
+
+        const over =
+            used + amount - category.budget;
+
+        if(
+            !confirm(
+`予算を¥${over.toLocaleString()}超えます。
+
+このまま登録しますか？`
+            )
+        ){
+            return;
+        }
+
+    }
 
     category.history.push({
 
