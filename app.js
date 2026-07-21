@@ -1932,13 +1932,31 @@ function deleteAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
 
-    if(!confirm("カテゴリを削除しますか？"))
+    const category =
+        app.annualCategories[currentAnnualCategory];
+
+    if(category.id==="otherReserve"){
+
+        alert("📦 その他積立は削除できません。");
+
         return;
+
+    }
+
+    if(
+        !confirm(
+            `「${category.title}」を削除しますか？`
+        )
+    ){
+        return;
+    }
 
     app.annualCategories.splice(
         currentAnnualCategory,
         1
     );
+
+    refreshOtherReserve();
 
     currentAnnualCategory=-1;
 
@@ -1947,7 +1965,6 @@ function deleteAnnualCategory(){
     showPage("annual");
 
 }
-
 function deleteAnnualHistory(index){
 
     if(currentAnnualCategory<0) return;
