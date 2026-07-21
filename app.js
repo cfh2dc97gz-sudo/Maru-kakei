@@ -1570,13 +1570,15 @@ function drawYearChart(){
 /* ===========================
    特別費管理
 =========================== */
-
 function addAnnualCategory(){
 
-    const title=prompt("カテゴリ名");
+    const title = prompt("カテゴリ名");
+
     if(!title) return;
 
-    const budget=Number(prompt("予算"));
+    const budget =
+        Number(prompt("予算"));
+
     if(isNaN(budget)) return;
 
     app.annualCategories.push({
@@ -1591,10 +1593,58 @@ function addAnnualCategory(){
 
     });
 
+    refreshOtherReserve();
+
     update();
 
 }
 
+function getOtherReserveBudget(){
+
+    const TOTAL_BUDGET = 1350000;
+
+    const fixedTotal =
+        app.annualCategories
+            .filter(c=>c.id!=="otherReserve")
+            .reduce((sum,c)=>sum+c.budget,0);
+
+    return Math.max(
+        TOTAL_BUDGET-fixedTotal,
+        0
+    );
+
+}
+
+function refreshOtherReserve(){
+
+    let other =
+        app.annualCategories.find(
+            c=>c.id==="otherReserve"
+        );
+
+    if(!other){
+
+        other={
+
+            id:"otherReserve",
+
+            title:"📦 その他積立",
+
+            budget:0,
+
+            history:[]
+
+        };
+
+        app.annualCategories.push(other);
+
+    }
+
+    other.title="📦 その他積立";
+
+    other.budget=getOtherReserveBudget();
+
+}
 function drawAnnualManage(){
 
     const area =
