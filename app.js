@@ -1597,38 +1597,90 @@ function addAnnualCategory(){
 
 function drawAnnualManage(){
 
-    const area=
+    const area =
         document.getElementById("annualManageList");
 
     if(!area) return;
 
-    area.innerHTML="";
+    area.innerHTML = "";
 
-    const totalBudget=
-        app.annualCategories.reduce(
-            (sum,item)=>sum+item.budget,
-            0
+    const TOTAL_BUDGET = 1350000;
+
+    let fixedTotal = 0;
+
+    app.annualCategories.forEach(category=>{
+
+        if(category.id!=="otherReserve"){
+
+            fixedTotal += category.budget;
+
+        }
+
+    });
+
+    let otherReserve =
+        TOTAL_BUDGET - fixedTotal;
+
+    if(otherReserve < 0){
+
+        otherReserve = 0;
+
+    }
+
+    const otherCategory =
+        app.annualCategories.find(
+            c=>c.id==="otherReserve"
         );
 
-    const totalUsed=
+    if(otherCategory){
+
+        otherCategory.title = "📦 その他積立";
+        otherCategory.budget = otherReserve;
+    }else{
+
+        app.annualCategories.push({
+
+            id:"otherReserve",
+
+            title:"📦 その他積立",
+
+            budget:otherReserve,
+
+            history:[]
+
+        });
+
+    }
+
+    const totalBudget = TOTAL_BUDGET;
+
+    const totalUsed =
         app.annualCategories.reduce(
-            (sum,item)=>
+
+            (sum,category)=>
+
                 sum+
-                item.history.reduce(
+
+                category.history.reduce(
+
                     (s,h)=>s+h.amount,
+
                     0
+
                 ),
+
             0
+
         );
 
-    const totalRemain=
+    const totalRemain =
         totalBudget-totalUsed;
 
-    area.innerHTML+=`
+    area.innerHTML += `
 
 <div class="card">
 
-<h3>📊 特別費合計</h3>
+<h3>💰 特別費合計</h3>
 
 <p>予算合計：¥${totalBudget.toLocaleString()}</p>
 
@@ -1642,16 +1694,16 @@ function drawAnnualManage(){
 
     app.annualCategories.forEach((category,index)=>{
 
-        const used=
+        const used =
             category.history.reduce(
                 (sum,item)=>sum+item.amount,
                 0
             );
 
-        const remain=
+        const remain =
             category.budget-used;
 
-        const percent=
+        const percent =
             category.budget===0
             ?0
             :Math.min(
@@ -1661,7 +1713,7 @@ function drawAnnualManage(){
                 100
             );
 
-        area.innerHTML+=`
+        area.innerHTML += `
 
 <button
 class="card"
@@ -1691,7 +1743,7 @@ style="width:${percent}%">
 
     });
 
-    area.innerHTML+=`
+    area.innerHTML += `
 
 <button
 class="card"
@@ -1706,9 +1758,6 @@ onclick="addAnnualCategory()">
 `;
 
 }
-
-let currentAnnualCategory=-1;
-
 function openAnnualCategory(index){
 
     currentAnnualCategory=index;
