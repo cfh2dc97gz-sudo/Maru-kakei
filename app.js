@@ -1888,31 +1888,46 @@ function editAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
 
-    const category=
+    const category =
         app.annualCategories[currentAnnualCategory];
 
-    const title=
-        prompt("カテゴリ名",category.title);
+    if(category.id==="otherReserve"){
+
+        alert("📦 その他積立は自動計算です。");
+
+        return;
+
+    }
+
+    const title =
+        prompt(
+            "カテゴリ名",
+            category.title
+        );
 
     if(!title) return;
 
-    const budget=
+    const budget =
         Number(
-            prompt("予算",category.budget)
+            prompt(
+                "予算",
+                category.budget
+            )
         );
 
     if(isNaN(budget)) return;
 
-    category.title=title;
+    category.title = title;
 
-    category.budget=budget;
+    category.budget = budget;
+
+    refreshOtherReserve();
 
     update();
 
     openAnnualCategory(currentAnnualCategory);
 
 }
-
 function deleteAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
