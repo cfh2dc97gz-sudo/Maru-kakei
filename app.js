@@ -1647,6 +1647,8 @@ function refreshOtherReserve(){
 }
 function drawAnnualManage(){
 
+    refreshOtherReserve();
+
     const area =
         document.getElementById("annualManageList");
 
@@ -1656,54 +1658,6 @@ function drawAnnualManage(){
 
     const TOTAL_BUDGET = 1350000;
 
-    let fixedTotal = 0;
-
-    app.annualCategories.forEach(category=>{
-
-        if(category.id!=="otherReserve"){
-
-            fixedTotal += category.budget;
-
-        }
-
-    });
-
-    let otherReserve =
-        TOTAL_BUDGET - fixedTotal;
-
-    if(otherReserve < 0){
-
-        otherReserve = 0;
-
-    }
-
-    const otherCategory =
-        app.annualCategories.find(
-            c=>c.id==="otherReserve"
-        );
-
-    if(otherCategory){
-
-        otherCategory.title = "📦 その他積立";
-        otherCategory.budget = otherReserve;
-    }else{
-
-        app.annualCategories.push({
-
-            id:"otherReserve",
-
-            title:"📦 その他積立",
-
-            budget:otherReserve,
-
-            history:[]
-
-        });
-
-    }
-
-    const totalBudget = TOTAL_BUDGET;
-
     const totalUsed =
         app.annualCategories.reduce(
 
@@ -1712,11 +1666,8 @@ function drawAnnualManage(){
                 sum+
 
                 category.history.reduce(
-
                     (s,h)=>s+h.amount,
-
                     0
-
                 ),
 
             0
@@ -1724,15 +1675,15 @@ function drawAnnualManage(){
         );
 
     const totalRemain =
-        totalBudget-totalUsed;
+        TOTAL_BUDGET-totalUsed;
 
     area.innerHTML += `
 
 <div class="card">
 
-<h3>💰 特別費合計</h3>
+<h3>💰 年間135万円管理</h3>
 
-<p>予算合計：¥${totalBudget.toLocaleString()}</p>
+<p>予算合計：¥${TOTAL_BUDGET.toLocaleString()}</p>
 
 <p>使用合計：¥${totalUsed.toLocaleString()}</p>
 
@@ -1741,6 +1692,17 @@ function drawAnnualManage(){
 </div>
 
 `;
+
+    app.annualCategories
+        .sort((a,b)=>{
+
+            if(a.id==="otherReserve") return 1;
+
+            if(b.id==="otherReserve") return -1;
+
+            return 0;
+
+        });
 
     app.annualCategories.forEach((category,index)=>{
 
