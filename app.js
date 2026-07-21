@@ -1357,22 +1357,9 @@ function showCategoryHistory(categoryId){
 
 `;
 
-    const annualCategory =
-    app.annualCategories.find(
-        c=>c.id===categoryId
-    );
-
-const isSpecial =
-    !!annualCategory;
-
-document.getElementById("editAnnualCategory").style.display =
-    isSpecial ? "block" : "none";
-
-document.getElementById("deleteAnnualCategory").style.display =
-    isSpecial ? "block" : "none";
-
-document.getElementById("addAnnualHistory").style.display =
-    isSpecial ? "block" : "none";
+    document.getElementById("editAnnualCategory").style.display="none";
+document.getElementById("deleteAnnualCategory").style.display="none";
+document.getElementById("addAnnualHistory").style.display="none";
 
     const history=
         document.getElementById("categoryHistory");
