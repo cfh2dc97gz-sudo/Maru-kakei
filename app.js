@@ -191,43 +191,33 @@ function getKey(){
 }
 function getMonthData(year,month){
 
-    const key =
-        `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
-
-const saved = localStorage.getItem(
-    `maru-kakei-${year}-${String(month).padStart(2,"0")}`
-);
-
-if(!saved){
-
-    return null;
-
-}
-
-try{
-
-    return JSON.parse(saved);
-
-}catch(e){
-
-    console.error("データの読み込みに失敗しました",e);
-
-    return null;
-
-}
-
-}catch(e){
-
-    console.error(
-        "月データの読込に失敗しました",
-        e
+    const saved = localStorage.getItem(
+        `maru-kakei-${year}-${String(month).padStart(2,"0")}`
     );
 
-    return null;
+    if(!saved){
+
+        return null;
+
+    }
+
+    try{
+
+        return JSON.parse(saved);
+
+    }catch(e){
+
+        console.error(
+            "データの読み込みに失敗しました",
+            e
+        );
+
+        return null;
+
+    }
 
 }
 
-}
 function getYearKey(){
 
     return `maru-kakei-year-${currentYear}`;
