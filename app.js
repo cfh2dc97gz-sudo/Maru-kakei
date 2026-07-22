@@ -1528,13 +1528,14 @@ function getMonthYear(month){
 
 function getMonthlySpent(year,month){
 
-    const saved = localStorage.getItem(
-        `maru-kakei-${year}-${String(month).padStart(2,"0")}`
-    );
+const data =
+    getMonthData(year,month);
 
-    if(!saved) return 0;
+if(!data){
 
-    const data = JSON.parse(saved);
+    return 0;
+
+}
 
     return (data.budgets || []).reduce(
         (sum,item)=>sum+(item.spent||0),
