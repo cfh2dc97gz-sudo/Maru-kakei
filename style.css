@@ -1600,3 +1600,10 @@ button:active{
     font-size:16px;
 
 }
+
+html,
+body{
+
+    touch-action: manipulation;
+
+}
