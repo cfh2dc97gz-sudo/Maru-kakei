@@ -1524,14 +1524,6 @@ function getFiscalMonths(){
 
 }
 
-function getMonthYear(month){
-
-    return month <= 3
-        ? currentYear + 1
-        : currentYear;
-
-}
-
 function getMonthlySpent(year,month){
 
 const data =
