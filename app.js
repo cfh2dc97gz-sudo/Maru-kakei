@@ -1065,39 +1065,41 @@ function drawYearSummary(){
     }
 
     let income = 0;
-    let spent = 0;
+let spent = 0;
 
-    for(const month of [4,5,6,7,8,9,10,11,12,1,2,3]){
+const months = [4,5,6,7,8,9,10,11,12,1,2,3];
 
-        const year =
-            month <= 3
-                ? currentYear + 1
-                : currentYear;
+months.forEach(month=>{
 
-        const key =
-            `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
+    const year =
+        month <= 3
+            ? currentYear + 1
+            : currentYear;
 
-        const saved =
-            localStorage.getItem(key);
+    const key =
+        `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
 
-        if(!saved) continue;
+    const saved =
+        localStorage.getItem(key);
 
-        const data =
-            JSON.parse(saved);
+    if(!saved) return;
 
-        income +=
-            (data.income?.papa || 0) +
-            (data.income?.mama || 0) +
-            (data.income?.extra || 0);
+    const data =
+        JSON.parse(saved);
 
-        spent +=
-            (data.budgets || []).reduce(
-                (sum,item)=>
-                    sum + (item.spent || 0),
-                0
-            );
+    income +=
+        (data.income?.papa || 0) +
+        (data.income?.mama || 0) +
+        (data.income?.extra || 0);
 
-    }
+    spent +=
+        (data.budgets || []).reduce(
+            (sum,item)=>
+                sum + Number(item.spent || 0),
+            0
+        );
+
+});
 
     const remain =
         income - spent;
