@@ -2259,19 +2259,31 @@ if(editBonusBtn){
 
     editBonusBtn.onclick = ()=>{
 
-        app.bonus.summerForecast =
-            Number(prompt("夏予定",app.bonus.summerForecast)) || 0;
+       openNumberModal("夏ボーナス予定",(summerForecast)=>{
 
-        app.bonus.summerActual =
-            Number(prompt("夏実績",app.bonus.summerActual)) || 0;
+    openNumberModal("夏ボーナス実績",(summerActual)=>{
 
-        app.bonus.winterForecast =
-            Number(prompt("冬予定",app.bonus.winterForecast)) || 0;
+        openNumberModal("冬ボーナス予定",(winterForecast)=>{
 
-        app.bonus.winterActual =
-            Number(prompt("冬実績",app.bonus.winterActual)) || 0;
+            openNumberModal("冬ボーナス実績",(winterActual)=>{
 
-        update();
+                app.bonus.summerForecast = summerForecast;
+
+                app.bonus.summerActual = summerActual;
+
+                app.bonus.winterForecast = winterForecast;
+
+                app.bonus.winterActual = winterActual;
+
+                update();
+
+            });
+
+        });
+
+    });
+
+});
 
     };
 
