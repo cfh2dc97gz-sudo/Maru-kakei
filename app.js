@@ -1159,16 +1159,43 @@ function drawYearCategory(){
 
     area.innerHTML = "";
 
-    const ranking =
-        app.budgets.map(budget=>{
+    const months = [4,5,6,7,8,9,10,11,12,1,2,3];
 
-            const list =
-    app.history.filter(h=>
+const ranking =
+    app.budgets.map(budget=>{
 
-        h.category === budget.name &&
-        h.annual === false
+        let list = [];
 
-    );
+        months.forEach(month=>{
+
+            const year =
+                month <= 3
+                    ? currentYear + 1
+                    : currentYear;
+
+            const saved =
+                localStorage.getItem(
+                    `maru-kakei-${year}-${String(month).padStart(2,"0")}`
+                );
+
+            if(!saved) return;
+
+            const data =
+                JSON.parse(saved);
+
+            list.push(
+
+                ...(data.history || []).filter(h=>
+
+                    h.category === budget.name &&
+                    h.annual === false
+
+                )
+
+            );
+
+        });
+
             const total =
                 list.reduce(
                     (sum,h)=>sum+h.amount,
@@ -1336,26 +1363,46 @@ function showCategoryHistory(categoryId){
     document.getElementById("categoryTitle").textContent=
         budget.name;
 
-    const list =
-    app.history
-        .filter(h=>
+const months = [4,5,6,7,8,9,10,11,12,1,2,3];
+
+let list = [];
+
+months.forEach(month=>{
+
+    const year =
+        month <= 3
+            ? currentYear + 1
+            : currentYear;
+
+    const saved =
+        localStorage.getItem(
+            `maru-kakei-${year}-${String(month).padStart(2,"0")}`
+        );
+
+    if(!saved) return;
+
+    const data =
+        JSON.parse(saved);
+
+    list.push(
+
+        ...(data.history || []).filter(h=>
 
             h.category === budget.name &&
             h.annual === false
 
         )
-        .sort(
-            (a,b)=>
-                new Date(b.date) -
-                new Date(a.date)
-        );
 
-        });
-            .sort(
-                (a,b)=>
-                    new Date(b.date)-
-                    new Date(a.date)
-            );
+    );
+
+});
+
+list.sort(
+    (a,b)=>
+        new Date(b.date)-
+        new Date(a.date)
+);
+   
 
     const total=
         list.reduce(
