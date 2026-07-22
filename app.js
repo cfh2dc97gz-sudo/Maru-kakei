@@ -1897,30 +1897,45 @@ function addAnnualHistory(){
 
     }
 
-    category.history.unshift({
+    const historyItem = {
 
-        name,
+    name,
 
-        amount,
+    amount,
 
-        date:new Date().toLocaleDateString(
-            "ja-JP",
-            {
-                year:"numeric",
-                month:"numeric",
-                day:"numeric"
-            }
-        )
+    date:new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    )
 
-    });
+};
 
-    save();
+category.history.unshift(historyItem);
 
-    drawAnnualManage();
+app.history.push({
 
-    openAnnualCategory(currentAnnualCategory);
+    date: historyItem.date,
 
-}
+    category: category.title,
+
+    amount: amount,
+
+    memo: name,
+
+    annual: true
+
+});
+
+save();
+
+drawAnnualManage();
+
+openAnnualCategory(currentAnnualCategory);
+   
 function editAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
