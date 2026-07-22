@@ -2307,4 +2307,95 @@ if(deleteBtn){
     };
 
 }
+/* ===========================
+   数字入力モーダル
+=========================== */
 
+let numberValue = "";
+
+let numberCallback = null;
+
+function updateNumberDisplay(){
+
+    const display =
+        document.getElementById("numberDisplay");
+
+    if(!display) return;
+
+    display.textContent =
+        "¥" +
+        (numberValue || "0")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+}
+
+function openNumberModal(title,callback){
+
+    numberValue = "";
+
+    numberCallback = callback;
+
+    document.getElementById("numberTitle").textContent =
+        title;
+
+    document.getElementById("numberModal").style.display =
+        "flex";
+
+    updateNumberDisplay();
+
+}
+
+function closeNumberModal(){
+
+    document.getElementById("numberModal").style.display =
+        "none";
+
+}
+
+function numberKey(num){
+
+    if(numberValue==="0"){
+
+        numberValue = num;
+
+    }else{
+
+        numberValue += num;
+
+    }
+
+    updateNumberDisplay();
+
+}
+
+function numberBack(){
+
+    numberValue =
+        numberValue.slice(0,-1);
+
+    updateNumberDisplay();
+
+}
+
+function numberClear(){
+
+    numberValue = "";
+
+    updateNumberDisplay();
+
+}
+
+document.getElementById("numberOk").onclick = ()=>{
+
+    const value =
+        Number(numberValue || 0);
+
+    closeNumberModal();
+
+    if(numberCallback){
+
+        numberCallback(value);
+
+    }
+
+};
