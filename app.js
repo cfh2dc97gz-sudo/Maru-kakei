@@ -1002,6 +1002,11 @@ function drawAI(){
 
     const overList =
         app.budgets
+       const overList =
+    app.budgets
+        .filter(item =>
+            item.id !== "rent"
+        )
         .map(item=>{
 
             const yearly =
