@@ -794,28 +794,26 @@ function addSpent(index,isOverwrite=false){
 
     }
 
-    app.history.push({
+   app.history.push({
 
-        date:new Date().toLocaleDateString(
-            "ja-JP",
-            {
-                month:"numeric",
-                day:"numeric"
-            }
-        ),
+    date:new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    ),
 
-        category:
-            app.budgets[index].name,
+    category:app.budgets[index].name,
 
-        amount,
+    amount,
 
-        memo
+    memo,
 
-    });
+    annual:false
 
-    update();
-
-}
+});
 /* ===========================
    ⑥ ページ切替・設定
 =========================== */
