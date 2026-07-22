@@ -1537,8 +1537,16 @@ function drawYearChart(){
         );
 
     });
+canvas.style.cursor = "pointer";
 
+canvas.onclick = () => {
+
+    showPage("home");
+
+};
+   
 }
+
 function addAnnualCategory(){
 
     const title = prompt("カテゴリ名");
