@@ -1058,7 +1058,9 @@ const monthsLeft =
 const monthlyNeed = Math.ceil(remain / monthsLeft);
 
 const candidates = app.budgets
-    .filter(item => item.id !== "rent")
+   .filter(item =>
+    !["rent","utility"].includes(item.id)
+)
     .sort((a, b) => b.budget - a.budget);
 
 const advice = [];
