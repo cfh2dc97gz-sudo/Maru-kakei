@@ -462,18 +462,19 @@ function changeMonth(step){
 
     save();
 
-    currentMonth += step;
+currentMonth += step;
 
-    if(currentMonth > 12){
+if(currentMonth > 12){
 
-        currentMonth = 1;
+    currentMonth = 1;
+    currentYear++;
 
-    }else if(currentMonth < 1){
+}else if(currentMonth < 1){
 
-        currentMonth = 12;
+    currentMonth = 12;
+    currentYear--;
 
-    }
-
+}
     load();
 
     update();
