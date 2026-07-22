@@ -47,12 +47,13 @@ const DEFAULT_BUDGETS = [
         spent:0
     },
 
-    {
-        id:"other",
-        name:"📦 その他",
-        budget:30000,
-        spent:0
-    },
+{
+    id:"other",
+    name:"📦 その他",
+    budget:30000,
+    spent:0
+},
+
 {
     id:"rent",
     name:"🏠 家賃",
