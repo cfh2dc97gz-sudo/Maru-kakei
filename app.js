@@ -2312,6 +2312,7 @@ if(deleteBtn){
 let numberValue = "";
 
 let numberCallback = null;
+let numberMemo = "";
 
 function updateNumberDisplay(){
 
@@ -2330,7 +2331,8 @@ function updateNumberDisplay(){
 function openNumberModal(title,callback){
 
     numberValue = "";
-
+document.getElementById("numberMemo").value = "";
+   
     numberCallback = callback;
 
     document.getElementById("numberTitle").textContent =
@@ -2386,14 +2388,16 @@ function numberClear(){
 document.getElementById("numberOk").onclick = ()=>{
 
     const value =
-        Number(numberValue || 0);
+    Number(numberValue || 0);
 
-    closeNumberModal();
+const memo =
+    document.getElementById("numberMemo").value.trim();
 
-    if(numberCallback){
+closeNumberModal();
 
-        numberCallback(value);
+if(numberCallback){
 
-    }
+    numberCallback(value,memo);
 
+}
 };
