@@ -658,29 +658,26 @@ onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
 
 function addIncome(type){
 
-    const amount =
-        Number(prompt("収入金額"));
+    const text = prompt("収入金額");
 
-    if(!amount) return;
+    if(text === null) return;
+
+    const amount = Number(text);
+
+    if(isNaN(amount) || amount <= 0) return;
 
     switch(type){
 
         case "パパ":
-
             app.income.papa += amount;
-
             break;
 
         case "ママ":
-
             app.income.mama += amount;
-
             break;
 
         case "臨時":
-
             app.income.extra += amount;
-
             break;
 
     }
