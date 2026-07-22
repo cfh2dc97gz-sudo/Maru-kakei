@@ -1966,14 +1966,17 @@ function addAnnualHistory(){
     const category=
         app.annualCategories[currentAnnualCategory];
 
-    const name=prompt("名前");
+openNumberModal("特別費",(amount,name)=>{
 
-    if(!name) return;
+    if(amount<=0) return;
 
-    const amount=
-        Number(prompt("金額"));
+    if(!name){
 
-    if(isNaN(amount)) return;
+        alert("名前を入力してください😊");
+
+        return;
+
+    }
 
     const used=
         category.history.reduce(
@@ -2035,47 +2038,45 @@ drawAnnualManage();
 
 openAnnualCategory(currentAnnualCategory);
 
+});
+
 }
    
-function editAnnualCategory(){
+function addAnnualCategory(){
 
-    if(currentAnnualCategory<0) return;
+    openNumberModal("カテゴリ予算",(budget,title)=>{
 
-    const category=
-        app.annualCategories[currentAnnualCategory];
+        if(budget<=0) return;
 
-    if(category.id==="otherReserve"){
+        if(!title){
 
-        alert("📦 その他積立は自動計算です。");
+            alert("カテゴリ名を入力してください😊");
 
-        return;
+            return;
 
-    }
+        }
 
-    const title=prompt(
-        "カテゴリ名",
-        category.title
-    );
+        app.annualCategories.push({
 
-    if(!title) return;
+            id:Date.now().toString(),
 
-    const budget=Number(
-        prompt(
-            "予算",
-            category.budget
-        )
-    );
+            title,
 
-    if(isNaN(budget)) return;
+            budget,
 
-    category.title=title;
-    category.budget=budget;
+            history:[]
 
-    refreshOtherReserve();
+        });
 
-    save();
+        refreshOtherReserve();
 
-    drawAnnualManage();
+        save();
+
+        drawAnnualManage();
+
+    });
+
+}
 
     openAnnualCategory(currentAnnualCategory);
 
