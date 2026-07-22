@@ -483,11 +483,23 @@ currentMonth += step;
 if(currentMonth > 12){
 
     currentMonth = 1;
-    currentYear++;
 
-}else if(currentMonth < 1){
+}
+
+if(currentMonth < 1){
 
     currentMonth = 12;
+
+}
+
+if(currentMonth === 4 && step === 1){
+
+    currentYear++;
+
+}
+
+if(currentMonth === 3 && step === -1){
+
     currentYear--;
 
 }
@@ -1093,16 +1105,10 @@ months.forEach(month=>{
             ? currentYear + 1
             : currentYear;
 
-    const key =
-        `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
+const data =
+    getMonthData(year,month);
 
-    const saved =
-        localStorage.getItem(key);
-
-    if(!saved) return;
-
-    const data =
-        JSON.parse(saved);
+if(!data) return;
 
     income +=
         (data.income?.papa || 0) +
@@ -1190,15 +1196,10 @@ const ranking =
                     ? currentYear + 1
                     : currentYear;
 
-            const saved =
-                localStorage.getItem(
-                    `maru-kakei-${year}-${String(month).padStart(2,"0")}`
-                );
+const data =
+    getMonthData(year,month);
 
-            if(!saved) return;
-
-            const data =
-                JSON.parse(saved);
+if(!data) return;
 
             list.push(
 
@@ -1391,15 +1392,10 @@ months.forEach(month=>{
             ? currentYear + 1
             : currentYear;
 
-    const saved =
-        localStorage.getItem(
-            `maru-kakei-${year}-${String(month).padStart(2,"0")}`
-        );
+const data =
+    getMonthData(year,month);
 
-    if(!saved) return;
-
-    const data =
-        JSON.parse(saved);
+if(!data) return;
 
     list.push(
 
@@ -2290,53 +2286,3 @@ if(deleteBtn){
 
 }
 
-/* ===========================
-   特別費管理
-=========================== */
-
-const addAnnualBtn =
-    document.getElementById("addAnnualManage")
-    ||
-    document.getElementById("addAnnualItem");
-
-if(addAnnualBtn){
-
-    addAnnualBtn.onclick = ()=>{
-
-        const title =
-            prompt("項目名");
-
-        if(!title) return;
-
-        const amount =
-            Number(
-                prompt("金額")
-            );
-
-        if(isNaN(amount)) return;
-
-        const date =
-            prompt(
-                "日付(YYYY-MM-DD)",
-                new Date()
-                    .toISOString()
-                    .slice(0,10)
-            );
-
-        if(!date) return;
-
-        app.annualItems.push({
-
-            title,
-
-            amount,
-
-            date
-
-        });
-
-        update();
-
-    };
-
-}
