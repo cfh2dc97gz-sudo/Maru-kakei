@@ -1514,8 +1514,14 @@ ${item.memo||""}
 
 const ANNUAL_BUDGET = 1350000;
 
-function getFiscalMonths() {
-    return [4,5,6,7,8,9,10,11,12,1,2,3];
+function getFiscalMonths(){
+
+    return [
+        4,5,6,7,8,9,
+        10,11,12,
+        1,2,3
+    ];
+
 }
 
 function getMonthYear(month){
