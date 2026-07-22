@@ -53,7 +53,12 @@ const DEFAULT_BUDGETS = [
         budget:30000,
         spent:0
     }
-
+{
+    id:"rent",
+    name:"🏠 家賃",
+    budget:50000,
+    spent:0
+},
 ];
 
 function createDefaultBudgets(){
