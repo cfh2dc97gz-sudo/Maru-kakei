@@ -1583,3 +1583,20 @@ button:active{
     font-size:16px;
 
 }
+.number-memo{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    margin-bottom:16px;
+
+    padding:12px;
+
+    border:2px solid #F7C948;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+}
