@@ -275,6 +275,8 @@ function save(){
     alert("データの保存に失敗しました。");
 
 }
+
+   }
 function load(){
 
     app.bank={
