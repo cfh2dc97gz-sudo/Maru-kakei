@@ -2237,20 +2237,16 @@ if(editGoalBtn){
 
     editGoalBtn.onclick = ()=>{
 
-        const goal =
-            Number(
-                prompt(
-                    "年間目標",
-                    app.goal
-                )
-            );
+        openNumberModal("年間目標",(goal)=>{
 
-        if(isNaN(goal)) return;
+    if(goal<=0) return;
 
-        app.goal = goal;
+    app.goal = goal;
 
-        update();
+    update();
 
+});
+       
     };
 
 }
