@@ -1125,9 +1125,21 @@ ${item.name} は年間約¥${item.over.toLocaleString()}オーバー見込みで
 
     }else{
 
-        html += "🎉 すべてのカテゴリが予算内ペースです！";
+    html += "🎉 すべてのカテゴリが予算内ペースです！<br><br>";
 
-    }
+}
+
+if(advice.length){
+
+    html += "💡 <b>目標までナビ</b><br>";
+
+    advice.forEach(item=>{
+
+        html += `${item}<br>`;
+
+    });
+
+}
 
     ai.innerHTML = html;
 
