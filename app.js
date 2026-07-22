@@ -1429,120 +1429,154 @@ ${item.memo||""}
    ⑩ 年間グラフ
 =========================== */
 
-function drawYearChart() {
+const ANNUAL_BUDGET = 1350000;
 
-    const canvas = document.getElementById("yearChart");
-    if (!canvas) return;
+function getFiscalMonths() {
+    return [4,5,6,7,8,9,10,11,12,1,2,3];
+}
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+function getMonthYear(month){
+    return month <= 3
+        ? fiscalYear + 1
+        : fiscalYear;
+}
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function getMonthlySpent(year,month){
 
-    const months = [4,5,6,7,8,9,10,11,12,1,2,3];
+    const saved = localStorage.getItem(
+        `maru-kakei-${year}-${String(month).padStart(2,"0")}`
+    );
 
-    const values = [];
+    if(!saved) return 0;
 
-    months.forEach(month => {
+    const data = JSON.parse(saved);
 
-        const year = month <= 3 ? currentYear + 1 : currentYear;
+    return (data.budgets || []).reduce(
+        (sum,item)=>sum+(item.spent||0),
+        0
+    );
 
-        const saved = localStorage.getItem(
-            `maru-kakei-${year}-${String(month).padStart(2,"0")}`
+}
+
+function drawYearChart(){
+
+    const canvas=document.getElementById("yearChart");
+
+    if(!canvas) return;
+
+    const ctx=canvas.getContext("2d");
+
+    if(!ctx) return;
+
+    const W=canvas.width;
+    const H=canvas.height;
+
+    ctx.clearRect(0,0,W,H);
+
+    const months=getFiscalMonths();
+
+    const values=months.map(month=>
+        getMonthlySpent(
+            getMonthYear(month),
+            month
+        )
+    );
+
+    const max=Math.max(...values,1);
+
+    const padding=16;
+
+    const graphHeight=H-45;
+
+    const barWidth=
+        (W-padding*2)/months.length;
+
+    const hitAreas=[];
+
+    values.forEach((value,index)=>{
+
+        const h=value/max*graphHeight;
+
+        const x=
+            padding+
+            index*barWidth+
+            6;
+
+        const y=
+            graphHeight-h+10;
+
+        const w=
+            barWidth-12;
+
+        ctx.fillStyle="#F7C948";
+
+        ctx.fillRect(
+            x,
+            y,
+            w,
+            h
         );
 
-        if (!saved) {
+        ctx.fillStyle="#666";
 
-            values.push(0);
-            return;
+        ctx.font="11px sans-serif";
 
-        }
+        ctx.textAlign="center";
 
-        const data = JSON.parse(saved);
-
-        const spent = (data.budgets || []).reduce(
-            (sum, item) => sum + (item.spent || 0),
-            0
+        ctx.fillText(
+            months[index]+"月",
+            x+w/2,
+            H-8
         );
 
-        values.push(spent);
+        hitAreas.push({
 
-    });
-
-    const max = Math.max(...values, 1);
-
-    const chartTop = 10;
-    const chartBottom = canvas.height - 25;
-    const chartHeight = chartBottom - chartTop;
-
-    const width = canvas.width / months.length;
-
-    const bars = [];
-
-    values.forEach((value, index) => {
-
-        const barHeight = value / max * chartHeight;
-
-        const x = index * width + 10;
-        const y = chartBottom - barHeight;
-        const w = width - 20;
-        const h = barHeight;
-
-        bars.push({
             x,
             y,
             w,
             h,
-            month: months[index]
+
+            month:months[index]
+
         });
-
-        ctx.fillStyle = "#66bb6a";
-        ctx.fillRect(x, y, w, h);
-
-        ctx.fillStyle = "#666";
-        ctx.font = "11px sans-serif";
-        ctx.textAlign = "center";
-
-        ctx.fillText(
-            months[index] + "月",
-            index * width + width / 2,
-            canvas.height - 5
-        );
 
     });
 
-    canvas.style.cursor = "pointer";
+    canvas.style.cursor="pointer";
 
-    canvas.onclick = function (e) {
+    canvas.onclick=(e)=>{
 
-        const rect = canvas.getBoundingClientRect();
+        const rect=
+            canvas.getBoundingClientRect();
 
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
+        const scaleX=
+            W/rect.width;
 
-        const x = (e.clientX - rect.left) * scaleX;
-        const y = (e.clientY - rect.top) * scaleY;
+        const scaleY=
+            H/rect.height;
 
-        const hit = bars.find(bar =>
-            x >= bar.x &&
-            x <= bar.x + bar.w &&
-            y >= bar.y &&
-            y <= bar.y + bar.h
-        );
+        const x=
+            (e.clientX-rect.left)*scaleX;
 
-        if (!hit) return;
+        const y=
+            (e.clientY-rect.top)*scaleY;
 
-        currentMonth = hit.month;
+        const hit=
+            hitAreas.find(bar=>
 
-        if (hit.month <= 3) {
+                x>=bar.x&&
+                x<=bar.x+bar.w&&
+                y>=bar.y&&
+                y<=bar.y+bar.h
 
-            currentYear = fiscalYear + 1;
+            );
 
-        } else {
+        if(!hit) return;
 
-            currentYear = fiscalYear;
+        currentMonth=hit.month;
 
-        }
+        currentYear=
+            getMonthYear(hit.month);
 
         update();
 
@@ -1551,45 +1585,14 @@ function drawYearChart() {
     };
 
 }
-function addAnnualCategory(){
-
-    const title = prompt("カテゴリ名");
-
-    if(!title) return;
-
-    const budget = Number(prompt("予算"));
-
-    if(isNaN(budget)) return;
-
-    app.annualCategories.push({
-
-        id:Date.now().toString(),
-
-        title,
-
-        budget,
-
-        history:[]
-
-    });
-
-    refreshOtherReserve();
-
-    update();
-
-}
-
 function getOtherReserveBudget(){
 
-    const TOTAL_BUDGET = 1350000;
-
-    const fixedTotal =
-        app.annualCategories
-            .filter(c=>c.id!=="otherReserve")
-            .reduce((sum,c)=>sum+c.budget,0);
+    const total = app.annualCategories
+        .filter(c=>c.id!=="otherReserve")
+        .reduce((sum,c)=>sum+c.budget,0);
 
     return Math.max(
-        TOTAL_BUDGET-fixedTotal,
+        ANNUAL_BUDGET-total,
         0
     );
 
@@ -1597,10 +1600,9 @@ function getOtherReserveBudget(){
 
 function refreshOtherReserve(){
 
-    let other =
-        app.annualCategories.find(
-            c=>c.id==="otherReserve"
-        );
+    let other=app.annualCategories.find(
+        c=>c.id==="otherReserve"
+    );
 
     if(!other){
 
@@ -1625,27 +1627,57 @@ function refreshOtherReserve(){
     other.budget=getOtherReserveBudget();
 
 }
+
+function addAnnualCategory(){
+
+    const title=prompt("カテゴリ名");
+
+    if(!title) return;
+
+    const budget=Number(prompt("予算"));
+
+    if(isNaN(budget)) return;
+
+    app.annualCategories.push({
+
+        id:Date.now().toString(),
+
+        title,
+
+        budget,
+
+        history:[]
+
+    });
+
+    refreshOtherReserve();
+
+    save();
+
+    drawAnnualManage();
+
+}
+
 function drawAnnualManage(){
 
     refreshOtherReserve();
 
-    const area =
-        document.getElementById("annualManageList");
+    const area=document.getElementById(
+        "annualManageList"
+    );
 
     if(!area) return;
 
     area.innerHTML="";
 
-    const TOTAL_BUDGET=1350000;
-
     const totalUsed=
         app.annualCategories.reduce(
 
-            (sum,category)=>
+            (sum,c)=>
 
                 sum+
 
-                category.history.reduce(
+                c.history.reduce(
                     (s,h)=>s+h.amount,
                     0
                 ),
@@ -1654,26 +1686,26 @@ function drawAnnualManage(){
 
         );
 
-    const totalRemain=
-        TOTAL_BUDGET-totalUsed;
+    const remain=
+        ANNUAL_BUDGET-totalUsed;
 
     area.innerHTML+=`
 
 <div class="card">
 
-<h3>💰 特別費管理</h3>
+<h3>💰 特別費</h3>
 
-<p>予算合計：¥${TOTAL_BUDGET.toLocaleString()}</p>
+<p>年間予算 ¥${ANNUAL_BUDGET.toLocaleString()}</p>
 
-<p>使用合計：¥${totalUsed.toLocaleString()}</p>
+<p>使用 ¥${totalUsed.toLocaleString()}</p>
 
-<p>残り：¥${totalRemain.toLocaleString()}</p>
+<p>残り ¥${remain.toLocaleString()}</p>
 
 </div>
 
 `;
 
-    const displayCategories=[
+    const list=[
 
         ...app.annualCategories.filter(
             c=>c.id!=="otherReserve"
@@ -1684,7 +1716,8 @@ function drawAnnualManage(){
         )
 
     ].filter(Boolean);
-       displayCategories.forEach((category)=>{
+
+    list.forEach(category=>{
 
         const index=
             app.annualCategories.findIndex(
@@ -1693,7 +1726,7 @@ function drawAnnualManage(){
 
         const used=
             category.history.reduce(
-                (sum,item)=>sum+item.amount,
+                (sum,h)=>sum+h.amount,
                 0
             );
 
@@ -1704,9 +1737,7 @@ function drawAnnualManage(){
             category.budget===0
             ?0
             :Math.min(
-                Math.round(
-                    used/category.budget*100
-                ),
+                used/category.budget*100,
                 100
             );
 
@@ -1759,30 +1790,29 @@ function openAnnualCategory(index){
 
     currentAnnualCategory=index;
 
-    const category=
-        app.annualCategories[index];
+    const category=app.annualCategories[index];
 
-
+    if(!category) return;
 
     lastPage="annual";
 
     showPage("category");
-document.getElementById("editAnnualCategory").style.display="block";
-document.getElementById("deleteAnnualCategory").style.display="block";
-document.getElementById("addAnnualHistory").style.display="block";
+
+    document.getElementById("editAnnualCategory").style.display="block";
+    document.getElementById("deleteAnnualCategory").style.display="block";
+    document.getElementById("addAnnualHistory").style.display="block";
+
     document.getElementById("categoryTitle").textContent=
         category.title;
 
-    const used=
-        category.history.reduce(
-            (sum,item)=>sum+item.amount,
-            0
-        );
+    const used=category.history.reduce(
+        (sum,h)=>sum+h.amount,
+        0
+    );
 
-    const remain=
-        category.budget-used;
+    const remain=category.budget-used;
 
-    let message=`
+    let html=`
 
 予算：¥${category.budget.toLocaleString()}<br>
 使用：¥${used.toLocaleString()}<br>
@@ -1792,12 +1822,14 @@ document.getElementById("addAnnualHistory").style.display="block";
 
     if(category.id==="otherReserve"){
 
-        message+=`
+        html+=`
 
 <br><br>
 
 <small>
-📦 この金額は年間予算135万円から他カテゴリを差し引いて自動計算されます。
+
+📦 この金額は他カテゴリから自動計算されています。
+
 </small>
 
 `;
@@ -1805,22 +1837,27 @@ document.getElementById("addAnnualHistory").style.display="block";
     }
 
     document.getElementById("categorySummary").innerHTML=
-        message;
+        html;
 
-    const history=
-        document.getElementById("categoryHistory");
+    const history=document.getElementById(
+        "categoryHistory"
+    );
 
     history.innerHTML="";
-       if(category.history.length===0){
+
+    if(category.history.length===0){
 
         history.innerHTML=
-            "<p>まだ履歴はありません</p>";
 
-    }else{
+        "<p>まだ履歴はありません😊</p>";
 
-        category.history.forEach((item,index)=>{
+        return;
 
-            history.innerHTML+=`
+    }
+
+    category.history.forEach((item,index)=>{
+
+        history.innerHTML+=`
 
 <button
 class="setting-item"
@@ -1828,8 +1865,9 @@ onclick="deleteAnnualHistory(${index})">
 
 <span>
 
-${item.date}<br>
-${item.name}
+<strong>${item.name}</strong><br>
+
+${item.date}
 
 </span>
 
@@ -1843,11 +1881,10 @@ ${item.name}
 
 `;
 
-        });
-
-    }
+    });
 
 }
+
 function addAnnualHistory(){
 
     if(currentAnnualCategory<0) return;
@@ -1855,8 +1892,7 @@ function addAnnualHistory(){
     const category=
         app.annualCategories[currentAnnualCategory];
 
-    const name=
-        prompt("名前");
+    const name=prompt("名前");
 
     if(!name) return;
 
@@ -1867,7 +1903,7 @@ function addAnnualHistory(){
 
     const used=
         category.history.reduce(
-            (sum,item)=>sum+item.amount,
+            (sum,h)=>sum+h.amount,
             0
         );
 
@@ -1877,16 +1913,16 @@ function addAnnualHistory(){
             used+amount-category.budget;
 
         if(!confirm(
+
 `予算を¥${over.toLocaleString()}超えます。
 
-このまま登録しますか？`
-        )){
-            return;
-        }
+登録しますか？`
+
+        )) return;
 
     }
 
-    category.history.push({
+    category.history.unshift({
 
         name,
 
@@ -1895,6 +1931,7 @@ function addAnnualHistory(){
         date:new Date().toLocaleDateString(
             "ja-JP",
             {
+                year:"numeric",
                 month:"numeric",
                 day:"numeric"
             }
@@ -1904,12 +1941,11 @@ function addAnnualHistory(){
 
     save();
 
-    openAnnualCategory(currentAnnualCategory);
-
     drawAnnualManage();
 
-}
+    openAnnualCategory(currentAnnualCategory);
 
+}
 function editAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
@@ -1925,35 +1961,35 @@ function editAnnualCategory(){
 
     }
 
-    const title=
-        prompt(
-            "カテゴリ名",
-            category.title
-        );
+    const title=prompt(
+        "カテゴリ名",
+        category.title
+    );
 
     if(!title) return;
 
-    const budget=
-        Number(
-            prompt(
-                "予算",
-                category.budget
-            )
-        );
+    const budget=Number(
+        prompt(
+            "予算",
+            category.budget
+        )
+    );
 
     if(isNaN(budget)) return;
 
     category.title=title;
-
     category.budget=budget;
 
     refreshOtherReserve();
 
-    update();
+    save();
+
+    drawAnnualManage();
 
     openAnnualCategory(currentAnnualCategory);
 
 }
+
 function deleteAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
@@ -1969,24 +2005,22 @@ function deleteAnnualCategory(){
 
     }
 
-    if(
-        !confirm(
-            `「${category.title}」を削除しますか？`
-        )
-    ){
-        return;
-    }
+    if(!confirm(
+        `「${category.title}」を削除しますか？`
+    )) return;
 
     app.annualCategories.splice(
         currentAnnualCategory,
         1
     );
 
-    refreshOtherReserve();
-
     currentAnnualCategory=-1;
 
-    update();
+    refreshOtherReserve();
+
+    save();
+
+    drawAnnualManage();
 
     showPage("annual");
 
@@ -2005,12 +2039,11 @@ function deleteAnnualHistory(index){
 
     save();
 
-    openAnnualCategory(currentAnnualCategory);
-
     drawAnnualManage();
 
+    openAnnualCategory(currentAnnualCategory);
+
 }
-   
 /* ===========================
    ⑪ 初期表示
 =========================== */
