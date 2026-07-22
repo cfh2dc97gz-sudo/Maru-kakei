@@ -1750,15 +1750,7 @@ function openAnnualCategory(index){
     const category=
         app.annualCategories[index];
 
-  if(lastPage!=="annual"){
 
-    alert("年間カテゴリは削除できません😊");
-
-    return;
-
-}
-
-if(currentAnnualCategory<0) return;
 
     lastPage="annual";
 
