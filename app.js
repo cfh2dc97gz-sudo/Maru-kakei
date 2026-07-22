@@ -374,74 +374,68 @@ function load(){
    ③ 初期化・年度セレクト
 =========================== */
 
+// ===========================
+// 年度・月 初期化
+// ===========================
+
+const today = new Date();
+
+const currentFiscalYear =
+    today.getMonth() >= 3
+        ? today.getFullYear()
+        : today.getFullYear() - 1;
+
 const session =
     JSON.parse(
         localStorage.getItem(getSessionKey()) || "{}"
     );
 
-const today = new Date();
-
-// 現在の年度（4月開始）
-const fiscalYear =
-    today.getMonth() + 1 >= 4
-        ? today.getFullYear()
-        : today.getFullYear() - 1;
-
-// 初回は現在年度
 currentYear =
-    session.year ?? fiscalYear;
+    session.year ?? currentFiscalYear;
 
-// 初回は現在月
 currentMonth =
     session.month ?? (today.getMonth() + 1);
 
-// 年度外なら自動補正
-if(currentMonth >= 4 && currentYear < fiscalYear){
-    currentYear = fiscalYear;
-    currentMonth = 4;
-}
+// 画面復元
+window.lastPage =
+    session.page || "home";
 
-if(currentMonth <= 3 && currentYear < fiscalYear){
-    currentYear = fiscalYear;
-    currentMonth = 4;
-}
-
+// 年度セレクト
 const yearSelect =
     document.getElementById("yearSelect");
 
-if(yearSelect){
+if (yearSelect) {
 
-    // 2026〜2035年度を自動生成
     yearSelect.innerHTML = "";
 
-    for(let y=2026;y<=2035;y++){
+    for (let y = 2024; y <= 2035; y++) {
 
-        const option=document.createElement("option");
-        option.value=y;
-        option.textContent=`${y}年度`;
+        const option =
+            document.createElement("option");
+
+        option.value = y;
+        option.textContent = `${y}年度`;
 
         yearSelect.appendChild(option);
 
     }
 
-    yearSelect.value=currentYear;
+    yearSelect.value = currentYear;
 
-    yearSelect.onchange=()=>{
+    yearSelect.onchange = () => {
 
         save();
 
-        currentYear=Number(yearSelect.value);
-        currentMonth=4;
+        currentYear =
+            Number(yearSelect.value);
+
+        currentMonth = 4;
 
         load();
+
         update();
 
-        showPage(
-            JSON.parse(
-                localStorage.getItem(getSessionKey())
-                || "{}"
-            ).page || "home"
-        );
+        showPage(window.lastPage);
 
     };
 
