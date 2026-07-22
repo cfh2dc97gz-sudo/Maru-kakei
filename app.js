@@ -1329,11 +1329,16 @@ function showCategoryHistory(categoryId){
     document.getElementById("categoryTitle").textContent=
         budget.name;
 
-    const list=
-        app.history
-            .filter(
-                h=>h.category===budget.name
-            )
+    const list =
+    app.history
+        .filter(h => {
+
+            return (
+                h.category === budget.name &&
+                !h.annual
+            );
+
+        });
             .sort(
                 (a,b)=>
                     new Date(b.date)-
