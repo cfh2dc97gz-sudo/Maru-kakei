@@ -1704,31 +1704,37 @@ function refreshOtherReserve(){
 
 function addAnnualCategory(){
 
-    const title=prompt("カテゴリ名");
+    openNumberModal("カテゴリ予算",(budget,title)=>{
 
-    if(!title) return;
+        if(budget<=0) return;
 
-    const budget=Number(prompt("予算"));
+        if(!title){
 
-    if(isNaN(budget)) return;
+            alert("カテゴリ名を入力してください😊");
 
-    app.annualCategories.push({
+            return;
 
-        id:Date.now().toString(),
+        }
 
-        title,
+        app.annualCategories.push({
 
-        budget,
+            id:Date.now().toString(),
 
-        history:[]
+            title,
+
+            budget,
+
+            history:[]
+
+        });
+
+        refreshOtherReserve();
+
+        save();
+
+        drawAnnualManage();
 
     });
-
-    refreshOtherReserve();
-
-    save();
-
-    drawAnnualManage();
 
 }
 
@@ -2042,7 +2048,20 @@ openAnnualCategory(currentAnnualCategory);
 
 }
    
-function addAnnualCategory(){
+function editAnnualCategory(){
+
+    if(currentAnnualCategory<0) return;
+
+    const category =
+        app.annualCategories[currentAnnualCategory];
+
+    if(category.id==="otherReserve"){
+
+        alert("📦 その他積立は自動計算です。");
+
+        return;
+
+    }
 
     openNumberModal("カテゴリ予算",(budget,title)=>{
 
@@ -2056,17 +2075,9 @@ function addAnnualCategory(){
 
         }
 
-        app.annualCategories.push({
+        category.title = title;
 
-            id:Date.now().toString(),
-
-            title,
-
-            budget,
-
-            history:[]
-
-        });
+        category.budget = budget;
 
         refreshOtherReserve();
 
@@ -2074,14 +2085,11 @@ function addAnnualCategory(){
 
         drawAnnualManage();
 
+        openAnnualCategory(currentAnnualCategory);
+
     });
 
 }
-
-    openAnnualCategory(currentAnnualCategory);
-
-}
-
 function deleteAnnualCategory(){
 
     if(currentAnnualCategory<0) return;
