@@ -1947,6 +1947,8 @@ save();
 drawAnnualManage();
 
 openAnnualCategory(currentAnnualCategory);
+
+}
    
 function editAnnualCategory(){
 
