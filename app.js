@@ -194,18 +194,27 @@ function getMonthData(year,month){
     const key =
         `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
 
-    const saved =
-        localStorage.getItem(key);
+const saved = localStorage.getItem(
+    `maru-kakei-${year}-${String(month).padStart(2,"0")}`
+);
 
-    if(!saved){
+if(!saved){
 
-        return null;
+    return null;
 
-    }
+}
 
-    try{
+try{
 
     return JSON.parse(saved);
+
+}catch(e){
+
+    console.error("データの読み込みに失敗しました",e);
+
+    return null;
+
+}
 
 }catch(e){
 
