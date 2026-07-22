@@ -1046,10 +1046,13 @@ function drawAI(){
     const remain =
         Math.max(goal - saving,0);
 
-    const monthsLeft =
+const monthsLeft =
+    Math.max(
         currentMonth <= 3
             ? 4 - currentMonth
-            : 16 - currentMonth;
+            : 16 - currentMonth,
+        1
+    );
 
     let html = "";
 
