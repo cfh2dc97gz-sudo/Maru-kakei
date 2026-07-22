@@ -505,7 +505,54 @@
     </button>
 
 </nav>
+<!-- 数字入力モーダル -->
+<div id="numberModal" class="modal" style="display:none;">
 
+    <div class="modal-box">
+
+        <h2 id="numberTitle">
+            金額入力
+        </h2>
+
+        <div id="numberDisplay">
+            ¥0
+        </div>
+
+        <div class="number-grid">
+
+            <button onclick="numberKey('1')">1</button>
+            <button onclick="numberKey('2')">2</button>
+            <button onclick="numberKey('3')">3</button>
+
+            <button onclick="numberKey('4')">4</button>
+            <button onclick="numberKey('5')">5</button>
+            <button onclick="numberKey('6')">6</button>
+
+            <button onclick="numberKey('7')">7</button>
+            <button onclick="numberKey('8')">8</button>
+            <button onclick="numberKey('9')">9</button>
+
+            <button onclick="numberClear()">C</button>
+            <button onclick="numberKey('0')">0</button>
+            <button onclick="numberBack()">⌫</button>
+
+        </div>
+
+        <div class="modal-buttons">
+
+            <button onclick="closeNumberModal()">
+                キャンセル
+            </button>
+
+            <button id="numberOk">
+                OK
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <script src="app.js"></script>
 
 </body>
