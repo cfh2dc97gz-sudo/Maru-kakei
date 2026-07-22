@@ -203,7 +203,20 @@ function getMonthData(year,month){
 
     }
 
+    try{
+
     return JSON.parse(saved);
+
+}catch(e){
+
+    console.error(
+        "月データの読込に失敗しました",
+        e
+    );
+
+    return null;
+
+}
 
 }
 function getYearKey(){
