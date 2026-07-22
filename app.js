@@ -208,7 +208,7 @@ function getMonthData(year,month){
     }catch(e){
 
         console.error(
-            "データの読み込みに失敗しました",
+            "月データの読込に失敗しました",
             e
         );
 
@@ -217,7 +217,6 @@ function getMonthData(year,month){
     }
 
 }
-
 function getYearKey(){
 
     return `maru-kakei-year-${currentYear}`;
