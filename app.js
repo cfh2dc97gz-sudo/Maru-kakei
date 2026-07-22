@@ -1096,7 +1096,7 @@ function drawYearSummary(){
     let income = 0;
 let spent = 0;
 
-const months = [4,5,6,7,8,9,10,11,12,1,2,3];
+const months = getFiscalMonths();
 
 months.forEach(month=>{
 
