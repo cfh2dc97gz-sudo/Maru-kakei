@@ -1436,9 +1436,11 @@ function getFiscalMonths() {
 }
 
 function getMonthYear(month){
+
     return month <= 3
-        ? fiscalYear + 1
-        : fiscalYear;
+        ? currentYear + 1
+        : currentYear;
+
 }
 
 function getMonthlySpent(year,month){
@@ -1460,123 +1462,87 @@ function getMonthlySpent(year,month){
 
 function drawYearChart(){
 
-    const canvas=document.getElementById("yearChart");
-
+    const canvas = document.getElementById("yearChart");
     if(!canvas) return;
 
-    const ctx=canvas.getContext("2d");
-
+    const ctx = canvas.getContext("2d");
     if(!ctx) return;
 
-    const W=canvas.width;
-    const H=canvas.height;
+    const W = canvas.width;
+    const H = canvas.height;
 
     ctx.clearRect(0,0,W,H);
 
-    const months=getFiscalMonths();
+    const months = getFiscalMonths();
 
-    const values=months.map(month=>
-        getMonthlySpent(
-            getMonthYear(month),
-            month
-        )
-    );
+    const values = months.map(month=>{
 
-    const max=Math.max(...values,1);
+        const year = month <= 3
+            ? currentYear + 1
+            : currentYear;
 
-    const padding=16;
+        return getMonthlySpent(year,month);
 
-    const graphHeight=H-45;
+    });
 
-    const barWidth=
-        (W-padding*2)/months.length;
+    const max = Math.max(...values,1);
+
+    const left = 18;
+    const bottom = 26;
+    const graphHeight = H - bottom - 10;
+    const barWidth = (W-left*2)/months.length;
 
     const hitAreas=[];
 
     values.forEach((value,index)=>{
 
-        const h=value/max*graphHeight;
+        const h = value/max*graphHeight;
 
-        const x=
-            padding+
-            index*barWidth+
-            6;
-
-        const y=
-            graphHeight-h+10;
-
-        const w=
-            barWidth-12;
+        const x = left + index*barWidth + 6;
+        const y = graphHeight - h + 8;
+        const w = barWidth - 12;
 
         ctx.fillStyle="#F7C948";
-
-        ctx.fillRect(
-            x,
-            y,
-            w,
-            h
-        );
+        ctx.fillRect(x,y,w,h);
 
         ctx.fillStyle="#666";
-
         ctx.font="11px sans-serif";
-
         ctx.textAlign="center";
-
         ctx.fillText(
             months[index]+"月",
             x+w/2,
-            H-8
+            H-6
         );
 
         hitAreas.push({
-
-            x,
-            y,
-            w,
-            h,
-
+            x,y,w,h,
             month:months[index]
-
         });
 
     });
 
-    canvas.style.cursor="pointer";
-
     canvas.onclick=(e)=>{
 
-        const rect=
-            canvas.getBoundingClientRect();
+        const rect=canvas.getBoundingClientRect();
 
-        const scaleX=
-            W/rect.width;
+        const scaleX=W/rect.width;
+        const scaleY=H/rect.height;
 
-        const scaleY=
-            H/rect.height;
+        const x=(e.clientX-rect.left)*scaleX;
+        const y=(e.clientY-rect.top)*scaleY;
 
-        const x=
-            (e.clientX-rect.left)*scaleX;
+        const hit=hitAreas.find(bar=>
 
-        const y=
-            (e.clientY-rect.top)*scaleY;
+            x>=bar.x &&
+            x<=bar.x+bar.w &&
+            y>=bar.y &&
+            y<=bar.y+bar.h
 
-        const hit=
-            hitAreas.find(bar=>
-
-                x>=bar.x&&
-                x<=bar.x+bar.w&&
-                y>=bar.y&&
-                y<=bar.y+bar.h
-
-            );
+        );
 
         if(!hit) return;
 
-        currentMonth=hit.month;
-
-        currentYear=
-            getMonthYear(hit.month);
+        currentMonth = hit.month;
 
         update();
 
