@@ -1429,124 +1429,128 @@ ${item.memo||""}
    ⑩ 年間グラフ
 =========================== */
 
-function drawYearChart(){
+function drawYearChart() {
 
-    const canvas =
-        document.getElementById("yearChart");
+    const canvas = document.getElementById("yearChart");
+    if (!canvas) return;
 
-    if(!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    if(
-        typeof canvas.getContext !== "function"
-    ){
-        return;
-    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const ctx =
-        canvas.getContext("2d");
+    const months = [4,5,6,7,8,9,10,11,12,1,2,3];
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+    const values = [];
 
-    const months=[
-        4,5,6,7,8,9,10,11,12,1,2,3
-    ];
+    months.forEach(month => {
 
-    const values=[];
+        const year = month <= 3 ? currentYear + 1 : currentYear;
 
-    months.forEach(month=>{
+        const saved = localStorage.getItem(
+            `maru-kakei-${year}-${String(month).padStart(2,"0")}`
+        );
 
-        const year =
-            month<=3
-                ? currentYear+1
-                : currentYear;
-
-        const saved =
-            localStorage.getItem(
-                `maru-kakei-${year}-${String(month).padStart(2,"0")}`
-            );
-
-        if(!saved){
+        if (!saved) {
 
             values.push(0);
-
             return;
 
         }
 
-        const data=
-            JSON.parse(saved);
+        const data = JSON.parse(saved);
 
-        const spent=
-            (data.budgets||[])
-            .reduce(
-                (sum,item)=>
-                    sum+(item.spent||0),
-                0
-            );
+        const spent = (data.budgets || []).reduce(
+            (sum, item) => sum + (item.spent || 0),
+            0
+        );
 
         values.push(spent);
 
     });
 
-    const max =
-        Math.max(...values,1);
+    const max = Math.max(...values, 1);
 
-    const width =
-        canvas.width/months.length;
+    const chartTop = 10;
+    const chartBottom = canvas.height - 25;
+    const chartHeight = chartBottom - chartTop;
 
-    values.forEach((value,index)=>{
+    const width = canvas.width / months.length;
 
-        const height =
-            value/max*
-            (canvas.height-30);
+    const bars = [];
 
-        ctx.fillStyle="#66bb6a";
+    values.forEach((value, index) => {
 
-        ctx.fillRect(
+        const barHeight = value / max * chartHeight;
 
-            index*width+10,
+        const x = index * width + 10;
+        const y = chartBottom - barHeight;
+        const w = width - 20;
+        const h = barHeight;
 
-            canvas.height-height-20,
+        bars.push({
+            x,
+            y,
+            w,
+            h,
+            month: months[index]
+        });
 
-            width-20,
+        ctx.fillStyle = "#66bb6a";
+        ctx.fillRect(x, y, w, h);
 
-            height
-
-        );
-
-        ctx.fillStyle="#666";
-
-        ctx.font="11px sans-serif";
-
-        ctx.textAlign="center";
+        ctx.fillStyle = "#666";
+        ctx.font = "11px sans-serif";
+        ctx.textAlign = "center";
 
         ctx.fillText(
-
-            months[index]+"月",
-
-            index*width+
-            width/2,
-
-            canvas.height-5
-
+            months[index] + "月",
+            index * width + width / 2,
+            canvas.height - 5
         );
 
     });
-canvas.style.cursor = "pointer";
 
-canvas.onclick = () => {
+    canvas.style.cursor = "pointer";
 
-    showPage("home");
+    canvas.onclick = function (e) {
 
-};
-   
+        const rect = canvas.getBoundingClientRect();
+
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+
+        const hit = bars.find(bar =>
+            x >= bar.x &&
+            x <= bar.x + bar.w &&
+            y >= bar.y &&
+            y <= bar.y + bar.h
+        );
+
+        if (!hit) return;
+
+        currentMonth = hit.month;
+
+        if (hit.month <= 3) {
+
+            currentYear = fiscalYear + 1;
+
+        } else {
+
+            currentYear = fiscalYear;
+
+        }
+
+        update();
+
+        showPage("home");
+
+    };
+
 }
-
 function addAnnualCategory(){
 
     const title = prompt("カテゴリ名");
