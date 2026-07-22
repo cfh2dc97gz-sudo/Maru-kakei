@@ -1449,9 +1449,9 @@ if(!data) return;
 
         ...(data.history || []).filter(h=>
 
-            h.category === budget.name &&
-            h.annual === false
-
+          !h.income &&
+h.category === budget.name &&
+h.annual === false
         )
 
     );
