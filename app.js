@@ -814,6 +814,11 @@ function addSpent(index,isOverwrite=false){
     annual:false
 
 });
+
+update();
+
+}
+
 /* ===========================
    ⑥ ページ切替・設定
 =========================== */
@@ -1156,10 +1161,12 @@ function drawYearCategory(){
         app.budgets.map(budget=>{
 
             const list =
-                app.history.filter(
-                    h=>h.category===budget.name
-                );
+    app.history.filter(h=>
 
+        h.category === budget.name &&
+        h.annual === false
+
+    );
             const total =
                 list.reduce(
                     (sum,h)=>sum+h.amount,
@@ -1329,12 +1336,17 @@ function showCategoryHistory(categoryId){
 
     const list =
     app.history
-        .filter(h => {
+        .filter(h=>
 
-            return (
-                h.category === budget.name &&
-                !h.annual
-            );
+            h.category === budget.name &&
+            h.annual === false
+
+        )
+        .sort(
+            (a,b)=>
+                new Date(b.date)-
+                new Date(a.date)
+        );
 
         });
             .sort(
