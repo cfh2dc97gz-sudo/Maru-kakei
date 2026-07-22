@@ -711,31 +711,29 @@ onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
 
 function addIncome(type){
 
-    const text = prompt("収入金額");
+    openNumberModal("収入金額", amount=>{
 
-    if(text === null) return;
+        if(amount<=0) return;
 
-    const amount = Number(text);
+        switch(type){
 
-    if(isNaN(amount) || amount <= 0) return;
+            case "パパ":
+                app.income.papa += amount;
+                break;
 
-    switch(type){
+            case "ママ":
+                app.income.mama += amount;
+                break;
 
-        case "パパ":
-            app.income.papa += amount;
-            break;
+            case "臨時":
+                app.income.extra += amount;
+                break;
 
-        case "ママ":
-            app.income.mama += amount;
-            break;
+        }
 
-        case "臨時":
-            app.income.extra += amount;
-            break;
+        update();
 
-    }
-
-    update();
+    });
 
 }
 
