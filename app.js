@@ -375,26 +375,35 @@ function load(){
 =========================== */
 
 const session =
-
     JSON.parse(
-
-        localStorage.getItem(getSessionKey())
-
-        || "{}"
-
+        localStorage.getItem(getSessionKey()) || "{}"
     );
 
+const today = new Date();
+
+// 現在の年度（4月開始）
+const fiscalYear =
+    today.getMonth() + 1 >= 4
+        ? today.getFullYear()
+        : today.getFullYear() - 1;
+
+// 初回は現在年度
 currentYear =
-    session.year ?? 2026;
+    session.year ?? fiscalYear;
 
+// 初回は現在月
 currentMonth =
-    session.month ?? 4;
+    session.month ?? (today.getMonth() + 1);
 
-// 年度外の月を補正
-if(currentMonth < 4){
+// 年度外なら自動補正
+if(currentMonth >= 4 && currentYear < fiscalYear){
+    currentYear = fiscalYear;
+    currentMonth = 4;
+}
 
-    currentYear--;
-
+if(currentMonth <= 3 && currentYear < fiscalYear){
+    currentYear = fiscalYear;
+    currentMonth = 4;
 }
 
 const yearSelect =
@@ -402,29 +411,30 @@ const yearSelect =
 
 if(yearSelect){
 
-    yearSelect.value =
-        String(currentYear);
+    // 2026〜2035年度を自動生成
+    yearSelect.innerHTML = "";
 
-    yearSelect.onchange = ()=>{
+    for(let y=2026;y<=2035;y++){
+
+        const option=document.createElement("option");
+        option.value=y;
+        option.textContent=`${y}年度`;
+
+        yearSelect.appendChild(option);
+
+    }
+
+    yearSelect.value=currentYear;
+
+    yearSelect.onchange=()=>{
 
         save();
 
-        currentYear =
-            Number(yearSelect.value);
-
-        currentMonth = 4;
+        currentYear=Number(yearSelect.value);
+        currentMonth=4;
 
         load();
-
         update();
-
-        drawYearSummary();
-
-        drawYearCategory();
-
-        drawYearChart();
-
-        drawAnnualManage();
 
         showPage(
             JSON.parse(
@@ -436,8 +446,6 @@ if(yearSelect){
     };
 
 }
-
-// initializeApp()で読み込むため削除
 /* ===========================
    ④ 月変更・画面更新
 =========================== */
