@@ -262,49 +262,30 @@ function save(){
 
     };
 
+    try{
+
     localStorage.setItem(
         getYearKey(),
         JSON.stringify(yearData)
     );
-
-    const monthData={
-
-        bank:{...app.bank},
-
-        income:{...app.income},
-
-        budgets:JSON.parse(
-            JSON.stringify(app.budgets)
-        ),
-
-        history:[...app.history]
-
-    };
 
     localStorage.setItem(
         getKey(),
         JSON.stringify(monthData)
     );
 
-    const session=
-        JSON.parse(
-            localStorage.getItem(getSessionKey())
-            || "{}"
-        );
-
-    session.year=currentYear;
-
-    session.month=currentMonth;
-
-    session.page=session.page || "home";
-
     localStorage.setItem(
         getSessionKey(),
         JSON.stringify(session)
     );
 
-}
+}catch(e){
 
+    console.error("データの保存に失敗しました",e);
+
+    alert("データの保存に失敗しました。");
+
+}
 function load(){
 
     app.bank={
