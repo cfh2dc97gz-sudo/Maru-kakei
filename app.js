@@ -276,7 +276,8 @@ function save(){
 
 }
 
-   }
+}
+
 function load(){
 
     app.bank={
