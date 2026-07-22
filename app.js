@@ -52,7 +52,7 @@ const DEFAULT_BUDGETS = [
         name:"📦 その他",
         budget:30000,
         spent:0
-    }
+    },
 {
     id:"rent",
     name:"🏠 家賃",
@@ -999,14 +999,9 @@ function drawAI(){
 年間目標まで約¥${remain.toLocaleString()}不足する見込みです。<br>
 残り${monthsLeft}か月は毎月約¥${Math.ceil(remain/Math.max(monthsLeft,1)).toLocaleString()}改善すると達成圏内になります。<br><br>
 `;
-
-    const overList =
-        app.budgets
        const overList =
     app.budgets
-        .filter(item =>
-            item.id !== "rent"
-        )
+        .filter(item => item.id !== "rent")
         .map(item=>{
 
             const yearly =
