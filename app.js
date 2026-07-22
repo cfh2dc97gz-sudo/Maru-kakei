@@ -2214,22 +2214,23 @@ onclick="editBudget(${index})">
 
 function editBudget(index){
 
-    const value =
-        Number(
-            prompt(
-                "月予算",
-                app.budgets[index].budget
-            )
-        );
+    openNumberModal(
 
-    if(isNaN(value)) return;
+        app.budgets[index].name + " 月予算",
 
-    app.budgets[index].budget = value;
+        (value)=>{
 
-    update();
+            if(value<=0) return;
+
+            app.budgets[index].budget = value;
+
+            update();
+
+        }
+
+    );
 
 }
-
 const editGoalBtn =
     document.getElementById("editGoal");
 
