@@ -843,59 +843,52 @@ function editBank(){
 
 function addSpent(index,isOverwrite=false){
 
-    const input =
-        prompt("金額 メモ");
+    openNumberModal(
 
-    if(!input) return;
+        app.budgets[index].name,
 
-    const parts =
-        input.trim().split(" ");
+        (amount,memo)=>{
 
-    const amount =
-        Number(parts[0]);
+            if(amount<=0) return;
 
-    if(!amount) return;
+            if(isOverwrite){
 
-    const memo =
-        parts.slice(1).join(" ");
+                app.budgets[index].spent = amount;
 
-    if(isOverwrite){
+            }else{
 
-        app.budgets[index].spent =
-            amount;
+                app.budgets[index].spent += amount;
 
-    }else{
+            }
 
-        app.budgets[index].spent +=
-            amount;
+            app.history.unshift({
 
-    }
+                date:new Date().toLocaleDateString(
+                    "ja-JP",
+                    {
+                        year:"numeric",
+                        month:"2-digit",
+                        day:"2-digit"
+                    }
+                ),
 
-   app.history.push({
+                category:app.budgets[index].name,
 
-    date:new Date().toLocaleDateString(
-        "ja-JP",
-        {
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
+                amount,
+
+                memo,
+
+                annual:false
+
+            });
+
+            update();
+
         }
-    ),
 
-    category:app.budgets[index].name,
-
-    amount,
-
-    memo,
-
-    annual:false
-
-});
-
-update();
+    );
 
 }
-
 /* ===========================
    ⑥ ページ切替・設定
 =========================== */
