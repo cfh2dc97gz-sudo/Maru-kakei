@@ -711,22 +711,49 @@ onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
 
 function addIncome(type){
 
-    openNumberModal("収入金額", amount=>{
+    openNumberModal("収入金額",(amount,memo)=>{
 
         if(amount<=0) return;
 
         switch(type){
 
             case "パパ":
+
                 app.income.papa += amount;
                 break;
 
             case "ママ":
+
                 app.income.mama += amount;
                 break;
 
             case "臨時":
+
                 app.income.extra += amount;
+
+                app.history.unshift({
+
+                    date:new Date().toLocaleDateString(
+                        "ja-JP",
+                        {
+                            year:"numeric",
+                            month:"2-digit",
+                            day:"2-digit"
+                        }
+                    ),
+
+                    category:"🎁 臨時収入",
+
+                    amount,
+
+                    memo,
+
+                    income:true,
+
+                    annual:false
+
+                });
+
                 break;
 
         }
