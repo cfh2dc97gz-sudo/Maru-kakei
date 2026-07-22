@@ -1055,7 +1055,33 @@ const monthsLeft =
     );
 
     let html = "";
+const monthlyNeed = Math.ceil(remain / monthsLeft);
 
+const candidates = app.budgets
+    .filter(item => item.id !== "rent")
+    .sort((a, b) => b.budget - a.budget);
+
+const advice = [];
+
+let rest = monthlyNeed;
+
+for (const item of candidates) {
+
+    if (rest <= 0) break;
+
+    const cut = Math.min(
+        Math.ceil(rest / 1000) * 1000,
+        Math.floor(item.budget * 0.2 / 1000) * 1000
+    );
+
+    if (cut >= 1000) {
+
+        advice.push(`${item.name} -¥${cut.toLocaleString()}`);
+
+        rest -= cut;
+    }
+}
+   
     html += `
 📊 <b>年間目標</b><br>
 年間目標まで約¥${remain.toLocaleString()}不足する見込みです。<br>
