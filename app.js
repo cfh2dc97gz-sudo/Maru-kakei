@@ -804,43 +804,28 @@ document
 
 function editBank(){
 
-    const mitakeText =
-        prompt("みたけ銀行残高");
+    openNumberModal("みたけ銀行残高",(mitake)=>{
 
-    if(mitakeText === null) return;
+        openNumberModal("滝沢銀行残高",(takizawa)=>{
 
-    const mitake =
-        Number(mitakeText);
+            app.bank.mitake = mitake;
 
-    if(isNaN(mitake)) return;
+            app.bank.takizawa = takizawa;
 
-    const takizawaText =
-        prompt("滝沢銀行残高");
+            if(currentMonth===4){
 
-    if(takizawaText === null) return;
+                app.startBank =
+                    mitake + takizawa;
 
-    const takizawa =
-        Number(takizawaText);
+            }
 
-    if(isNaN(takizawa)) return;
+            update();
 
-    app.bank.mitake = mitake;
+        });
 
-    app.bank.takizawa = takizawa;
-
-    // 4月だけ今年の基準残高を更新
-    if(currentMonth === 4){
-
-        app.startBank =
-            mitake +
-            takizawa;
-
-    }
-
-    update();
+    });
 
 }
-
 function addSpent(index,isOverwrite=false){
 
     openNumberModal(
