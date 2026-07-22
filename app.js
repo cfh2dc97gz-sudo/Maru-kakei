@@ -231,53 +231,81 @@ function getSessionKey(){
 
 function save(){
 
-    const yearData={
+    const yearData = {
 
-        goal:app.goal,
+        goal: app.goal,
 
-        startBank:app.startBank,
+        startBank: app.startBank,
 
-        reserveMin:app.reserveMin,
+        reserveMin: app.reserveMin,
 
-        reserveFund:JSON.parse(
+        reserveFund: JSON.parse(
             JSON.stringify(app.reserveFund)
         ),
 
-        bonus:{...app.bonus},
+        bonus: { ...app.bonus },
 
-        annualCategories:JSON.parse(
+        annualCategories: JSON.parse(
             JSON.stringify(app.annualCategories)
         )
 
     };
 
+    const monthData = {
+
+        bank: { ...app.bank },
+
+        income: { ...app.income },
+
+        budgets: JSON.parse(
+            JSON.stringify(app.budgets)
+        ),
+
+        history: JSON.parse(
+            JSON.stringify(app.history)
+        )
+
+    };
+
+    const sessionData = {
+
+        year: currentYear,
+
+        month: currentMonth,
+
+        page: window.lastPage || "home"
+
+    };
+
     try{
 
-    localStorage.setItem(
-        getYearKey(),
-        JSON.stringify(yearData)
-    );
+        localStorage.setItem(
+            getYearKey(),
+            JSON.stringify(yearData)
+        );
 
-    localStorage.setItem(
-        getKey(),
-        JSON.stringify(monthData)
-    );
+        localStorage.setItem(
+            getKey(),
+            JSON.stringify(monthData)
+        );
 
-    localStorage.setItem(
-        getSessionKey(),
-        JSON.stringify(session)
-    );
+        localStorage.setItem(
+            getSessionKey(),
+            JSON.stringify(sessionData)
+        );
 
-}catch(e){
+    }catch(e){
 
-    console.error("データの保存に失敗しました",e);
+        console.error(
+            "データの保存に失敗しました",
+            e
+        );
 
-    alert("データの保存に失敗しました。");
+        alert("データの保存に失敗しました。");
+
+    }
 
 }
-
-}
-
 function load(){
 
     app.bank={
