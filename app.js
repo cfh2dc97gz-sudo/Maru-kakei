@@ -189,7 +189,23 @@ function getKey(){
     return `maru-kakei-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
 
 }
+function getMonthData(year,month){
 
+    const key =
+        `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
+
+    const saved =
+        localStorage.getItem(key);
+
+    if(!saved){
+
+        return null;
+
+    }
+
+    return JSON.parse(saved);
+
+}
 function getYearKey(){
 
     return `maru-kakei-year-${currentYear}`;
