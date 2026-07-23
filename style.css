@@ -53,6 +53,7 @@ button{
     display:flex;
     border-top:1px solid #ECECEC;
     box-shadow:0 -3px 12px rgba(0,0,0,.05);
+    z-index:100;
 }
 
 .nav-btn{
@@ -62,7 +63,6 @@ button{
     justify-content:center;
     align-items:center;
     color:#999;
-    transition:.2s;
 }
 
 .nav-btn.active{
@@ -84,49 +84,50 @@ button{
 
 .card{
     background:#fff;
-    border-radius:18px;
-    padding:18px;
+    border-radius:20px;
+    padding:20px;
     margin-bottom:16px;
-    box-shadow:0 3px 10px rgba(0,0,0,.05);
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
 }
 
 .card-title{
-    font-size:17px;
+    font-size:16px;
     font-weight:700;
-    margin-bottom:14px;
+    color:#666;
+    margin-bottom:12px;
 }
 
 .value{
-    font-size:30px;
+    font-size:34px;
     font-weight:700;
     color:#F6B700;
 }
 
 .sub{
     margin-top:8px;
-    color:#888;
+    color:#999;
     font-size:14px;
 }
 
 /* ==========================
-   メニュー
+   ホームメニュー
 ========================== */
 
 .menu-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:14px;
-    margin-top:18px;
+    margin-top:20px;
 }
 
 .menu-btn{
     background:#FFD95A;
-    border-radius:18px;
-    padding:22px 12px;
+    border-radius:20px;
+    padding:24px 16px;
     font-size:17px;
     font-weight:700;
     color:#555;
-    box-shadow:0 3px 10px rgba(0,0,0,.05);
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
 }
 
 .menu-btn:active{
