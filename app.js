@@ -1,35 +1,44 @@
-/* ===================================
+/* ==================================
    まる家計 Ver2
-   app.js
-=================================== */
+================================== */
 
-// ===============================
-// 初期化
-// ===============================
+// ==========================
+// アプリ
+// ==========================
 
-document.addEventListener("DOMContentLoaded", init);
+const app = {
+    page: "home"
+};
 
-function init() {
+// ==========================
+// 起動
+// ==========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
     setupNavigation();
-    showPage("home");
-}
+    drawHome();
 
-// ===============================
-// ナビゲーション
-// ===============================
+});
+
+// ==========================
+// ナビ
+// ==========================
 
 function setupNavigation() {
 
-    const buttons = document.querySelectorAll(".nav-btn");
-
-    buttons.forEach(button => {
+    document.querySelectorAll(".nav-btn").forEach(button => {
 
         button.addEventListener("click", () => {
 
-            buttons.forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll(".nav-btn")
+                .forEach(btn => btn.classList.remove("active"));
+
             button.classList.add("active");
 
-            showPage(button.dataset.page);
+            app.page = button.dataset.page;
+
+            drawPage();
 
         });
 
@@ -37,225 +46,116 @@ function setupNavigation() {
 
 }
 
-// ===============================
-// ページ表示
-// ===============================
+// ==========================
+// ページ切替
+// ==========================
 
-function showPage(page) {
+function drawPage() {
 
-    const container = document.getElementById("pageContainer");
+    switch (app.page) {
 
-switch (page) {
+        case "home":
+            drawHome();
+            break;
 
-    case "home":
-        drawHomePage();
-        break;
+        case "year":
+            drawYear();
+            break;
 
-    case "year":
-        drawYearPage();
-        break;
+        case "special":
+            drawSpecial();
+            break;
 
-    case "special":
-        drawSpecialPage();
-        break;
+        case "setting":
+            drawSetting();
+            break;
 
-    case "setting":
-        drawSettingPage();
-        break;
-
-}
+    }
 
 }
 
-// ===============================
+// ==========================
 // ホーム
-// ===============================
+// ==========================
 
-function drawHomePage() {
+function drawHome() {
 
-    const container = document.getElementById("pageContainer");
+    document.getElementById("pageContainer").innerHTML = `
 
-    /* ===================================
-   まる家計 Ver2
-   app.js
-=================================== */
+<div class="card">
+    <div class="card-title">📅 今月</div>
+    <div class="value">¥0</div>
+    <div class="sub">2026年7月</div>
+</div>
 
-// ===============================
-// 初期化
-// ===============================
+<div class="card">
+    <div class="card-title">💰 銀行残高</div>
+    <div class="value">¥0</div>
+    <div class="sub">後でデータと連動します</div>
+</div>
 
-document.addEventListener("DOMContentLoaded", init);
-
-function init() {
-    setupNavigation();
-    showPage("home");
-}
-
-// ===============================
-// ナビゲーション
-// ===============================
-
-function setupNavigation() {
-
-    const buttons = document.querySelectorAll(".nav-btn");
-
-    buttons.forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            buttons.forEach(btn => btn.classList.remove("active"));
-            button.classList.add("active");
-
-            showPage(button.dataset.page);
-
-        });
-
-    });
-
-}
-
-// ===============================
-// ページ表示
-// ===============================
-
-function showPage(page) {
-
-    const container = document.getElementById("pageContainer");
-
-switch (page) {
-
-    case "home":
-        drawHomePage();
-        break;
-
-    case "year":
-        drawYearPage();
-        break;
-
-    case "special":
-        drawSpecialPage();
-        break;
-
-    case "setting":
-        drawSettingPage();
-        break;
-
-}
-
-}
-
-// ===============================
-// ホーム
-// ===============================
-
-function drawHomePage() {
-
-    const container = document.getElementById("pageContainer");
-
-    container.innerHTML = `
-        <h2>🏠 ホーム</h2>
-            <div class="menu-grid">
-
-        <button class="menu-btn">
-            💸<br>支出入力
-        </button>
-
-        <button class="menu-btn">
-            💰<br>収入入力
-        </button>
-
-        <button class="menu-btn">
-            📋<br>履歴
-        </button>
-
-        <button class="menu-btn">
-            📊<br>カテゴリ
-        </button>
-
+<div class="card">
+    <div class="card-title">🤖 AI</div>
+    <div class="sub">
+        AIアドバイスがここに表示されます。
     </div>
-    `;
+</div>
+
+<div class="menu-grid">
+
+    <button class="menu-btn">
+        💸<br>支出入力
+    </button>
+
+    <button class="menu-btn">
+        💰<br>収入入力
+    </button>
+
+    <button class="menu-btn">
+        📋<br>履歴
+    </button>
+
+    <button class="menu-btn">
+        📊<br>カテゴリ
+    </button>
+
+</div>
+
+`;
 
 }
 
-// ===============================
+// ==========================
 // 年間
-// ===============================
+// ==========================
 
-function drawYearPage() {
+function drawYear() {
 
-    const container = document.getElementById("pageContainer");
-
-    container.innerHTML = `
+    document.getElementById("pageContainer").innerHTML = `
         <h2>📊 年間</h2>
     `;
 
 }
 
-// ===============================
+// ==========================
 // 特別費
-// ===============================
+// ==========================
 
-function drawSpecialPage() {
+function drawSpecial() {
 
-    const container = document.getElementById("pageContainer");
-
-    container.innerHTML = `
+    document.getElementById("pageContainer").innerHTML = `
         <h2>💰 特別費</h2>
     `;
 
 }
 
-// ===============================
+// ==========================
 // 設定
-// ===============================
+// ==========================
 
-function drawSettingPage() {
+function drawSetting() {
 
-    const container = document.getElementById("pageContainer");
-
-    container.innerHTML = `
-        <h2>⚙️ 設定</h2>
-    `;
-
-} 
-}
-// ===============================
-// 年間
-// ===============================
-
-function drawYearPage() {
-
-    const container = document.getElementById("pageContainer");
-
-    container.innerHTML = `
-        <h2>📊 年間</h2>
-    `;
-
-}
-
-// ===============================
-// 特別費
-// ===============================
-
-function drawSpecialPage() {
-
-    const container = document.getElementById("pageContainer");
-
-    container.innerHTML = `
-        <h2>💰 特別費</h2>
-    `;
-
-}
-
-// ===============================
-// 設定
-// ===============================
-
-function drawSettingPage() {
-
-    const container = document.getElementById("pageContainer");
-
-    container.innerHTML = `
+    document.getElementById("pageContainer").innerHTML = `
         <h2>⚙️ 設定</h2>
     `;
 
