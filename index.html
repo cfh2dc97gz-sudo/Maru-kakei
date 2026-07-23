@@ -1,47 +1,53 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>まる家計 Ver2</title>
 
-  <link rel="stylesheet" href="style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>まる家計 Ver2</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- アプリ全体 -->
-  <div id="app">
+    <!-- アプリ -->
+    <div id="app">
 
-    <!-- ページ表示エリア -->
-    <main id="pageContainer"></main>
+        <!-- ページ -->
+        <main id="pageContainer"></main>
 
-    <!-- 下部ナビ -->
-    <nav id="bottomNav">
-      <button class="nav-btn active" data-page="home">
-        <span>🏠</span>
-        <small>ホーム</small>
-      </button>
+        <!-- 下部ナビ -->
+        <nav id="bottomNav">
 
-      <button class="nav-btn" data-page="year">
-        <span>📊</span>
-        <small>年間</small>
-      </button>
+            <button class="nav-btn active" data-page="home">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">ホーム</div>
+            </button>
 
-      <button class="nav-btn" data-page="special">
-        <span>💰</span>
-        <small>特別費</small>
-      </button>
+            <button class="nav-btn" data-page="year">
+                <div class="nav-icon">📊</div>
+                <div class="nav-text">年間</div>
+            </button>
 
-      <button class="nav-btn" data-page="setting">
-        <span>⚙️</span>
-        <small>設定</small>
-      </button>
-    </nav>
+            <button class="nav-btn" data-page="special">
+                <div class="nav-icon">💰</div>
+                <div class="nav-text">特別費</div>
+            </button>
 
-  </div>
+            <button class="nav-btn" data-page="setting">
+                <div class="nav-icon">⚙️</div>
+                <div class="nav-text">設定</div>
+            </button>
 
-  <script src="app.js"></script>
+        </nav>
+
+    </div>
+
+    <script src="app.js"></script>
 
 </body>
+
 </html>
