@@ -14,7 +14,9 @@ const app = {
 
     bankBalance: 0,
     monthlyIncome: 0,
-    monthlyExpense: 0
+    monthlyExpense: 0,
+
+    annualGoal: 0
 };
 
 // ==========================
@@ -94,7 +96,7 @@ function drawHome() {
 <div class="card">
 
     <div class="card-title">
-        📅 今月
+        📅 今月の支出
     </div>
 
     <div class="value">
@@ -126,11 +128,27 @@ function drawHome() {
 <div class="card">
 
     <div class="card-title">
+        🎯 年間目標
+    </div>
+
+    <div class="value">
+        ¥${formatMoney(app.annualGoal)}
+    </div>
+
+    <div class="sub">
+        年度開始からの貯金目標
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="card-title">
         🤖 AIアドバイス
     </div>
 
     <div class="sub">
-        まずは収入を入力しましょう😊
+        まずは収入・支出・銀行残高を入力しましょう😊
     </div>
 
 </div>
@@ -174,7 +192,7 @@ function drawYear() {
     </div>
 
     <div class="sub">
-        Ver2でこれから作成します
+        次回から年間目標・年間合計・グラフを作成します
     </div>
 
 </div>
@@ -198,7 +216,7 @@ function drawSpecial() {
     </div>
 
     <div class="sub">
-        Ver2でこれから作成します
+        次回から作成します
     </div>
 
 </div>
@@ -222,7 +240,7 @@ function drawSetting() {
     </div>
 
     <div class="sub">
-        Ver2でこれから作成します
+        次回から作成します
     </div>
 
 </div>
