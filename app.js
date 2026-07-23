@@ -3,11 +3,18 @@
 ================================== */
 
 // ==========================
-// アプリ
+// アプリ状態
 // ==========================
 
 const app = {
-    page: "home"
+    page: "home",
+
+    currentYear: 2026,
+    currentMonth: 7,
+
+    bankBalance: 0,
+    monthlyIncome: 0,
+    monthlyExpense: 0
 };
 
 // ==========================
@@ -17,23 +24,23 @@ const app = {
 document.addEventListener("DOMContentLoaded", () => {
 
     setupNavigation();
-    drawHome();
+    drawPage();
 
 });
 
 // ==========================
-// ナビ
+// ナビゲーション
 // ==========================
 
 function setupNavigation() {
 
-    document.querySelectorAll(".nav-btn").forEach(button => {
+    const buttons = document.querySelectorAll(".nav-btn");
+
+    buttons.forEach(button => {
 
         button.addEventListener("click", () => {
 
-            document.querySelectorAll(".nav-btn")
-                .forEach(btn => btn.classList.remove("active"));
-
+            buttons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
 
             app.page = button.dataset.page;
@@ -80,25 +87,52 @@ function drawPage() {
 
 function drawHome() {
 
-    document.getElementById("pageContainer").innerHTML = `
+    const page = document.getElementById("pageContainer");
+
+    page.innerHTML = `
 
 <div class="card">
-    <div class="card-title">📅 今月</div>
-    <div class="value">¥0</div>
-    <div class="sub">2026年7月</div>
-</div>
 
-<div class="card">
-    <div class="card-title">💰 銀行残高</div>
-    <div class="value">¥0</div>
-    <div class="sub">後でデータと連動します</div>
-</div>
-
-<div class="card">
-    <div class="card-title">🤖 AI</div>
-    <div class="sub">
-        AIアドバイスがここに表示されます。
+    <div class="card-title">
+        📅 今月
     </div>
+
+    <div class="value">
+        ¥${formatMoney(app.monthlyExpense)}
+    </div>
+
+    <div class="sub">
+        ${app.currentYear}年 ${app.currentMonth}月
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="card-title">
+        💰 銀行残高
+    </div>
+
+    <div class="value">
+        ¥${formatMoney(app.bankBalance)}
+    </div>
+
+    <div class="sub">
+        現在の銀行残高
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="card-title">
+        🤖 AIアドバイス
+    </div>
+
+    <div class="sub">
+        まずは収入を入力しましょう😊
+    </div>
+
 </div>
 
 <div class="menu-grid">
@@ -132,8 +166,20 @@ function drawHome() {
 function drawYear() {
 
     document.getElementById("pageContainer").innerHTML = `
-        <h2>📊 年間</h2>
-    `;
+
+<div class="card">
+
+    <div class="card-title">
+        📊 年間ページ
+    </div>
+
+    <div class="sub">
+        Ver2でこれから作成します
+    </div>
+
+</div>
+
+`;
 
 }
 
@@ -144,8 +190,20 @@ function drawYear() {
 function drawSpecial() {
 
     document.getElementById("pageContainer").innerHTML = `
-        <h2>💰 特別費</h2>
-    `;
+
+<div class="card">
+
+    <div class="card-title">
+        💰 特別費
+    </div>
+
+    <div class="sub">
+        Ver2でこれから作成します
+    </div>
+
+</div>
+
+`;
 
 }
 
@@ -156,7 +214,29 @@ function drawSpecial() {
 function drawSetting() {
 
     document.getElementById("pageContainer").innerHTML = `
-        <h2>⚙️ 設定</h2>
-    `;
+
+<div class="card">
+
+    <div class="card-title">
+        ⚙️ 設定
+    </div>
+
+    <div class="sub">
+        Ver2でこれから作成します
+    </div>
+
+</div>
+
+`;
+
+}
+
+// ==========================
+// 共通
+// ==========================
+
+function formatMoney(value) {
+
+    return Number(value).toLocaleString("ja-JP");
 
 }
