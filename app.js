@@ -7,6 +7,7 @@
 // ==========================
 
 const app = {
+
     page: "home",
 
     currentYear: 2026,
@@ -16,7 +17,12 @@ const app = {
     monthlyIncome: 0,
     monthlyExpense: 0,
 
-    annualGoal: 0
+    annualGoal: 0,
+
+    incomeList: [],
+    expenseList: [],
+    history: []
+
 };
 
 // ==========================
@@ -36,13 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function setupNavigation() {
 
-    const buttons = document.querySelectorAll(".nav-btn");
-
-    buttons.forEach(button => {
+    document.querySelectorAll(".nav-btn").forEach(button => {
 
         button.addEventListener("click", () => {
 
-            buttons.forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll(".nav-btn")
+                .forEach(btn => btn.classList.remove("active"));
+
             button.classList.add("active");
 
             app.page = button.dataset.page;
@@ -192,7 +198,7 @@ function drawYear() {
     </div>
 
     <div class="sub">
-        次回から年間目標・年間合計・グラフを作成します
+        次回から年間目標・年間合計・グラフを実装します
     </div>
 
 </div>
@@ -216,7 +222,7 @@ function drawSpecial() {
     </div>
 
     <div class="sub">
-        次回から作成します
+        次回から実装します
     </div>
 
 </div>
@@ -240,7 +246,7 @@ function drawSetting() {
     </div>
 
     <div class="sub">
-        次回から作成します
+        次回から実装します
     </div>
 
 </div>
@@ -255,6 +261,6 @@ function drawSetting() {
 
 function formatMoney(value) {
 
-    return Number(value).toLocaleString("ja-JP");
+    return Number(value || 0).toLocaleString("ja-JP");
 
 }
