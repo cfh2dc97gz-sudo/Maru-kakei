@@ -1,87 +1,86 @@
-/* =========================
+/* ==================================
    まる家計 Ver2
-   style.css
-========================= */
+================================== */
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html,
 body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
-  background:#FFF8E8;
-  color:#444;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    background:#FFF8E8;
+    color:#444;
 }
 
 button{
-  border:none;
-  background:none;
-  font:inherit;
-  cursor:pointer;
+    border:none;
+    background:none;
+    font:inherit;
+    cursor:pointer;
 }
 
 #app{
-  width:100%;
-  height:100dvh;
-  display:flex;
-  flex-direction:column;
+    width:100%;
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
 }
 
 #pageContainer{
-  flex:1;
-  overflow-y:auto;
-  padding:20px 18px 100px;
+    flex:1;
+    overflow-y:auto;
+    padding:18px 18px 110px;
 }
 
+/* ==========================
+   下部ナビ
+========================== */
+
 #bottomNav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  height:78px;
-  background:#ffffff;
-  border-top:1px solid #ececec;
-
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-
-  box-shadow:0 -4px 12px rgba(0,0,0,.05);
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:78px;
+    background:#fff;
+    display:flex;
+    border-top:1px solid #ECECEC;
+    box-shadow:0 -3px 12px rgba(0,0,0,.05);
 }
 
 .nav-btn{
-  flex:1;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:4px;
-  color:#999;
-  transition:.2s;
-}
-
-.nav-btn span{
-  font-size:24px;
-}
-
-.nav-btn small{
-  font-size:11px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:#999;
+    transition:.2s;
 }
 
 .nav-btn.active{
-  color:#F6B700;
+    color:#F6B700;
 }
-/* =========================
-   共通カード
-========================= */
+
+.nav-icon{
+    font-size:24px;
+    margin-bottom:4px;
+}
+
+.nav-text{
+    font-size:11px;
+}
+
+/* ==========================
+   カード
+========================== */
 
 .card{
     background:#fff;
@@ -92,14 +91,13 @@ button{
 }
 
 .card-title{
-    font-size:18px;
+    font-size:17px;
     font-weight:700;
     margin-bottom:14px;
-    color:#555;
 }
 
 .value{
-    font-size:32px;
+    font-size:30px;
     font-weight:700;
     color:#F6B700;
 }
@@ -109,9 +107,10 @@ button{
     color:#888;
     font-size:14px;
 }
-/* =========================
-   ホームボタン
-========================= */
+
+/* ==========================
+   メニュー
+========================== */
 
 .menu-grid{
     display:grid;
@@ -122,15 +121,12 @@ button{
 
 .menu-btn{
     background:#FFD95A;
-    border:none;
     border-radius:18px;
-    padding:20px 12px;
-    text-align:center;
+    padding:22px 12px;
     font-size:17px;
     font-weight:700;
     color:#555;
     box-shadow:0 3px 10px rgba(0,0,0,.05);
-    transition:.2s;
 }
 
 .menu-btn:active{
