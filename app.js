@@ -76,30 +76,47 @@ function drawHomePage() {
     const container = document.getElementById("pageContainer");
 
     container.innerHTML = `
-        <h2>🏠 ホーム</h2>
-            <div class="menu-grid">
 
-        <button class="menu-btn">
-            💸<br>支出入力
-        </button>
+        <div class="card">
+            <div class="card-title">📅 今月</div>
+            <div class="value">¥0</div>
+            <div class="sub">2026年7月</div>
+        </div>
 
-        <button class="menu-btn">
-            💰<br>収入入力
-        </button>
+        <div class="card">
+            <div class="card-title">💰 銀行残高</div>
+            <div class="value">¥0</div>
+            <div class="sub">後でデータと連動します</div>
+        </div>
 
-        <button class="menu-btn">
-            📋<br>履歴
-        </button>
+        <div class="card">
+            <div class="card-title">🤖 AIアドバイス</div>
+            <div class="sub">ここにAIコメントを表示します。</div>
+        </div>
 
-        <button class="menu-btn">
-            📊<br>カテゴリ
-        </button>
+        <div class="menu-grid">
 
-    </div>
+            <button class="menu-btn">
+                💸<br>支出入力
+            </button>
+
+            <button class="menu-btn">
+                💰<br>収入入力
+            </button>
+
+            <button class="menu-btn">
+                📋<br>履歴
+            </button>
+
+            <button class="menu-btn">
+                📊<br>カテゴリ
+            </button>
+
+        </div>
+
     `;
 
 }
-
 // ===============================
 // 年間
 // ===============================
