@@ -77,6 +77,25 @@ function drawHomePage() {
 
     container.innerHTML = `
         <h2>🏠 ホーム</h2>
+            <div class="menu-grid">
+
+        <button class="menu-btn">
+            💸<br>支出入力
+        </button>
+
+        <button class="menu-btn">
+            💰<br>収入入力
+        </button>
+
+        <button class="menu-btn">
+            📋<br>履歴
+        </button>
+
+        <button class="menu-btn">
+            📊<br>カテゴリ
+        </button>
+
+    </div>
     `;
 
 }
