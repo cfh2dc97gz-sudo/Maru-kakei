@@ -1,5 +1,6 @@
 /* ==================================
    まる家計 Ver2
+   Step 2-2
 ================================== */
 
 // ==========================
@@ -14,14 +15,15 @@ const app = {
     currentMonth: 7,
 
     bankBalance: 0,
+    annualGoal: 0,
+
     monthlyIncome: 0,
     monthlyExpense: 0,
 
-    annualGoal: 0,
-
     incomeList: [],
     expenseList: [],
-    history: []
+    history: [],
+    budgets: []
 
 };
 
@@ -29,15 +31,17 @@ const app = {
 // 起動
 // ==========================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", init);
+
+function init() {
 
     setupNavigation();
     drawPage();
 
-});
+}
 
 // ==========================
-// ナビゲーション
+// ナビ
 // ==========================
 
 function setupNavigation() {
@@ -102,7 +106,7 @@ function drawHome() {
 <div class="card">
 
     <div class="card-title">
-        📅 今月の支出
+        📅 今月
     </div>
 
     <div class="value">
@@ -142,7 +146,7 @@ function drawHome() {
     </div>
 
     <div class="sub">
-        年度開始からの貯金目標
+        年度開始から増やしたい金額
     </div>
 
 </div>
@@ -161,19 +165,27 @@ function drawHome() {
 
 <div class="menu-grid">
 
-    <button class="menu-btn">
+    <button class="menu-btn" onclick="alert('次のStepで作成します')">
         💸<br>支出入力
     </button>
 
-    <button class="menu-btn">
+    <button class="menu-btn" onclick="alert('次のStepで作成します')">
         💰<br>収入入力
     </button>
 
-    <button class="menu-btn">
+    <button class="menu-btn" onclick="alert('次のStepで作成します')">
+        🏦<br>銀行残高
+    </button>
+
+    <button class="menu-btn" onclick="alert('次のStepで作成します')">
+        🎯<br>年間目標
+    </button>
+
+    <button class="menu-btn" onclick="alert('次のStepで作成します')">
         📋<br>履歴
     </button>
 
-    <button class="menu-btn">
+    <button class="menu-btn" onclick="alert('次のStepで作成します')">
         📊<br>カテゴリ
     </button>
 
@@ -198,7 +210,13 @@ function drawYear() {
     </div>
 
     <div class="sub">
-        次回から年間目標・年間合計・グラフを実装します
+        ・年間目標
+        <br>
+        ・年間合計
+        <br>
+        ・月別推移
+        <br>
+        ・カテゴリ分析
     </div>
 
 </div>
@@ -222,7 +240,7 @@ function drawSpecial() {
     </div>
 
     <div class="sub">
-        次回から実装します
+        特別費ページをこれから作ります。
     </div>
 
 </div>
@@ -246,7 +264,7 @@ function drawSetting() {
     </div>
 
     <div class="sub">
-        次回から実装します
+        年間目標・予算・ボーナス設定などをここへ追加します。
     </div>
 
 </div>
