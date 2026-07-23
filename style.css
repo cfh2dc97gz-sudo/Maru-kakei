@@ -79,3 +79,33 @@ button{
 .nav-btn.active{
   color:#F6B700;
 }
+/* =========================
+   共通カード
+========================= */
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.05);
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:14px;
+    color:#555;
+}
+
+.value{
+    font-size:32px;
+    font-weight:700;
+    color:#F6B700;
+}
+
+.sub{
+    margin-top:8px;
+    color:#888;
+    font-size:14px;
+}
