@@ -109,3 +109,30 @@ button{
     color:#888;
     font-size:14px;
 }
+/* =========================
+   ホームボタン
+========================= */
+
+.menu-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin-top:18px;
+}
+
+.menu-btn{
+    background:#FFD95A;
+    border:none;
+    border-radius:18px;
+    padding:20px 12px;
+    text-align:center;
+    font-size:17px;
+    font-weight:700;
+    color:#555;
+    box-shadow:0 3px 10px rgba(0,0,0,.05);
+    transition:.2s;
+}
+
+.menu-btn:active{
+    transform:scale(.98);
+}
