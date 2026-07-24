@@ -1017,7 +1017,13 @@ function drawAI(){
         Number(app.income.papa || 0) +
         Number(app.income.mama || 0) +
         Number(app.income.extra || 0);
-
+if (income === 0) {
+    ai.innerHTML = `
+    💰 まずは今月の収入を入力しましょう😊<br><br>
+    収入を入力すると年間目標や節約アドバイスを表示します。
+    `;
+    return;
+}
     const spent =
         app.budgets.reduce(
             (sum,item)=>sum + Number(item.spent || 0),
