@@ -481,20 +481,7 @@ if (yearSelect) {
 
 }
 
-    save();
 
-    currentYear = Number(yearSelect.value);
-
-    // 年度を切り替えたら必ず4月から開始
-    currentMonth = 4;
-
-    load();
-
-    update();
-
-    showPage(window.lastPage || "home");
-
-};
 /* ===========================
    ④ 月変更・画面更新
 =========================== */
