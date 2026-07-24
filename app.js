@@ -442,7 +442,44 @@ currentMonth =
 window.lastPage =
     session.page || "home";
 
-yearSelect.onchange = () => {
+const yearSelect =
+    document.getElementById("yearSelect");
+
+if (yearSelect) {
+
+    yearSelect.innerHTML = "";
+
+    for (let y = 2024; y <= 2035; y++) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = y;
+        option.textContent = `${y}年度`;
+
+        yearSelect.appendChild(option);
+
+    }
+
+    yearSelect.value = currentYear;
+
+    yearSelect.onchange = () => {
+
+        save();
+
+        currentYear = Number(yearSelect.value);
+
+        currentMonth = 4;
+
+        load();
+
+        update();
+
+        showPage(window.lastPage || "home");
+
+    };
+
+}
 
     save();
 
