@@ -538,6 +538,33 @@ document
 .getElementById("nextMonth")
 .onclick=()=>changeMonth(1);
 
+function goToMonth(month){
+
+    if(month >= 4){
+
+        currentYear = getFiscalYear();
+
+    }else{
+
+        currentYear = getFiscalYear() + 1;
+
+    }
+
+    currentMonth = month;
+
+    load();
+    update();
+    showPage("home");
+
+    requestAnimationFrame(()=>{
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+    });
+
+}
+
 function update(){
 
     if(yearSelect){
