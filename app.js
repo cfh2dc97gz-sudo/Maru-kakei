@@ -187,7 +187,6 @@ function getKey(){
 
     return `maru-kakei-${year}-${String(currentMonth).padStart(2,"0")}`;
 
-}
 
 }
 function getMonthData(year,month){
@@ -544,20 +543,12 @@ document
 
 function goToMonth(month){
 
-    if(month >= 4){
-
-        currentYear = getFiscalYear();
-
-    }else{
-
-        currentYear = getFiscalYear() + 1;
-
-    }
-
     currentMonth = month;
 
     load();
+
     update();
+
     showPage("home");
 
     requestAnimationFrame(()=>{
@@ -568,7 +559,6 @@ function goToMonth(month){
     });
 
 }
-
 function update(){
 
     if(yearSelect){
