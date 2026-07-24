@@ -1726,22 +1726,7 @@ function drawYearChart(){
 
         if(!hit) return;
 
-        if(hit.month<=3){
-            currentYear++;
-        }
-
-        currentMonth = hit.month;
-
-        load();
-        update();
-        showPage("home");
-
-        requestAnimationFrame(()=>{
-            window.scrollTo({
-                top:0,
-                behavior:"smooth"
-            });
-        });
+goToMonth(hit.month);
 
     };
 
