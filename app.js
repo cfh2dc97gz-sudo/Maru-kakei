@@ -1208,8 +1208,14 @@ if(!data) return;
 
 const totalIncome = income + bonusTotal;
 
-    document.getElementById("yearIncome").textContent =
-        "¥" + income.toLocaleString();
+    const bonusTotal =
+    Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
+    Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
+
+const totalIncome = income + bonusTotal;
+
+document.getElementById("yearIncome").textContent =
+    "¥" + totalIncome.toLocaleString();
 
     document.getElementById("yearSpent").textContent =
         "¥" + spent.toLocaleString();
