@@ -183,12 +183,15 @@ let currentMonth=4;
 
 function getKey(){
 
-    const year = getDisplayYear(currentMonth);
+    const year = getDisplayYear(
+        currentMonth,
+        currentYear
+    );
 
     return `maru-kakei-${year}-${String(currentMonth).padStart(2,"0")}`;
 
-
 }
+
 function getMonthData(year,month){
 
     const saved = localStorage.getItem(
@@ -483,11 +486,11 @@ if (yearSelect) {
    ④ 月変更・画面更新
 =========================== */
 
-function getDisplayYear(month=currentMonth){
+function getDisplayYear(month = currentMonth, fiscalYear = currentYear){
 
-    return month<=3
-        ?currentYear+1
-        :currentYear;
+    return month <= 3
+        ? fiscalYear + 1
+        : fiscalYear;
 
 }
 
