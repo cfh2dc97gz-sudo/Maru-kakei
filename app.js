@@ -183,7 +183,11 @@ let currentMonth=4;
 
 function getKey(){
 
-    return `maru-kakei-${currentYear}-${String(currentMonth).padStart(2,"0")}`;
+    const year = getDisplayYear(currentMonth);
+
+    return `maru-kakei-${year}-${String(currentMonth).padStart(2,"0")}`;
+
+}
 
 }
 function getMonthData(year,month){
