@@ -520,7 +520,13 @@ function changeMonth(step){
 
 function goToMonth(month){
 
+    let displayYear = getDisplayYear(currentMonth);
+
     currentMonth = month;
+
+    currentYear = month <= 3
+        ? displayYear - 1
+        : displayYear;
 
     load();
 
