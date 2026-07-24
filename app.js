@@ -1630,9 +1630,10 @@ function drawYearChart(){
 
     const values = months.map(month=>{
 
-        const year = month <= 3
-            ? currentYear + 1
-            : currentYear;
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
 
         return getMonthlySpent(year,month);
 
@@ -1668,7 +1669,10 @@ function drawYearChart(){
         );
 
         hitAreas.push({
-            x,y,w,h,
+            x,
+            y:0,
+            w,
+            h:H,
             month:months[index]
         });
 
@@ -1695,11 +1699,22 @@ function drawYearChart(){
 
         if(!hit) return;
 
+        if(hit.month<=3){
+            currentYear++;
+        }
+
         currentMonth = hit.month;
 
+        load();
         update();
-
         showPage("home");
+
+        requestAnimationFrame(()=>{
+            window.scrollTo({
+                top:0,
+                behavior:"smooth"
+            });
+        });
 
     };
 
