@@ -1183,10 +1183,10 @@ const data =
 if(!data) return;
 
     income +=
-        (data.income?.papa || 0) +
-        (data.income?.mama || 0) +
-        (data.income?.extra || 0);
-
+    Number(data.income?.papa || 0) +
+    Number(data.income?.mama || 0) +
+    Number(data.income?.extra || 0);
+    
     spent +=
         (data.budgets || []).reduce(
             (sum,item)=>
@@ -1206,12 +1206,12 @@ if(!data) return;
         ) -
         (app.startBank || 0);
 
+   const progress = saving;
     const bonusTotal =
-        (app.bonus.summerActual || app.bonus.summerForecast || 0) +
-        (app.bonus.winterActual || app.bonus.winterForecast || 0);
+    Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
+    Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
 
-    const progress =
-        saving + bonusTotal;
+const totalIncome = income + bonusTotal;
 
     document.getElementById("yearIncome").textContent =
         "¥" + income.toLocaleString();
@@ -1229,8 +1229,8 @@ if(!data) return;
         "summary-money " +
         (remain >= 0 ? "plus" : "minus");
 
-    document.getElementById("yearGoal").textContent =
-        `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+    document.getElementById("yearIncome").textContent =
+    "¥" + totalIncome.toLocaleString();
 
     document.getElementById("goalBar").style.width =
         Math.min(
