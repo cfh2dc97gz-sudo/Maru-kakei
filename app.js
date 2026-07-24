@@ -1548,17 +1548,19 @@ document.getElementById("addAnnualHistory").style.display="none";
 
 `;
 
-            monthMap[month].forEach(item=>{
+            monthMap[month].forEach((item,index)=>{
 
-                history.innerHTML+=`
+    history.innerHTML+=`
 
-<div class="setting-item">
+<button
+class="setting-item"
+onclick="editCategoryHistory('${budget.id}',${index})">
 
 <span>
 
 ${item.date}<br>
 
-${item.memo||""}
+${item.memo || ""}
 
 </span>
 
@@ -1568,11 +1570,11 @@ ${item.memo||""}
 
 </span>
 
-</div>
+</button>
 
 `;
 
-            });
+});
 
         });
 
