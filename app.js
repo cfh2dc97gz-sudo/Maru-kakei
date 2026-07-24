@@ -1058,13 +1058,13 @@ function update() {
    Part⑤ End
 ===================================================== */
 /* =====================================================
-   🌸 まる家計 Ver20
+   🌸 まる家計 Ver20.2
    ---------------------------------------------
    ⑥ カテゴリ表示・収入・支出・銀行
 ===================================================== */
 
 /* =====================================================
-   カテゴリ一覧
+   カテゴリ表示
 ===================================================== */
 
 function drawCategories() {
@@ -1085,13 +1085,13 @@ function drawCategories() {
 class="input-card"
 onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 
-    <span class="input-name">
+    <div class="input-name">
         ${item.name}
-    </span>
+    </div>
 
-    <span class="input-left ${remain < 0 ? "over" : ""}">
+    <div class="input-left ${remain < 0 ? "over" : ""}">
         ${yen(remain)}
-    </span>
+    </div>
 
 </button>
 
@@ -1102,50 +1102,88 @@ onclick="addSpent(${index}, ${item.id === "iwagin" || item.id === "rakuten"})">
 }
 
 /* =====================================================
-   収入追加
+   共通履歴追加
+===================================================== */
+
+function addHistory({
+
+    categoryId = "",
+
+    category = "",
+
+    amount = 0,
+
+    memo = "",
+
+    income = false,
+
+    annual = false
+
+}) {
+
+    app.history.unshift({
+
+        id: Date.now(),
+
+        date: todayString(),
+
+        categoryId,
+
+        category,
+
+        amount,
+
+        memo,
+
+        income,
+
+        annual
+
+    });
+
+}
+
+/* =====================================================
+   収入入力
 ===================================================== */
 
 function addIncome(type) {
 
-    openNumberModal(type + "収入", (amount, memo) => {
+    openNumberModal(`${type}収入`, (amount, memo) => {
+
+        amount = Number(amount);
 
         if (amount <= 0) return;
 
         switch (type) {
 
             case "パパ":
-
                 app.income.papa += amount;
                 break;
 
             case "ママ":
-
                 app.income.mama += amount;
                 break;
 
             case "臨時":
-
                 app.income.extra += amount;
-
-                app.history.unshift({
-
-                    date: todayString(),
-
-                    category: "🎁 臨時収入",
-
-                    amount,
-
-                    memo,
-
-                    income: true,
-
-                    annual: false
-
-                });
-
                 break;
 
         }
+
+        addHistory({
+
+            categoryId: "income",
+
+            category: `${type}収入`,
+
+            amount,
+
+            memo,
+
+            income: true
+
+        });
 
         update();
 
@@ -1154,52 +1192,46 @@ function addIncome(type) {
 }
 
 /* =====================================================
-   支出追加
+   支出入力
 ===================================================== */
 
 function addSpent(index, overwrite = false) {
 
-    const budget = app.budgets[index];
+    const item = app.budgets[index];
 
-    if (!budget) return;
+    if (!item) return;
 
-    openNumberModal(
+    openNumberModal(item.name, (amount, memo) => {
 
-        budget.name,
+        amount = Number(amount);
 
-        (amount, memo) => {
+        if (amount <= 0) return;
 
-            if (amount <= 0) return;
+        if (overwrite) {
 
-            if (overwrite) {
+            item.spent = amount;
 
-                budget.spent = amount;
+        } else {
 
-            } else {
-
-                budget.spent += amount;
-
-            }
-
-            app.history.unshift({
-
-                date: todayString(),
-
-                category: budget.name,
-
-                amount,
-
-                memo,
-
-                annual: false
-
-            });
-
-            update();
+            item.spent += amount;
 
         }
 
-    );
+        addHistory({
+
+            categoryId: item.id,
+
+            category: item.name,
+
+            amount,
+
+            memo
+
+        });
+
+        update();
+
+    });
 
 }
 
@@ -1209,43 +1241,27 @@ function addSpent(index, overwrite = false) {
 
 function editBank() {
 
-    openNumberModal(
+    openNumberModal("みたけ銀行", mitake => {
 
-        "みたけ銀行",
+        openNumberModal("滝沢銀行", takizawa => {
 
-        (mitake) => {
+            app.bank.mitake = Number(mitake);
 
-            openNumberModal(
+            app.bank.takizawa = Number(takizawa);
 
-                "滝沢銀行",
+            if (currentMonth === 4) {
 
-                (takizawa) => {
+                app.startBank =
+                    app.bank.mitake +
+                    app.bank.takizawa;
 
-                    app.bank.mitake = mitake;
+            }
 
-                    app.bank.takizawa = takizawa;
+            update();
 
-                    /* 年度開始月だけ開始残高更新 */
+        });
 
-                    if (currentMonth === 4) {
-
-                        app.startBank =
-
-                            mitake +
-
-                            takizawa;
-
-                    }
-
-                    update();
-
-                }
-
-            );
-
-        }
-
-    );
+    });
 
 }
 
@@ -1255,7 +1271,7 @@ function editBank() {
 
 function resetMonth() {
 
-    if (!confirm("今月をリセットしますか？")) {
+    if (!confirm("今月のデータをリセットしますか？")) {
 
         return;
 
@@ -1280,24 +1296,28 @@ function resetMonth() {
 }
 
 /* =====================================================
-   ボタン
+   ボタン登録
 ===================================================== */
 
-document.getElementById("incomePapa").onclick =
-    () => addIncome("パパ");
+[
+    ["incomePapa", () => addIncome("パパ")],
+    ["incomeMama", () => addIncome("ママ")],
+    ["incomeExtra", () => addIncome("臨時")],
+    ["resetMonth", resetMonth]
+].forEach(([id, func]) => {
 
-document.getElementById("incomeMama").onclick =
-    () => addIncome("ママ");
+    const button = document.getElementById(id);
 
-document.getElementById("incomeExtra").onclick =
-    () => addIncome("臨時");
+    if (button) {
 
-document.getElementById("resetMonth").onclick =
-    resetMonth;
+        button.onclick = func;
+
+    }
+
+});
 
 /* =====================================================
-   Ver20
-   Part⑥ End
+   Ver20.2
 ===================================================== */
 /* =====================================================
    🌸 まる家計 Ver20
@@ -2510,7 +2530,7 @@ update = function () {
    Part⑬ End
 ===================================================== */
 /* =====================================================
-   🌸 まる家計 Ver20
+   🌸 まる家計 Ver20.1
    ---------------------------------------------
    ⑭ 設定画面・予算編集
 ===================================================== */
@@ -2521,8 +2541,7 @@ update = function () {
 
 function drawBudgetList() {
 
-    const area =
-        document.getElementById("budgetList");
+    const area = document.getElementById("budgetList");
 
     if (!area) return;
 
@@ -2537,15 +2556,11 @@ function drawBudgetList() {
     <div class="budget-left">
 
         <div class="budget-name">
-
             ${item.name}
-
         </div>
 
         <div class="budget-value">
-
             ${yen(item.budget)}
-
         </div>
 
     </div>
@@ -2572,8 +2587,7 @@ function drawBudgetList() {
 
 function editBudget(index) {
 
-    const item =
-        app.budgets[index];
+    const item = app.budgets[index];
 
     if (!item) return;
 
@@ -2582,6 +2596,8 @@ function editBudget(index) {
         `${item.name}予算`,
 
         amount => {
+
+            if (amount <= 0) return;
 
             item.budget = amount;
 
@@ -2605,6 +2621,8 @@ function editGoal() {
 
         amount => {
 
+            if (amount <= 0) return;
+
             app.goal = amount;
 
             update();
@@ -2626,6 +2644,8 @@ function editStartBank() {
         "年度開始残高",
 
         amount => {
+
+            if (amount < 0) return;
 
             app.startBank = amount;
 
@@ -2649,7 +2669,33 @@ function editSpecialBudget() {
 
         amount => {
 
+            if (amount < 0) return;
+
             app.specialBudget = amount;
+
+            update();
+
+        }
+
+    );
+
+}
+
+/* =====================================================
+   最低残高
+===================================================== */
+
+function editReserveMin() {
+
+    openNumberModal(
+
+        "最低残高",
+
+        amount => {
+
+            if (amount < 0) return;
+
+            app.reserveMin = amount;
 
             update();
 
@@ -2670,15 +2716,31 @@ function refreshSettingPage() {
 }
 
 /* =====================================================
-   ボタン
+   ボタン登録
 ===================================================== */
 
-const goalButton =
-    document.getElementById("editGoal");
+[
+    ["editGoal", editGoal],
+    ["editStartBank", editStartBank],
+    ["editSpecialBudget", editSpecialBudget],
+    ["editReserveMin", editReserveMin]
 
-if (goalButton) {
+].forEach(([id, func]) => {
 
+    const button = document.getElementById(id);
 
+    if (button) {
+
+        button.onclick = func;
+
+    }
+
+});
+
+/* =====================================================
+   Ver20.1
+   Part⑭ End
+===================================================== */
 /* =====================================================
    🌸 まる家計 Ver20
    ---------------------------------------------
