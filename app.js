@@ -1030,18 +1030,13 @@ if (income === 0) {
             0
         );
 
-    const bonus =
-        Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
-        Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
-
     const bank =
-        Number(app.bank.mitake || 0) +
-        Number(app.bank.takizawa || 0);
+    Number(app.bank.mitake || 0) +
+    Number(app.bank.takizawa || 0);
 
-    const saving =
-        bank -
-        Number(app.startBank || 0) +
-        bonus;
+const saving =
+    bank -
+    Number(app.startBank || 0);
 
     const goal =
         Number(app.goal || 0);
