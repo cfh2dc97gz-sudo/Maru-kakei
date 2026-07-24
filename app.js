@@ -1028,6 +1028,19 @@ navButtons[2].onclick =
 
 navButtons[3].onclick =
 ()=>showPage("setting");
+navButtons[3].onclick =
+()=>showPage("setting");
+
+const prevMonthBtn = document.getElementById("prevMonth");
+const nextMonthBtn = document.getElementById("nextMonth");
+
+if(prevMonthBtn){
+    prevMonthBtn.onclick = ()=>changeMonth(-1);
+}
+
+if(nextMonthBtn){
+    nextMonthBtn.onclick = ()=>changeMonth(1);
+}
 /* ===========================
    ⑦ AI分析
 =========================== */
