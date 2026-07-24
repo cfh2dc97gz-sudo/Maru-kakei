@@ -442,46 +442,22 @@ currentMonth =
 window.lastPage =
     session.page || "home";
 
-// 年度セレクト
-const yearSelect =
-    document.getElementById("yearSelect");
+yearSelect.onchange = () => {
 
-if (yearSelect) {
+    save();
 
-    yearSelect.innerHTML = "";
+    currentYear = Number(yearSelect.value);
 
-    for (let y = 2024; y <= 2035; y++) {
+    // 年度を切り替えたら必ず4月から開始
+    currentMonth = 4;
 
-        const option =
-            document.createElement("option");
+    load();
 
-        option.value = y;
-        option.textContent = `${y}年度`;
+    update();
 
-        yearSelect.appendChild(option);
+    showPage(window.lastPage || "home");
 
-    }
-
-    yearSelect.value = currentYear;
-
-    yearSelect.onchange = () => {
-
-        save();
-
-        currentYear =
-            Number(yearSelect.value);
-
-        currentMonth = 4;
-
-        load();
-
-        update();
-
-        showPage(window.lastPage);
-
-    };
-
-}
+};
 /* ===========================
    ④ 月変更・画面更新
 =========================== */
