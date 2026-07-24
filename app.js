@@ -2136,19 +2136,36 @@ function refreshYearPage() {
    Part⑪ End
 ===================================================== */
 /* =====================================================
-   🌸 まる家計 Ver20
+   🌸 まる家計 Ver20.3
    ---------------------------------------------
    ⑫ 年間管理
 ===================================================== */
 
 /* =====================================================
-   年間管理一覧
+   使用額取得
+===================================================== */
+
+function getAnnualSpent(item) {
+
+    if (!item.history) return 0;
+
+    return item.history.reduce(
+
+        (sum, h) => sum + Number(h.amount || 0),
+
+        0
+
+    );
+
+}
+
+/* =====================================================
+   一覧表示
 ===================================================== */
 
 function drawAnnualManage() {
 
-    const list =
-        document.getElementById("annualList");
+    const list = document.getElementById("annualList");
 
     if (!list) return;
 
@@ -2156,19 +2173,16 @@ function drawAnnualManage() {
 
     app.annualCategories.forEach((item, index) => {
 
-        const remain =
-            item.budget - item.spent;
+        const spent = getAnnualSpent(item);
+
+        const remain = item.budget - spent;
 
         const percent =
             item.budget === 0
                 ? 0
                 : Math.min(
                     100,
-                    Math.round(
-                        item.spent /
-                        item.budget *
-                        100
-                    )
+                    Math.round(spent / item.budget * 100)
                 );
 
         list.innerHTML += `
@@ -2177,19 +2191,9 @@ function drawAnnualManage() {
 
     <div class="annual-title">
 
-        <span>
+        <span>${item.title}</span>
 
-            ${item.name}
-
-        </span>
-
-        <span>
-
-            ${yen(item.spent)}
-            /
-            ${yen(item.budget)}
-
-        </span>
+        <span>${yen(spent)} / ${yen(item.budget)}</span>
 
     </div>
 
@@ -2206,15 +2210,13 @@ function drawAnnualManage() {
 
         <span>
 
-            残り
-            ${yen(remain)}
+            残り ${yen(remain)}
 
         </span>
 
-        <button
-            onclick="editAnnual(${index})">
+        <button onclick="editAnnual(${index})">
 
-            編集
+            入力
 
         </button>
 
@@ -2234,24 +2236,43 @@ function drawAnnualManage() {
 
 function editAnnual(index) {
 
-    const item =
-        app.annualCategories[index];
+    const item = app.annualCategories[index];
 
     if (!item) return;
 
     openNumberModal(
 
-        item.name,
+        item.title,
 
         (amount, memo) => {
 
-            item.spent += amount;
+            amount = Number(amount);
 
-            app.history.unshift({
+            if (amount <= 0) return;
+
+            if (!item.history) {
+
+                item.history = [];
+
+            }
+
+            item.history.unshift({
+
+                id: Date.now(),
 
                 date: todayString(),
 
-                category: item.name,
+                amount,
+
+                memo
+
+            });
+
+            addHistory({
+
+                categoryId: item.id,
+
+                category: item.title,
 
                 amount,
 
@@ -2275,16 +2296,19 @@ function editAnnual(index) {
 
 function editAnnualBudget(index) {
 
-    const item =
-        app.annualCategories[index];
+    const item = app.annualCategories[index];
 
     if (!item) return;
 
     openNumberModal(
 
-        `${item.name}予算`,
+        `${item.title}予算`,
 
         amount => {
+
+            amount = Number(amount);
+
+            if (amount <= 0) return;
 
             item.budget = amount;
 
@@ -2300,13 +2324,13 @@ function editAnnualBudget(index) {
    年間合計
 ===================================================== */
 
-function getAnnualSpent() {
+function getAnnualBudgetTotal() {
 
     return app.annualCategories.reduce(
 
         (sum, item) =>
 
-            sum + item.spent,
+            sum + Number(item.budget || 0),
 
         0
 
@@ -2314,13 +2338,13 @@ function getAnnualSpent() {
 
 }
 
-function getAnnualBudget() {
+function getAnnualSpentTotal() {
 
     return app.annualCategories.reduce(
 
         (sum, item) =>
 
-            sum + item.budget,
+            sum + getAnnualSpent(item),
 
         0
 
@@ -2329,11 +2353,10 @@ function getAnnualBudget() {
 }
 
 /* =====================================================
-   Ver20
-   Part⑫ End
+   Ver20.3
 ===================================================== */
 /* =====================================================
-   🌸 まる家計 Ver20
+   🌸 まる家計 Ver20.4
    ---------------------------------------------
    ⑬ 履歴管理
 ===================================================== */
@@ -2344,8 +2367,7 @@ function getAnnualBudget() {
 
 function drawHistory() {
 
-    const list =
-        document.getElementById("historyList");
+    const list = document.getElementById("historyList");
 
     if (!list) return;
 
@@ -2355,17 +2377,14 @@ function drawHistory() {
 
         list.innerHTML = `
 <div class="empty">
-
 履歴はまだありません😊
-
 </div>
 `;
-
         return;
 
     }
 
-    app.history.forEach((item, index) => {
+    app.history.forEach((item) => {
 
         list.innerHTML += `
 
@@ -2373,39 +2392,23 @@ function drawHistory() {
 
     <div class="history-top">
 
-        <span>
+        <span>${item.category}</span>
 
-            ${item.category}
-
-        </span>
-
-        <span>
-
-            ${yen(item.amount)}
-
-        </span>
+        <span>${yen(item.amount)}</span>
 
     </div>
 
     <div class="history-bottom">
 
-        <span>
+        <span>${item.date}</span>
 
-            ${item.date}
-
-        </span>
-
-        <span>
-
-            ${item.memo || ""}
-
-        </span>
+        <span>${item.memo || ""}</span>
 
     </div>
 
     <button
         class="delete-button"
-        onclick="deleteHistory(${index})">
+        onclick="deleteHistory(${item.id})">
 
         削除
 
@@ -2423,65 +2426,95 @@ function drawHistory() {
    削除
 ===================================================== */
 
-function deleteHistory(index) {
+function deleteHistory(id) {
 
-    if (!confirm("削除しますか？")) {
+    if (!confirm("削除しますか？")) return;
 
-        return;
+    const index = app.history.findIndex(h => h.id === id);
 
-    }
+    if (index === -1) return;
 
     const item = app.history[index];
 
-    if (!item) return;
+    /* -----------------------
+       月支出
+    ----------------------- */
 
-    /* 月予算 */
+    if (!item.income && !item.annual) {
 
-    const budget = app.budgets.find(
+        const budget = app.budgets.find(
 
-        b => b.name === item.category
+            b => b.id === item.categoryId
 
-    );
+        );
 
-    if (budget) {
+        if (budget) {
 
-        budget.spent -= item.amount;
-
-        if (budget.spent < 0) {
-
-            budget.spent = 0;
-
-        }
-
-    }
-
-    /* 年間 */
-
-    const annual = app.annualCategories.find(
-
-        a => a.name === item.category
-
-    );
-
-    if (annual) {
-
-        annual.spent -= item.amount;
-
-        if (annual.spent < 0) {
-
-            annual.spent = 0;
+            budget.spent = Math.max(
+                0,
+                budget.spent - item.amount
+            );
 
         }
 
     }
 
-    /* 収入 */
+    /* -----------------------
+       年間支出
+    ----------------------- */
+
+    if (item.annual) {
+
+        const annual = app.annualCategories.find(
+
+            a => a.id === item.categoryId
+
+        );
+
+        if (annual && annual.history) {
+
+            const historyIndex =
+                annual.history.findIndex(
+
+                    h => h.id === id
+
+                );
+
+            if (historyIndex >= 0) {
+
+                annual.history.splice(
+
+                    historyIndex,
+
+                    1
+
+                );
+
+            }
+
+        }
+
+    }
+
+    /* -----------------------
+       収入
+    ----------------------- */
 
     if (item.income) {
 
-        if (item.category === "🎁 臨時収入") {
+        switch (item.category) {
 
-            app.income.extra -= item.amount;
+            case "パパ収入":
+                app.income.papa -= item.amount;
+                break;
+
+            case "ママ収入":
+                app.income.mama -= item.amount;
+                break;
+
+            case "臨時収入":
+                app.income.extra -= item.amount;
+                break;
 
         }
 
@@ -2499,13 +2532,31 @@ function deleteHistory(index) {
 
 function clearHistory() {
 
-    if (!confirm("履歴をすべて削除しますか？")) {
-
-        return;
-
-    }
+    if (!confirm("履歴をすべて削除しますか？")) return;
 
     app.history = [];
+
+    app.budgets.forEach(item => {
+
+        item.spent = 0;
+
+    });
+
+    app.annualCategories.forEach(item => {
+
+        item.history = [];
+
+    });
+
+    app.income = {
+
+        papa: 0,
+
+        mama: 0,
+
+        extra: 0
+
+    };
 
     update();
 
@@ -2526,8 +2577,7 @@ update = function () {
 };
 
 /* =====================================================
-   Ver20
-   Part⑬ End
+   Ver20.4
 ===================================================== */
 /* =====================================================
    🌸 まる家計 Ver20.1
