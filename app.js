@@ -504,14 +504,33 @@ function changeMonth(step){
 
     save();
 
-    let displayYear = getDisplayYear(currentMonth);
+    if(currentMonth === 4 && step === -1){
 
-    let date = new Date(displayYear, currentMonth - 1 + step, 1);
+        currentMonth = 3;
+        currentYear--;
 
-    currentMonth = date.getMonth() + 1;
-    currentYear = date.getMonth() + 1 <= 3
-        ? date.getFullYear() - 1
-        : date.getFullYear();
+    }else if(currentMonth === 3 && step === 1){
+
+        currentMonth = 4;
+        currentYear++;
+
+    }else{
+
+        currentMonth += step;
+
+    }
+
+    if(currentMonth < 1){
+
+        currentMonth = 12;
+
+    }
+
+    if(currentMonth > 12){
+
+        currentMonth = 1;
+
+    }
 
     load();
 
@@ -520,7 +539,6 @@ function changeMonth(step){
     showPage(window.lastPage || "home");
 
 }
-
 function goToMonth(month){
 
     let displayYear = getDisplayYear(currentMonth);
