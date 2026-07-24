@@ -1161,35 +1161,35 @@ function drawYearSummary(){
     }
 
     let income = 0;
-let spent = 0;
+    let spent = 0;
 
-const months = getFiscalMonths();
+    const months = getFiscalMonths();
 
-months.forEach(month=>{
+    months.forEach(month=>{
 
-    const year =
-        month <= 3
-            ? currentYear + 1
-            : currentYear;
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
 
-const data =
-    getMonthData(year,month);
+        const data =
+            getMonthData(year,month);
 
-if(!data) return;
+        if(!data) return;
 
-    income +=
-    Number(data.income?.papa || 0) +
-    Number(data.income?.mama || 0) +
-    Number(data.income?.extra || 0);
-    
-    spent +=
-        (data.budgets || []).reduce(
-            (sum,item)=>
-                sum + Number(item.spent || 0),
-            0
-        );
+        income +=
+            Number(data.income?.papa || 0) +
+            Number(data.income?.mama || 0) +
+            Number(data.income?.extra || 0);
 
-});
+        spent +=
+            (data.budgets || []).reduce(
+                (sum,item)=>
+                    sum + Number(item.spent || 0),
+                0
+            );
+
+    });
 
     const remain =
         income - spent;
@@ -1199,23 +1199,19 @@ if(!data) return;
             app.bank.mitake +
             app.bank.takizawa
         ) -
-        (app.startBank || 0);
+        Number(app.startBank || 0);
 
-   const progress = saving;
-    const bonusTotal =
-    Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
-    Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
-
-const totalIncome = income + bonusTotal;
+    const progress = saving;
 
     const bonusTotal =
-    Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
-    Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
+        Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
+        Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
 
-const totalIncome = income + bonusTotal;
+    const totalIncome =
+        income + bonusTotal;
 
-document.getElementById("yearIncome").textContent =
-    "¥" + totalIncome.toLocaleString();
+    document.getElementById("yearIncome").textContent =
+        "¥" + totalIncome.toLocaleString();
 
     document.getElementById("yearSpent").textContent =
         "¥" + spent.toLocaleString();
@@ -1230,14 +1226,14 @@ document.getElementById("yearIncome").textContent =
         "summary-money " +
         (remain >= 0 ? "plus" : "minus");
 
-    document.getElementById("yearIncome").textContent =
-    "¥" + totalIncome.toLocaleString();
+    document.getElementById("yearGoal").textContent =
+        `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
 
     document.getElementById("goalBar").style.width =
         Math.min(
             progress /
-            Math.max(app.goal,1)
-            * 100,
+            Math.max(app.goal,1) *
+            100,
             100
         ) + "%";
 
