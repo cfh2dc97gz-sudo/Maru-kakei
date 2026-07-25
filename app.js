@@ -1718,6 +1718,48 @@ function getFiscalMonths(){
     ];
 
 }
+function drawIncomeHistory(){
+
+    const area =
+        document.getElementById("incomeHistoryList");
+
+    if(!area) return;
+
+    const list = getFiscalIncomeHistory();
+
+    area.innerHTML = "";
+
+    if(list.length === 0){
+
+        area.innerHTML =
+            "<p>まだ収入履歴はありません😊</p>";
+
+        return;
+
+    }
+
+    list.forEach(item=>{
+
+        area.innerHTML += `
+
+<button class="setting-item">
+
+<span>
+${item.type}<br>
+<small>${item.date}</small>
+</span>
+
+<span>
+¥${item.amount.toLocaleString()}
+</span>
+
+</button>
+
+`;
+
+    });
+
+}
 function getFiscalIncomeHistory(){
 
     const list = [];
