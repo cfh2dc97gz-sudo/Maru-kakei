@@ -1584,71 +1584,66 @@ ${item.advice}
 
 function showCategoryHistory(categoryId){
 
-    lastPage="year";
+    lastPage = "year";
 
     showPage("category");
 
-    const budget=
-        app.budgets.find(
-            b=>b.id===categoryId
-        );
+    const budget =
+        app.budgets.find(b=>b.id===categoryId);
 
     if(!budget) return;
 
-    document.getElementById("categoryTitle").textContent=
+    document.getElementById("categoryTitle").textContent =
         budget.name;
 
-const months = getFiscalMonths();
+    const months = getFiscalMonths();
 
-let list = [];
+    let list = [];
 
-months.forEach(month=>{
+    months.forEach(month=>{
 
-    const year =
-        month <= 3
-            ? currentYear + 1
-            : currentYear;
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
 
-const data =
-    getMonthData(year,month);
+        const data = getMonthData(year,month);
 
-if(!data) return;
+        if(!data) return;
 
-    list.push(
+        list.push(
 
-        ...(data.history || []).filter(h=>
+            ...(data.history || []).filter(h=>
 
-          !h.income &&
-h.category === budget.name &&
-h.annual === false
-        )
+                !h.income &&
+                !h.annual &&
+                h.category === budget.name
 
+            )
+
+        );
+
+    });
+
+    list.sort(
+        (a,b)=>new Date(b.date)-new Date(a.date)
     );
 
-});
-
-list.sort(
-    (a,b)=>
-        new Date(b.date)-
-        new Date(a.date)
-);
-   
-
-    const total=
+    const total =
         list.reduce(
             (sum,h)=>sum+h.amount,
             0
         );
 
-    const yearlyBudget=
-        budget.budget*12;
+    const yearlyBudget =
+        budget.budget * 12;
 
-    const percent=
+    const percent =
         yearlyBudget===0
-        ?0
-        :Math.round(total/yearlyBudget*100);
+            ?0
+            :Math.round(total/yearlyBudget*100);
 
-    document.getElementById("categorySummary").innerHTML=`
+    document.getElementById("categorySummary").innerHTML = `
 
 年間予算：¥${yearlyBudget.toLocaleString()}<br>
 年間支出：¥${total.toLocaleString()}<br>
@@ -1658,23 +1653,22 @@ list.sort(
 `;
 
     document.getElementById("editAnnualCategory").style.display="none";
-document.getElementById("deleteAnnualCategory").style.display="none";
-document.getElementById("addAnnualHistory").style.display="none";
+    document.getElementById("deleteAnnualCategory").style.display="none";
+    document.getElementById("addAnnualHistory").style.display="none";
 
-    const history=
+    const history =
         document.getElementById("categoryHistory");
 
-    history.innerHTML="";
-       const monthMap={};
+    history.innerHTML = "";
+
+    const monthMap = {};
 
     list.forEach(item=>{
 
-        const month=item.date.substring(0,7);
+        const month = item.date.substring(0,7);
 
         if(!monthMap[month]){
-
-            monthMap[month]=[];
-
+            monthMap[month] = [];
         }
 
         monthMap[month].push(item);
@@ -1686,7 +1680,7 @@ document.getElementById("addAnnualHistory").style.display="none";
         .reverse()
         .forEach(month=>{
 
-            history.innerHTML+=`
+            history.innerHTML += `
 
 <div class="card">
 
@@ -1696,13 +1690,13 @@ document.getElementById("addAnnualHistory").style.display="none";
 
 `;
 
-            monthMap[month].forEach((item,index)=>{
+            monthMap[month].forEach(item=>{
 
-    history.innerHTML+=`
+                history.innerHTML += `
 
 <button
 class="setting-item"
-onclick="editCategoryHistory('${budget.id}',${index})">
+onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
 
 <span>
 
@@ -1722,7 +1716,7 @@ ${item.memo || ""}
 
 `;
 
-});
+            });
 
         });
 
