@@ -1767,29 +1767,59 @@ function getFiscalIncomeHistory(){
 }
 function drawIncomeHistory(){
 
-    let list = getFiscalIncomeHistory();
+    const area =
+        document.getElementById("incomeHistoryList");
 
-if(incomeFilter === "papa"){
+    const papaBtn =
+        document.getElementById("incomePapaFilter");
 
-    list = list.filter(item=>
+    const mamaBtn =
+        document.getElementById("incomeMamaFilter");
 
-        item.type.includes("パパ")
+    const allBtn =
+        document.getElementById("incomeAllFilter");
 
-    );
+    if(!area) return;
+    [papaBtn, mamaBtn, allBtn].forEach(btn=>{
+    if(btn){
+        btn.style.background = "";
+        btn.style.color = "";
+        btn.style.fontWeight = "";
+    }
+});
 
-}else if(incomeFilter === "mama"){
+if(incomeFilter === "papa" && papaBtn){
 
-    list = list.filter(item=>
+    papaBtn.style.background = "#F7C948";
+    papaBtn.style.fontWeight = "bold";
 
-        item.type.includes("ママ")
+}else if(incomeFilter === "mama" && mamaBtn){
 
-    );
+    mamaBtn.style.background = "#F7C948";
+    mamaBtn.style.fontWeight = "bold";
+
+}else if(allBtn){
+
+    allBtn.style.background = "#F7C948";
+    allBtn.style.fontWeight = "bold";
 
 }
 
-    if(!area) return;
+    let list = getFiscalIncomeHistory();
 
-    const list = getFiscalIncomeHistory();
+    if(incomeFilter === "papa"){
+
+        list = list.filter(item=>
+            item.type.includes("パパ")
+        );
+
+    }else if(incomeFilter === "mama"){
+
+        list = list.filter(item=>
+            item.type.includes("ママ")
+        );
+
+    }
 
     if(list.length === 0){
 
@@ -1802,6 +1832,7 @@ if(incomeFilter === "papa"){
         `;
 
         return;
+
     }
 
     const total = list.reduce((sum,item)=>{
@@ -1822,18 +1853,18 @@ if(incomeFilter === "papa"){
     list.forEach(item=>{
 
         area.innerHTML += `
-    <button
-        class="setting-item"
-        onclick="deleteIncomeHistory(${list.indexOf(item)})">
-        <span>
-            <b>${item.type}</b><br>
-            <small>${item.date}</small>
-        </span>
-        <span style="font-weight:bold;">
-            ¥${Number(item.amount).toLocaleString()}
-        </span>
-    </button>
-`;
+            <button
+                class="setting-item"
+                onclick="deleteIncomeHistory(${list.indexOf(item)})">
+                <span>
+                    <b>${item.type}</b><br>
+                    <small>${item.date}</small>
+                </span>
+                <span style="font-weight:bold;">
+                    ¥${Number(item.amount).toLocaleString()}
+                </span>
+            </button>
+        `;
 
     });
 
