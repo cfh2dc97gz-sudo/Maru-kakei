@@ -1890,7 +1890,23 @@ function drawCategoryHistory(){
 
     const list =
         document.getElementById("categoryHistoryList");
+const budget = app.budgets.find(
+    item => item.name === app.categoryFilter
+);
 
+list.innerHTML = `
+
+<div class="card">
+
+<h3>${app.categoryFilter}</h3>
+
+<p>
+月予算：¥${Number(budget?.budget || 0).toLocaleString()}
+</p>
+
+</div>
+
+`;
     if(!filter || !list) return;
 
     // カテゴリボタン
@@ -1944,7 +1960,7 @@ ${item.name}
 
     }
 
-    list.innerHTML="";
+    list.innerHTML += "";
 
     const monthMap={};
 
