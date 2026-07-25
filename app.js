@@ -1905,9 +1905,20 @@ function drawCategoryHistory(){
 app.budgets.forEach(item=>{
 
     filter.innerHTML += `
-        <button
-            class="setting-item ${app.categoryFilter===item.name ? "active" : ""}"
-            onclick="changeCategoryFilter('${item.name}')">
+       <button
+    class="setting-item"
+    onclick="editCategoryHistory('${item.category}', '${item.date}', ${item.amount})">
+
+    <span>
+        ${item.date}<br>
+        <small>${item.memo || ""}</small>
+    </span>
+
+    <span>
+        ¥${Number(item.amount).toLocaleString()}
+    </span>
+
+</button>
 
             ${item.name}
 
