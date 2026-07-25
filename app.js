@@ -2371,12 +2371,16 @@ function drawBonusPage(){
     }
 
     document.getElementById("summerBonusAmount").textContent =
-        "¥" +
-        Number(app.bonus.summerActual || 0).toLocaleString();
+        "¥" + Number(app.bonus.summerActual || 0).toLocaleString();
 
     document.getElementById("winterBonusAmount").textContent =
-        "¥" +
-        Number(app.bonus.winterActual || 0).toLocaleString();
+        "¥" + Number(app.bonus.winterActual || 0).toLocaleString();
+
+    document.getElementById("summerKeepAmount").textContent =
+        "¥" + Number(app.bonus.summerKeep || 0).toLocaleString();
+
+    document.getElementById("winterKeepAmount").textContent =
+        "¥" + Number(app.bonus.winterKeep || 0).toLocaleString();
 
 }
 function editBudget(index){
