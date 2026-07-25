@@ -102,8 +102,8 @@ const app={
         extra:0
 
     },
-incomeHistory:[]
-    
+incomeHistory:[],
+
 bonus:{
 
     papaSummerForecast:600000,
@@ -118,11 +118,12 @@ bonus:{
     papaWinterActual:0,
     mamaWinterActual:0,
 
-    summerKeep:0,
-    winterKeep:0
+  summerKeep:0,
+winterKeep:0
 
-}
-    annualCategories:[
+},
+
+annualCategories:[
 
         {
             id:"birthday",
@@ -252,6 +253,7 @@ function save(){
         reserveFund: JSON.parse(
             JSON.stringify(app.reserveFund)
         ),
+        
 
         bonus: { ...app.bonus },
 
@@ -272,8 +274,12 @@ function save(){
         ),
 
         history: JSON.parse(
-            JSON.stringify(app.history)
-        )
+    JSON.stringify(app.history)
+),
+
+incomeHistory: JSON.parse(
+    JSON.stringify(app.incomeHistory)
+)
 
     };
 
@@ -371,7 +377,8 @@ app.bonus = {
     app.budgets=createDefaultBudgets();
 
     app.history=[];
-
+app.incomeHistory=[];
+    
     const monthSaved=
         localStorage.getItem(getKey());
 
@@ -387,7 +394,8 @@ app.bonus = {
         app.budgets=data.budgets || app.budgets;
 
         app.history=data.history || [];
-
+app.incomeHistory = data.incomeHistory || [];
+        
     }
 
     const yearSaved=
