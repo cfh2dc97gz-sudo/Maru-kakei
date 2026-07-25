@@ -3259,3 +3259,10 @@ window.onerror = function(message, source, line, column, error){
         "\n列：" + column
     );
 };
+function numberBack(){
+
+    numberValue = numberValue.slice(0,-1);
+
+    updateNumberDisplay();
+
+}
