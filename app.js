@@ -1808,6 +1808,30 @@ function drawIncomeHistory(){
     });
 
 }
+function deleteIncomeHistory(index){
+
+    if(!confirm("この収入履歴を削除しますか？"))
+        return;
+
+    const list = getFiscalIncomeHistory();
+
+    const target = list[index];
+
+    if(!target) return;
+
+    app.incomeHistory = app.incomeHistory.filter(item=>
+
+        !(
+            item.date === target.date &&
+            item.type === target.type &&
+            item.amount === target.amount
+        )
+
+    );
+
+    update();
+
+}
 function getMonthlySpent(year,month){
 
 const data =
