@@ -185,6 +185,8 @@ annualCategories:[
 let currentYear=2026;
 
 let currentMonth=4;
+
+let incomeFilter = "all";
 /* ===========================
    ② 保存・読込
 =========================== */
