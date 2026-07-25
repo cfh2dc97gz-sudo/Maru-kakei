@@ -2328,6 +2328,44 @@ onclick="editBudget(${index})">
     });
 
 }
+function drawBonusPage(){
+
+    const summer =
+        document.getElementById("summerBonus");
+
+    const winter =
+        document.getElementById("winterBonus");
+
+    const message =
+        document.getElementById("bonusMessage");
+
+    if(!summer || !winter || !message) return;
+
+    summer.style.display = "none";
+    winter.style.display = "none";
+    message.style.display = "none";
+
+    if(currentMonth === 6){
+
+        summer.style.display = "block";
+
+    }else if(currentMonth === 11){
+
+        winter.style.display = "block";
+
+    }else{
+
+        message.style.display = "block";
+
+    }
+
+    document.getElementById("summerBonusAmount").textContent =
+        "¥" + Number(app.bonus.summerActual || 0).toLocaleString();
+
+    document.getElementById("winterBonusAmount").textContent =
+        "¥" + Number(app.bonus.winterActual || 0).toLocaleString();
+
+}
 
 function editBudget(index){
 
