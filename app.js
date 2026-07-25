@@ -114,7 +114,7 @@ const app={
     summerKeep:0,
     winterKeep:0
 
-}
+ },
     annualCategories:[
 
         {
