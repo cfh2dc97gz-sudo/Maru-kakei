@@ -1829,17 +1829,38 @@ function deleteIncomeHistory(index){
 
     if(!target) return;
 
-    app.incomeHistory = app.incomeHistory.filter(item=>
+ const data = getMonthData(target.year, target.month);
 
-        !(
-            item.date === target.date &&
-            item.type === target.type &&
-            item.amount === target.amount
-        )
+if(!data) return;
 
-    );
+data.incomeHistory = (data.incomeHistory || []).filter(item=>
 
-    update();
+    !(
+        item.date === target.date &&
+        item.type === target.type &&
+        item.amount === target.amount
+    )
+
+);
+
+localStorage.setItem(
+
+    `maru-kakei-${target.year}-${String(target.month).padStart(2,"0")}`,
+
+    JSON.stringify(data)
+
+);
+
+if(
+    target.year === getDisplayYear(currentMonth) &&
+    target.month === currentMonth
+){
+
+    app.incomeHistory = data.incomeHistory;
+
+}
+
+update();
 
 }
 function getMonthlySpent(year,month){
