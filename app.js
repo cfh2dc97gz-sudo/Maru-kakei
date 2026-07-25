@@ -2462,13 +2462,19 @@ if(summerBtn){
 
 summerBtn.onclick = ()=>{
 
-    openNumberModal("夏ボーナス実績",(value)=>{
+    openNumberModal("夏ボーナス実績",(bonus)=>{
 
-        app.bonus.summerActual = value;
+        app.bonus.summerActual = bonus;
 
-        update();
+        openNumberModal("架空通帳へ入金",(keep)=>{
 
-        drawBonusPage();
+            app.bonus.summerKeep = keep;
+
+            update();
+
+            drawBonusPage();
+
+        });
 
     });
 
