@@ -2064,16 +2064,44 @@ function editCategoryHistory(category, date, amount){
 
             if(!data) return;
 
-            data.history = (data.history || []).filter(item=>
+            const target = (data.history || []).find(item=>
 
-                !(
-                    item.category === category &&
-                    item.date === date &&
-                    item.amount === amount &&
-                    !item.annual
-                )
+    item.category === category &&
+    item.date === date &&
+    item.amount === amount &&
+    !item.annual
 
-            );
+);
+
+data.history = (data.history || []).filter(item=>
+
+    !(
+        item.category === category &&
+        item.date === date &&
+        item.amount === amount &&
+        !item.annual
+    )
+
+);
+
+if(target){
+
+    const budget = (data.budgets || []).find(b=>
+
+        b.name === target.category
+
+    );
+
+    if(budget){
+
+        budget.spent = Math.max(
+            0,
+            Number(budget.spent || 0) - Number(target.amount || 0)
+        );
+
+    }
+
+}
 
             localStorage.setItem(
                 `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
