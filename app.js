@@ -1915,12 +1915,90 @@ app.budgets.forEach(item=>{
     `;
 
 });
+    const history = getFiscalMonths().flatMap(month=>{
+
+    const year =
+        month <= 3
+            ? currentYear + 1
+            : currentYear;
+
+    const data = getMonthData(year, month);
+
+    if(!data) return [];
+
+    return (data.history || []).filter(item=>
+
+        !item.income &&
+        !item.annual &&
+        item.category === app.categoryFilter
+
+    );
+
+});
+
+if(history.length === 0){
+
     list.innerHTML = `
         <div style="text-align:center;padding:20px;color:#999;">
             履歴はまだありません😊
         </div>
     `;
 
+    return;
+
+}
+
+list.innerHTML = "";
+
+const monthMap = {};
+
+history.forEach(item=>{
+
+    const month = item.date.substring(0,7);
+
+    if(!monthMap[month]){
+
+        monthMap[month] = [];
+
+    }
+
+    monthMap[month].push(item);
+
+});
+
+Object.keys(monthMap)
+.sort()
+.reverse()
+.forEach(month=>{
+
+    list.innerHTML += `
+        <div class="card">
+            <h3>${month}</h3>
+        </div>
+    `;
+
+    monthMap[month].forEach(item=>{
+
+        list.innerHTML += `
+           <button
+    class="setting-item"
+    onclick="editCategoryHistory('${app.categoryFilter}', '${item.date}', ${item.amount})">
+
+                <span>
+                    ${item.date}<br>
+                    <small>${item.memo || ""}</small>
+                </span>
+
+                <span>
+                    ¥${Number(item.amount).toLocaleString()}
+                </span>
+
+            </button>
+        `;
+
+    });
+
+});
 }
 function changeCategoryFilter(name){
 
@@ -1929,6 +2007,28 @@ function changeCategoryFilter(name){
     drawCategoryHistory();
 
     save();
+
+}
+
+function editCategoryHistory(category, date, amount){
+
+    app.editCategoryHistory = {
+
+        category,
+
+        date,
+
+        amount
+
+    };
+
+    openNumberModal("金額を変更",(value)=>{
+
+        if(value <= 0) return;
+
+        alert("次に保存処理を追加します😊");
+
+    });
 
 }
 function deleteIncomeHistory(index){
