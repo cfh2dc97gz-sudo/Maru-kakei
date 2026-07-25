@@ -1004,22 +1004,24 @@ case "bonus":
 
     break;
 
-    if(page!=="category"){
+}
 
-        const session =
-            JSON.parse(
-                localStorage.getItem(getSessionKey())
-                || "{}"
-            );
+if(page!=="category"){
 
-        session.page = page;
-
-        localStorage.setItem(
-            getSessionKey(),
-            JSON.stringify(session)
+    const session =
+        JSON.parse(
+            localStorage.getItem(getSessionKey())
+            || "{}"
         );
 
-    }
+    session.page = page;
+
+    localStorage.setItem(
+        getSessionKey(),
+        JSON.stringify(session)
+    );
+
+}
 
 }
 
