@@ -1097,11 +1097,14 @@ const saving =
     bank -
     Number(app.startBank || 0);
 
-    const goal =
-        Number(app.goal || 0);
+const totalSaving =
+    saving + getBonusKeepTotal();
 
-    const remain =
-        Math.max(goal - saving,0);
+const goal =
+    Number(app.goal || 0);
+
+const remain =
+    Math.max(goal - totalSaving,0);
 
 const monthsLeft =
     Math.max(
