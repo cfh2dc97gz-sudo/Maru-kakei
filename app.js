@@ -2460,11 +2460,15 @@ const summerBtn =
 
 if(summerBtn){
 
-    summerBtn.onclick = ()=>{
+summerBtn.onclick = ()=>{
 
-        openNumberModal("夏ボーナス実績",(value)=>{
+    openNumberModal("夏ボーナス実績",(bonus)=>{
 
-            app.bonus.summerActual = value;
+        app.bonus.summerActual = bonus;
+
+        openNumberModal("架空通帳へ入金",(keep)=>{
+
+            app.bonus.summerKeep = keep;
 
             update();
 
@@ -2472,7 +2476,9 @@ if(summerBtn){
 
         });
 
-    };
+    });
+
+};
 
 }
 
