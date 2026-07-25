@@ -2430,6 +2430,47 @@ if(editBonusBtn){
     };
 
 }
+const summerBtn =
+    document.getElementById("editSummerBonus");
+
+if(summerBtn){
+
+    summerBtn.onclick = ()=>{
+
+        openNumberModal("夏ボーナス実績",(value)=>{
+
+            app.bonus.summerActual = value;
+
+            update();
+
+            drawBonusPage();
+
+        });
+
+    };
+
+}
+
+const winterBtn =
+    document.getElementById("editWinterBonus");
+
+if(winterBtn){
+
+    winterBtn.onclick = ()=>{
+
+        openNumberModal("冬ボーナス実績",(value)=>{
+
+            app.bonus.winterActual = value;
+
+            update();
+
+            drawBonusPage();
+
+        });
+
+    };
+
+}
 const annualBtn =
     document.getElementById("annualManage");
 
