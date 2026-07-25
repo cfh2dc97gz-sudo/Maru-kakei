@@ -2333,7 +2333,7 @@ onclick="editBudget(${index})">
 
 }
 function drawBonusPage(){
-
+console.log(currentYear, currentMonth);
     const summer =
         document.getElementById("summerBonus");
 
