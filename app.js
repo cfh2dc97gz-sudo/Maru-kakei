@@ -1263,7 +1263,8 @@ function drawYearSummary(){
         ) -
         Number(app.startBank || 0);
 
-    const progress = saving;
+const progress =
+    saving + getBonusKeepTotal();
 
     const bonusTotal =
         Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
