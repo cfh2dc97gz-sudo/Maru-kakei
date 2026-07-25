@@ -970,6 +970,8 @@ const bonusPage =
 
 const incomePage =
     document.getElementById("incomePage");
+const categoryHistoryPage =
+    document.getElementById("categoryHistoryPage");
 
 const pages = [
     homePage,
@@ -1059,6 +1061,17 @@ function showPage(page){
             categoryPage.style.display = "block";
             break;
 case "income":
+
+    incomePage.style.display = "block";
+
+    navButtons[3].classList.add("active");
+
+    drawIncomeHistory();
+
+    lastPage = "setting";
+
+    break;
+
 case "categoryHistory":
 
     categoryHistoryPage.style.display = "block";
@@ -1066,14 +1079,6 @@ case "categoryHistory":
     navButtons[3].classList.add("active");
 
     drawCategoryHistory();
-
-    lastPage = "setting";
-
-    break;
-            
-    incomePage.style.display = "block";
-navButtons[3].classList.add("active");
-    drawIncomeHistory();
 
     lastPage = "setting";
 
@@ -1879,6 +1884,39 @@ if(incomeFilter === "papa" && papaBtn){
         `;
 
     });
+
+}
+function drawCategoryHistory(){
+
+    const filter =
+        document.getElementById("categoryHistoryFilter");
+
+    const list =
+        document.getElementById("categoryHistoryList");
+
+    if(!filter || !list) return;
+
+    filter.innerHTML = "";
+
+    app.budgets.forEach(item=>{
+
+        filter.innerHTML += `
+            <button
+                class="setting-item"
+                onclick="">
+
+                ${item.name}
+
+            </button>
+        `;
+
+    });
+
+    list.innerHTML = `
+        <div style="text-align:center;padding:20px;color:#999;">
+            履歴はまだありません😊
+        </div>
+    `;
 
 }
 function deleteIncomeHistory(index){
