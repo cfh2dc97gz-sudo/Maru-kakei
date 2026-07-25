@@ -2366,36 +2366,11 @@ if(editBonusBtn){
 
     editBonusBtn.onclick = ()=>{
 
-       openNumberModal("夏ボーナス予定",(summerForecast)=>{
-
-    openNumberModal("夏ボーナス実績",(summerActual)=>{
-
-        openNumberModal("冬ボーナス予定",(winterForecast)=>{
-
-            openNumberModal("冬ボーナス実績",(winterActual)=>{
-
-                app.bonus.summerForecast = summerForecast;
-
-                app.bonus.summerActual = summerActual;
-
-                app.bonus.winterForecast = winterForecast;
-
-                app.bonus.winterActual = winterActual;
-
-                update();
-
-            });
-
-        });
-
-    });
-
-});
+        showPage("bonus");
 
     };
 
 }
-
 const annualBtn =
     document.getElementById("annualManage");
 
