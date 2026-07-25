@@ -400,7 +400,13 @@ function load(){
 
         app.reserveFund=data.reserveFund || app.reserveFund;
 
-        app.bonus=data.bonus || app.bonus;
+        app.bonus = {
+
+    ...app.bonus,
+
+    ...(data.bonus || {})
+
+};
 
         app.annualCategories=
             data.annualCategories ||
