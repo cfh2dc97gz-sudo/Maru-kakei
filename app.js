@@ -2572,8 +2572,7 @@ if(winterBtn){
 
     });
 
-};
-    };
+}
 
 }
 const annualBtn =
