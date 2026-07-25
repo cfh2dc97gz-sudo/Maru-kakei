@@ -103,13 +103,13 @@ const app={
 
     },
 
- bonus:{
+bonus:{
 
-    papaSummerForecast:0,
-    mamaSummerForecast:0,
+    papaSummerForecast:600000,
+    mamaSummerForecast:300000,
 
-    papaWinterForecast:0,
-    mamaWinterForecast:0,
+    papaWinterForecast:600000,
+    mamaWinterForecast:300000,
 
     papaSummerActual:0,
     mamaSummerActual:0,
@@ -349,13 +349,13 @@ function load(){
 
     };
 
- app.bonus = {
+app.bonus = {
 
-    papaSummerForecast:0,
-    mamaSummerForecast:0,
+    papaSummerForecast:600000,
+    mamaSummerForecast:300000,
 
-    papaWinterForecast:0,
-    mamaWinterForecast:0,
+    papaWinterForecast:600000,
+    mamaWinterForecast:300000,
 
     papaSummerActual:0,
     mamaSummerActual:0,
@@ -1284,9 +1284,16 @@ function drawYearSummary(){
 const progress =
     saving + getBonusKeepTotal();
 
-    const bonusTotal =
-        Number(app.bonus.summerActual || app.bonus.summerForecast || 0) +
-        Number(app.bonus.winterActual || app.bonus.winterForecast || 0);
+   const summerBonus =
+    Number(app.bonus.papaSummerActual || app.bonus.papaSummerForecast || 0) +
+    Number(app.bonus.mamaSummerActual || app.bonus.mamaSummerForecast || 0);
+
+const winterBonus =
+    Number(app.bonus.papaWinterActual || app.bonus.papaWinterForecast || 0) +
+    Number(app.bonus.mamaWinterActual || app.bonus.mamaWinterForecast || 0);
+
+const bonusTotal =
+    summerBonus + winterBonus;
 
     const totalIncome =
         income + bonusTotal;
@@ -2534,16 +2541,29 @@ if(winterBtn){
 
     winterBtn.onclick = ()=>{
 
-        openNumberModal("冬ボーナス実績",(value)=>{
+    openNumberModal("👨 パパ冬賞与",(papa)=>{
 
-            app.bonus.winterActual = value;
+        app.bonus.papaWinterActual = papa;
 
-            update();
+        openNumberModal("👩 ママ冬賞与",(mama)=>{
 
-            drawBonusPage();
+            app.bonus.mamaWinterActual = mama;
+
+            openNumberModal("積立額",(keep)=>{
+
+                app.bonus.winterKeep = keep;
+
+                update();
+
+                drawBonusPage();
+
+            });
 
         });
 
+    });
+
+};
     };
 
 }
