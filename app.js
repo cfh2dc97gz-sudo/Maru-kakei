@@ -2548,7 +2548,39 @@ summerBtn.onclick = ()=>{
             openNumberModal("積立額",(keep)=>{
 
                 app.bonus.summerKeep = keep;
+app.incomeHistory.unshift({
 
+    date: new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    ),
+
+    type:"パパ夏賞与",
+
+    amount: app.bonus.papaSummerActual
+
+});
+
+app.incomeHistory.unshift({
+
+    date: new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    ),
+
+    type:"ママ夏賞与",
+
+    amount: app.bonus.mamaSummerActual
+
+});
                 update();
 
                 drawBonusPage();
