@@ -2474,17 +2474,23 @@ if(summerBtn){
 
 summerBtn.onclick = ()=>{
 
-    openNumberModal("夏ボーナス実績",(bonus)=>{
+    openNumberModal("👨 パパ夏賞与",(papa)=>{
 
-        app.bonus.summerActual = bonus;
+        app.bonus.papaSummerActual = papa;
 
-        openNumberModal("架空通帳へ入金",(keep)=>{
+        openNumberModal("👩 ママ夏賞与",(mama)=>{
 
-            app.bonus.summerKeep = keep;
+            app.bonus.mamaSummerActual = mama;
 
-            update();
+            openNumberModal("積立額",(keep)=>{
 
-            drawBonusPage();
+                app.bonus.summerKeep = keep;
+
+                update();
+
+                drawBonusPage();
+
+            });
 
         });
 
