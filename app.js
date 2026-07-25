@@ -2340,7 +2340,7 @@ onclick="editBudget(${index})">
 
 }
 function drawBonusPage(){
-console.log(currentYear, currentMonth);
+
     const summer =
         document.getElementById("summerBonus");
 
@@ -2371,13 +2371,14 @@ console.log(currentYear, currentMonth);
     }
 
     document.getElementById("summerBonusAmount").textContent =
-        "¥" + Number(app.bonus.summerActual || 0).toLocaleString();
+        "¥" +
+        Number(app.bonus.summerActual || 0).toLocaleString();
 
     document.getElementById("winterBonusAmount").textContent =
-        "¥" + Number(app.bonus.winterActual || 0).toLocaleString();
+        "¥" +
+        Number(app.bonus.winterActual || 0).toLocaleString();
 
 }
-
 function editBudget(index){
 
     openNumberModal(
