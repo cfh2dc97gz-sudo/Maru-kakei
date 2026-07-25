@@ -807,6 +807,25 @@ function addIncome(type){
 
         }
 
+        app.incomeHistory.unshift({
+
+            date:new Date().toLocaleDateString(
+                "ja-JP",
+                {
+                    year:"numeric",
+                    month:"2-digit",
+                    day:"2-digit"
+                }
+            ),
+
+            type,
+
+            amount,
+
+            memo
+
+        });
+
         update();
 
     });
