@@ -102,7 +102,8 @@ const app={
         extra:0
 
     },
-
+incomeHistory:[]
+    
 bonus:{
 
     papaSummerForecast:600000,
