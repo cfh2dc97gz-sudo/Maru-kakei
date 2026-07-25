@@ -978,7 +978,8 @@ const pages = [
     categoryPage,
     settingPage,
     bonusPage,
-    incomePage
+    incomePage,
+    categoryHistoryPage
 ];
 
 const navButtons =
