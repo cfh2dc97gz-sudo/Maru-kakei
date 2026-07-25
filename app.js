@@ -757,79 +757,7 @@ onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
     });
 
 }
-function openIncomeMenu(){
 
-    const menu = [
-
-        "👨 パパ給与",
-        "👩 ママ給与",
-        "🎁 臨時収入",
-
-        "👨 パパ夏賞与",
-        "👩 ママ夏賞与",
-
-        "👨 パパ冬賞与",
-        "👩 ママ冬賞与"
-
-    ];
-
-    let text = "入力する項目を選んでください😊\n\n";
-
-    menu.forEach((item,index)=>{
-
-        text += `${index+1}. ${item}\n`;
-
-    });
-
-    const select = prompt(text);
-
-    if(!select) return;
-
-    switch(Number(select)){
-
-        case 1:
-            addIncome("パパ");
-            break;
-
-        case 2:
-            addIncome("ママ");
-            break;
-
-        case 3:
-            addIncome("臨時");
-            break;
-
-        case 4:
-            document.getElementById("editSummerBonus").click();
-            break;
-
-        case 5:
-            openNumberModal("👩 ママ夏賞与",(amount)=>{
-                app.bonus.mamaSummerActual = amount;
-                update();
-                drawBonusPage();
-            });
-            break;
-
-        case 6:
-            openNumberModal("👨 パパ冬賞与",(amount)=>{
-                app.bonus.papaWinterActual = amount;
-                update();
-                drawBonusPage();
-            });
-            break;
-
-        case 7:
-            openNumberModal("👩 ママ冬賞与",(amount)=>{
-                app.bonus.mamaWinterActual = amount;
-                update();
-                drawBonusPage();
-            });
-            break;
-
-    }
-
-}
 function addIncome(type){
 
     openNumberModal("収入金額",(amount,memo)=>{
