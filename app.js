@@ -1888,6 +1888,10 @@ if(incomeFilter === "papa" && papaBtn){
 }
 function drawCategoryHistory(){
 
+    if(!app.categoryFilter){
+        app.categoryFilter = app.budgets[0].name;
+    }
+
     const filter =
         document.getElementById("categoryHistoryFilter");
 
@@ -1896,27 +1900,35 @@ function drawCategoryHistory(){
 
     if(!filter || !list) return;
 
-    filter.innerHTML = "";
+  filter.innerHTML = "";
 
-    app.budgets.forEach(item=>{
+app.budgets.forEach(item=>{
 
-        filter.innerHTML += `
-            <button
-                class="setting-item"
-                onclick="">
+    filter.innerHTML += `
+        <button
+            class="setting-item ${app.categoryFilter===item.name ? "active" : ""}"
+            onclick="changeCategoryFilter('${item.name}')">
 
-                ${item.name}
+            ${item.name}
 
-            </button>
-        `;
+        </button>
+    `;
 
-    });
-
+});
     list.innerHTML = `
         <div style="text-align:center;padding:20px;color:#999;">
             履歴はまだありません😊
         </div>
     `;
+
+}
+function changeCategoryFilter(name){
+
+    app.categoryFilter = name;
+
+    drawCategoryHistory();
+
+    save();
 
 }
 function deleteIncomeHistory(index){
