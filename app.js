@@ -1056,7 +1056,7 @@ function showPage(page){
 case "income":
 
     incomePage.style.display = "block";
-
+navButtons[3].classList.add("active");
     drawIncomeHistory();
 
     lastPage = "setting";
