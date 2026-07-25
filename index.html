@@ -435,33 +435,45 @@
 
         </button>
 
-      <div class="setting-group">
+        <div class="setting-group">
 
-    <h3>💰 ボーナス管理</h3>
+            <h3>💰 ボーナス管理</h3>
 
-    <button
-        class="setting-item"
-        id="editBonus">
+            <button
+                class="setting-item"
+                id="editBonus">
 
-        <span>夏・冬ボーナス</span>
+                <span>夏・冬ボーナス</span>
 
-        <span>編集</span>
+                <span>編集</span>
 
-    </button>
+            </button>
 
-</div>
+        </div>
 
         <div id="budgetList">
 
         </div>
-<button
-    class="setting-item"
-    id="annualManage">
 
-    💰特別費
+        <button
+            class="setting-item"
+            id="annualManage">
 
-</button>
-        <button class="setting-item danger" id="deleteAll">
+            💰 特別費
+
+        </button>
+
+        <button
+            class="setting-item"
+            onclick="showPage('income')">
+
+            💰 年間収入履歴
+
+        </button>
+
+        <button
+            class="setting-item danger"
+            id="deleteAll">
 
             🗑 全データ削除
 
@@ -492,43 +504,70 @@
 
         <h2>💰 ボーナス管理</h2>
 
-     <div id="bonusContents">
+        <div id="bonusContents">
 
-    <div id="summerBonus" style="display:none;">
+            <div id="summerBonus" style="display:none;">
 
-        <h3>🌻 夏ボーナス</h3>
+                <h3>🌻 夏ボーナス</h3>
 
-        <button class="setting-item" id="editSummerBonus">
-            <span>実績入力</span>
-            <span id="summerBonusAmount">¥0</span>
-        </button>
-<button class="setting-item" id="editSummerKeep">
-    <span>積立額</span>
-    <span id="summerKeepAmount">¥0</span>
-</button>
-        
+                <button class="setting-item" id="editSummerBonus">
+                    <span>実績入力</span>
+                    <span id="summerBonusAmount">¥0</span>
+                </button>
+
+                <button class="setting-item" id="editSummerKeep">
+                    <span>積立額</span>
+                    <span id="summerKeepAmount">¥0</span>
+                </button>
+
+            </div>
+
+            <div id="winterBonus" style="display:none;">
+
+                <h3>⛄ 冬ボーナス</h3>
+
+                <button class="setting-item" id="editWinterBonus">
+                    <span>実績入力</span>
+                    <span id="winterBonusAmount">¥0</span>
+                </button>
+
+                <button class="setting-item" id="editWinterKeep">
+                    <span>積立額</span>
+                    <span id="winterKeepAmount">¥0</span>
+                </button>
+
+            </div>
+
+            <p id="bonusMessage">
+                ボーナス月のみ入力できます😊
+            </p>
+
+        </div>
+
     </div>
-
-    <div id="winterBonus" style="display:none;">
-
-        <h3>⛄ 冬ボーナス</h3>
-
-        <button class="setting-item" id="editWinterBonus">
-            <span>実績入力</span>
-            <span id="winterBonusAmount">¥0</span>
-        </button>
-<button class="setting-item" id="editWinterKeep">
-    <span>積立額</span>
-    <span id="winterKeepAmount">¥0</span>
-</button>
-        
-    </div>
-
-    <p id="bonusMessage">
-        ボーナス月のみ入力できます😊
-    </p>
 
 </div>
+<div id="incomePage"
+     class="page"
+     style="display:none;">
+
+    <div class="card">
+
+        <button
+            class="setting-item"
+            onclick="backPage()">
+
+            ← 戻る
+
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>💰 年間収入履歴</h2>
+
+        <div id="incomeHistoryList"></div>
 
     </div>
 
