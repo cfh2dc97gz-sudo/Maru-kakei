@@ -103,18 +103,18 @@ const app={
 
     },
 
-    bonus:{
+ bonus:{
 
-        summerForecast:0,
+    summerForecast:300000,
+    winterForecast:300000,
 
-        summerActual:0,
+    summerActual:0,
+    winterActual:0,
 
-        winterForecast:0,
+    summerKeep:0,
+    winterKeep:0
 
-        winterActual:0
-
-    },
-
+}
     annualCategories:[
 
         {
