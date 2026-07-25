@@ -2383,6 +2383,21 @@ function drawBonusPage(){
         "¥" + Number(app.bonus.winterKeep || 0).toLocaleString();
 
 }
+function getBonusKeepTotal(){
+
+    let total = 0;
+
+    total += app.bonus.summerActual > 0
+        ? app.bonus.summerKeep
+        : app.bonus.summerForecast;
+
+    total += app.bonus.winterActual > 0
+        ? app.bonus.winterKeep
+        : app.bonus.winterForecast;
+
+    return total;
+
+}
 function editBudget(index){
 
     openNumberModal(
