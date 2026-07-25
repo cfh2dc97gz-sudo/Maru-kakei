@@ -1742,9 +1742,19 @@ function getFiscalIncomeHistory(){
 
         if(!data) return;
 
-        list.push(
-            ...(data.incomeHistory || [])
-        );
+        (data.incomeHistory || []).forEach(item=>{
+
+    list.push({
+
+        ...item,
+
+        year,
+
+        month
+
+    });
+
+});
 
     });
 
