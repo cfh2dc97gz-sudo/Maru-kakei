@@ -2411,13 +2411,29 @@ function getBonusKeepTotal(){
 
     let total = 0;
 
-    total += app.bonus.summerActual > 0
-        ? app.bonus.summerKeep
-        : app.bonus.summerForecast;
+    const summerActual =
+        Number(app.bonus.papaSummerActual || 0) +
+        Number(app.bonus.mamaSummerActual || 0);
 
-    total += app.bonus.winterActual > 0
-        ? app.bonus.winterKeep
-        : app.bonus.winterForecast;
+    const winterActual =
+        Number(app.bonus.papaWinterActual || 0) +
+        Number(app.bonus.mamaWinterActual || 0);
+
+    const summerForecast =
+        Number(app.bonus.papaSummerForecast || 0) +
+        Number(app.bonus.mamaSummerForecast || 0);
+
+    const winterForecast =
+        Number(app.bonus.papaWinterForecast || 0) +
+        Number(app.bonus.mamaWinterForecast || 0);
+
+    total += summerActual > 0
+        ? Number(app.bonus.summerKeep || 0)
+        : summerForecast;
+
+    total += winterActual > 0
+        ? Number(app.bonus.winterKeep || 0)
+        : winterForecast;
 
     return total;
 
