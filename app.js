@@ -997,10 +997,12 @@ case "category":
 case "bonus":
 
     bonusPage.style.display = "block";
+
+    drawBonusPage();
+
     lastPage = "setting";
+
     break;
-            
-    }
 
     if(page!=="category"){
 
