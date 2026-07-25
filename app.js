@@ -2462,24 +2462,17 @@ if(summerBtn){
 
 summerBtn.onclick = ()=>{
 
-    openNumberModal("夏ボーナス実績",(bonus)=>{
+    openNumberModal("夏ボーナス実績",(value)=>{
 
-        app.bonus.summerActual = bonus;
+        app.bonus.summerActual = value;
 
-        openNumberModal("架空通帳へ入金",(keep)=>{
+        update();
 
-            app.bonus.summerKeep = keep;
-
-            update();
-
-            drawBonusPage();
-
-        });
+        drawBonusPage();
 
     });
 
 };
-
 }
 
 const winterBtn =
