@@ -105,16 +105,22 @@ const app={
 
  bonus:{
 
-    summerForecast:300000,
-    winterForecast:300000,
+    papaSummerForecast:0,
+    mamaSummerForecast:0,
 
-    summerActual:0,
-    winterActual:0,
+    papaWinterForecast:0,
+    mamaWinterForecast:0,
+
+    papaSummerActual:0,
+    mamaSummerActual:0,
+
+    papaWinterActual:0,
+    mamaWinterActual:0,
 
     summerKeep:0,
     winterKeep:0
 
- },
+}
     annualCategories:[
 
         {
