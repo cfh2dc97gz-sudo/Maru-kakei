@@ -2475,29 +2475,29 @@ function closeNumberModal(){
 
 function numberKey(num){
 
-    if(numberValue==="0"){
+    // 10桁まで入力可能
+    if(numberValue.length >= 10){
+        return;
+    }
 
-        numberValue = num;
+    if(numberValue === "" || numberValue === "0"){
+
+        numberValue = String(num);
 
     }else{
 
-        numberValue += num;
+        numberValue += String(num);
 
     }
 
     updateNumberDisplay();
 
-}
-
-function numberBack(){
-
-    numberValue =
-        numberValue.slice(0,-1);
-
-    updateNumberDisplay();
+    // iPhoneの高速連打対策
+    if(navigator.vibrate){
+        navigator.vibrate(5);
+    }
 
 }
-
 function numberClear(){
 
     numberValue = "";
