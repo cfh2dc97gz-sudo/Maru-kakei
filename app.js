@@ -1899,116 +1899,107 @@ function drawCategoryHistory(){
 
     if(!filter || !list) return;
 
-  filter.innerHTML = "";
+    // カテゴリボタン
+    filter.innerHTML = "";
 
-app.budgets.forEach(item=>{
+    app.budgets.forEach(item=>{
 
-    filter.innerHTML += `
-       <button
-    class="setting-item"
-    onclick="editCategoryHistory('${item.category}', '${item.date}', ${item.amount})">
+        filter.innerHTML += `
+<button
+class="setting-item ${app.categoryFilter===item.name ? "active" : ""}"
+onclick="changeCategoryFilter('${item.name}')">
 
-    <span>
-        ${item.date}<br>
-        <small>${item.memo || ""}</small>
-    </span>
-
-    <span>
-        ¥${Number(item.amount).toLocaleString()}
-    </span>
+${item.name}
 
 </button>
-
-            ${item.name}
-
-        </button>
-    `;
-
-});
-    const history = getFiscalMonths().flatMap(month=>{
-
-    const year =
-        month <= 3
-            ? currentYear + 1
-            : currentYear;
-
-    const data = getMonthData(year, month);
-
-    if(!data) return [];
-
-    return (data.history || []).filter(item=>
-
-        !item.income &&
-        !item.annual &&
-        item.category === app.categoryFilter
-
-    );
-
-});
-
-if(history.length === 0){
-
-    list.innerHTML = `
-        <div style="text-align:center;padding:20px;color:#999;">
-            履歴はまだありません😊
-        </div>
-    `;
-
-    return;
-
-}
-
-list.innerHTML = "";
-
-const monthMap = {};
-
-history.forEach(item=>{
-
-    const month = item.date.substring(0,7);
-
-    if(!monthMap[month]){
-
-        monthMap[month] = [];
-
-    }
-
-    monthMap[month].push(item);
-
-});
-
-Object.keys(monthMap)
-.sort()
-.reverse()
-.forEach(month=>{
-
-    list.innerHTML += `
-        <div class="card">
-            <h3>${month}</h3>
-        </div>
-    `;
-
-    monthMap[month].forEach(item=>{
-
-        list.innerHTML += `
-           <button
-    class="setting-item"
-    onclick="editCategoryHistory('${item.category}', '${item.date}', ${item.amount})"
-
-                <span>
-                    ${item.date}<br>
-                    <small>${item.memo || ""}</small>
-                </span>
-
-                <span>
-                    ¥${Number(item.amount).toLocaleString()}
-                </span>
-
-            </button>
-        `;
+`;
 
     });
 
-});
+    // 履歴取得
+    const history = getFiscalMonths().flatMap(month=>{
+
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
+
+        const data = getMonthData(year, month);
+
+        if(!data) return [];
+
+        return (data.history || []).filter(item=>
+
+            !item.income &&
+            !item.annual &&
+            item.category === app.categoryFilter
+
+        );
+
+    });
+
+    if(history.length===0){
+
+        list.innerHTML=`
+<div style="text-align:center;padding:20px;color:#999;">
+履歴はまだありません😊
+</div>
+`;
+
+        return;
+
+    }
+
+    list.innerHTML="";
+
+    const monthMap={};
+
+    history.forEach(item=>{
+
+        const month=item.date.substring(0,7);
+
+        if(!monthMap[month]){
+            monthMap[month]=[];
+        }
+
+        monthMap[month].push(item);
+
+    });
+
+    Object.keys(monthMap)
+    .sort()
+    .reverse()
+    .forEach(month=>{
+
+        list.innerHTML += `
+<div class="card">
+<h3>${month}</h3>
+</div>
+`;
+
+        monthMap[month].forEach(item=>{
+
+            list.innerHTML += `
+<button
+class="setting-item"
+onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
+
+<span>
+${item.date}<br>
+<small>${item.memo || ""}</small>
+</span>
+
+<span>
+¥${Number(item.amount).toLocaleString()}
+</span>
+
+</button>
+`;
+
+        });
+
+    });
+
 }
 function changeCategoryFilter(name){
 
