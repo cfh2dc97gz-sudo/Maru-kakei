@@ -2612,7 +2612,39 @@ if(winterBtn){
             openNumberModal("積立額",(keep)=>{
 
                 app.bonus.winterKeep = keep;
+app.incomeHistory.unshift({
 
+    date: new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    ),
+
+    type:"パパ冬賞与",
+
+    amount: app.bonus.papaWinterActual
+
+});
+
+app.incomeHistory.unshift({
+
+    date: new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    ),
+
+    type:"ママ冬賞与",
+
+    amount: app.bonus.mamaWinterActual
+
+});
                 update();
 
                 drawBonusPage();
