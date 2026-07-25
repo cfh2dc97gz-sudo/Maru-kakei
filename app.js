@@ -938,7 +938,7 @@ function showPage(page){
 
         if(p){
 
-            p.style.display="none";
+            p.style.display = "none";
 
         }
 
@@ -952,76 +952,76 @@ function showPage(page){
 
         case "home":
 
-            homePage.style.display="block";
+            homePage.style.display = "block";
             navButtons[0].classList.add("active");
-            lastPage="home";
+
+            lastPage = "home";
             break;
 
         case "year":
 
-            yearPage.style.display="block";
+            yearPage.style.display = "block";
             navButtons[1].classList.add("active");
 
             drawYearSummary();
             drawYearCategory();
             drawYearChart();
 
-            lastPage="year";
+            lastPage = "year";
             break;
 
         case "annual":
 
-            annualPage.style.display="block";
+            annualPage.style.display = "block";
             navButtons[2].classList.add("active");
 
             drawAnnualManage();
 
-            lastPage="annual";
+            lastPage = "annual";
             break;
 
         case "setting":
 
-            settingPage.style.display="block";
+            settingPage.style.display = "block";
             navButtons[3].classList.add("active");
 
             drawBudgetList();
 
-            lastPage="setting";
+            lastPage = "setting";
             break;
 
-case "category":
+        case "bonus":
 
-    categoryPage.style.display = "block";
-    break;
+            bonusPage.style.display = "block";
 
-case "bonus":
+            drawBonusPage();
 
-    bonusPage.style.display = "block";
+            lastPage = "setting";
+            break;
 
-    drawBonusPage();
+        case "category":
 
-    lastPage = "setting";
+            categoryPage.style.display = "block";
+            break;
 
-    break;
+    }
 
-}
+    if(page !== "category"){
 
-if(page!=="category"){
+        const session =
+            JSON.parse(
+                localStorage.getItem(getSessionKey())
+                || "{}"
+            );
 
-    const session =
-        JSON.parse(
-            localStorage.getItem(getSessionKey())
-            || "{}"
+        session.page = page;
+
+        localStorage.setItem(
+            getSessionKey(),
+            JSON.stringify(session)
         );
 
-    session.page = page;
-
-    localStorage.setItem(
-        getSessionKey(),
-        JSON.stringify(session)
-    );
-
-}
+    }
 
 }
 
@@ -1032,28 +1032,35 @@ function backPage(){
 }
 
 navButtons[0].onclick =
-()=>showPage("home");
+    ()=>showPage("home");
 
 navButtons[1].onclick =
-()=>showPage("year");
+    ()=>showPage("year");
 
 navButtons[2].onclick =
-()=>showPage("annual");
+    ()=>showPage("annual");
 
 navButtons[3].onclick =
-()=>showPage("setting");
-navButtons[3].onclick =
-()=>showPage("setting");
+    ()=>showPage("setting");
 
-const prevMonthBtn = document.getElementById("prevMonth");
-const nextMonthBtn = document.getElementById("nextMonth");
+const prevMonthBtn =
+    document.getElementById("prevMonth");
+
+const nextMonthBtn =
+    document.getElementById("nextMonth");
 
 if(prevMonthBtn){
-    prevMonthBtn.onclick = ()=>changeMonth(-1);
+
+    prevMonthBtn.onclick =
+        ()=>changeMonth(-1);
+
 }
 
 if(nextMonthBtn){
-    nextMonthBtn.onclick = ()=>changeMonth(1);
+
+    nextMonthBtn.onclick =
+        ()=>changeMonth(1);
+
 }
 /* ===========================
    ⑦ AI分析
