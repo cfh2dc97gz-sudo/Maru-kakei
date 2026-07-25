@@ -2528,10 +2528,12 @@ document.addEventListener("touchend", function(e){
 
     const now = Date.now();
 
-    if(now - lastTouchEnd <= 300){
-
+    // ダブルタップによる画面ズームだけ防ぐ
+    if(
+        now - lastTouchEnd <= 300 &&
+        e.target === document.documentElement
+    ){
         e.preventDefault();
-
     }
 
     lastTouchEnd = now;
