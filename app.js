@@ -915,12 +915,16 @@ const categoryPage =
 const settingPage =
     document.getElementById("settingPage");
 
+const bonusPage =
+    document.getElementById("bonusPage");
+
 const pages = [
     homePage,
     yearPage,
     annualPage,
     categoryPage,
-    settingPage
+    settingPage,
+    bonusPage
 ];
 
 const navButtons =
