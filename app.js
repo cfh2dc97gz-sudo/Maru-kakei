@@ -1710,7 +1710,34 @@ function getFiscalMonths(){
     ];
 
 }
+function getFiscalIncomeHistory(){
 
+    const list = [];
+
+    const months = getFiscalMonths();
+
+    months.forEach(month=>{
+
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
+
+        const data = getMonthData(year, month);
+
+        if(!data) return;
+
+        list.push(
+            ...(data.incomeHistory || [])
+        );
+
+    });
+
+    return list.sort(
+        (a,b)=>new Date(b.date)-new Date(a.date)
+    );
+
+}
 function getMonthlySpent(year,month){
 
 const data =
