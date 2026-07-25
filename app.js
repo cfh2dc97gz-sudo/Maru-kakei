@@ -1767,7 +1767,25 @@ function getFiscalIncomeHistory(){
 }
 function drawIncomeHistory(){
 
-    const area = document.getElementById("incomeHistoryList");
+    let list = getFiscalIncomeHistory();
+
+if(incomeFilter === "papa"){
+
+    list = list.filter(item=>
+
+        item.type.includes("パパ")
+
+    );
+
+}else if(incomeFilter === "mama"){
+
+    list = list.filter(item=>
+
+        item.type.includes("ママ")
+
+    );
+
+}
 
     if(!area) return;
 
