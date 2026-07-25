@@ -1982,7 +1982,7 @@ Object.keys(monthMap)
         list.innerHTML += `
            <button
     class="setting-item"
-    onclick="editCategoryHistory('${app.categoryFilter}', '${item.date}', ${item.amount})">
+    onclick="editCategoryHistory('${item.category}', '${item.date}', ${item.amount})"
 
                 <span>
                     ${item.date}<br>
@@ -2012,23 +2012,85 @@ function changeCategoryFilter(name){
 
 function editCategoryHistory(category, date, amount){
 
-    app.editCategoryHistory = {
+    if(confirm("OKで金額変更\nキャンセルで削除します。")){
 
-        category,
+        openNumberModal("金額を変更",(value)=>{
 
-        date,
+            if(value <= 0) return;
 
-        amount
+            getFiscalMonths().forEach(month=>{
 
-    };
+                const year =
+                    month <= 3
+                        ? currentYear + 1
+                        : currentYear;
 
-    openNumberModal("金額を変更",(value)=>{
+                const data = getMonthData(year, month);
 
-        if(value <= 0) return;
+                if(!data) return;
 
-        alert("次に保存処理を追加します😊");
+                (data.history || []).forEach(item=>{
 
-    });
+                    if(
+                        item.category === category &&
+                        item.date === date &&
+                        item.amount === amount &&
+                        !item.annual
+                    ){
+                        item.amount = value;
+                    }
+
+                });
+
+                localStorage.setItem(
+                    `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
+                    JSON.stringify(data)
+                );
+
+            });
+
+            load();
+            update();
+
+        });
+
+    }else{
+
+        if(!confirm("この履歴を削除しますか？")) return;
+
+        getFiscalMonths().forEach(month=>{
+
+            const year =
+                month <= 3
+                    ? currentYear + 1
+                    : currentYear;
+
+            const data = getMonthData(year, month);
+
+            if(!data) return;
+
+            data.history = (data.history || []).filter(item=>
+
+                !(
+                    item.category === category &&
+                    item.date === date &&
+                    item.amount === amount &&
+                    !item.annual
+                )
+
+            );
+
+            localStorage.setItem(
+                `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
+                JSON.stringify(data)
+            );
+
+        });
+
+        load();
+        update();
+
+    }
 
 }
 function deleteIncomeHistory(index){
