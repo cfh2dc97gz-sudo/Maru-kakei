@@ -1724,48 +1724,7 @@ function getFiscalMonths(){
     ];
 
 }
-function drawIncomeHistory(){
 
-    const area =
-        document.getElementById("incomeHistoryList");
-
-    if(!area) return;
-
-    const list = getFiscalIncomeHistory();
-
-    area.innerHTML = "";
-
-    if(list.length === 0){
-
-        area.innerHTML =
-            "<p>まだ収入履歴はありません😊</p>";
-
-        return;
-
-    }
-
-    list.forEach(item=>{
-
-        area.innerHTML += `
-
-<button class="setting-item">
-
-<span>
-${item.type}<br>
-<small>${item.date}</small>
-</span>
-
-<span>
-¥${item.amount.toLocaleString()}
-</span>
-
-</button>
-
-`;
-
-    });
-
-}
 function getFiscalIncomeHistory(){
 
     const list = [];
@@ -1796,47 +1755,54 @@ function getFiscalIncomeHistory(){
 }
 function drawIncomeHistory(){
 
-    const area =
-        document.getElementById("incomeHistoryList");
+    const area = document.getElementById("incomeHistoryList");
 
     if(!area) return;
 
-    const list =
-        getFiscalIncomeHistory();
-
-    area.innerHTML = "";
+    const list = getFiscalIncomeHistory();
 
     if(list.length === 0){
 
-        area.innerHTML =
-            "<p>まだ収入履歴はありません😊</p>";
+        area.innerHTML = `
+            <div class="card">
+                <div style="text-align:center;padding:20px;color:#888;">
+                    まだ収入履歴はありません😊
+                </div>
+            </div>
+        `;
 
         return;
-
     }
+
+    const total = list.reduce((sum,item)=>{
+        return sum + Number(item.amount || 0);
+    },0);
+
+    area.innerHTML = `
+        <div class="card" style="margin-bottom:15px;">
+            <div style="font-size:14px;color:#888;">
+                年間収入合計
+            </div>
+            <div style="font-size:28px;font-weight:bold;color:#f5a623;">
+                ¥${total.toLocaleString()}
+            </div>
+        </div>
+    `;
 
     list.forEach(item=>{
 
         area.innerHTML += `
-
-<button class="setting-item">
-
-    <span>
-
-        ${item.type}<br>
-
-        <small>${item.date}</small>
-
-    </span>
-
-    <span>
-
-        ¥${item.amount.toLocaleString()}
-
-    </span>
-
-</button>
-
+    <button
+        class="setting-item"
+        onclick="deleteIncomeHistory(${list.indexOf(item)})">
+        <span>
+            <b>${item.type}</b><br>
+            <small>${item.date}</small>
+        </span>
+        <span style="font-weight:bold;">
+            ¥${Number(item.amount).toLocaleString()}
+        </span>
+    </button>
 `;
 
     });
