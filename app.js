@@ -2387,12 +2387,19 @@ function drawBonusPage(){
 
     }
 
-    document.getElementById("summerBonusAmount").textContent =
-        "¥" + Number(app.bonus.summerActual || 0).toLocaleString();
+ const summerTotal =
+    Number(app.bonus.papaSummerActual || 0) +
+    Number(app.bonus.mamaSummerActual || 0);
 
-    document.getElementById("winterBonusAmount").textContent =
-        "¥" + Number(app.bonus.winterActual || 0).toLocaleString();
+const winterTotal =
+    Number(app.bonus.papaWinterActual || 0) +
+    Number(app.bonus.mamaWinterActual || 0);
 
+document.getElementById("summerBonusAmount").textContent =
+    "¥" + summerTotal.toLocaleString();
+
+document.getElementById("winterBonusAmount").textContent =
+    "¥" + winterTotal.toLocaleString();
     document.getElementById("summerKeepAmount").textContent =
         "¥" + Number(app.bonus.summerKeep || 0).toLocaleString();
 
