@@ -1049,7 +1049,15 @@ function showPage(page){
 
             categoryPage.style.display = "block";
             break;
+case "income":
 
+    incomePage.style.display = "block";
+
+    drawIncomeHistory();
+
+    lastPage = "setting";
+
+    break;
     }
 
     if(page !== "category"){
