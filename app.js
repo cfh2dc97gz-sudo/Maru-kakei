@@ -1890,23 +1890,7 @@ function drawCategoryHistory(){
 
     const list =
         document.getElementById("categoryHistoryList");
-const budget = app.budgets.find(
-    item => item.name === app.categoryFilter
-);
 
-list.innerHTML = `
-
-<div class="card">
-
-<h3>${app.categoryFilter}</h3>
-
-<p>
-月予算：¥${Number(budget?.budget || 0).toLocaleString()}
-</p>
-
-</div>
-
-`;
     if(!filter || !list) return;
 
     // カテゴリボタン
@@ -1925,6 +1909,11 @@ ${item.name}
 `;
 
     });
+
+    // 選択中カテゴリ
+    const budget = app.budgets.find(
+        item => item.name === app.categoryFilter
+    );
 
     // 履歴取得
     const history = getFiscalMonths().flatMap(month=>{
@@ -1948,9 +1937,41 @@ ${item.name}
 
     });
 
+    // 合計
+    const total = history.reduce(
+        (sum,item)=>sum+Number(item.amount),
+        0
+    );
+
+    const yearlyBudget =
+        Number(budget?.budget || 0) * 12;
+
+    const remain =
+        yearlyBudget - total;
+
+    const percent =
+        yearlyBudget
+        ? Math.round(total / yearlyBudget * 100)
+        : 0;
+
+    // 上部カード
+    list.innerHTML = `
+<div class="card">
+
+<h2>${app.categoryFilter}</h2>
+
+<p>月予算：¥${Number(budget?.budget || 0).toLocaleString()}</p>
+<p>年間予算：¥${yearlyBudget.toLocaleString()}</p>
+<p>年間実績：¥${total.toLocaleString()}</p>
+<p>残り：¥${remain.toLocaleString()}</p>
+<p>達成率：${percent}%</p>
+
+</div>
+`;
+
     if(history.length===0){
 
-        list.innerHTML=`
+        list.innerHTML += `
 <div style="text-align:center;padding:20px;color:#999;">
 履歴はまだありません😊
 </div>
@@ -1959,8 +1980,6 @@ ${item.name}
         return;
 
     }
-
-    list.innerHTML += "";
 
     const monthMap={};
 
