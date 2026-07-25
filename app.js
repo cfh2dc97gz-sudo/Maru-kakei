@@ -715,6 +715,8 @@ function update(){
 
     drawAnnualManage();
 
+    drawIncomeHistory();
+    
     save();
 
 }
