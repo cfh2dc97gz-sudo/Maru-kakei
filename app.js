@@ -973,7 +973,8 @@ const pages = [
     annualPage,
     categoryPage,
     settingPage,
-    bonusPage
+    bonusPage,
+    incomePage
 ];
 
 const navButtons =
