@@ -989,11 +989,17 @@ function showPage(page){
             lastPage="setting";
             break;
 
-        case "category":
+case "category":
 
-            categoryPage.style.display="block";
-            break;
+    categoryPage.style.display = "block";
+    break;
 
+case "bonus":
+
+    bonusPage.style.display = "block";
+    lastPage = "setting";
+    break;
+            
     }
 
     if(page!=="category"){
