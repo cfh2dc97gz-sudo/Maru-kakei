@@ -964,6 +964,9 @@ const settingPage =
 const bonusPage =
     document.getElementById("bonusPage");
 
+const incomePage =
+    document.getElementById("incomePage");
+
 const pages = [
     homePage,
     yearPage,
