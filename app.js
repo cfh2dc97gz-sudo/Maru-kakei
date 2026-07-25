@@ -2719,3 +2719,17 @@ document.addEventListener("touchend", function(e){
     lastTouchEnd = now;
 
 }, { passive:false });
+
+
+
+
+
+
+
+window.onerror = function(message, source, line, column, error){
+    alert(
+        message +
+        "\n行：" + line +
+        "\n列：" + column
+    );
+};
