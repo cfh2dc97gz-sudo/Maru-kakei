@@ -566,7 +566,37 @@
     <div class="card">
 
         <h2>💰 年間収入履歴</h2>
+<div
+style="
+display:flex;
+gap:8px;
+margin-bottom:15px;">
 
+<button
+class="setting-item"
+onclick="incomeFilter='papa';drawIncomeHistory();">
+
+👨 パパ
+
+</button>
+
+<button
+class="setting-item"
+onclick="incomeFilter='mama';drawIncomeHistory();">
+
+👩 ママ
+
+</button>
+
+<button
+class="setting-item"
+onclick="incomeFilter='all';drawIncomeHistory();">
+
+📋 履歴
+
+</button>
+
+</div>
         <div id="incomeHistoryList"></div>
 
     </div>
