@@ -1059,7 +1059,18 @@ function showPage(page){
             categoryPage.style.display = "block";
             break;
 case "income":
+case "categoryHistory":
 
+    categoryHistoryPage.style.display = "block";
+
+    navButtons[3].classList.add("active");
+
+    drawCategoryHistory();
+
+    lastPage = "setting";
+
+    break;
+            
     incomePage.style.display = "block";
 navButtons[3].classList.add("active");
     drawIncomeHistory();
