@@ -1543,7 +1543,7 @@ function changeCategoryFilter(name){
 
     app.categoryFilter = name;
 
-    drawCategoryHistory();
+    drawCategoryDetail();
 
     save();
 
