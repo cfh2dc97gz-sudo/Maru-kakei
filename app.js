@@ -710,8 +710,6 @@ function update(){
 
     drawYearSummary();
 
-    drawYearCategory();
-
     drawYearChart();
 
     drawAnnualManage();
