@@ -2105,6 +2105,8 @@ function drawCategoryDetail(){
 <p>年間予算：¥${yearlyBudget.toLocaleString()}</p>
 
 <p>年間実績：¥${total.toLocaleString()}</p>
+
+<p>年間残り：¥${(yearlyBudget - total).toLocaleString()}</p>
 `;
 
     const historyList =
