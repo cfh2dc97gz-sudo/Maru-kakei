@@ -1104,10 +1104,9 @@ case "categoryHistory":
 
 function backPage(){
 
-    showPage(lastPage);
+    showPage(window.lastPage || "home");
 
 }
-
 navButtons[0].onclick =
     ()=>showPage("home");
 
