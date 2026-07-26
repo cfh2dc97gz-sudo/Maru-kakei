@@ -2115,8 +2115,60 @@ function drawCategoryDetail(){
     history
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    historyList.innerHTML = history.length
-        ? history.map(item => `
+    const monthMap = {};
+
+history.forEach(item => {
+
+    const month = (item.targetMonth || item.date.substring(0,7));
+
+    if(!monthMap[month]){
+        monthMap[month] = [];
+    }
+
+    monthMap[month].push(item);
+
+});
+
+historyList.innerHTML = "";
+
+Object.keys(monthMap)
+.sort()
+.reverse()
+.forEach(month=>{
+
+    historyList.innerHTML += `
+<div class="card">
+<h3>${month}</h3>
+</div>
+`;
+
+    monthMap[month].forEach(item=>{
+
+        historyList.innerHTML += `
+<button
+class="setting-item"
+onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
+
+    <span>
+        ${item.date}<br>
+        <small>${item.memo || ""}</small>
+    </span>
+
+    <span style="font-weight:bold;">
+        ¥${Number(item.amount).toLocaleString()}
+    </span>
+
+</button>
+`;
+
+    });
+
+});
+
+if(history.length===0){
+    historyList.innerHTML =
+    `<p style="text-align:center;color:#888;">履歴はありません😊</p>`;
+}
 <button
 class="setting-item"
 onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
