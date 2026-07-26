@@ -1954,20 +1954,7 @@ ${item.name}
         ? Math.round(total / yearlyBudget * 100)
         : 0;
 
-    // 上部カード
-    list.innerHTML = `
-<div class="card">
-
-<h2>${app.categoryFilter}</h2>
-
-<p>月予算：¥${Number(budget?.budget || 0).toLocaleString()}</p>
-<p>年間予算：¥${yearlyBudget.toLocaleString()}</p>
-<p>年間実績：¥${total.toLocaleString()}</p>
-<p>残り：¥${remain.toLocaleString()}</p>
-<p>達成率：${percent}%</p>
-
-</div>
-`;
+    list.innerHTML = "";
 
     if(history.length===0){
 
