@@ -1901,7 +1901,7 @@ function drawCategoryHistory(){
         filter.innerHTML += `
 <button
 class="setting-item ${app.categoryFilter===item.name ? "active" : ""}"
-onclick="changeCategoryFilter('${item.name}')">
+onclick="openCategoryDetail('${item.name}')"
 
 ${item.name}
 
@@ -2039,7 +2039,15 @@ function changeCategoryFilter(name){
     save();
 
 }
+function openCategoryDetail(category){
 
+    app.categoryFilter = category;
+
+    showPage("category");
+
+    drawCategoryHistory();
+
+}
 function editCategoryHistory(category, date, amount){
 
     if(confirm("OKで金額変更\nキャンセルで削除します。")){
