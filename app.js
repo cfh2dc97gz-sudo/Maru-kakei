@@ -2169,23 +2169,6 @@ if(history.length===0){
     historyList.innerHTML =
     `<p style="text-align:center;color:#888;">履歴はありません😊</p>`;
 }
-<button
-class="setting-item"
-onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
-
-    <span>
-        ${item.date}<br>
-        <small>${item.memo || ""}</small>
-    </span>
-
-    <span style="font-weight:bold;">
-        ¥${Number(item.amount).toLocaleString()}
-    </span>
-
-</button>
-
-`).join("")
-        : `<p style="text-align:center;color:#888;">履歴はありません😊</p>`;
 
 }
 function editCategoryBudget(name){
