@@ -2959,34 +2959,7 @@ console.log({
    設定画面
 =========================== */
 
-function drawBudgetList(){
 
-    const area =
-        document.getElementById("budgetList");
-
-    if(!area) return;
-
-    area.innerHTML = "";
-
-    app.budgets.forEach((item,index)=>{
-
-        area.innerHTML += `
-
-<button
-class="setting-item"
-onclick="editBudget(${index})">
-
-<span>${item.name}</span>
-
-<span>¥${item.budget.toLocaleString()}</span>
-
-</button>
-
-`;
-
-    });
-
-}
 function drawBonusPage(){
 
     const summer =
