@@ -2117,18 +2117,21 @@ function drawCategoryDetail(){
 
     historyList.innerHTML = history.length
         ? history.map(item => `
-<div class="history-item">
+<button
+class="setting-item"
+onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
 
-    <div>
-        <div>${item.date}</div>
-        ${item.memo ? `<div style="font-size:12px;color:#888;">${item.memo}</div>` : ""}
-    </div>
+    <span>
+        ${item.date}<br>
+        <small>${item.memo || ""}</small>
+    </span>
 
-    <div style="font-weight:bold;">
+    <span style="font-weight:bold;">
         ¥${Number(item.amount).toLocaleString()}
-    </div>
+    </span>
 
-</div>
+</button>
+
 `).join("")
         : `<p style="text-align:center;color:#888;">履歴はありません😊</p>`;
 
