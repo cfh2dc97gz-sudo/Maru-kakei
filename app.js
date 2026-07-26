@@ -1040,9 +1040,6 @@ function showPage(page){
 
             settingPage.style.display = "block";
             navButtons[3].classList.add("active");
-
-            drawBudgetList();
-
             lastPage = "setting";
             break;
 
@@ -2079,7 +2076,7 @@ function drawCategoryDetail(){
     <span>${app.categoryFilter}</span>
 
     <button
-        onclick="editBudget('${app.categoryFilter}')"
+        onclick="editCategoryBudget('${app.categoryFilter}')"
         style="
             border:none;
             background:none;
@@ -2131,6 +2128,22 @@ function drawCategoryDetail(){
 </div>
 `).join("")
         : `<p style="text-align:center;color:#888;">履歴はありません😊</p>`;
+
+}
+function editCategoryBudget(name){
+
+    const budget = app.budgets.find(item => item.name === name);
+
+    openNumberModal(`${name}の月予算`, value => {
+
+        if(value <= 0) return;
+
+        budget.budget = value;
+
+        update();
+        drawCategoryDetail();
+
+    });
 
 }
 function editCategoryHistory(category, date, amount){
