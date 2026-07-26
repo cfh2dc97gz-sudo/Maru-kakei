@@ -1067,17 +1067,6 @@ case "income":
 
     break;
 
-case "categoryHistory":
-
-    categoryHistoryPage.style.display = "block";
-
-    navButtons[3].classList.add("active");
-
-    drawCategoryHistory();
-
-    lastPage = "setting";
-
-    break;
     }
 
     if(page !== "category"){
