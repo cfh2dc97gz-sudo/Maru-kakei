@@ -2075,9 +2075,8 @@ function drawCategoryDetail(){
             ? Math.min(100, Math.round(total / yearlyBudget * 100))
             : 0;
 
-    document.getElementById("categoryTitle").innerHTML =
-        `
-${app.categoryFilter}
+document.getElementById("categoryTitle").innerHTML = `
+<h2>${app.categoryFilter}</h2>
 
 <div class="progress" style="margin-top:15px;">
     <div style="
@@ -2096,7 +2095,6 @@ ${percent}%
 
 <p>年間実績：¥${total.toLocaleString()}</p>
 `;
-
     const historyList = document.getElementById("categoryHistoryList");
 
     historyList.innerHTML = "";
