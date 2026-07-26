@@ -1705,7 +1705,14 @@ function openCategoryDetail(category){
     drawCategoryDetail();
 
 }
-function drawCategoryDetail(){
+function drawCategoryDetail(categoryId){
+
+    if(categoryId){
+        const budget = app.budgets.find(item => item.id === categoryId);
+        if(budget){
+            app.categoryFilter = budget.name;
+        }
+    }
 
     const budget = app.budgets.find(
         item => item.name === app.categoryFilter
