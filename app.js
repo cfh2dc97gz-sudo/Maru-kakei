@@ -1901,7 +1901,7 @@ function drawCategoryHistory(){
         filter.innerHTML += `
 <button
 class="setting-item ${app.categoryFilter===item.name ? "active" : ""}"
-onclick="openCategoryDetail('${item.name}')"
+onclick="openCategoryDetail('${item.name}')">
 
 ${item.name}
 
@@ -2032,7 +2032,102 @@ function openCategoryDetail(category){
 
     showPage("category");
 
-    drawCategoryHistory();
+    drawCategoryDetail();
+
+}
+function drawCategoryDetail(){
+
+    const budget = app.budgets.find(
+        item => item.name === app.categoryFilter
+    );
+
+    const history = getFiscalMonths().flatMap(month=>{
+
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
+
+        const data = getMonthData(year, month);
+
+        if(!data) return [];
+
+        return (data.history || []).filter(item=>
+
+            !item.income &&
+            !item.annual &&
+            item.category === app.categoryFilter
+
+        );
+
+    });
+
+    const total = history.reduce(
+        (sum,item)=>sum+Number(item.amount),
+        0
+    );
+
+    const yearlyBudget =
+        Number(budget?.budget || 0) * 12;
+
+    const percent =
+        yearlyBudget
+            ? Math.min(100, Math.round(total / yearlyBudget * 100))
+            : 0;
+
+    document.getElementById("categoryTitle").innerHTML =
+        `
+${app.categoryFilter}
+
+<div class="progress" style="margin-top:15px;">
+    <div style="
+        width:${percent}%;
+        height:100%;
+        background:#f6c64f;
+        border-radius:10px;
+    "></div>
+</div>
+
+<div style="margin-top:15px;font-size:18px;font-weight:bold;">
+${percent}%
+</div>
+
+<p>年間予算：¥${yearlyBudget.toLocaleString()}</p>
+
+<p>年間実績：¥${total.toLocaleString()}</p>
+`;
+
+    const historyList = document.getElementById("categoryHistoryList");
+
+    historyList.innerHTML = "";
+
+    history
+    .sort((a,b)=>new Date(b.date)-new Date(a.date))
+    .forEach(item=>{
+
+        historyList.innerHTML += `
+
+<div class="history-item">
+
+    <div>
+
+        <div>${item.date}</div>
+
+        ${item.memo ? `<div style="font-size:12px;color:#888;">${item.memo}</div>` : ""}
+
+    </div>
+
+    <div style="font-weight:bold;">
+
+        ¥${Number(item.amount).toLocaleString()}
+
+    </div>
+
+</div>
+
+`;
+
+    });
 
 }
 function editCategoryHistory(category, date, amount){
