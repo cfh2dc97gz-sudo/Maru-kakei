@@ -934,7 +934,8 @@ function addSpent(index,isOverwrite=false){
 
                 memo,
 
-                annual:false
+                annual:false,
+
 targetMonth: `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
             });
 
