@@ -1041,8 +1041,6 @@ function showPage(page){
     settingPage.style.display = "block";
     navButtons[3].classList.add("active");
 
-    drawBudgetList();
-
     lastPage = "setting";
     break;
 
