@@ -2074,7 +2074,22 @@ function drawCategoryDetail(){
             : 0;
 
     document.getElementById("categoryTitle").innerHTML = `
-${app.categoryFilter}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
+    <span>${app.categoryFilter}</span>
+
+    <button
+        onclick="editBudget('${app.categoryFilter}')"
+        style="
+            border:none;
+            background:none;
+            font-size:20px;
+            cursor:pointer;
+        ">
+        ✏️
+    </button>
+
+</div>
 
 <div class="progress" style="margin-top:15px;">
     <div style="
