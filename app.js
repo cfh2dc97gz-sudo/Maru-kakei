@@ -1019,7 +1019,6 @@ function showPage(page){
             navButtons[1].classList.add("active");
 
             drawYearSummary();
-            drawYearCategory();
             drawYearChart();
 
             lastPage = "year";
