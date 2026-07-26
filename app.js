@@ -3046,25 +3046,7 @@ function getBonusKeepTotal(){
     return total;
 
 }
-function editBudget(index){
 
-    openNumberModal(
-
-        app.budgets[index].name + " 月予算",
-
-        (value)=>{
-
-            if(value<=0) return;
-
-            app.budgets[index].budget = value;
-
-            update();
-
-        }
-
-    );
-
-}
 const editGoalBtn =
     document.getElementById("editGoal");
 
