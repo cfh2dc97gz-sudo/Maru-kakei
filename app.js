@@ -1559,15 +1559,6 @@ function changeCategoryFilter(name){
     save();
 
 }
-function openCategoryDetail(category){
-
-    app.categoryFilter = category;
-
-    showPage("category");
-
-    drawCategoryDetail();
-
-}
 function drawCategoryDetail(categoryId){
 
     if(categoryId){
