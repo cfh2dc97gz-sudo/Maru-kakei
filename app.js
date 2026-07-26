@@ -968,8 +968,6 @@ const bonusPage =
 
 const incomePage =
     document.getElementById("incomePage");
-const categoryHistoryPage =
-    document.getElementById("categoryHistoryPage");
 
 const pages = [
     homePage,
@@ -978,8 +976,7 @@ const pages = [
     categoryPage,
     settingPage,
     bonusPage,
-    incomePage,
-    categoryHistoryPage
+    incomePage
 ];
 
 const navButtons =
