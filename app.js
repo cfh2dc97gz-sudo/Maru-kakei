@@ -1036,12 +1036,15 @@ function showPage(page){
             lastPage = "annual";
             break;
 
-        case "setting":
+    case "setting":
 
-            settingPage.style.display = "block";
-            navButtons[3].classList.add("active");
-            lastPage = "setting";
-            break;
+    settingPage.style.display = "block";
+    navButtons[3].classList.add("active");
+
+    drawBudgetList();
+
+    lastPage = "setting";
+    break;
 
         case "bonus":
 
