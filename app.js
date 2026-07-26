@@ -2074,7 +2074,7 @@ function drawCategoryDetail(){
             : 0;
 
     document.getElementById("categoryTitle").innerHTML = `
-<h2>${app.categoryFilter}</h2>
+${app.categoryFilter}
 
 <div class="progress" style="margin-top:15px;">
     <div style="
