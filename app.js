@@ -1401,7 +1401,7 @@ historyList.innerHTML = "";
     lastPage='category';
     app.categoryFilter='${budget.name}';
     drawCategoryDetail('${budget.id}');
-"
+">
 
                 ${budget.icon || "📒"} ${budget.name}
 
