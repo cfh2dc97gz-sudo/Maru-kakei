@@ -2205,21 +2205,35 @@ function openAnnualCategory(index){
 
     showPage("category");
 
-    document.getElementById("categoryTitle").innerHTML = `
-<div style="display:flex;justify-content:space-between;align-items:center;">
+document.getElementById("categoryTitle").innerHTML = `
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;">
 
     <span>${category.title}</span>
 
-    <button
-        onclick="editAnnualCategory()"
-        style="
-            border:none;
-            background:none;
-            font-size:20px;
-            cursor:pointer;
-        ">
-        ✏️
-    </button>
+    <div style="display:flex;gap:12px;">
+
+        <button
+            onclick="editAnnualCategory()"
+            style="border:none;background:none;font-size:20px;">
+            ✏️
+        </button>
+
+        <button
+            onclick="deleteAnnualCategory()"
+            style="border:none;background:none;font-size:20px;">
+            🗑
+        </button>
+
+        <button
+            onclick="addAnnualHistory()"
+            style="border:none;background:none;font-size:20px;">
+            ➕
+        </button>
+
+    </div>
 
 </div>
 `;
