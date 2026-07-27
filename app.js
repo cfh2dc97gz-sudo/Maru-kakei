@@ -1411,6 +1411,9 @@ historyList.innerHTML = "";
     });
 
 }
+historyList.innerHTML += `
+    </div>
+`;
 /* ===========================
    ⑩ 年間グラフ
 =========================== */
@@ -1741,11 +1744,20 @@ onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
 });
 
 if(history.length===0){
-    historyList.innerHTML =
-    `<p style="text-align:center;color:#888;">履歴はありません😊</p>`;
-}
+   historyList.innerHTML = `
+<div class="card">
+    <p style="text-align:center;color:#888;">
+        履歴はありません😊
+    </p>
+</div>
+`;
 
 }
+window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+});
+
 function editCategoryBudget(name){
 
     const budget = app.budgets.find(item => item.name === name);
