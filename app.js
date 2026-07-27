@@ -915,12 +915,14 @@ function addSpent(index,isOverwrite=false){
 
             }
 
-            app.history.unshift({
-
-    id: Date.now().toString(),
-
-    date:new Date().toLocaleDateString(
-                    {
+       date:new Date().toLocaleDateString(
+    "ja-JP",
+    {
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+    }
+),
                         year:"numeric",
                         month:"2-digit",
                         day:"2-digit"
@@ -1730,8 +1732,9 @@ Object.keys(monthMap)
 
         historyList.innerHTML += `
 <button
+<button
 class="setting-item"
-onclick="deleteCategoryHistory('${item.id}')"
+onclick="deleteCategoryHistory('${item.id}')">
 
     <span>
         ${item.date}<br>
