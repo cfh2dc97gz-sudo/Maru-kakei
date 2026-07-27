@@ -2277,12 +2277,39 @@ align-items:center;">
         return;
     }
 
-    category.history.forEach((item,index)=>{
+ const grouped = {};
+
+category.history.forEach((item, index) => {
+
+    const month = Number(item.date.substring(5,7));
+
+    if(!grouped[month]){
+        grouped[month] = [];
+    }
+
+    grouped[month].push({
+        ...item,
+        index
+    });
+
+});
+
+Object.keys(grouped)
+.sort((a,b)=>b-a)
+.forEach(month=>{
+
+    historyList.innerHTML += `
+        <h3 style="margin:20px 0 10px;">
+            ${month}月
+        </h3>
+    `;
+
+    grouped[month].forEach(item=>{
 
         historyList.innerHTML += `
             <button
                 class="setting-item"
-                onclick="deleteAnnualHistory(${index})">
+                onclick="deleteAnnualHistory(${item.index})">
 
                 <span>
                     <strong>${item.name}</strong><br>
@@ -2298,6 +2325,8 @@ align-items:center;">
 
     });
 
+});
+    
 }
 function addAnnualHistory(){
 
