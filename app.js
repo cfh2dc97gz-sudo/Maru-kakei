@@ -1379,9 +1379,9 @@ function showCategoryHistory(categoryId){
 }
 function showCategoryList(){
 
-    lastPage = "setting";
+  window.lastPage = "setting";
 
-    showPage("category");
+showPage("category");
 
     document.getElementById("categoryTitle").innerHTML =
         "📒 カテゴリ履歴";
@@ -1398,7 +1398,7 @@ historyList.innerHTML = "";
             <button
                 class="setting-item"
                onclick="
-    lastPage='category';
+    window.lastPage='category';
     app.categoryFilter='${budget.name}';
     drawCategoryDetail('${budget.id}');
 ">
@@ -1411,9 +1411,7 @@ historyList.innerHTML = "";
     });
 
 }
-historyList.innerHTML += `
-    </div>
-`;
+
 /* ===========================
    ⑩ 年間グラフ
 =========================== */
@@ -1647,7 +1645,11 @@ if(categoryId){
     document.getElementById("categoryTitle").innerHTML = `
 <div style="display:flex;justify-content:space-between;align-items:center;">
 
-    <span>${app.categoryFilter}</span>
+   <span
+    onclick="showCategoryList()"
+    style="cursor:pointer;">
+    ${app.categoryFilter}
+</span>
 
 <button
     onclick="${
@@ -1754,9 +1756,11 @@ if(history.length===0){
 
 }
 window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+    top:0,
+    behavior:"smooth"
 });
+
+}
 
 function editCategoryBudget(name){
 
