@@ -1649,8 +1649,8 @@ if(categoryId){
 <button
     onclick="${
     budget?.name
-        ? `editCategoryHistory('${item.category}','${item.date}',${item.amount})`
-        : `deleteAnnualHistory(${history.indexOf(item)})`
+        ? `editCategoryBudget('${app.categoryFilter}')`
+        : `editAnnualCategory()`
 }"
 
         style="
