@@ -1612,12 +1612,13 @@ if(categoryId){
 
     <span>${app.categoryFilter}</span>
 
-  <button
+<button
     onclick="${
     budget?.name
         ? `editCategoryHistory('${item.category}','${item.date}',${item.amount})`
         : `deleteAnnualHistory(${history.indexOf(item)})`
 }"
+
         style="
             border:none;
             background:none;
