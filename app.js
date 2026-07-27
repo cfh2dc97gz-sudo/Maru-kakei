@@ -1780,6 +1780,7 @@ function editCategoryBudget(name){
 
     });
 
+    }
     function editCategoryHistory(category, date, amount){
 
     const mode = prompt(
