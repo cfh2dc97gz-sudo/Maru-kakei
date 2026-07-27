@@ -1784,9 +1784,41 @@ function deleteCategoryHistory(historyId){
 
         if(!data) return;
 
-        const target = (data.history || []).find(item=>
+        const target = (data.history || []).find(item =>
             item.id === historyId
         );
+
+        if(!target) return;
+
+        data.history = (data.history || []).filter(item =>
+            item.id !== historyId
+        );
+
+        const budget = (data.budgets || []).find(b =>
+            b.name === target.category
+        );
+
+        if(budget){
+
+            budget.spent = Math.max(
+                0,
+                Number(budget.spent || 0) - Number(target.amount || 0)
+            );
+
+        }
+
+        localStorage.setItem(
+            `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
+            JSON.stringify(data)
+        );
+
+    });
+
+    load();
+    update();
+    drawCategoryDetail();
+
+}
 
        
     function editCategoryHistory(category, date, amount){
