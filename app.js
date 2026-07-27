@@ -917,8 +917,9 @@ function addSpent(index,isOverwrite=false){
 
             app.history.unshift({
 
-                date:new Date().toLocaleDateString(
-                    "ja-JP",
+    id: Date.now().toString(),
+
+    date:new Date().toLocaleDateString(
                     {
                         year:"numeric",
                         month:"2-digit",
@@ -1730,7 +1731,7 @@ Object.keys(monthMap)
         historyList.innerHTML += `
 <button
 class="setting-item"
-onclick="editCategoryHistory('${item.category}','${item.date}',${item.amount})">
+onclick="deleteCategoryHistory('${item.id}')"
 
     <span>
         ${item.date}<br>
@@ -1765,22 +1766,26 @@ window.scrollTo({
 
 }
 
-function editCategoryBudget(name){
+function deleteCategoryHistory(historyId){
 
-    const budget = app.budgets.find(item => item.name === name);
+    if(!confirm("履歴を削除しますか？")) return;
 
-    openNumberModal(`${name}の月予算`, value => {
+    getFiscalMonths().forEach(month=>{
 
-        if(value <= 0) return;
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
 
-        budget.budget = value;
+        const data = getMonthData(year,month);
 
-        update();
-        drawCategoryDetail();
+        if(!data) return;
 
-    });
+        const target = (data.history || []).find(item=>
+            item.id === historyId
+        );
 
-    }
+       
     function editCategoryHistory(category, date, amount){
 
     const mode = prompt(
