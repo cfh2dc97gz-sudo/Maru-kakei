@@ -1379,7 +1379,36 @@ function showCategoryHistory(categoryId){
 }
 function showCategoryList(){
 
-    alert("これから作ります😊");
+    lastPage = "setting";
+
+    showPage("category");
+
+    document.getElementById("categoryTitle").innerHTML =
+        "📒 カテゴリ履歴";
+
+     const historyList =
+    document.getElementById("categoryDetailHistory");
+
+historyList.innerHTML = "";
+
+    app.budgets.forEach(budget=>{
+
+       historyList.innerHTML += `
+        
+            <button
+                class="setting-item"
+               onclick="
+    lastPage='category';
+    app.categoryFilter='${budget.name}';
+    drawCategoryDetail('${budget.id}');
+"
+
+                ${budget.icon || "📒"} ${budget.name}
+
+            </button>
+        `;
+
+    });
 
 }
 /* ===========================
