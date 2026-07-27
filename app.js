@@ -1554,9 +1554,10 @@ function drawCategoryDetail(categoryId){
         }
     }
 
-    const budget = app.budgets.find(
-        item => item.name === app.categoryFilter
-    );
+  const budget =
+    app.budgets.find(item => item.name === app.categoryFilter)
+    ||
+    app.annualCategories?.find(item => item.title === app.categoryFilter);
 
     const history = getFiscalMonths().flatMap(month => {
 
@@ -1583,7 +1584,9 @@ function drawCategoryDetail(categoryId){
     );
 
     const yearlyBudget =
-        Number(budget?.budget || 0) * 12;
+    budget?.budget
+        ? Number(budget.budget) * 12
+        : Number(budget?.amount || 0);
 
     const percent =
         yearlyBudget
