@@ -2195,102 +2195,83 @@ onclick="addAnnualCategory()">
 }
 function openAnnualCategory(index){
 
-    currentAnnualCategory=index;
+    currentAnnualCategory = index;
 
-    const category=app.annualCategories[index];
+    const category = app.annualCategories[index];
 
     if(!category) return;
 
-    lastPage="annual";
+    lastPage = "annual";
 
     showPage("category");
-    
-    // document.getElementById("editAnnualCategory").style....
-   // document.getElementById("addAnnualHistory").style.display="block";
 
-    document.getElementById("categoryTitle").textContent=
-        category.title;
+    document.getElementById("categoryTitle").innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span>${category.title}</span>
+        </div>
+    `;
 
-    const used=category.history.reduce(
+    const historyList =
+        document.getElementById("categoryDetailHistory");
+
+    historyList.innerHTML = "";
+
+    const used = category.history.reduce(
         (sum,h)=>sum+h.amount,
         0
     );
 
-    const remain=category.budget-used;
+    const remain = category.budget - used;
 
-    let html=`
-
-予算：¥${category.budget.toLocaleString()}<br>
-使用：¥${used.toLocaleString()}<br>
-残り：¥${remain.toLocaleString()}
-
-`;
+    historyList.innerHTML += `
+        <div class="card">
+            <p>予算：¥${category.budget.toLocaleString()}</p>
+            <p>使用：¥${used.toLocaleString()}</p>
+            <p>残り：¥${remain.toLocaleString()}</p>
+        </div>
+    `;
 
     if(category.id==="otherReserve"){
-
-        html+=`
-
-<br><br>
-
-<small>
-
-📦 この金額は他カテゴリから自動計算されています。
-
-</small>
-
-`;
-
+        historyList.innerHTML += `
+            <div class="card">
+                <small>📦 この金額は他カテゴリから自動計算されています。</small>
+            </div>
+        `;
     }
-
-    document.getElementById("categorySummary").innerHTML=
-        html;
-
-    const history=document.getElementById(
-        "categoryHistory"
-    );
-
-    history.innerHTML="";
 
     if(category.history.length===0){
 
-        history.innerHTML=
-
-        "<p>まだ履歴はありません😊</p>";
+        historyList.innerHTML += `
+            <p style="text-align:center;color:#888;">
+                まだ履歴はありません😊
+            </p>
+        `;
 
         return;
-
     }
 
     category.history.forEach((item,index)=>{
 
-        history.innerHTML+=`
+        historyList.innerHTML += `
+            <button
+                class="setting-item"
+                onclick="deleteAnnualHistory(${index})">
 
-<button
-class="setting-item"
-onclick="deleteAnnualHistory(${index})">
+                <span>
+                    <strong>${item.name}</strong><br>
+                    ${item.date}
+                </span>
 
-<span>
+                <span>
+                    ¥${item.amount.toLocaleString()}
+                </span>
 
-<strong>${item.name}</strong><br>
-
-${item.date}
-
-</span>
-
-<span>
-
-¥${item.amount.toLocaleString()}
-
-</span>
-
-</button>
-
-`;
+            </button>
+        `;
 
     });
 
 }
-
 function addAnnualHistory(){
 
     if(currentAnnualCategory<0) return;
