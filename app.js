@@ -1731,7 +1731,7 @@ Object.keys(monthMap)
     monthMap[month].forEach(item=>{
 
         historyList.innerHTML += `
-<button
+
 <button
 class="setting-item"
 onclick="deleteCategoryHistory('${item.id}')">
@@ -1821,127 +1821,6 @@ function deleteCategoryHistory(historyId){
 }
 
        
-    function editCategoryHistory(category, date, amount){
-
-    const mode = prompt(
-`操作を選択してください😊
-
-1 = 金額変更
-2 = 削除`
-    );
-
-    if(mode === "1"){
-
-        openNumberModal("金額を変更",(value)=>{
-
-            if(value <= 0) return;
-
-            getFiscalMonths().forEach(month=>{
-
-                const year =
-                    month <= 3
-                        ? currentYear + 1
-                        : currentYear;
-
-                const data = getMonthData(year,month);
-
-                if(!data) return;
-
-                (data.history || []).forEach(item=>{
-
-                    if(
-                        item.category === category &&
-                        item.date === date &&
-                        item.amount === amount &&
-                        !item.annual
-                    ){
-                        item.amount = value;
-                    }
-
-                });
-
-                localStorage.setItem(
-                    `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
-                    JSON.stringify(data)
-                );
-
-            });
-
-            load();
-            update();
-            drawCategoryDetail();
-
-        });
-
-    }else if(mode === "2"){
-
-        if(!confirm("この履歴を削除しますか？")) return;
-
-        getFiscalMonths().forEach(month=>{
-
-            const year =
-                month <= 3
-                    ? currentYear + 1
-                    : currentYear;
-
-            const data = getMonthData(year,month);
-
-            if(!data) return;
-
-            const target = (data.history || []).find(item=>
-
-                item.category === category &&
-                item.date === date &&
-                item.amount === amount &&
-                !item.annual
-
-            );
-
-            data.history = (data.history || []).filter(item=>
-
-                !(
-                    item.category === category &&
-                    item.date === date &&
-                    item.amount === amount &&
-                    !item.annual
-                )
-
-            );
-
-            if(target){
-
-                const budget = (data.budgets || []).find(b=>
-
-                    b.name === target.category
-
-                );
-
-                if(budget){
-
-                    budget.spent = Math.max(
-                        0,
-                        Number(budget.spent || 0) - Number(target.amount || 0)
-                    );
-
-                }
-
-            }
-
-            localStorage.setItem(
-                `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
-                JSON.stringify(data)
-            );
-
-        });
-
-        load();
-        update();
-        drawCategoryDetail();
-
-    }
-
-}
-
     function deleteIncomeHistory(index){
 
     if(!confirm("この収入履歴を削除しますか？"))
