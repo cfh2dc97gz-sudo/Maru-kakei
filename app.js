@@ -1403,7 +1403,7 @@ historyList.innerHTML = "";
     drawCategoryDetail('${budget.id}');
 ">
 
-                ${budget.icon || "📒"} ${budget.name}
+                 ${budget.name}
 
             </button>
         `;
