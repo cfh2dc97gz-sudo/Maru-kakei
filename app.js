@@ -1699,7 +1699,10 @@ if(categoryId){
 
 history.forEach(item => {
 
-    const month = (item.targetMonth || item.date.substring(0,7));
+const month = Number(
+    (item.targetMonth || item.date.substring(0,7))
+        .split("-")[1]
+);
 
     if(!monthMap[month]){
         monthMap[month] = [];
@@ -1718,7 +1721,7 @@ Object.keys(monthMap)
 
     historyList.innerHTML += `
 <div class="card">
-<h3>${month}</h3>
+<h3>${month}月</h3>
 </div>
 `;
 
