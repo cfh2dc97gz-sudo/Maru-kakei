@@ -915,29 +915,29 @@ function addSpent(index,isOverwrite=false){
 
             }
 
-       date:new Date().toLocaleDateString(
-    "ja-JP",
-    {
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit"
-    }
-),
+            app.history.unshift({
+
+                id: Date.now().toString(),
+
+                date: new Date().toLocaleDateString(
+                    "ja-JP",
+                    {
                         year:"numeric",
                         month:"2-digit",
                         day:"2-digit"
                     }
                 ),
 
-                category:app.budgets[index].name,
+                category: app.budgets[index].name,
 
                 amount,
 
                 memo,
 
-                annual:false,
+                annual: false,
 
-targetMonth: `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
+                targetMonth: `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
+
             });
 
             update();
