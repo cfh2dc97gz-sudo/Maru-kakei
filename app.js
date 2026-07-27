@@ -2204,8 +2204,7 @@ function openAnnualCategory(index){
     lastPage="annual";
 
     showPage("category");
-
-    document.getElementById("editAnnualCategory").style.display="block";
+    
     // document.getElementById("editAnnualCategory").style....
     document.getElementById("addAnnualHistory").style.display="block";
 
