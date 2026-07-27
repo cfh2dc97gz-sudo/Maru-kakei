@@ -2206,10 +2206,23 @@ function openAnnualCategory(index){
     showPage("category");
 
     document.getElementById("categoryTitle").innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span>${category.title}</span>
-        </div>
-    `;
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
+    <span>${category.title}</span>
+
+    <button
+        onclick="editAnnualCategory()"
+        style="
+            border:none;
+            background:none;
+            font-size:20px;
+            cursor:pointer;
+        ">
+        ✏️
+    </button>
+
+</div>
+`;
 
     const historyList =
         document.getElementById("categoryDetailHistory");
