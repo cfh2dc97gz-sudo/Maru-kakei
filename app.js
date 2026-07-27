@@ -2206,7 +2206,7 @@ function openAnnualCategory(index){
     showPage("category");
     
     // document.getElementById("editAnnualCategory").style....
-    document.getElementById("addAnnualHistory").style.display="block";
+   // document.getElementById("addAnnualHistory").style.display="block";
 
     document.getElementById("categoryTitle").textContent=
         category.title;
