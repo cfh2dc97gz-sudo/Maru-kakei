@@ -1547,12 +1547,23 @@ function changeCategoryFilter(name){
 }
 function drawCategoryDetail(categoryId){
 
-    if(categoryId){
-        const budget = app.budgets.find(item => item.id === categoryId);
-        if(budget){
-            app.categoryFilter = budget.name;
+if(categoryId){
+
+    const budget = app.budgets.find(item => item.id === categoryId);
+
+    if(budget){
+        app.categoryFilter = budget.name;
+    }else{
+
+        const annual = app.annualCategories?.find(item => item.id === categoryId);
+
+        if(annual){
+            app.categoryFilter = annual.title;
         }
+
     }
+
+}
 
   const budget =
     app.budgets.find(item => item.name === app.categoryFilter)
@@ -1570,12 +1581,15 @@ function drawCategoryDetail(categoryId){
 
         if (!data) return [];
 
-        return (data.history || []).filter(item =>
-            !item.income &&
-            !item.annual &&
-            item.category === app.categoryFilter
-        );
+        return (data.history || []).filter(item => {
 
+    if(item.income) return false;
+
+    if(item.category !== app.categoryFilter) return false;
+
+    return true;
+
+});
     });
 
     const total = history.reduce(
@@ -1598,8 +1612,12 @@ function drawCategoryDetail(categoryId){
 
     <span>${app.categoryFilter}</span>
 
-    <button
-        onclick="editCategoryBudget('${app.categoryFilter}')"
+  <button
+    onclick="${
+    budget?.name
+        ? `editCategoryHistory('${item.category}','${item.date}',${item.amount})`
+        : `deleteAnnualHistory(${history.indexOf(item)})`
+}"
         style="
             border:none;
             background:none;
