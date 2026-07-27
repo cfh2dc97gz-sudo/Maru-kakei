@@ -1780,10 +1780,16 @@ function editCategoryBudget(name){
 
     });
 
-}
-function editCategoryHistory(category, date, amount){
+    function editCategoryHistory(category, date, amount){
 
-    if(confirm("OKで金額変更\nキャンセルで削除します。")){
+    const mode = prompt(
+`操作を選択してください😊
+
+1 = 金額変更
+2 = 削除`
+    );
+
+    if(mode === "1"){
 
         openNumberModal("金額を変更",(value)=>{
 
@@ -1796,7 +1802,7 @@ function editCategoryHistory(category, date, amount){
                         ? currentYear + 1
                         : currentYear;
 
-                const data = getMonthData(year, month);
+                const data = getMonthData(year,month);
 
                 if(!data) return;
 
@@ -1822,10 +1828,11 @@ function editCategoryHistory(category, date, amount){
 
             load();
             update();
+            drawCategoryDetail();
 
         });
 
-    }else{
+    }else if(mode === "2"){
 
         if(!confirm("この履歴を削除しますか？")) return;
 
@@ -1836,48 +1843,48 @@ function editCategoryHistory(category, date, amount){
                     ? currentYear + 1
                     : currentYear;
 
-            const data = getMonthData(year, month);
+            const data = getMonthData(year,month);
 
             if(!data) return;
 
             const target = (data.history || []).find(item=>
 
-    item.category === category &&
-    item.date === date &&
-    item.amount === amount &&
-    !item.annual
+                item.category === category &&
+                item.date === date &&
+                item.amount === amount &&
+                !item.annual
 
-);
+            );
 
-data.history = (data.history || []).filter(item=>
+            data.history = (data.history || []).filter(item=>
 
-    !(
-        item.category === category &&
-        item.date === date &&
-        item.amount === amount &&
-        !item.annual
-    )
+                !(
+                    item.category === category &&
+                    item.date === date &&
+                    item.amount === amount &&
+                    !item.annual
+                )
 
-);
+            );
 
-if(target){
+            if(target){
 
-    const budget = (data.budgets || []).find(b=>
+                const budget = (data.budgets || []).find(b=>
 
-        b.name === target.category
+                    b.name === target.category
 
-    );
+                );
 
-    if(budget){
+                if(budget){
 
-        budget.spent = Math.max(
-            0,
-            Number(budget.spent || 0) - Number(target.amount || 0)
-        );
+                    budget.spent = Math.max(
+                        0,
+                        Number(budget.spent || 0) - Number(target.amount || 0)
+                    );
 
-    }
+                }
 
-}
+            }
 
             localStorage.setItem(
                 `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
@@ -1888,11 +1895,13 @@ if(target){
 
         load();
         update();
+        drawCategoryDetail();
 
     }
 
 }
-function deleteIncomeHistory(index){
+
+    function deleteIncomeHistory(index){
 
     if(!confirm("この収入履歴を削除しますか？"))
         return;
