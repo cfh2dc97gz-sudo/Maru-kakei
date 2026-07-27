@@ -1377,6 +1377,11 @@ function showCategoryHistory(categoryId){
     drawCategoryDetail(categoryId);
 
 }
+function showCategoryList(){
+
+    alert("これから作ります😊");
+
+}
 /* ===========================
    ⑩ 年間グラフ
 =========================== */
