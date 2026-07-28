@@ -1520,9 +1520,9 @@ if(incomeFilter === "papa" && papaBtn){
 
 }
 
+const allList = getFiscalIncomeHistory();
 
-
-    let list = getFiscalIncomeHistory();
+let list = [...allList];
 
    if(incomeFilter === "papa"){
 
@@ -1558,9 +1558,9 @@ if(incomeFilter === "papa" && papaBtn){
 
     }
 
-    const total = list.reduce((sum,item)=>{
-        return sum + Number(item.amount || 0);
-    },0);
+   const total = allList.reduce((sum,item)=>{
+    return sum + Number(item.amount || 0);
+},0);
 
     area.innerHTML = `
         <div class="card" style="margin-bottom:15px;">
