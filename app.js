@@ -2951,17 +2951,22 @@ function updateNumberDisplay(){
 function openNumberModal(title,callback){
 
     numberValue = "";
-document.getElementById("numberMemo").value = "";
-   
+
+    document.getElementById("numberMemo").value = "";
+
+    document.activeElement?.blur();
+
     numberCallback = callback;
 
     document.getElementById("numberTitle").textContent =
         title;
 
-    document.getElementById("numberModal").style.display =
-        "flex";
+    setTimeout(() => {
+        document.getElementById("numberModal").style.display =
+            "flex";
 
-    updateNumberDisplay();
+        updateNumberDisplay();
+    }, 100);
 
 }
 
