@@ -812,22 +812,24 @@ function addIncome(type){
 
         app.incomeHistory.unshift({
 
-            date:new Date().toLocaleDateString(
-                "ja-JP",
-                {
-                    year:"numeric",
-                    month:"2-digit",
-                    day:"2-digit"
-                }
-            ),
+    date:new Date().toLocaleDateString(
+        "ja-JP",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    ),
 
-            type,
+    type,
 
-            amount,
+    amount,
 
-            memo
+    memo,
 
-        });
+    targetMonth:`${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
+
+});
 
         update();
 
@@ -1567,7 +1569,10 @@ if(incomeFilter === "papa" && papaBtn){
 
 list.forEach(item=>{
 
-    const month = Number(item.date.substring(5,7));
+const month = Number(
+    (item.targetMonth || item.date.substring(0,7))
+        .split("-")[1]
+);
 
     if(!monthMap[month]){
         monthMap[month] = [];
