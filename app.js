@@ -1613,7 +1613,7 @@ Object.keys(monthMap)
         area.innerHTML += `
             <button
                 class="setting-item"
-                onclick="deleteIncomeHistory(${list.indexOf(item)})">
+               onclick="deleteIncomeHistory('${item.id}')"
 
              <span>
     <b>${item.type}</b><br>
