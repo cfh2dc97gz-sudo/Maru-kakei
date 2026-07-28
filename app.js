@@ -1492,11 +1492,11 @@ function drawIncomeHistory(){
     const mamaBtn =
         document.getElementById("incomeMamaFilter");
 
-    const allBtn =
-        document.getElementById("incomeAllFilter");
-
+    const extraBtn =
+    document.getElementById("incomeExtraFilter");
+    
     if(!area) return;
-    [papaBtn, mamaBtn, allBtn].forEach(btn=>{
+   [papaBtn, mamaBtn, extraBtn].forEach(btn=>{
     if(btn){
         btn.style.background = "";
         btn.style.color = "";
@@ -1514,12 +1514,14 @@ if(incomeFilter === "papa" && papaBtn){
     mamaBtn.style.background = "#F7C948";
     mamaBtn.style.fontWeight = "bold";
 
-}else if(allBtn){
+}else if(incomeFilter === "extra" && extraBtn){
 
-    allBtn.style.background = "#F7C948";
-    allBtn.style.fontWeight = "bold";
+    extraBtn.style.background = "#F7C948";
+    extraBtn.style.fontWeight = "bold";
 
 }
+
+
 
     let list = getFiscalIncomeHistory();
 
