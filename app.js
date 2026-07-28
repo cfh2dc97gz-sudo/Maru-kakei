@@ -560,13 +560,11 @@ function changeMonth(step){
 
     }
 
-    load();
-
-    update();
-
-    showPage(window.lastPage || "home");
-
-}
+load();
+update();
+window.lastPage = "home";
+showPage("home");
+    
 function goToMonth(month){
 
     let displayYear = getDisplayYear(currentMonth);
