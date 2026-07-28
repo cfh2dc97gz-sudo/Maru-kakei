@@ -812,7 +812,9 @@ function addIncome(type){
 
         app.incomeHistory.unshift({
 
-    date:new Date().toLocaleDateString(
+    id: Date.now().toString(),
+
+    date: new Date().toLocaleDateString(
         "ja-JP",
         {
             year:"numeric",
