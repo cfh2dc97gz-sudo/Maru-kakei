@@ -1873,7 +1873,6 @@ function deleteCategoryHistory(historyId){
 
 }
 
-       
     function deleteIncomeHistory(index){
 
     if(!confirm("この収入履歴を削除しますか？"))
@@ -1885,40 +1884,42 @@ function deleteCategoryHistory(historyId){
 
     if(!target) return;
 
- const data = getMonthData(target.year, target.month);
+    const data = getMonthData(target.year, target.month);
 
-if(!data) return;
+    if(!data) return;
 
-data.incomeHistory = (data.incomeHistory || []).filter(item=>
+    data.incomeHistory = (data.incomeHistory || []).filter(item=>
 
-    !(
-        item.date === target.date &&
-        item.type === target.type &&
-        item.amount === target.amount
-    )
+        !(
+            item.date === target.date &&
+            item.type === target.type &&
+            item.amount === target.amount
+        )
 
-);
+    );
 
-localStorage.setItem(
+    localStorage.setItem(
 
-    `maru-kakei-${target.year}-${String(target.month).padStart(2,"0")}`,
+        `maru-kakei-${target.year}-${String(target.month).padStart(2,"0")}`,
 
-    JSON.stringify(data)
+        JSON.stringify(data)
 
-);
+    );
 
-if(
-    target.year === getDisplayYear(currentMonth) &&
-    target.month === currentMonth
-){
+    if(
+        target.year === getDisplayYear(currentMonth) &&
+        target.month === currentMonth
+    ){
 
-    app.incomeHistory = data.incomeHistory;
+        app.incomeHistory = data.incomeHistory;
+
+    }
+
+    update();
+    drawIncomeHistory();
 
 }
 
-update();
-
-}
 function getMonthlySpent(year,month){
 
 const data =
