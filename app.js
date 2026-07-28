@@ -186,8 +186,7 @@ let currentYear=2026;
 
 let currentMonth=4;
 
-incomeFilter = "extra";
-drawIncomeHistory();
+let incomeFilter = "extra";
 /* ===========================
    ② 保存・読込
 =========================== */
