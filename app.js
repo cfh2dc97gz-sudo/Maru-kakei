@@ -1895,14 +1895,9 @@ function deleteIncomeHistory(id){
 
     if(!data) return;
 
-    data.incomeHistory = (data.incomeHistory || []).filter(item=>
-
-        !(
-            item.date === target.date &&
-            item.type === target.type &&
-            item.amount === target.amount
-        )
-
+data.incomeHistory =
+    (data.incomeHistory || []).filter(item =>
+        item.id !== id
     );
 
     // 収入合計も減らす
