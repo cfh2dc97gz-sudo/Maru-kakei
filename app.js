@@ -1563,26 +1563,19 @@ if(incomeFilter === "papa" && papaBtn){
         </div>
     `;
 
-    list.forEach(item=>{
+ const monthMap = {};
 
-        area.innerHTML += `
-            <button
-                class="setting-item"
-                onclick="deleteIncomeHistory(${list.indexOf(item)})">
-                <span>
-                    <b>${item.type}</b><br>
-                    <small>${item.date}</small>
-                </span>
-                <span style="font-weight:bold;">
-                    ¥${Number(item.amount).toLocaleString()}
-                </span>
-            </button>
-        `;
+list.forEach(item=>{
 
-    });
+    const month = Number(item.date.substring(5,7));
 
-}
-const monthMap = {};
+    if(!monthMap[month]){
+        monthMap[month] = [];
+    }
+
+    monthMap[month].push(item);
+
+});
 
 Object.keys(monthMap)
 .sort((a,b)=>b-a)
@@ -1616,6 +1609,8 @@ Object.keys(monthMap)
     });
 
 });
+}
+
 
 function changeCategoryFilter(name){
 
