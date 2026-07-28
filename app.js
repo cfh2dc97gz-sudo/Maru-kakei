@@ -1040,19 +1040,22 @@ function showPage(page){
     lastPage = "setting";
     break;
 
-        case "bonus":
+      case "bonus":
 
-            bonusPage.style.display = "block";
+    currentAnnualCategory = -1;
 
-            drawBonusPage();
+    bonusPage.style.display = "block";
 
-            lastPage = "setting";
-            break;
+    drawBonusPage();
 
-        case "category":
+    lastPage = "setting";
+    break;
 
-            categoryPage.style.display = "block";
-            break;
+case "category":
+
+    categoryPage.style.display = "block";
+    break;
+            
 case "income":
 
     incomePage.style.display = "block";
