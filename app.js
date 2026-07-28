@@ -1095,9 +1095,13 @@ case "income":
 
 function backPage(){
 
+    app.categoryFilter = null;
+    currentAnnualCategory = -1;
+
     showPage(window.lastPage || "home");
 
 }
+
 navButtons[0].onclick =
     ()=>showPage("home");
 
