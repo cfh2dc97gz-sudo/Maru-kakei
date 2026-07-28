@@ -564,7 +564,9 @@ load();
 update();
 window.lastPage = "home";
 showPage("home");
-    
+
+    }
+
 function goToMonth(month){
 
     let displayYear = getDisplayYear(currentMonth);
