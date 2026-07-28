@@ -1872,7 +1872,7 @@ function deleteCategoryHistory(historyId){
 
 }
 
-    function deleteIncomeHistory(index){
+function deleteIncomeHistory(index){
 
     if(!confirm("この収入履歴を削除しますか？"))
         return;
@@ -1897,6 +1897,40 @@ function deleteCategoryHistory(historyId){
 
     );
 
+    // 収入合計も減らす
+    data.income = data.income || {
+        papa:0,
+        mama:0,
+        extra:0
+    };
+
+    switch(target.type){
+
+        case "パパ":
+        case "パパ賞与":
+            data.income.papa = Math.max(
+                0,
+                Number(data.income.papa || 0) - Number(target.amount || 0)
+            );
+            break;
+
+        case "ママ":
+        case "ママ賞与":
+            data.income.mama = Math.max(
+                0,
+                Number(data.income.mama || 0) - Number(target.amount || 0)
+            );
+            break;
+
+        case "臨時":
+            data.income.extra = Math.max(
+                0,
+                Number(data.income.extra || 0) - Number(target.amount || 0)
+            );
+            break;
+
+    }
+
     localStorage.setItem(
 
         `maru-kakei-${target.year}-${String(target.month).padStart(2,"0")}`,
@@ -1905,17 +1939,15 @@ function deleteCategoryHistory(historyId){
 
     );
 
+    // 今表示中の月なら読み直す
     if(
         target.year === getDisplayYear(currentMonth) &&
         target.month === currentMonth
     ){
-
-        app.incomeHistory = data.incomeHistory;
-
+        load();
     }
 
     update();
-    drawIncomeHistory();
 
 }
 
