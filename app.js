@@ -1599,10 +1599,11 @@ Object.keys(monthMap)
                 class="setting-item"
                 onclick="deleteIncomeHistory(${list.indexOf(item)})">
 
-                <span>
-                    <b>${item.type}</b><br>
-                    <small>${item.date}</small>
-                </span>
+             <span>
+    <b>${item.type}</b><br>
+    ${item.date}<br>
+    <small>${item.memo || ""}</small>
+</span>
 
                 <span style="font-weight:bold;">
                     ¥${Number(item.amount).toLocaleString()}
