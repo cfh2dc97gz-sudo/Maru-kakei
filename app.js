@@ -1776,10 +1776,13 @@ const month = Number(
 });
 
 historyList.innerHTML = "";
+const fiscalOrder = [4,5,6,7,8,9,10,11,12,1,2,3];
 
 Object.keys(monthMap)
-.sort()
-.reverse()
+.sort((a,b)=>
+    fiscalOrder.indexOf(Number(b)) -
+    fiscalOrder.indexOf(Number(a))
+)
 .forEach(month=>{
 
     historyList.innerHTML += `
