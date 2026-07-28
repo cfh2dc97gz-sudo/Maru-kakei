@@ -186,7 +186,8 @@ let currentYear=2026;
 
 let currentMonth=4;
 
-let incomeFilter = "all";
+incomeFilter = "extra";
+drawIncomeHistory();
 /* ===========================
    ② 保存・読込
 =========================== */
@@ -1522,20 +1523,26 @@ if(incomeFilter === "papa" && papaBtn){
 
     let list = getFiscalIncomeHistory();
 
-    if(incomeFilter === "papa"){
+   if(incomeFilter === "papa"){
 
-        list = list.filter(item=>
-            item.type.includes("パパ")
-        );
+    list = list.filter(item=>
+        item.type.includes("パパ")
+    );
 
-    }else if(incomeFilter === "mama"){
+}else if(incomeFilter === "mama"){
 
-        list = list.filter(item=>
-            item.type.includes("ママ")
-        );
+    list = list.filter(item=>
+        item.type.includes("ママ")
+    );
 
-    }
+}else if(incomeFilter === "extra"){
 
+    list = list.filter(item=>
+        item.type === "臨時"
+    );
+
+}
+    
     if(list.length === 0){
 
         area.innerHTML = `
