@@ -1880,14 +1880,14 @@ function deleteCategoryHistory(historyId){
 
 }
 
-function deleteIncomeHistory(index){
+function deleteIncomeHistory(id){
 
     if(!confirm("この収入履歴を削除しますか？"))
         return;
 
     const list = getFiscalIncomeHistory();
 
-    const target = list[index];
+    const target = list.find(item => item.id === id);
 
     if(!target) return;
 
