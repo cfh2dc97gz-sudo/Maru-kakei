@@ -1339,13 +1339,19 @@ function drawYearSummary(){
 const progress =
     saving + getBonusKeepTotal();
 
-   const summerBonus =
-    Number(app.bonus.papaSummerActual || app.bonus.papaSummerForecast || 0) +
-    Number(app.bonus.mamaSummerActual || app.bonus.mamaSummerForecast || 0);
+ const summerBonus =
+    (app.bonus.papaSummerActual || app.bonus.mamaSummerActual)
+        ? Number(app.bonus.papaSummerActual || 0) +
+          Number(app.bonus.mamaSummerActual || 0)
+        : Number(app.bonus.papaSummerForecast || 0) +
+          Number(app.bonus.mamaSummerForecast || 0);
 
 const winterBonus =
-    Number(app.bonus.papaWinterActual || app.bonus.papaWinterForecast || 0) +
-    Number(app.bonus.mamaWinterActual || app.bonus.mamaWinterForecast || 0);
+    (app.bonus.papaWinterActual || app.bonus.mamaWinterActual)
+        ? Number(app.bonus.papaWinterActual || 0) +
+          Number(app.bonus.mamaWinterActual || 0)
+        : Number(app.bonus.papaWinterForecast || 0) +
+          Number(app.bonus.mamaWinterForecast || 0);
 
 const bonusTotal =
     summerBonus + winterBonus;
