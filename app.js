@@ -529,7 +529,9 @@ function getFiscalYear(){
 }
 
 function changeMonth(step){
-
+    
+app.categoryFilter = null;
+currentAnnualCategory = -1;
     save();
 
     if(currentMonth === 4 && step === -1){
