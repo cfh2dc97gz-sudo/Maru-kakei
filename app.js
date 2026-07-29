@@ -3103,3 +3103,46 @@ function exportBackup(){
 document
     .getElementById("backupExport")
     .onclick = exportBackup;
+
+// ===========================
+// バックアップ読込
+// ===========================
+
+function importBackup(file){
+
+    const reader = new FileReader();
+
+    reader.onload = e => {
+
+        try{
+
+            const backup = JSON.parse(e.target.result);
+
+            if(!confirm("現在のデータをバックアップで上書きしますか？")){
+                return;
+            }
+
+            Object.keys(backup).forEach(key=>{
+
+                localStorage.setItem(
+                    key,
+                    JSON.stringify(backup[key])
+                );
+
+            });
+
+            alert("バックアップを復元しました😊");
+
+            location.reload();
+
+        }catch{
+
+            alert("バックアップファイルを読み込めませんでした。");
+
+        }
+
+    };
+
+    reader.readAsText(file);
+
+}
