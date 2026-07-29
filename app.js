@@ -3146,3 +3146,26 @@ function importBackup(file){
     reader.readAsText(file);
 
 }
+document
+    .getElementById("backupImport")
+    .onclick = ()=>{
+
+    document
+        .getElementById("backupFile")
+        .click();
+
+};
+
+document
+    .getElementById("backupFile")
+    .addEventListener("change",(e)=>{
+
+        if(e.target.files.length){
+
+            importBackup(e.target.files[0]);
+
+        }
+
+        e.target.value = "";
+
+    });
