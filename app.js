@@ -70,7 +70,7 @@ function createDefaultBudgets(){
 const app={
 
     goal:3400000,
-
+    annualBudget:1350000,
     reserveMin:500000,
 
     reserveFund:{
@@ -247,7 +247,7 @@ function save(){
     const yearData = {
 
         goal: app.goal,
-
+        annualBudget: app.annualBudget,
         startBank: app.startBank,
 
         reserveMin: app.reserveMin,
@@ -409,7 +409,10 @@ app.incomeHistory = data.incomeHistory || [];
             JSON.parse(yearSaved);
 
         app.goal=data.goal ?? app.goal;
-
+        
+         app.annualBudget =
+        data.annualBudget ?? 1350000;
+        
         app.startBank=data.startBank ?? 0;
 
         app.reserveMin=data.reserveMin ?? 500000;
@@ -1438,8 +1441,6 @@ historyList.innerHTML = "";
    ⑩ 年間グラフ
 =========================== */
 
-const ANNUAL_BUDGET = 1350000;
-
 function getFiscalMonths(){
 
     return [
@@ -2088,7 +2089,7 @@ function getOtherReserveBudget(){
         .reduce((sum,c)=>sum+c.budget,0);
 
     return Math.max(
-        ANNUAL_BUDGET-total,
+       app.annualBudget-total,
         0
     );
 
@@ -2188,8 +2189,8 @@ function drawAnnualManage(){
 
         );
 
-    const remain=
-        ANNUAL_BUDGET-totalUsed;
+    const remain=   
+        app.annualBudget -totalUsed;
 
     area.innerHTML+=`
 
@@ -2197,7 +2198,7 @@ function drawAnnualManage(){
 
 <h3>💰 特別費</h3>
 
-<p>年間予算 ¥${ANNUAL_BUDGET.toLocaleString()}</p>
+<p>年間予算 ¥${app.annualBudget.toLocaleString()}</p>
 
 <p>使用 ¥${totalUsed.toLocaleString()}</p>
 
