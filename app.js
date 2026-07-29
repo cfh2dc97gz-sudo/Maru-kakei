@@ -3058,3 +3058,48 @@ function numberBack(){
     updateNumberDisplay();
 
 }
+// ===========================
+// バックアップ保存
+// ===========================
+
+function exportBackup(){
+
+    const backup = {};
+
+    for(let i = 0; i < localStorage.length; i++){
+
+        const key = localStorage.key(i);
+
+        if(key.startsWith("maru-kakei")){
+
+            backup[key] = JSON.parse(localStorage.getItem(key));
+
+        }
+
+    }
+
+    const blob = new Blob(
+        [JSON.stringify(backup, null, 2)],
+        { type:"application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    const today = new Date();
+
+    const fileName =
+        `maru-kakei-backup-${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}.json`;
+
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+}
+
+document
+    .getElementById("backupExport")
+    .onclick = exportBackup;
