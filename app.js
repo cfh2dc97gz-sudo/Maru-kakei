@@ -2755,6 +2755,28 @@ if(editGoalBtn){
     };
 
 }
+const editAnnualBudgetBtn =
+    document.getElementById("editAnnualBudget");
+
+if(editAnnualBudgetBtn){
+
+    editAnnualBudgetBtn.onclick = ()=>{
+
+        openNumberModal("特別費予算",(value)=>{
+
+            if(value<=0) return;
+
+            app.annualBudget = value;
+
+            refreshOtherReserve();
+
+            update();
+
+        });
+
+    };
+
+}
 
 const editBonusBtn =
     document.getElementById("editBonus");
