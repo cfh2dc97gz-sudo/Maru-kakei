@@ -2489,6 +2489,43 @@ function getMonthlyCoachProgress(){
     return result;
 }
 
+
+function getGoalContinuationForecast(annual, monthlyCoach){
+
+    const monthlyImprovement =
+        Number(monthlyCoach.target || 0);
+
+    const continuedImprovement =
+        monthlyImprovement *
+        Number(annual.futureMonths || 0);
+
+    const continuedForecast =
+        Number(annual.noChangeForecast || 0) +
+        continuedImprovement;
+
+    const remainingGap =
+        Math.max(
+            Number(annual.goal || 0) -
+            continuedForecast,
+            0
+        );
+
+    const remainingSurplus =
+        Math.max(
+            continuedForecast -
+            Number(annual.goal || 0),
+            0
+        );
+
+    return {
+        monthlyImprovement,
+        continuedImprovement,
+        continuedForecast,
+        remainingGap,
+        remainingSurplus
+    };
+}
+
 function drawAI(){
 
     const ai =
@@ -2882,6 +2919,12 @@ function drawAI(){
     const annual =
         getAnnualCoachData();
 
+    const goalForecast =
+        getGoalContinuationForecast(
+            annual,
+            monthlyCoach
+        );
+
     html += `
 <div style="
     margin-top:18px;
@@ -2914,10 +2957,7 @@ function drawAI(){
         💰 今の貯金ペース
         ¥${annual.currentSaving.toLocaleString()}<br>
 
-        🔮 このままなら年度末
-        ¥${annual.noChangeForecast.toLocaleString()}<br>
-
-        🌱 今後、自然に貯まりそうな額
+        🌱 今の生活ペースで自然に貯まりそうな額
         月約¥${annual.naturalMonthly.toLocaleString()}
         × ${annual.futureMonths}か月
         ＝ ¥${annual.naturalFuture.toLocaleString()}<br>
@@ -2925,39 +2965,82 @@ function drawAI(){
         🎁 ボーナス見込み
         ¥${annual.bonusFuture.toLocaleString()}
     </div>
+
+    <div style="
+        margin-top:12px;
+        padding:11px 12px;
+        border-radius:12px;
+        background:#f8f8f8;
+        line-height:1.7;
+        font-size:13px;
+    ">
+        🔮 <strong>このままなら年度末</strong><br>
+        ¥${annual.noChangeForecast.toLocaleString()}
+        <br>
+        <span style="opacity:.78;">
+            目標との差：
+            ${
+                annual.gap > 0
+                    ? "あと¥" + annual.gap.toLocaleString()
+                    : "＋¥" + annual.surplus.toLocaleString()
+            }
+        </span>
+    </div>
+
+    <div style="
+        margin-top:10px;
+        padding:11px 12px;
+        border-radius:12px;
+        background:#fff8dc;
+        line-height:1.7;
+        font-size:13px;
+    ">
+        🚀 <strong>今月の節約チャレンジを残りの月も続けたら</strong><br>
+        年間でさらに
+        ¥${goalForecast.continuedImprovement.toLocaleString()}
+        改善できる見込みです。<br>
+
+        🔮 年度末予測：
+        <strong>¥${goalForecast.continuedForecast.toLocaleString()}</strong>
+        <br>
 `;
 
-    if(annual.gap<=0){
+    if(goalForecast.remainingGap > 0){
 
         html += `
-<div style="
-    margin-top:10px;
-    font-weight:700;
-">
-🎉 目標達成圏内です！
-`;
-
-        if(annual.surplus>0){
-
-            html +=
-                `<br>目標より約¥${annual.surplus.toLocaleString()}上回る予測です。`;
-
-        }
-
-        html += `</div>`;
+        ⚠️ それでも目標まで
+        あと¥${goalForecast.remainingGap.toLocaleString()}
+        足りない予測です。
+        `;
 
     }else{
+
+        html += `
+        🎉 このペースを続ければ、
+        目標より
+        ¥${goalForecast.remainingSurplus.toLocaleString()}
+        上回る予測です！
+        `;
+
+    }
+
+    html += `
+    </div>
+`;
+
+    if(annual.gap > 0){
 
         html += `
 <div style="
     margin-top:10px;
     line-height:1.7;
+    font-size:13px;
 ">
 年間目標まで
 <strong>あと約¥${annual.gap.toLocaleString()}</strong>です。
 `;
 
-        if(annual.futureMonths>0){
+        if(annual.futureMonths > 0){
 
             html += `
 <br>
@@ -2990,19 +3073,14 @@ function drawAI(){
 <br>
 `;
 
-            cuts.forEach(item=>{
+            cuts.forEach((item,index)=>{
 
                 html +=
                     `${item.name}を
                     ¥${item.amount.toLocaleString()}減らす`;
 
-                if(
-                    cuts.indexOf(item)
-                    < cuts.length-1
-                ){
-
+                if(index < cuts.length - 1){
                     html += "<br>";
-
                 }
 
             });
@@ -3029,6 +3107,17 @@ function drawAI(){
 `;
 
         }
+
+    }else{
+
+        html += `
+<div style="
+    margin-top:10px;
+    font-weight:700;
+">
+🎉 今の予測では年間目標を達成できるペースです！
+</div>
+`;
 
     }
 
