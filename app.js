@@ -2384,12 +2384,20 @@ function getMonthlyCoachProgress(){
     };
 
     /*
-       年間コーチが決めた「今月減らす額」を、
-       実際の支出の進み具合に合わせて表示する。
+       年間コーチの「○円減らす」は、
+       通常予算からその金額を減らした
+       「今月の目標使用額」として扱う。
 
-       今月の目標額そのものを予算から先に引くのではなく、
-       各カテゴリの「目標として減らしたい額」を
-       進捗として持つ。
+       例：
+       食費 80,000円
+       節約目標 12,000円
+       → 今月は68,000円以内
+
+       現在1,000円使っているなら、
+       → 目標まであと67,000円使える
+
+       「まだ使っていない＝節約達成」
+       とは扱わないのがポイント。
     */
 
     ["food","holiday"].forEach(id=>{
@@ -2413,44 +2421,68 @@ function getMonthlyCoachProgress(){
                 )?.spent || 0
             );
 
-        /*
-           現時点では、通常予算に対して
-           どれだけ余裕があるかを「節約進捗」として表示。
-           ただし月初から達成扱いにならないよう、
-           実際の使用額が増えた後の進捗だけを
-           次の段階で精密化できる構造にしておく。
-        */
-
-        const normalRemaining =
+        const targetSpend =
             Math.max(
-                budget - spent,
+                budget - target,
                 0
             );
 
-        const achieved =
-            Math.min(
-                normalRemaining,
-                target
+        const remainingToTarget =
+            Math.max(
+                targetSpend - spent,
+                0
             );
 
-        result.achieved += achieved;
+        /*
+           目標使用額を超えた場合は、
+           その超過額を「追加で抑える必要がある額」とする。
+        */
+
+        const overTarget =
+            Math.max(
+                spent - targetSpend,
+                0
+            );
 
         result.categories.push({
             id,
             target,
-            achieved,
-            remaining:
-                Math.max(
-                    target - achieved,
-                    0
-                )
+            budget,
+            spent,
+            targetSpend,
+            remainingToTarget,
+            overTarget
         });
 
     });
 
+    /*
+       「今月あと減らす額」ではなく、
+       現在の目標使用額との差を
+       チャレンジの進捗として扱う。
+
+       目標使用額以内なら、
+       まだその金額まで使える状態。
+       月末に使わなかった分が
+       最終的な節約額になる。
+    */
+
     result.remaining =
-        Math.max(
-            result.target - result.achieved,
+        result.categories.reduce(
+            (sum,item)=>sum + item.remainingToTarget,
+            0
+        );
+
+    result.achieved =
+        result.categories.reduce(
+            (sum,item)=>{
+                return sum +
+                    Math.max(
+                        item.targetSpend -
+                        item.spent,
+                        0
+                    );
+            },
             0
         );
 
@@ -2727,22 +2759,47 @@ function drawAI(){
     <strong>¥${item.target.toLocaleString()}減</strong>
     <br>
     <span style="opacity:.78;">
-        今月の目標まであと
-        ¥${item.remaining.toLocaleString()}
+        目標使用額：¥${item.targetSpend.toLocaleString()}以内
     </span>
-</div>
+    <br>
+    <span style="opacity:.78;">
+        今は¥${item.spent.toLocaleString()}使用
+        ｜あと¥${item.remainingToTarget.toLocaleString()}使えます
+    </span>
+`;
+
+        if(item.overTarget > 0){
+
+            html += `
+<br>
+<span style="font-weight:700;">
+⚠️ 目標より¥${item.overTarget.toLocaleString()}多く使っています
+</span>
+`;
+
+        }
+
+        html += `</div>
 `;
 
         });
 
-        if(monthlyCoach.remaining <= 0){
+        const allOnTrack =
+            monthlyCoach.categories.length > 0 &&
+            monthlyCoach.categories.every(
+                item=>item.overTarget <= 0
+            );
+
+        if(allOnTrack){
 
             html += `
 <div style="
     margin-top:10px;
-    font-weight:700;
+    font-size:13px;
+    opacity:.78;
 ">
-🎉 今月の節約チャレンジ達成です！
+今のところ目標使用額以内のペースです👌
+月末までこの範囲に収めれば、節約チャレンジ達成です。
 </div>
 `;
 
@@ -2754,7 +2811,7 @@ function drawAI(){
     font-size:13px;
     opacity:.78;
 ">
-支出を入力するたびに、この目標の進み具合も更新します。
+支出を入力するたびに、目標使用額との差を更新します。
 </div>
 `;
 
