@@ -93,6 +93,8 @@ const app={
 
     startBank:0,
 
+    bankConfirmed:false,
+
     income:{
 
         papa:0,
@@ -277,6 +279,8 @@ function save(){
 
         bank: { ...app.bank },
 
+        bankConfirmed: app.bankConfirmed === true,
+
         income: { ...app.income },
 
         budgets: JSON.parse(
@@ -358,6 +362,8 @@ function load(){
 
     app.startBank=0;
 
+    app.bankConfirmed=false;
+
     app.reserveMin=500000;
 
     app.reserveFund={
@@ -411,6 +417,10 @@ app.bonus = {
             JSON.parse(monthSaved);
 
         app.bank=data.bank || app.bank;
+
+        app.bankConfirmed =
+            data.bankConfirmed === true ||
+            (data.bank && (Number(data.bank.mitake || 0) + Number(data.bank.takizawa || 0) > 0));
 
         app.income=data.income || app.income;
 
@@ -636,6 +646,196 @@ function goToMonth(month){
     });
 
 }
+function getFiscalMonthInfo(month){
+
+    return {
+        year: month <= 3 ? currentYear + 1 : currentYear,
+        month
+    };
+
+}
+
+function isBankConfirmedData(data){
+
+    if(!data) return false;
+
+    if(data.bankConfirmed === true) return true;
+
+    const bank = data.bank || {};
+
+    return (
+        Number(bank.mitake || 0) +
+        Number(bank.takizawa || 0)
+    ) > 0;
+
+}
+
+function getMonthIncomeTotal(data){
+
+    if(!data || !data.income) return 0;
+
+    return (
+        Number(data.income.papa || 0) +
+        Number(data.income.mama || 0) +
+        Number(data.income.extra || 0)
+    );
+
+}
+
+function getMonthBankOutflow(data){
+
+    if(!data) return 0;
+
+    const budgets = data.budgets || [];
+
+    /* 現金カテゴリはATM引出時に銀行から出るので二重計上しない */
+    let directSpent = budgets.reduce((sum,item)=>{
+
+        if(["food","holiday","gas"].includes(item.id)){
+            return sum;
+        }
+
+        return sum + Number(item.spent || 0);
+
+    },0);
+
+    /*
+       「📦 その他」は入力時に
+       🏦銀行 / 🏧現金 を選べる。
+       現金を選んだ分はATMからすでに出ているため、
+       銀行からの直接支出から差し引く。
+    */
+    const cashOther =
+        (data.history || []).reduce((sum,item)=>{
+
+            if(
+                item.category === "📦 その他" &&
+                item.paymentMethod === "cash"
+            ){
+                return sum + Number(item.amount || 0);
+            }
+
+            return sum;
+
+        },0);
+
+    directSpent =
+        Math.max(
+            0,
+            directSpent - cashOther
+        );
+
+    const atm = data.atm || {};
+
+    /* 生協は滝沢銀行から引き落とされる */
+    const coop = Number(atm.coop || 0);
+
+    /* ATMは現金を下ろした時点で銀行から出る */
+    const withdrawn = Number(atm.withdrawn || 0);
+
+    return directSpent + coop + withdrawn;
+
+}
+
+function getBankForecast(){
+
+    const months = getFiscalMonths();
+
+    const currentIndex = months.indexOf(currentMonth);
+
+    let balance = Number(app.startBank || 0);
+
+    let baseIndex = -1;
+
+    /* 現在月より前で最後に確定した銀行残高を探す */
+    for(let i=0; i<currentIndex; i++){
+
+        const info = getFiscalMonthInfo(months[i]);
+        const data = getMonthData(info.year,info.month);
+
+        if(isBankConfirmedData(data)){
+
+            balance =
+                Number(data.bank?.mitake || 0) +
+                Number(data.bank?.takizawa || 0);
+
+            baseIndex = i;
+
+        }
+
+    }
+
+    /* 最後の確定残高より後の月を予測する */
+    for(let i=baseIndex + 1; i<=currentIndex; i++){
+
+        const info = getFiscalMonthInfo(months[i]);
+        const data = getMonthData(info.year,info.month);
+
+        if(!data) continue;
+
+        balance += getMonthIncomeTotal(data);
+        balance -= getMonthBankOutflow(data);
+
+    }
+
+    return Math.round(balance);
+
+}
+
+function drawBankForecast(){
+
+    const bankEl =
+        document.getElementById("bankTotal");
+
+    if(!bankEl) return;
+
+    const row = bankEl.closest(".bank-row");
+
+    if(!row) return;
+
+    let forecastEl =
+        document.getElementById("bankForecast");
+
+    if(!forecastEl){
+
+        forecastEl = document.createElement("div");
+
+        forecastEl.id = "bankForecast";
+        forecastEl.style.marginTop = "6px";
+        forecastEl.style.fontSize = "13px";
+        forecastEl.style.fontWeight = "600";
+        forecastEl.style.opacity = "0.78";
+
+        row.parentNode.insertBefore(
+            forecastEl,
+            row.nextSibling
+        );
+
+    }
+
+    if(app.bankConfirmed){
+
+        const actual =
+            Number(app.bank.mitake || 0) +
+            Number(app.bank.takizawa || 0);
+
+        forecastEl.innerHTML =
+            `🔒 確定残高　¥${actual.toLocaleString()}`;
+
+    }else{
+
+        const forecast = getBankForecast();
+
+        forecastEl.innerHTML =
+            `🔮 月末予測　¥${forecast.toLocaleString()}<br>` +
+            `<span style="font-weight:500;opacity:.7">` +
+            `収入・ATM・生協・入力済みの銀行支出から予測` +
+            `</span>`;
+
+    }
+
+}
+
 function update(){
 
     if(yearSelect){
@@ -718,10 +918,21 @@ function update(){
 
     if(bankEl){
 
-        bankEl.textContent=
-            "¥"+bankTotal.toLocaleString();
+        if(app.bankConfirmed){
+
+            bankEl.textContent=
+                "¥"+bankTotal.toLocaleString();
+
+        }else{
+
+            bankEl.textContent=
+                "¥"+getBankForecast().toLocaleString();
+
+        }
 
     }
+
+    drawBankForecast();
 
     const savingEl=
         document.getElementById("savingTotal");
@@ -941,14 +1152,6 @@ function addCoop(){
 
             if(amount<=0) return;
 
-            /*
-               生協はATM現金とは完全に別。
-               滝沢銀行から引き落とされる食費。
-
-               請求額が今月25日までに確定するため、
-               「今見ている月」の食費として登録する。
-            */
-
             app.atm = {
                 withdrawn:0,
                 cashSpent:0,
@@ -958,34 +1161,17 @@ function addCoop(){
                 ...(app.atm || {})
             };
 
-            /*
-               生協はATMから出ない。
-               ただし食費としては使った金額に入れる。
-            */
-
+            /* 生協はATM現金とは完全に別。滝沢銀行からの食費引落。 */
             app.atm.coop =
                 Number(app.atm.coop || 0) + amount;
 
-            /*
-               食費の使用額に生協を加算
-            */
-
             const food =
-                app.budgets.find(
-                    item => item.id === "food"
-                );
+                app.budgets.find(item => item.id === "food");
 
             if(food){
-
                 food.spent =
-                    Number(food.spent || 0)
-                    + amount;
-
+                    Number(food.spent || 0) + amount;
             }
-
-            /*
-               食費の履歴として保存
-            */
 
             const date =
                 new Date().toLocaleDateString(
@@ -998,32 +1184,15 @@ function addCoop(){
                 );
 
             app.history.unshift({
-
                 id:Date.now().toString(),
-
                 date,
-
                 category:"🍚 食費",
-
                 amount,
-
-                memo:
-                    `🛒 生協${
-                        memo
-                        ? "｜" + memo
-                        : ""
-                    }`,
-
+                memo:`🛒 生協${memo ? "｜" + memo : ""}`,
                 annual:false,
-
                 coop:true,
-
                 targetMonth:
-                    `${getDisplayYear()}-${
-                        String(currentMonth)
-                            .padStart(2,"0")
-                    }`
-
+                    `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
             });
 
             update();
@@ -1032,6 +1201,7 @@ function addCoop(){
     );
 
 }
+
 function addIncome(type){
 
     openNumberModal("収入金額",(amount,memo)=>{
@@ -1129,6 +1299,8 @@ document
     if(!confirm("今月をリセットしますか？"))
         return;
 
+    app.bankConfirmed = false;
+
     app.income = {
 
         papa:0,
@@ -1166,6 +1338,8 @@ function editBank(){
 
             app.bank.takizawa = takizawa;
 
+            app.bankConfirmed = true;
+
             if(currentMonth===4){
 
                 app.startBank =
@@ -1180,6 +1354,134 @@ function editBank(){
     });
 
 }
+function openPaymentChoice(callback){
+
+    const old = document.getElementById("paymentChoiceModal");
+
+    if(old){
+        old.remove();
+    }
+
+    const modal =
+        document.createElement("div");
+
+    modal.id = "paymentChoiceModal";
+
+    modal.style.position = "fixed";
+    modal.style.inset = "0";
+    modal.style.background = "rgba(0,0,0,.35)";
+    modal.style.display = "flex";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+    modal.style.zIndex = "99999";
+    modal.style.padding = "20px";
+    modal.style.boxSizing = "border-box";
+
+    modal.innerHTML = `
+
+<div style="
+    width:100%;
+    max-width:360px;
+    background:#fff;
+    border-radius:22px;
+    padding:24px 20px;
+    box-shadow:0 10px 40px rgba(0,0,0,.18);
+    text-align:center;
+">
+
+    <div style="
+        font-size:20px;
+        font-weight:800;
+        margin-bottom:8px;
+    ">
+        📦 その他の支払い方法
+    </div>
+
+    <div style="
+        font-size:14px;
+        color:#777;
+        margin-bottom:20px;
+        line-height:1.6;
+    ">
+        この支出は銀行から？<br>
+        それともATMの現金から？
+    </div>
+
+    <button
+        id="paymentBankBtn"
+        style="
+            width:100%;
+            border:0;
+            border-radius:14px;
+            padding:15px 12px;
+            margin-bottom:10px;
+            background:#fff4c7;
+            font-size:16px;
+            font-weight:800;
+        "
+    >
+        🏦 銀行から引き落とし
+    </button>
+
+    <button
+        id="paymentCashBtn"
+        style="
+            width:100%;
+            border:0;
+            border-radius:14px;
+            padding:15px 12px;
+            background:#fff4c7;
+            font-size:16px;
+            font-weight:800;
+        "
+    >
+        🏧 ATMの現金
+    </button>
+
+    <button
+        id="paymentCancelBtn"
+        style="
+            width:100%;
+            border:0;
+            background:transparent;
+            padding:14px 12px 4px;
+            color:#888;
+            font-size:14px;
+        "
+    >
+        キャンセル
+    </button>
+
+</div>
+
+`;
+
+    document.body.appendChild(modal);
+
+    const close = ()=>{
+        modal.remove();
+    };
+
+    document
+        .getElementById("paymentBankBtn")
+        .onclick = ()=>{
+            close();
+            callback("bank");
+        };
+
+    document
+        .getElementById("paymentCashBtn")
+        .onclick = ()=>{
+            close();
+            callback("cash");
+        };
+
+    document
+        .getElementById("paymentCancelBtn")
+        .onclick = close;
+
+}
+
 function addSpent(index,isOverwrite=false){
 
     openNumberModal(
@@ -1190,66 +1492,148 @@ function addSpent(index,isOverwrite=false){
 
             if(amount<=0) return;
 
-            if(isOverwrite){
+            /*
+               「その他」だけは、
+               支払い方法を選ぶ。
+            */
 
-                const previous =
-                    Number(app.budgets[index].spent || 0);
+            if(app.budgets[index].id === "other"){
 
-                app.budgets[index].spent = amount;
+                openPaymentChoice(
+                    (paymentMethod)=>{
 
-                if(["food","holiday","gas"].includes(app.budgets[index].id)){
-                    app.atm.cashSpent = Math.max(
-                        0,
-                        Number(app.atm.cashSpent || 0) - previous + amount
-                    );
-                }
+                        saveExpense(
+                            index,
+                            amount,
+                            memo,
+                            isOverwrite,
+                            paymentMethod
+                        );
 
-            }else{
+                    }
+                );
 
-                app.budgets[index].spent += amount;
-
-                if(["food","holiday","gas"].includes(app.budgets[index].id)){
-                    app.atm.cashSpent =
-                        Number(app.atm.cashSpent || 0) + amount;
-                }
+                return;
 
             }
 
-            app.history.unshift({
+            /*
+               食費・休日・ガソリンはATM現金。
+               それ以外は銀行支出。
+            */
 
-                id: Date.now().toString(),
+            const paymentMethod =
+                ["food","holiday","gas"].includes(
+                    app.budgets[index].id
+                )
+                    ? "cash"
+                    : "bank";
 
-                date: new Date().toLocaleDateString(
-                    "ja-JP",
-                    {
-                        year:"numeric",
-                        month:"2-digit",
-                        day:"2-digit"
-                    }
-                ),
-
-                category: app.budgets[index].name,
-
+            saveExpense(
+                index,
                 amount,
-
                 memo,
-
-                annual: false,
-
-                cashExpense:
-                    ["food","holiday","gas"].includes(app.budgets[index].id),
-
-                targetMonth: `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
-
-            });
-
-            update();
+                isOverwrite,
+                paymentMethod
+            );
 
         }
-
     );
 
 }
+
+function saveExpense(
+    index,
+    amount,
+    memo,
+    isOverwrite=false,
+    paymentMethod="bank"
+){
+
+    const item =
+        app.budgets[index];
+
+    if(!item) return;
+
+    if(isOverwrite){
+
+        const previous =
+            Number(item.spent || 0);
+
+        item.spent = amount;
+
+        /*
+           上書き対象が現金の場合、
+           ATM現金使用額も差し替える。
+        */
+
+        if(paymentMethod === "cash"){
+
+            app.atm.cashSpent =
+                Math.max(
+                    0,
+                    Number(app.atm.cashSpent || 0)
+                    - previous
+                    + amount
+                );
+
+        }
+
+    }else{
+
+        item.spent =
+            Number(item.spent || 0)
+            + amount;
+
+        if(paymentMethod === "cash"){
+
+            app.atm.cashSpent =
+                Number(app.atm.cashSpent || 0)
+                + amount;
+
+        }
+
+    }
+
+    app.history.unshift({
+
+        id: Date.now().toString(),
+
+        date:
+            new Date().toLocaleDateString(
+                "ja-JP",
+                {
+                    year:"numeric",
+                    month:"2-digit",
+                    day:"2-digit"
+                }
+            ),
+
+        category:item.name,
+
+        amount,
+
+        memo,
+
+        annual:false,
+
+        paymentMethod,
+
+        cashExpense:
+            paymentMethod === "cash",
+
+        targetMonth:
+            `${getDisplayYear()}-${
+                String(currentMonth)
+                    .padStart(2,"0")
+            }`
+
+    });
+
+    update();
+
+}
+
 /* ===========================
    ⑥ ページ切替・設定
 =========================== */
