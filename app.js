@@ -181,11 +181,10 @@ annualCategories:[
     history:[],
 
     atm:{
-        amount:0,
+        withdrawn:0,
+        cashSpent:0,
         coop:0,
-        food:0,
-        gas:0,
-        holiday:0,
+        holidayCount:0,
         date:null
     }
 
@@ -396,11 +395,10 @@ app.bonus = {
     app.incomeHistory=[];
 
     app.atm={
-        amount:0,
+        withdrawn:0,
+        cashSpent:0,
         coop:0,
-        food:0,
-        gas:0,
-        holiday:0,
+        holidayCount:0,
         date:null
     };
     
@@ -423,8 +421,21 @@ app.bonus = {
         app.incomeHistory =
             data.incomeHistory || [];
 
-        app.atm =
-            data.atm || app.atm;
+        app.atm = {
+            ...app.atm,
+            ...(data.atm || {})
+        };
+
+        // 旧ATMデータが残っている場合の移行
+        if(app.atm.withdrawn === undefined){
+            app.atm.withdrawn = Number(data.atm?.amount || 0);
+        }
+        if(app.atm.cashSpent === undefined){
+            app.atm.cashSpent = 0;
+        }
+        if(app.atm.holidayCount === undefined){
+            app.atm.holidayCount = 0;
+        }
         
         
     }
@@ -756,6 +767,50 @@ function update(){
 /* ===========================
    ⑤ カテゴリ・収入・支出
 =========================== */
+function getAtmPlan(){
+
+    const foodBudget =
+        Number(app.budgets.find(item=>item.id==="food")?.budget || 80000);
+
+    const gasBudget =
+        Number(app.budgets.find(item=>item.id==="gas")?.budget || 17000);
+
+    const coop =
+        Number(app.atm.coop || 0);
+
+    const foodCashBudget =
+        Math.max(foodBudget - coop, 0);
+
+    const withdrawn =
+        Number(app.atm.withdrawn || 0);
+
+    const gasCashBudget =
+        Math.min(gasBudget, Math.max(withdrawn - foodCashBudget, 0));
+
+    const holidayBudget =
+        Math.max(
+            withdrawn - foodCashBudget - gasCashBudget,
+            0
+        );
+
+    const cashBalance =
+        Math.max(
+            withdrawn - Number(app.atm.cashSpent || 0),
+            0
+        );
+
+    return {
+        foodBudget,
+        gasBudget,
+        coop,
+        foodCashBudget,
+        gasCashBudget,
+        holidayBudget,
+        cashBalance
+    };
+
+}
+
 function drawCategories(){
 
     const grid =
@@ -763,12 +818,7 @@ function drawCategories(){
 
     if(!grid) return;
 
-    /*
-       🏧 ATM
-       ATMは「支出」ではなく、
-       現金を食費・ガソリン・休日へ
-       振り分けるための管理機能。
-    */
+    const plan = getAtmPlan();
 
     grid.innerHTML = `
 
@@ -781,7 +831,21 @@ onclick="openATM()">
     </span>
 
     <span class="input-left">
-        ¥${Number(app.atm.amount || 0).toLocaleString()}
+        ¥${plan.cashBalance.toLocaleString()}
+    </span>
+
+</button>
+
+<button
+class="input-card"
+onclick="addCoop()">
+
+    <span class="input-name">
+        🛒 生協
+    </span>
+
+    <span class="input-left">
+        ¥${plan.coop.toLocaleString()}
     </span>
 
 </button>
@@ -790,8 +854,19 @@ onclick="openATM()">
 
     app.budgets.forEach((item,index)=>{
 
-        const remain =
-            item.budget - item.spent;
+        const used =
+            Number(item.spent || 0);
+
+        const isCashCategory =
+            ["food","holiday","gas"].includes(item.id);
+
+        let displayUsed = used;
+
+        // 生協は食費に含めるので、食費カードの使用額はそのまま合計表示
+        // ATM現金の残高は別管理する
+        if(isCashCategory && item.id === "food"){
+            displayUsed = used;
+        }
 
         grid.innerHTML += `
 
@@ -803,8 +878,8 @@ onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
         ${item.name}
     </span>
 
-    <span class="input-left ${remain<0?"over":""}">
-        ¥${remain.toLocaleString()}
+    <span class="input-left ${displayUsed>item.budget?"over":""}">
+        ¥${displayUsed.toLocaleString()}
     </span>
 
 </button>
@@ -814,97 +889,39 @@ onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
     });
 
 }
+
 function openATM(){
 
     openNumberModal(
-        "🏧 ATM引出額",
+        "🏧 ATMから下ろす金額",
         (amount)=>{
 
             if(amount<=0) return;
 
             openNumberModal(
-                "🛒 生協引落額（食費）",
-                (coop)=>{
+                "🎉 今月の休日回数",
+                (holidayCount)=>{
 
-                    coop =
-                        Math.max(
-                            0,
-                            Number(coop || 0)
+                    holidayCount = Math.max(
+                        0,
+                        Math.floor(Number(holidayCount || 0))
+                    );
+
+                    app.atm.withdrawn =
+                        Number(app.atm.withdrawn || 0) + amount;
+
+                    app.atm.holidayCount =
+                        holidayCount;
+
+                    app.atm.date =
+                        new Date().toLocaleDateString(
+                            "ja-JP",
+                            {
+                                year:"numeric",
+                                month:"2-digit",
+                                day:"2-digit"
+                            }
                         );
-
-                    /*
-                       食費80,000円から
-                       生協引落分を先に差し引く
-                    */
-
-                    const foodNeed =
-                        Math.max(
-                            80000 - coop,
-                            0
-                        );
-
-                    let remaining = amount;
-
-                    /*
-                       ① 食費
-                    */
-
-                    const food =
-                        Math.min(
-                            foodNeed,
-                            remaining
-                        );
-
-                    remaining -= food;
-
-                    /*
-                       ② ガソリン
-                       最大17,000円
-                    */
-
-                    const gas =
-                        Math.min(
-                            17000,
-                            remaining
-                        );
-
-                    remaining -= gas;
-
-                    /*
-                       ③ 休日
-                       残った金額を全部入れる
-                    */
-
-                    const holiday =
-                        Math.max(
-                            remaining,
-                            0
-                        );
-
-                    app.atm = {
-
-                        amount,
-
-                        coop,
-
-                        food,
-
-                        gas,
-
-                        holiday,
-
-                        date:
-                            new Date()
-                                .toLocaleDateString(
-                                    "ja-JP",
-                                    {
-                                        year:"numeric",
-                                        month:"2-digit",
-                                        day:"2-digit"
-                                    }
-                                )
-
-                    };
 
                     update();
 
@@ -915,6 +932,130 @@ function openATM(){
     );
 
 }
+
+function addCoop(){
+
+    openNumberModal(
+        "🛒 生協（翌月の食費）",
+        (amount,memo)=>{
+
+            if(amount<=0) return;
+
+            /*
+               生協はATM現金とは完全に別。
+               滝沢銀行から引き落とされる食費として、
+               翌月分の食費に登録する。
+            */
+
+            const nextMonth =
+                currentMonth === 12
+                    ? 1
+                    : currentMonth + 1;
+
+            const nextYear =
+                nextMonth <= 3
+                    ? currentYear + 1
+                    : currentYear;
+
+            const nextKey =
+                `maru-kakei-${nextYear}-${String(nextMonth).padStart(2,"0")}`;
+
+            const saved =
+                localStorage.getItem(nextKey);
+
+            let data;
+
+            if(saved){
+                try{
+                    data = JSON.parse(saved);
+                }catch(e){
+                    data = null;
+                }
+            }
+
+            if(!data){
+                data = {
+                    bank:{mitake:0,takizawa:0},
+                    income:{papa:0,mama:0,extra:0},
+                    budgets:createDefaultBudgets(),
+                    history:[],
+                    incomeHistory:[],
+                    atm:{
+                        withdrawn:0,
+                        cashSpent:0,
+                        coop:0,
+                        holidayCount:0,
+                        date:null
+                    }
+                };
+            }
+
+            data.bank = data.bank || {mitake:0,takizawa:0};
+            data.income = data.income || {papa:0,mama:0,extra:0};
+            data.budgets = data.budgets || createDefaultBudgets();
+            data.history = data.history || [];
+            data.incomeHistory = data.incomeHistory || [];
+            data.atm = {
+                withdrawn:0,
+                cashSpent:0,
+                coop:0,
+                holidayCount:0,
+                date:null,
+                ...(data.atm || {})
+            };
+
+            data.atm.coop =
+                Number(data.atm.coop || 0) + amount;
+
+            const food =
+                data.budgets.find(item=>item.id==="food");
+
+            if(food){
+                food.spent =
+                    Number(food.spent || 0) + amount;
+            }
+
+            const date =
+                new Date().toLocaleDateString(
+                    "ja-JP",
+                    {
+                        year:"numeric",
+                        month:"2-digit",
+                        day:"2-digit"
+                    }
+                );
+
+            data.history.unshift({
+                id:Date.now().toString(),
+                date,
+                category:"🍚 食費",
+                amount,
+                memo:`🛒 生協${memo ? "｜" + memo : ""}`,
+                annual:false,
+                coop:true,
+                targetMonth:`${nextYear}-${String(nextMonth).padStart(2,"0")}`
+            });
+
+            localStorage.setItem(
+                nextKey,
+                JSON.stringify(data)
+            );
+
+            // 今見ている月が翌月なら、そのまま画面にも反映
+            if(
+                currentMonth === nextMonth &&
+                currentYear === nextYear
+            ){
+                load();
+            }
+
+            update();
+
+        }
+    );
+
+}
+
 function addIncome(type){
 
     openNumberModal("収入金額",(amount,memo)=>{
@@ -1028,19 +1169,11 @@ document
     app.history = [];
 
     app.atm = {
-
-        amount:0,
-
+        withdrawn:0,
+        cashSpent:0,
         coop:0,
-
-        food:0,
-
-        gas:0,
-
-        holiday:0,
-
+        holidayCount:0,
         date:null
-
     };
 
     update();
@@ -1083,11 +1216,26 @@ function addSpent(index,isOverwrite=false){
 
             if(isOverwrite){
 
+                const previous =
+                    Number(app.budgets[index].spent || 0);
+
                 app.budgets[index].spent = amount;
+
+                if(["food","holiday","gas"].includes(app.budgets[index].id)){
+                    app.atm.cashSpent = Math.max(
+                        0,
+                        Number(app.atm.cashSpent || 0) - previous + amount
+                    );
+                }
 
             }else{
 
                 app.budgets[index].spent += amount;
+
+                if(["food","holiday","gas"].includes(app.budgets[index].id)){
+                    app.atm.cashSpent =
+                        Number(app.atm.cashSpent || 0) + amount;
+                }
 
             }
 
@@ -1111,6 +1259,9 @@ function addSpent(index,isOverwrite=false){
                 memo,
 
                 annual: false,
+
+                cashExpense:
+                    ["food","holiday","gas"].includes(app.budgets[index].id),
 
                 targetMonth: `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
 
@@ -2036,6 +2187,28 @@ function deleteCategoryHistory(historyId){
                 Number(budget.spent || 0) - Number(target.amount || 0)
             );
 
+        }
+
+        data.atm = data.atm || {
+            withdrawn:0,
+            cashSpent:0,
+            coop:0,
+            holidayCount:0,
+            date:null
+        };
+
+        if(target.coop){
+            data.atm.coop = Math.max(
+                0,
+                Number(data.atm.coop || 0) - Number(target.amount || 0)
+            );
+        }
+
+        if(target.cashExpense){
+            data.atm.cashSpent = Math.max(
+                0,
+                Number(data.atm.cashSpent || 0) - Number(target.amount || 0)
+            );
         }
 
         localStorage.setItem(
