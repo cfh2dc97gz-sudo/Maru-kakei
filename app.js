@@ -178,7 +178,16 @@ annualCategories:[
 
     budgets:createDefaultBudgets(),
 
-    history:[]
+    history:[],
+
+    atm:{
+        amount:0,
+        coop:0,
+        food:0,
+        gas:0,
+        holiday:0,
+        date:null
+    }
 
 };
 
@@ -276,12 +285,16 @@ function save(){
         ),
 
         history: JSON.parse(
-    JSON.stringify(app.history)
-),
+            JSON.stringify(app.history)
+        ),
 
-incomeHistory: JSON.parse(
-    JSON.stringify(app.incomeHistory)
-)
+        incomeHistory: JSON.parse(
+            JSON.stringify(app.incomeHistory)
+        ),
+
+        atm: JSON.parse(
+            JSON.stringify(app.atm)
+        )
 
     };
 
@@ -378,8 +391,18 @@ app.bonus = {
 };
     app.budgets=createDefaultBudgets();
 
-    app.history=[];
-app.incomeHistory=[];
+     app.history=[];
+
+    app.incomeHistory=[];
+
+    app.atm={
+        amount:0,
+        coop:0,
+        food:0,
+        gas:0,
+        holiday:0,
+        date:null
+    };
     
     const monthSaved=
         localStorage.getItem(getKey());
@@ -395,8 +418,14 @@ app.incomeHistory=[];
 
         app.budgets=data.budgets || app.budgets;
 
-        app.history=data.history || [];
-app.incomeHistory = data.incomeHistory || [];
+              app.history=data.history || [];
+
+        app.incomeHistory =
+            data.incomeHistory || [];
+
+        app.atm =
+            data.atm || app.atm;
+        
         
     }
 
@@ -727,7 +756,6 @@ function update(){
 /* ===========================
    ⑤ カテゴリ・収入・支出
 =========================== */
-
 function drawCategories(){
 
     const grid =
@@ -735,7 +763,30 @@ function drawCategories(){
 
     if(!grid) return;
 
-    grid.innerHTML = "";
+    /*
+       🏧 ATM
+       ATMは「支出」ではなく、
+       現金を食費・ガソリン・休日へ
+       振り分けるための管理機能。
+    */
+
+    grid.innerHTML = `
+
+<button
+class="input-card atm-card"
+onclick="openATM()">
+
+    <span class="input-name">
+        🏧 ATM
+    </span>
+
+    <span class="input-left">
+        ¥${Number(app.atm.amount || 0).toLocaleString()}
+    </span>
+
+</button>
+
+`;
 
     app.budgets.forEach((item,index)=>{
 
@@ -763,7 +814,107 @@ onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
     });
 
 }
+function openATM(){
 
+    openNumberModal(
+        "🏧 ATM引出額",
+        (amount)=>{
+
+            if(amount<=0) return;
+
+            openNumberModal(
+                "🛒 生協引落額（食費）",
+                (coop)=>{
+
+                    coop =
+                        Math.max(
+                            0,
+                            Number(coop || 0)
+                        );
+
+                    /*
+                       食費80,000円から
+                       生協引落分を先に差し引く
+                    */
+
+                    const foodNeed =
+                        Math.max(
+                            80000 - coop,
+                            0
+                        );
+
+                    let remaining = amount;
+
+                    /*
+                       ① 食費
+                    */
+
+                    const food =
+                        Math.min(
+                            foodNeed,
+                            remaining
+                        );
+
+                    remaining -= food;
+
+                    /*
+                       ② ガソリン
+                       最大17,000円
+                    */
+
+                    const gas =
+                        Math.min(
+                            17000,
+                            remaining
+                        );
+
+                    remaining -= gas;
+
+                    /*
+                       ③ 休日
+                       残った金額を全部入れる
+                    */
+
+                    const holiday =
+                        Math.max(
+                            remaining,
+                            0
+                        );
+
+                    app.atm = {
+
+                        amount,
+
+                        coop,
+
+                        food,
+
+                        gas,
+
+                        holiday,
+
+                        date:
+                            new Date()
+                                .toLocaleDateString(
+                                    "ja-JP",
+                                    {
+                                        year:"numeric",
+                                        month:"2-digit",
+                                        day:"2-digit"
+                                    }
+                                )
+
+                    };
+
+                    update();
+
+                }
+            );
+
+        }
+    );
+
+}
 function addIncome(type){
 
     openNumberModal("収入金額",(amount,memo)=>{
@@ -871,10 +1022,26 @@ document
 
     };
 
-    app.budgets =
+      app.budgets =
         createDefaultBudgets();
 
     app.history = [];
+
+    app.atm = {
+
+        amount:0,
+
+        coop:0,
+
+        food:0,
+
+        gas:0,
+
+        holiday:0,
+
+        date:null
+
+    };
 
     update();
 
