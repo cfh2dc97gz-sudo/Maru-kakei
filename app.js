@@ -1950,6 +1950,395 @@ function getHolidayCoach(){
 
 }
 
+function getAnnualCoachData(){
+
+    const months = getFiscalMonths();
+
+    const currentIndex =
+        Math.max(
+            months.indexOf(currentMonth),
+            0
+        );
+
+    /*
+       現在月までの銀行予測を「今ここにあるお金」として扱う。
+       ここから先だけを未来予測するので、
+       今月分を二重計上しない。
+    */
+
+    const currentBank =
+        getBankForecast();
+
+    const startBank =
+        Number(app.startBank || 0);
+
+    const currentSaving =
+        currentBank - startBank;
+
+    /*
+       年度内に記録されている月から
+       「自然に残る金額」の平均を出す。
+
+       ボーナスは別管理なので、
+       ここでは通常収入・通常支出だけを見る。
+    */
+
+    const completedNets = [];
+
+    months.forEach((month,index)=>{
+
+        if(index > currentIndex) return;
+
+        const info =
+            getFiscalMonthInfo(month);
+
+        const data =
+            getMonthData(
+                info.year,
+                info.month
+            );
+
+        if(!data) return;
+
+        const income =
+            getMonthIncomeTotal(data);
+
+        const outflow =
+            getMonthBankOutflow(data);
+
+        /*
+           収入も支出もまだない月は
+           平均に入れない。
+        */
+
+        if(income===0 && outflow===0){
+            return;
+        }
+
+        completedNets.push(
+            income - outflow
+        );
+
+    });
+
+    /*
+       今月の予測があるので、
+       実績のある月の平均を自然な月間貯金額にする。
+
+       ただし極端な赤字月だけで
+       無茶な節約額にならないよう、
+       0円未満はそのまま「赤字」として扱う。
+    */
+
+    let naturalMonthly = 0;
+
+    if(completedNets.length){
+
+        naturalMonthly =
+            Math.round(
+                completedNets.reduce(
+                    (sum,value)=>sum+value,
+                    0
+                ) /
+                completedNets.length
+            );
+
+    }
+
+    /*
+       データがまだ少ない場合は、
+       現在月の収支から予測する。
+    */
+
+    if(completedNets.length===0){
+
+        const currentData = {
+            income:
+                app.income,
+            budgets:
+                app.budgets,
+            atm:
+                app.atm
+        };
+
+        naturalMonthly =
+            getMonthIncomeTotal(
+                currentData
+            ) -
+            getMonthBankOutflow(
+                currentData
+            );
+
+    }
+
+    /*
+       残り月数。
+       現在月はすでに currentBank に反映済みなので、
+       「未来の月」だけを加える。
+    */
+
+    const futureMonths =
+        Math.max(
+            months.length -
+            currentIndex -
+            1,
+            0
+        );
+
+    const naturalFuture =
+        naturalMonthly *
+        futureMonths;
+
+    /*
+       ボーナスは「実際に積み立てる金額」だけを
+       年間目標に加える。
+       まだ実績がないものは予測値を使う。
+    */
+
+    const bonusFuture =
+        getBonusKeepTotal();
+
+    /*
+       現在の自然な貯金
+       ＋ 今後の自然な貯金
+       ＋ ボーナス
+       ＝ 今のままの年間予測
+    */
+
+    const noChangeForecast =
+        currentSaving +
+        naturalFuture +
+        bonusFuture;
+
+    const goal =
+        Number(app.goal || 0);
+
+    const gap =
+        Math.max(
+            goal - noChangeForecast,
+            0
+        );
+
+    const surplus =
+        Math.max(
+            noChangeForecast - goal,
+            0
+        );
+
+    const monthlyExtra =
+        futureMonths > 0
+            ? Math.ceil(
+                gap /
+                futureMonths
+            )
+            : gap;
+
+    let status = "green";
+    let statusText =
+        "🟢 このままなら達成できそう";
+
+    if(gap>0){
+
+        /*
+           自然な月間貯金額に対して
+           必要な追加額がどれくらい重いかで判定。
+        */
+
+        if(
+            naturalMonthly > 0 &&
+            monthlyExtra <=
+                naturalMonthly * 0.3
+        ){
+
+            status = "yellow";
+            statusText =
+                "🟡 少し頑張れば達成できそう";
+
+        }else{
+
+            status = "red";
+            statusText =
+                "🔴 今のペースではかなり厳しい";
+
+        }
+
+    }
+
+    return {
+
+        currentBank,
+        startBank,
+        currentSaving,
+
+        naturalMonthly,
+        futureMonths,
+        naturalFuture,
+
+        bonusFuture,
+
+        noChangeForecast,
+
+        goal,
+        gap,
+        surplus,
+
+        monthlyExtra,
+
+        status,
+        statusText
+
+    };
+
+}
+
+function getAnnualCutPlan(extraNeed){
+
+    if(extraNeed<=0){
+        return [];
+    }
+
+    const food =
+        app.budgets.find(
+            item=>item.id==="food"
+        );
+
+    const holiday =
+        app.budgets.find(
+            item=>item.id==="holiday"
+        );
+
+    /*
+       「残り予算」ではなく、
+       現実に減らせる余地を見て
+       食費・休日へ分ける。
+
+       ガソリンは今の段階では
+       節約計画に強く入れない。
+    */
+
+    const candidates = [
+
+        {
+            id:"food",
+            name:"🍚 食費",
+            max:
+                Math.floor(
+                    Number(food?.budget || 0)
+                    * 0.15 /
+                    1000
+                ) * 1000
+        },
+
+        {
+            id:"holiday",
+            name:"🎉 休日",
+            max:
+                Math.floor(
+                    Number(holiday?.budget || 0)
+                    * 0.15 /
+                    1000
+                ) * 1000
+        }
+
+    ];
+
+    let rest =
+        Math.max(
+            extraNeed,
+            0
+        );
+
+    const result = [];
+
+    /*
+       まず食費と休日を半分ずつに近づける。
+       片方だけに無理をさせない。
+    */
+
+    const firstTarget =
+        Math.ceil(
+            rest / 2 / 1000
+        ) * 1000;
+
+    candidates.forEach(candidate=>{
+
+        if(rest<=0) return;
+
+        const cut =
+            Math.min(
+                firstTarget,
+                candidate.max,
+                Math.ceil(rest/1000)*1000
+            );
+
+        if(cut>0){
+
+            result.push({
+                name:candidate.name,
+                amount:cut
+            });
+
+            rest -= cut;
+
+        }
+
+    });
+
+    /*
+       まだ足りなければ残った余地から補う。
+    */
+
+    candidates.forEach(candidate=>{
+
+        if(rest<=0) return;
+
+        const already =
+            result.find(
+                item=>item.name===candidate.name
+            )?.amount || 0;
+
+        const available =
+            Math.max(
+                candidate.max - already,
+                0
+            );
+
+        const cut =
+            Math.min(
+                available,
+                Math.ceil(rest/1000)*1000
+            );
+
+        if(cut>0){
+
+            const existing =
+                result.find(
+                    item=>item.name===candidate.name
+                );
+
+            if(existing){
+
+                existing.amount += cut;
+
+            }else{
+
+                result.push({
+                    name:candidate.name,
+                    amount:cut
+                });
+
+            }
+
+            rest -= cut;
+
+        }
+
+    });
+
+    return result;
+
+}
+
 function drawAI(){
 
     const ai =
@@ -1957,7 +2346,19 @@ function drawAI(){
 
     if(!ai) return;
 
-    const plan = getAtmPlan();
+    const income =
+        Number(app.income.papa || 0) +
+        Number(app.income.mama || 0) +
+        Number(app.income.extra || 0);
+
+    /*
+       収入0円でも
+       「あと使える金額」は表示する。
+       AIを収入入力待ちで止めない。
+    */
+
+    const plan =
+        getAtmPlan();
 
     const food =
         app.budgets.find(
@@ -1974,40 +2375,22 @@ function drawAI(){
             item=>item.id==="gas"
         );
 
-    /*
-       ===========================
-       ① まず「あといくら使える？」
-       ===========================
-    */
-
-    const foodUsed =
-        Number(food?.spent || 0);
-
     const foodRemaining =
         Math.max(
             Number(food?.budget || 0) -
-            foodUsed,
+            Number(food?.spent || 0),
             0
         );
 
-    const gasUsed =
-        Number(gas?.spent || 0);
-
     const gasRemaining =
         Math.max(
-            plan.gasBudget -
-            gasUsed,
+            Number(gas?.budget || 0) -
+            Number(gas?.spent || 0),
             0
         );
 
     const holidayCoach =
         getHolidayCoach();
-
-    const holidayUsed =
-        Number(holiday?.spent || 0);
-
-    const holidayRemaining =
-        holidayCoach.remaining;
 
     let html = `
 
@@ -2052,7 +2435,7 @@ function drawAI(){
         ">
             <span>🎉 休日</span>
             <strong>
-                ¥${holidayRemaining.toLocaleString()}
+                ¥${holidayCoach.remaining.toLocaleString()}
             </strong>
         </div>
 
@@ -2071,12 +2454,12 @@ function drawAI(){
         </div>
 
     </div>
+
 `;
 
     if(holidayCoach.hasPlan){
 
         html += `
-
 <div style="
     margin-top:9px;
     font-size:13px;
@@ -2094,24 +2477,10 @@ function drawAI(){
 
         html += `</div>`;
 
-    }else{
-
-        html += `
-<div style="
-    margin-top:9px;
-    font-size:13px;
-    opacity:.7;
-">
-🎉 休日回数をATMから入力すると、1回あたりの目安を計算します。
-</div>
-`;
-
     }
 
     /*
-       ===========================
-       ② 今日の休日コーチ
-       ===========================
+       今日の休日コーチ
     */
 
     if(holidayCoach.hasPlan){
@@ -2186,113 +2555,11 @@ function drawAI(){
     }
 
     /*
-       ===========================
-       ③ 年間目標コーチ
-       ===========================
+       年間コーチ
     */
 
-    const income =
-        Number(app.income.papa || 0) +
-        Number(app.income.mama || 0) +
-        Number(app.income.extra || 0);
-
-    const currentForecast =
-        getBankForecast();
-
-    const currentSaving =
-        currentForecast -
-        Number(app.startBank || 0);
-
-    const bonusKeep =
-        getBonusKeepTotal();
-
-    const projectedSaving =
-        Math.max(
-            currentSaving + bonusKeep,
-            0
-        );
-
-    const goal =
-        Number(app.goal || 0);
-
-    const goalGap =
-        Math.max(
-            goal - projectedSaving,
-            0
-        );
-
-    const monthsLeft =
-        Math.max(
-            12 -
-            getFiscalMonths().indexOf(currentMonth) - 1,
-            0
-        );
-
-    const monthlyExtra =
-        monthsLeft > 0
-            ? Math.ceil(
-                goalGap / monthsLeft
-            )
-            : goalGap;
-
-    /*
-       今月の追加節約目標は、
-       年間コーチの不足額を残り月数で割る。
-       ただし現在の支出カテゴリから
-       無理のない候補を最大20%まで選ぶ。
-    */
-
-    const candidates = [
-        {
-            id:"food",
-            name:"🍚 食費",
-            remaining:foodRemaining
-        },
-        {
-            id:"holiday",
-            name:"🎉 休日",
-            remaining:holidayRemaining
-        }
-    ];
-
-    let extraNeed =
-        Math.max(
-            monthlyExtra,
-            0
-        );
-
-    const cuts = [];
-
-    for(const candidate of candidates){
-
-        if(extraNeed<=0) break;
-
-        const possible =
-            Math.floor(
-                candidate.remaining / 1000
-            ) * 1000;
-
-        if(possible<=0) continue;
-
-        const cut =
-            Math.min(
-                Math.ceil(extraNeed / 1000) * 1000,
-                possible,
-                10000
-            );
-
-        if(cut>0){
-
-            cuts.push({
-                name:candidate.name,
-                amount:cut
-            });
-
-            extraNeed -= cut;
-
-        }
-
-    }
+    const annual =
+        getAnnualCoachData();
 
     html += `
 <div style="
@@ -2300,58 +2567,143 @@ function drawAI(){
     padding-top:16px;
     border-top:1px solid rgba(0,0,0,.08);
 ">
+
     <div style="
         font-size:15px;
         font-weight:800;
-        margin-bottom:7px;
+        margin-bottom:9px;
     ">
-        🎯 年間目標コーチ
+        🏆 年間コーチ
+    </div>
+
+    <div style="
+        font-weight:800;
+        margin-bottom:8px;
+    ">
+        ${annual.statusText}
+    </div>
+
+    <div style="
+        font-size:13px;
+        line-height:1.75;
+    ">
+        🎯 年間目標
+        ¥${annual.goal.toLocaleString()}<br>
+
+        💰 今の貯金ペース
+        ¥${annual.currentSaving.toLocaleString()}<br>
+
+        🔮 このままなら年度末
+        ¥${annual.noChangeForecast.toLocaleString()}<br>
+
+        🌱 今後、自然に貯まりそうな額
+        月約¥${annual.naturalMonthly.toLocaleString()}
+        × ${annual.futureMonths}か月
+        ＝ ¥${annual.naturalFuture.toLocaleString()}<br>
+
+        🎁 ボーナス見込み
+        ¥${annual.bonusFuture.toLocaleString()}
     </div>
 `;
 
-    if(goalGap<=0){
+    if(annual.gap<=0){
 
         html += `
-🎉 今の予測では年間目標を達成できるペースです！
+<div style="
+    margin-top:10px;
+    font-weight:700;
+">
+🎉 目標達成圏内です！
 `;
+
+        if(annual.surplus>0){
+
+            html +=
+                `<br>目標より約¥${annual.surplus.toLocaleString()}上回る予測です。`;
+
+        }
+
+        html += `</div>`;
 
     }else{
 
         html += `
-年間目標まで約¥${goalGap.toLocaleString()}です。<br>
-残り${monthsLeft}か月なら、
-月約¥${monthlyExtra.toLocaleString()}の改善が必要です。
+<div style="
+    margin-top:10px;
+    line-height:1.7;
+">
+年間目標まで
+<strong>あと約¥${annual.gap.toLocaleString()}</strong>です。
 `;
+
+        if(annual.futureMonths>0){
+
+            html += `
+<br>
+残り${annual.futureMonths}か月なので、
+追加で月約
+<strong>¥${annual.monthlyExtra.toLocaleString()}</strong>
+の改善が必要です。
+`;
+
+        }
+
+        html += `</div>`;
+
+        const cuts =
+            getAnnualCutPlan(
+                annual.monthlyExtra
+            );
 
         if(cuts.length){
 
             html += `
-<div style="margin-top:8px;">
-今月は、
+<div style="
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:#fff8dc;
+    line-height:1.7;
+">
+💡 今月の調整案
+<br>
 `;
 
-            cuts.forEach((cut,index)=>{
-
-                if(index>0){
-                    html += " ＋ ";
-                }
+            cuts.forEach(item=>{
 
                 html +=
-                    `${cut.name} ¥${cut.amount.toLocaleString()}減`;
+                    `${item.name}を
+                    ¥${item.amount.toLocaleString()}減らす`;
+
+                if(
+                    cuts.indexOf(item)
+                    < cuts.length-1
+                ){
+
+                    html += "<br>";
+
+                }
 
             });
 
             html += `
-くらいから始めるのが現実的です。
+<br>
+合計約¥${cuts.reduce(
+    (sum,item)=>sum+item.amount,
+    0
+).toLocaleString()}の改善です。
 </div>
 `;
 
         }else{
 
             html += `
-<div style="margin-top:8px;">
-今月の追加節約だけでは埋めにくい金額です。
-かなり頑張る必要があります。
+<div style="
+    margin-top:10px;
+    line-height:1.7;
+">
+⚠️ 今の生活費だけで埋めるにはかなり厳しい金額です。
+無理な節約を前提にせず、目標やボーナスの見込みも確認しましょう。
 </div>
 `;
 
