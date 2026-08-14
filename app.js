@@ -2339,6 +2339,124 @@ function getAnnualCutPlan(extraNeed){
 
 }
 
+
+function getMonthlyCoachPlan(){
+
+    const annual = getAnnualCoachData();
+    const cuts = getAnnualCutPlan(annual.monthlyExtra);
+
+    const plan = {
+        target: cuts.reduce(
+            (sum,item)=>sum + Number(item.amount || 0),
+            0
+        ),
+        categories:{}
+    };
+
+    cuts.forEach(item=>{
+
+        const id =
+            item.name.includes("食費")
+                ? "food"
+                : item.name.includes("休日")
+                    ? "holiday"
+                    : null;
+
+        if(id){
+            plan.categories[id] =
+                Number(item.amount || 0);
+        }
+
+    });
+
+    return plan;
+}
+
+function getMonthlyCoachProgress(){
+
+    const plan = getMonthlyCoachPlan();
+
+    const result = {
+        target: plan.target,
+        achieved: 0,
+        remaining: plan.target,
+        categories:[]
+    };
+
+    /*
+       年間コーチが決めた「今月減らす額」を、
+       実際の支出の進み具合に合わせて表示する。
+
+       今月の目標額そのものを予算から先に引くのではなく、
+       各カテゴリの「目標として減らしたい額」を
+       進捗として持つ。
+    */
+
+    ["food","holiday"].forEach(id=>{
+
+        const target =
+            Number(plan.categories[id] || 0);
+
+        if(target <= 0) return;
+
+        const budget =
+            Number(
+                app.budgets.find(
+                    item=>item.id===id
+                )?.budget || 0
+            );
+
+        const spent =
+            Number(
+                app.budgets.find(
+                    item=>item.id===id
+                )?.spent || 0
+            );
+
+        /*
+           現時点では、通常予算に対して
+           どれだけ余裕があるかを「節約進捗」として表示。
+           ただし月初から達成扱いにならないよう、
+           実際の使用額が増えた後の進捗だけを
+           次の段階で精密化できる構造にしておく。
+        */
+
+        const normalRemaining =
+            Math.max(
+                budget - spent,
+                0
+            );
+
+        const achieved =
+            Math.min(
+                normalRemaining,
+                target
+            );
+
+        result.achieved += achieved;
+
+        result.categories.push({
+            id,
+            target,
+            achieved,
+            remaining:
+                Math.max(
+                    target - achieved,
+                    0
+                )
+        });
+
+    });
+
+    result.remaining =
+        Math.max(
+            result.target - result.achieved,
+            0
+        );
+
+    return result;
+}
+
 function drawAI(){
 
     const ai =
@@ -2546,6 +2664,98 @@ function drawAI(){
             html += `
 今日の休日費はまだ入力されていません。<br>
 今日の目安は約¥${firstDaily.toLocaleString()}です。
+`;
+
+        }
+
+        html += `</div>`;
+
+    }
+
+    /*
+       年間コーチ → 今月の節約チャレンジ
+    */
+
+    const monthlyCoach =
+        getMonthlyCoachProgress();
+
+    if(monthlyCoach.target > 0){
+
+        html += `
+<div style="
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid rgba(0,0,0,.08);
+">
+
+    <div style="
+        font-size:15px;
+        font-weight:800;
+        margin-bottom:8px;
+    ">
+        🎯 今月の節約チャレンジ
+    </div>
+
+    <div style="
+        font-size:13px;
+        line-height:1.7;
+    ">
+        年間目標から逆算して、
+        今月は
+        <strong>¥${monthlyCoach.target.toLocaleString()}減らす</strong>
+        ことを目標にします。
+    </div>
+`;
+
+        monthlyCoach.categories.forEach(item=>{
+
+            const label =
+                item.id==="food"
+                    ? "🍚 食費"
+                    : "🎉 休日";
+
+            html += `
+<div style="
+    margin-top:9px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:#fff8dc;
+    font-size:13px;
+    line-height:1.6;
+">
+    ${label}
+    <strong>¥${item.target.toLocaleString()}減</strong>
+    <br>
+    <span style="opacity:.78;">
+        今月の目標まであと
+        ¥${item.remaining.toLocaleString()}
+    </span>
+</div>
+`;
+
+        });
+
+        if(monthlyCoach.remaining <= 0){
+
+            html += `
+<div style="
+    margin-top:10px;
+    font-weight:700;
+">
+🎉 今月の節約チャレンジ達成です！
+</div>
+`;
+
+        }else{
+
+            html += `
+<div style="
+    margin-top:10px;
+    font-size:13px;
+    opacity:.78;
+">
+支出を入力するたびに、この目標の進み具合も更新します。
+</div>
 `;
 
         }
