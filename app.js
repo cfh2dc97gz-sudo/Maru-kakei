@@ -936,84 +936,56 @@ function openATM(){
 function addCoop(){
 
     openNumberModal(
-        "🛒 生協（翌月の食費）",
+        "🛒 生協（今月の食費）",
         (amount,memo)=>{
 
             if(amount<=0) return;
 
             /*
                生協はATM現金とは完全に別。
-               滝沢銀行から引き落とされる食費として、
-               翌月分の食費に登録する。
+               滝沢銀行から引き落とされる食費。
+
+               請求額が今月25日までに確定するため、
+               「今見ている月」の食費として登録する。
             */
 
-            const nextMonth =
-                currentMonth === 12
-                    ? 1
-                    : currentMonth + 1;
-
-            const nextYear =
-                nextMonth <= 3
-                    ? currentYear + 1
-                    : currentYear;
-
-            const nextKey =
-                `maru-kakei-${nextYear}-${String(nextMonth).padStart(2,"0")}`;
-
-            const saved =
-                localStorage.getItem(nextKey);
-
-            let data;
-
-            if(saved){
-                try{
-                    data = JSON.parse(saved);
-                }catch(e){
-                    data = null;
-                }
-            }
-
-            if(!data){
-                data = {
-                    bank:{mitake:0,takizawa:0},
-                    income:{papa:0,mama:0,extra:0},
-                    budgets:createDefaultBudgets(),
-                    history:[],
-                    incomeHistory:[],
-                    atm:{
-                        withdrawn:0,
-                        cashSpent:0,
-                        coop:0,
-                        holidayCount:0,
-                        date:null
-                    }
-                };
-            }
-
-            data.bank = data.bank || {mitake:0,takizawa:0};
-            data.income = data.income || {papa:0,mama:0,extra:0};
-            data.budgets = data.budgets || createDefaultBudgets();
-            data.history = data.history || [];
-            data.incomeHistory = data.incomeHistory || [];
-            data.atm = {
+            app.atm = {
                 withdrawn:0,
                 cashSpent:0,
                 coop:0,
                 holidayCount:0,
                 date:null,
-                ...(data.atm || {})
+                ...(app.atm || {})
             };
 
-            data.atm.coop =
-                Number(data.atm.coop || 0) + amount;
+            /*
+               生協はATMから出ない。
+               ただし食費としては使った金額に入れる。
+            */
+
+            app.atm.coop =
+                Number(app.atm.coop || 0) + amount;
+
+            /*
+               食費の使用額に生協を加算
+            */
 
             const food =
-                data.budgets.find(item=>item.id==="food");
+                app.budgets.find(
+                    item => item.id === "food"
+                );
 
             if(food){
+
                 food.spent =
-                    Number(food.spent || 0) + amount;
+                    Number(food.spent || 0)
+                    + amount;
+
             }
+
+            /*
+               食費の履歴として保存
+            */
 
             const date =
                 new Date().toLocaleDateString(
@@ -1025,29 +997,34 @@ function addCoop(){
                     }
                 );
 
-            data.history.unshift({
+            app.history.unshift({
+
                 id:Date.now().toString(),
+
                 date,
+
                 category:"🍚 食費",
+
                 amount,
-                memo:`🛒 生協${memo ? "｜" + memo : ""}`,
+
+                memo:
+                    `🛒 生協${
+                        memo
+                        ? "｜" + memo
+                        : ""
+                    }`,
+
                 annual:false,
+
                 coop:true,
-                targetMonth:`${nextYear}-${String(nextMonth).padStart(2,"0")}`
+
+                targetMonth:
+                    `${getDisplayYear()}-${
+                        String(currentMonth)
+                            .padStart(2,"0")
+                    }`
+
             });
-
-            localStorage.setItem(
-                nextKey,
-                JSON.stringify(data)
-            );
-
-            // 今見ている月が翌月なら、そのまま画面にも反映
-            if(
-                currentMonth === nextMonth &&
-                currentYear === nextYear
-            ){
-                load();
-            }
 
             update();
 
@@ -1055,7 +1032,6 @@ function addCoop(){
     );
 
 }
-
 function addIncome(type){
 
     openNumberModal("収入金額",(amount,memo)=>{
