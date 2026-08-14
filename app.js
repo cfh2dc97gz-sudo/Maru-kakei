@@ -2773,7 +2773,61 @@ function drawAI(){
             html += `
 <br>
 <span style="font-weight:700;">
-⚠️ 目標より¥${item.overTarget.toLocaleString()}多く使っています
+⚠️ 年間目標のための今月の目安より
+¥${item.overTarget.toLocaleString()}多く使っています。
+</span>
+`;
+
+            if(item.id==="holiday"){
+
+                const holidayCoach =
+                    getHolidayCoach();
+
+                if(
+                    holidayCoach.remainingCount > 0
+                ){
+
+                    /*
+                       節約チャレンジの超過分を、
+                       残りの休日で均等に調整する。
+                    */
+
+                    const adjustment =
+                        Math.ceil(
+                            item.overTarget /
+                            holidayCoach.remainingCount /
+                            100
+                        ) * 100;
+
+                    html += `
+<br>
+<span style="opacity:.82;">
+残り${holidayCoach.remainingCount}回で
+1回あたり約¥${adjustment.toLocaleString()}
+ずつ抑えると、今月の目標に近づけます。
+</span>
+`;
+
+                }
+
+            }else if(item.id==="food"){
+
+                html += `
+<br>
+<span style="opacity:.82;">
+ここからの食費を少しずつ抑えて、
+今月の目標使用額以内に戻せるか見ていきましょう。
+</span>
+`;
+
+            }
+
+        }else{
+
+            html += `
+<br>
+<span style="opacity:.78;">
+😊 今のところ、年間目標から決めた今月の使用額以内です。
 </span>
 `;
 
