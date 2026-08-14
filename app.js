@@ -1983,93 +1983,23 @@ function getAnnualCoachData(){
        ここでは通常収入・通常支出だけを見る。
     */
 
-    const completedNets = [];
-
-    months.forEach((month,index)=>{
-
-        if(index > currentIndex) return;
-
-        const info =
-            getFiscalMonthInfo(month);
-
-        const data =
-            getMonthData(
-                info.year,
-                info.month
-            );
-
-        if(!data) return;
-
-        const income =
-            getMonthIncomeTotal(data);
-
-        const outflow =
-            getMonthBankOutflow(data);
-
-        /*
-           収入も支出もまだない月は
-           平均に入れない。
-        */
-
-        if(income===0 && outflow===0){
-            return;
-        }
-
-        completedNets.push(
-            income - outflow
-        );
-
-    });
-
     /*
-       今月の予測があるので、
-       実績のある月の平均を自然な月間貯金額にする。
+       「自然に貯まりそうな額」は、
+       今は過去データの単純平均から出さない。
 
-       ただし極端な赤字月だけで
-       無茶な節約額にならないよう、
-       0円未満はそのまま「赤字」として扱う。
+       この年度は実際の銀行残高の増加が小さく、
+       過去データと現在の入力ルールも違うため、
+       まずは「月収約42万円 − 生活費約35万円」
+       という現実的な基準、月70,000円を使う。
+
+       今後データが十分に蓄積したら、
+       実績ベースへ切り替える。
     */
 
-    let naturalMonthly = 0;
+    const NATURAL_MONTHLY_BASELINE = 70000;
 
-    if(completedNets.length){
-
-        naturalMonthly =
-            Math.round(
-                completedNets.reduce(
-                    (sum,value)=>sum+value,
-                    0
-                ) /
-                completedNets.length
-            );
-
-    }
-
-    /*
-       データがまだ少ない場合は、
-       現在月の収支から予測する。
-    */
-
-    if(completedNets.length===0){
-
-        const currentData = {
-            income:
-                app.income,
-            budgets:
-                app.budgets,
-            atm:
-                app.atm
-        };
-
-        naturalMonthly =
-            getMonthIncomeTotal(
-                currentData
-            ) -
-            getMonthBankOutflow(
-                currentData
-            );
-
-    }
+    const naturalMonthly =
+        NATURAL_MONTHLY_BASELINE;
 
     /*
        残り月数。
@@ -2957,10 +2887,13 @@ function drawAI(){
         💰 今の貯金ペース
         ¥${annual.currentSaving.toLocaleString()}<br>
 
-        🌱 今の生活ペースで自然に貯まりそうな額
+        🌱 自然に貯まりそうな額の基準
         月約¥${annual.naturalMonthly.toLocaleString()}
         × ${annual.futureMonths}か月
         ＝ ¥${annual.naturalFuture.toLocaleString()}<br>
+        <span style="opacity:.72;">
+            ※現在は「月収約42万円 − 生活費約35万円」を基準に計算
+        </span><br>
 
         🎁 ボーナス見込み
         ¥${annual.bonusFuture.toLocaleString()}
