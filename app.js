@@ -696,7 +696,7 @@ function update(){
         "¥"+remain.toLocaleString();
 
     remainEl.className=
-        "summary-money "+
+        "ref-value ref-remain-value "+
         (remain>=0
             ?"plus"
             :"minus");
@@ -734,7 +734,7 @@ function update(){
 
         savingEl.className=
 
-            "bank-saving "+
+            "ref-saving "+
 
             (saving>=0
                 ?"plus"
