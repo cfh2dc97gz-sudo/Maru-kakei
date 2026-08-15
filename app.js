@@ -2150,6 +2150,10 @@ function getAnnualCutPlan(extraNeed){
        現実に減らせる余地を見て
        食費・休日へ分ける。
 
+       1カテゴリにつき通常予算の15%までを
+       現実的な節約上限として扱う。
+       その上限を超える無理な金額は提案しない。
+
        ガソリンは今の段階では
        節約計画に強く入れない。
     */
@@ -3002,6 +3006,19 @@ function drawAI(){
 
         if(cuts.length){
 
+            const suggestedTotal =
+                cuts.reduce(
+                    (sum,item)=>sum+item.amount,
+                    0
+                );
+
+            const remainingNeed =
+                Math.max(
+                    annual.monthlyExtra -
+                    suggestedTotal,
+                    0
+                );
+
             html += `
 <div style="
     margin-top:10px;
@@ -3010,7 +3027,7 @@ function drawAI(){
     background:#fff8dc;
     line-height:1.7;
 ">
-💡 今月の調整案
+💡 <strong>現実的な今月の調整案</strong>
 <br>
 `;
 
@@ -3028,10 +3045,37 @@ function drawAI(){
 
             html += `
 <br>
-合計約¥${cuts.reduce(
-    (sum,item)=>sum+item.amount,
-    0
-).toLocaleString()}の改善です。
+現実的に見込める改善は
+<strong>月約¥${suggestedTotal.toLocaleString()}</strong>です。
+`;
+
+            if(remainingNeed > 0){
+
+                html += `
+<br>
+⚠️ 目標達成に必要な
+月¥${annual.monthlyExtra.toLocaleString()}には、
+まだ<strong>約¥${remainingNeed.toLocaleString()}</strong>
+足りません。
+<br>
+<span style="opacity:.78;">
+ここを無理に食費・休日だけで削ることはせず、
+今後はボーナス・収入・特別費・目標設定なども含めて
+達成方法を考えます。
+</span>
+`;
+
+            }else{
+
+                html += `
+<br>
+🎯 この調整で、必要な月間改善額を
+まかなえる計算です。
+`;
+
+            }
+
+            html += `
 </div>
 `;
 
@@ -3043,7 +3087,9 @@ function drawAI(){
     line-height:1.7;
 ">
 ⚠️ 今の生活費だけで埋めるにはかなり厳しい金額です。
-無理な節約を前提にせず、目標やボーナスの見込みも確認しましょう。
+<br>
+無理な節約を前提にせず、ボーナス・収入・特別費・
+目標設定なども含めて達成方法を考えます。
 </div>
 `;
 
