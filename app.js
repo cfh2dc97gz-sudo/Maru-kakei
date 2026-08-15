@@ -3433,13 +3433,16 @@ function getHistoricalTrendData(){
 
 function getCurrentMonthHistoricalTrends(){
 
-    const trends =
-        getHistoricalTrendData();
+    /*
+       getHistoricalTrendData() は、
+       「現在月と同じ月」の結果そのものを返す。
 
-    return trends[currentMonth] || {
-        months: 0,
-        categories: {}
-    };
+       v10ではここで trends[currentMonth] として
+       もう一段階参照していたため、常に空データになり、
+       過去傾向の表示まで到達していなかった。
+    */
+
+    return getHistoricalTrendData();
 
 }
 
@@ -3457,16 +3460,27 @@ function getHistoricalTrendMessage(){
         return "";
     }
 
+    const preferredCategories = [
+        "🍚 食費",
+        "🎉 休日",
+        "⛽ ガソリン",
+        "💡 電気・水道",
+        "🏦 岩銀",
+        "💳 楽天",
+        "📦 その他",
+        "🏠 家賃"
+    ];
+
     const categories =
-        Object.entries(
-            trend.categories
+        preferredCategories
+        .filter(category =>
+            trend.categories[category] &&
+            trend.categories[category].average > 0
         )
-        .filter(([_,item]) => item.average > 0)
-        .sort(
-            (a,b) =>
-                b[1].average -
-                a[1].average
-        );
+        .map(category => [
+            category,
+            trend.categories[category]
+        ]);
 
     if(!categories.length){
         return "";
