@@ -626,3 +626,46 @@ body{background:var(--v29-cream)}
 @media(max-width:430px){
   .image-home{padding-bottom:88px !important}
 }
+
+
+/* =========================================================
+   Ver33｜ホーム下部バーを完全に外す＋画像を少し縦長に
+   ========================================================= */
+body{
+  padding-bottom:0 !important;
+}
+.bottom-nav{
+  display:none !important;
+}
+.image-home{
+  padding-bottom:0 !important;
+  max-width:680px !important;
+}
+.home-art{
+  /* 元画像より約6%だけ縦長に見せる */
+  height:106%;
+  aspect-ratio:auto;
+}
+.home-reference{
+  width:100%;
+  height:100%;
+  object-fit:fill;
+}
+@media(max-width:430px){
+  .image-home{padding-bottom:0 !important}
+  .home-art{height:106%}
+}
+
+
+/* =========================================================
+   Ver33｜ホーム下部バーを完全に外す＋画像を少し縦長に
+   ========================================================= */
+body{padding-bottom:0 !important;}
+.bottom-nav{display:none !important;}
+.image-home{padding-bottom:0 !important;max-width:680px !important;}
+.home-art{height:auto;aspect-ratio:1 / 1.59;}
+.home-reference{width:100%;height:100%;object-fit:fill;}
+@media(max-width:430px){
+  .image-home{padding-bottom:0 !important}
+  .home-art{height:auto;aspect-ratio:1 / 1.59}
+}
