@@ -1819,6 +1819,38 @@ function getAnnualCutPlan(extraNeed){
 
 }
 
+function getMonthlyCoachPlan(){
+
+    const annual = getAnnualCoachData();
+    const cuts = getAnnualCutPlan(annual.monthlyExtra);
+
+    const plan = {
+        target: cuts.reduce(
+            (sum,item)=>sum + Number(item.amount || 0),
+            0
+        ),
+        categories:{}
+    };
+
+    cuts.forEach(item=>{
+
+        const id =
+            item.name.includes("食費")
+                ? "food"
+                : item.name.includes("休日")
+                    ? "holiday"
+                    : null;
+
+        if(id){
+            plan.categories[id] =
+                Number(item.amount || 0);
+        }
+
+    });
+
+    return plan;
+}
+
 function getMonthlyCoachProgress(){
 
     const plan = getMonthlyCoachPlan();
