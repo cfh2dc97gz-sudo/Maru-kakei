@@ -243,3 +243,157 @@ button{color:inherit}
   #homePage .home-menu-card p{font-size:9px;margin-top:7px}
   #homePage .home-menu-arrow{width:28px;height:28px;font-size:22px;right:5px;bottom:5px}
 }
+
+/* =========================================================
+   まる家計 Ver29 — イラスト手帳風ホーム
+   参考イメージを「カード」ではなく「イラストUI」として再設計
+========================================================= */
+:root{
+  --v29-cream:#fffaf0;
+  --v29-paper:#fffdf8;
+  --v29-yellow:#f5cf55;
+  --v29-yellow-deep:#e7b82f;
+  --v29-brown:#6d5148;
+  --v29-brown-dark:#3e302b;
+  --v29-pink:#f6dce7;
+  --v29-green:#e6f0d9;
+  --v29-blue:#dff0f6;
+}
+
+body{background:var(--v29-cream)}
+#homePage.v29-home{
+  max-width:760px;
+  margin:0 auto;
+  padding:26px 18px 108px;
+  position:relative;
+  overflow:visible;
+}
+.v29-top-doodle{position:absolute;z-index:0;pointer-events:none}
+.v29-top-left{left:5px;top:6px;width:86px;transform:rotate(-5deg)}
+.v29-top-right{right:2px;top:3px;width:90px;transform:rotate(5deg)}
+.v29-month-card,.v29-summary-card,.v29-coach-card,.v29-menu-card{position:relative;z-index:1}
+
+.v29-month-card{
+  margin-top:58px;
+  display:grid;
+  grid-template-columns:66px 1fr 142px;
+  align-items:center;
+  gap:8px;
+  min-height:128px;
+  padding:12px 14px;
+  background:var(--v29-paper);
+  border:4px solid var(--v29-yellow);
+  border-radius:36px;
+  box-shadow:0 3px 0 rgba(231,184,47,.18);
+}
+.v29-round-btn{
+  width:62px;height:62px;border-radius:50%;
+  border:3px solid var(--v29-yellow);
+  background:#fffdf7;color:var(--v29-brown);
+  font-size:40px;line-height:1;font-weight:800;
+  display:grid;place-items:center;
+  padding:0;
+}
+.v29-month-actions{display:flex;justify-content:flex-end;gap:8px}
+.v29-round-btn.v29-trash{font-size:25px}
+.v29-period{text-align:center}
+#homePage.v29-home #yearSelect{font-size:23px;font-weight:950;color:var(--v29-brown);appearance:none;background:transparent;border:0;outline:0;text-align:center}
+#homePage.v29-home #period{margin:0;font-size:36px;line-height:1.15;font-weight:950;color:var(--v29-brown-dark)}
+
+.v29-summary-card{
+  margin-top:18px;padding:24px 22px 16px;
+  background:#fff;
+  border:4px solid #efda8a;
+  border-radius:34px;
+  box-shadow:0 4px 0 rgba(231,184,47,.13);
+}
+.v29-summary-top{display:grid;grid-template-columns:repeat(3,1fr)}
+.v29-summary-item{text-align:center;position:relative;padding:0 6px}
+.v29-summary-item:not(:last-child):after{content:"";position:absolute;right:0;top:10px;bottom:5px;border-right:4px dotted #e9d9b6}
+.v29-summary-icon{font-size:31px;height:38px;display:flex;justify-content:center;align-items:center}
+.v29-summary-label{font-size:21px;font-weight:900;color:var(--v29-brown);margin-top:1px}
+.v29-summary-money{font-size:36px;font-weight:950;color:var(--v29-brown-dark);letter-spacing:-.03em;white-space:nowrap}
+.v29-green .v29-summary-money{color:#2f7d39}
+.v29-dotted-divider{border-top:3px dashed #e8dcc2;margin:18px 0 10px}
+.v29-bank-row{display:grid;grid-template-columns:34px auto 1fr auto;align-items:center;gap:7px;cursor:pointer}
+.v29-bank-icon{font-size:28px}.v29-bank-label{font-size:22px;font-weight:950;color:var(--v29-brown-dark);white-space:nowrap}
+.v29-bank-total{font-size:27px;font-weight:950;white-space:nowrap}
+.v29-bank-saving{font-size:26px;font-weight:950;color:#df3b35;white-space:nowrap}
+
+.v29-coach-card{
+  margin-top:20px;padding:18px 20px 22px;
+  background:#fff3ae;
+  border:4px solid var(--v29-yellow);
+  border-radius:34px;
+  box-shadow:0 4px 0 rgba(231,184,47,.14);
+}
+.v29-coach-title-row{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.v29-chick{width:50px;height:50px;flex:0 0 auto}.v29-chick svg{width:100%;height:100%}
+.v29-coach-title-row h2{margin:0;font-size:29px;color:var(--v29-brown-dark);font-weight:950}
+.v29-sparkle{margin-left:auto;color:#e6b62f;font-size:28px}
+.v29-coach-inner{display:grid;grid-template-columns:1fr 190px;gap:13px;align-items:stretch}
+.v29-coach-bubble,.v29-challenge-note{
+  position:relative;background:#fffdf9;border:3px solid #e5d9bd;border-radius:28px;
+  box-shadow:0 2px 0 rgba(109,81,72,.06)
+}
+.v29-coach-bubble{padding:20px 22px;font-size:18px;line-height:1.7;color:var(--v29-brown)}
+.v29-coach-bubble strong{display:block;color:var(--v29-brown-dark);font-size:23px;margin-bottom:7px}
+.v29-flower{position:absolute;right:18px;top:16px;font-size:28px}
+.v29-challenge-note{padding:18px 15px 13px;transform:rotate(1deg)}
+.v29-note-title{font-size:17px;line-height:1.35;font-weight:950;color:var(--v29-brown-dark)}
+.v29-note-amount{font-size:31px;font-weight:950;color:#d79f18;margin-top:12px;white-space:nowrap}
+.v29-note-sub{font-size:14px;color:#8d7d73;margin-top:2px;font-weight:800}
+.v29-note-line{height:5px;background:#f0aaa7;border-radius:5px;margin-top:12px;transform:rotate(-2deg)}
+
+.v29-home-menu{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.v29-menu-card{
+  min-width:0;min-height:310px;padding:12px 10px 15px;border-radius:30px;
+  border:4px solid #efd26a;box-shadow:0 4px 0 rgba(231,184,47,.13);
+  position:relative;overflow:hidden;text-align:center;cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.v29-menu-card:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(231,184,47,.13)}
+.v29-menu-category{background:linear-gradient(180deg,#fff6d8,#fff0c5)}
+.v29-menu-income{background:linear-gradient(180deg,#ffeaf1,#f8ddea)}
+.v29-menu-coach{background:linear-gradient(180deg,#eaf5df,#e1eed7)}
+.v29-menu-art{height:172px;display:flex;align-items:center;justify-content:center}
+.v29-menu-art svg{width:100%;height:100%;max-width:210px;overflow:visible}
+.v29-menu-label{
+  display:inline-block;padding:7px 14px 6px;border-radius:18px;background:#fffdf8;
+  border:3px solid #e3d6ba;font-size:22px;line-height:1;font-weight:950;color:var(--v29-brown-dark);
+  box-shadow:0 2px 0 rgba(109,81,72,.06)
+}
+.v29-menu-card p{margin:12px 2px 0;font-size:14px;line-height:1.35;font-weight:850;color:var(--v29-brown);min-height:38px}
+.v29-arrow{position:absolute;right:10px;bottom:10px;width:42px;height:42px;border-radius:50%;background:#f3c641;color:#fff;font-size:37px;line-height:38px;font-weight:800;box-shadow:0 2px 0 rgba(170,125,20,.18)}
+
+/* bottom nav: reference image's soft paper look */
+.bottom-nav{
+  background:rgba(255,253,247,.97)!important;
+  border-top:3px solid #efd98d!important;
+  box-shadow:0 -3px 18px rgba(109,81,72,.05)!important;
+  padding:8px 12px 10px!important;
+}
+.bottom-nav button{font-size:29px!important;color:var(--v29-brown)!important;border-radius:28px!important;min-height:76px!important;font-weight:900!important}
+.bottom-nav button span{font-size:15px!important}
+.bottom-nav button.active{background:#fff5d7!important;color:#d59d16!important}
+
+@media (max-width:620px){
+  #homePage.v29-home{padding:18px 10px 100px}
+  .v29-top-left{width:70px;left:0;top:3px}.v29-top-right{width:74px;right:-2px;top:2px}
+  .v29-month-card{margin-top:52px;grid-template-columns:55px 1fr 116px;min-height:108px;padding:9px 10px;border-width:3px;border-radius:30px}
+  .v29-round-btn{width:52px;height:52px;font-size:34px;border-width:3px}.v29-round-btn.v29-trash{font-size:22px}.v29-month-actions{gap:5px}
+  #homePage.v29-home #yearSelect{font-size:18px}#homePage.v29-home #period{font-size:29px}
+  .v29-summary-card{margin-top:14px;padding:17px 11px 12px;border-width:3px;border-radius:29px}
+  .v29-summary-icon{font-size:25px;height:30px}.v29-summary-label{font-size:16px}.v29-summary-money{font-size:26px}
+  .v29-bank-row{grid-template-columns:27px auto 1fr auto;gap:4px}.v29-bank-icon{font-size:22px}.v29-bank-label{font-size:16px}.v29-bank-total{font-size:20px}.v29-bank-saving{font-size:19px}
+  .v29-coach-card{margin-top:14px;padding:14px 12px 16px;border-width:3px;border-radius:29px}
+  .v29-chick{width:42px;height:42px}.v29-coach-title-row h2{font-size:24px}.v29-sparkle{font-size:22px}
+  .v29-coach-inner{grid-template-columns:1fr 116px;gap:8px}.v29-coach-bubble{padding:14px 12px;font-size:14px;line-height:1.55;border-width:2px}.v29-coach-bubble strong{font-size:18px}.v29-flower{font-size:22px;right:8px;top:10px}
+  .v29-challenge-note{padding:13px 8px;border-width:2px}.v29-note-title{font-size:12px}.v29-note-amount{font-size:23px;margin-top:9px}.v29-note-sub{font-size:11px}.v29-note-line{height:4px;margin-top:8px}
+  .v29-home-menu{gap:7px;margin-top:13px}.v29-menu-card{min-height:242px;padding:8px 5px 11px;border-width:3px;border-radius:25px}.v29-menu-art{height:132px}.v29-menu-label{font-size:16px;padding:6px 8px;border-width:2px;border-radius:15px}.v29-menu-card p{font-size:10px;margin-top:8px}.v29-arrow{width:34px;height:34px;font-size:30px;line-height:31px;right:6px;bottom:6px}
+  .bottom-nav{padding:6px 8px 8px!important}.bottom-nav button{min-height:70px!important;font-size:26px!important}.bottom-nav button span{font-size:13px!important}
+}
+@media (max-width:390px){
+  .v29-summary-money{font-size:23px}.v29-bank-label{font-size:14px}.v29-bank-total{font-size:18px}.v29-bank-saving{font-size:17px}
+  .v29-menu-card{min-height:225px}.v29-menu-art{height:119px}.v29-menu-label{font-size:14px}.v29-menu-card p{font-size:9px}.v29-arrow{width:31px;height:31px;font-size:27px;line-height:28px}
+}
