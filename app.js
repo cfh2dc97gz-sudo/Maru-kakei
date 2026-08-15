@@ -738,9 +738,19 @@ function getMonthBankOutflow(data){
 
 function getBankForecast(){
 
+    /*
+       銀行予測も「現在年度」のデータだけを使う。
+       過去年度のデータはここには入れない。
+    */
+
+    const aiScope =
+        getCurrentAIDataScope();
+
     const months = getFiscalMonths();
 
-    const currentIndex = months.indexOf(currentMonth);
+    const currentIndex = months.indexOf(
+        aiScope.currentMonth
+    );
 
     let balance = Number(app.startBank || 0);
 
@@ -1951,6 +1961,15 @@ function getHolidayCoach(){
 }
 
 function getAnnualCoachData(){
+
+    /*
+       年間コーチは現在年度だけを分析対象にする。
+       過去年度は「学習材料」であり、
+       現在の年間目標・予算・節約判定には混ぜない。
+    */
+
+    const aiScope =
+        getCurrentAIDataScope();
 
     const months = getFiscalMonths();
 
@@ -3270,6 +3289,89 @@ historyList.innerHTML = "";
 /* ===========================
    ⑩ 年間グラフ
 =========================== */
+
+
+/* ===========================
+   AIデータの扱い
+=========================== */
+
+/*
+   現在のAIコーチが使ってよいデータは、
+   「現在選択している年度」のデータだけ。
+
+   過去年度のデータは、現在の家計ルールとは
+   入力方法やカテゴリの意味が違う可能性があるため、
+   現在のAIコーチの予算判定・目標判定には混ぜない。
+
+   将来、季節傾向や過去傾向を分析するときだけ、
+   getHistoricalLearningData() を学習材料として使う。
+*/
+
+function getCurrentAIDataScope(){
+
+    return {
+        fiscalYear: currentYear,
+        currentMonth,
+        source: "current-fiscal-year"
+    };
+
+}
+
+/*
+   過去年度のデータを「学習材料」として取得するための入口。
+   現在のAIコーチからは呼び出さない。
+
+   ここではデータを保存・取得できるようにするだけで、
+   過去データを現在の予算や節約判定へ混ぜない。
+*/
+
+function getHistoricalLearningData(){
+
+    const result = [];
+
+    for(let fiscalYear=2024; fiscalYear<currentYear; fiscalYear++){
+
+        const months = [
+            4,5,6,7,8,9,
+            10,11,12,
+            1,2,3
+        ];
+
+        months.forEach(month=>{
+
+            const year =
+                month <= 3
+                    ? fiscalYear + 1
+                    : fiscalYear;
+
+            const data =
+                getMonthData(year, month);
+
+            if(!data) return;
+
+            result.push({
+                fiscalYear,
+                year,
+                month,
+                incomeHistory:
+                    data.incomeHistory || [],
+                history:
+                    data.history || [],
+                budgets:
+                    data.budgets || [],
+                bank:
+                    data.bank || null,
+                bankConfirmed:
+                    data.bankConfirmed === true
+            });
+
+        });
+
+    }
+
+    return result;
+
+}
 
 function getFiscalMonths(){
 
