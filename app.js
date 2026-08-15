@@ -1966,8 +1966,16 @@ function getAnnualCoachData(){
        今月分を二重計上しない。
     */
 
+    /*
+       銀行残高を入力済みなら、年間コーチも
+       実際に入力した銀行残高を使う。
+       未入力のときだけ、これまで通り予測残高を使う。
+    */
     const currentBank =
-        getBankForecast();
+        app.bankConfirmed
+            ? Number(app.bank.mitake || 0) +
+              Number(app.bank.takizawa || 0)
+            : getBankForecast();
 
     const startBank =
         Number(app.startBank || 0);
