@@ -10,7 +10,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>まる家計 Ver12</title>
+    <title>まる家計 Ver27</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -21,6 +21,9 @@
 <!-- ホーム -->
 
 <div id="homePage">
+
+    <div class="home-decor home-decor-left">✦</div>
+    <div class="home-decor home-decor-right">🧸</div>
 
     <div class="card summary-card">
         <div class="month-header">
@@ -41,21 +44,25 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card summary-main">
         <div class="summary-grid">
-            <div class="summary-item">
+            <div class="summary-item income-summary">
+                <div class="summary-icon">💰</div>
                 <div class="summary-title">収入</div>
                 <div class="summary-money" id="incomeSummary">¥0</div>
             </div>
-            <div class="summary-item">
+            <div class="summary-item expense-summary">
+                <div class="summary-icon">💸</div>
                 <div class="summary-title">支出</div>
                 <div class="summary-money" id="spent">¥0</div>
             </div>
-            <div class="summary-item">
+            <div class="summary-item remain-summary">
+                <div class="summary-icon">👛</div>
                 <div class="summary-title">残り</div>
                 <div class="summary-money" id="remain">¥0</div>
             </div>
         </div>
+        <div class="summary-divider"></div>
         <div class="bank-row" onclick="editBank()">
             <span class="bank-label">🏦 銀行残高</span>
             <span class="bank-total" id="bankTotal">¥0</span>
@@ -64,7 +71,7 @@
     </div>
 
     <div class="card ai-card">
-        <h2>💡 今日のまるコーチ</h2>
+        <div class="coach-heading"><span class="coach-bulb">💡</span><h2>今日のまるコーチ</h2></div>
         <div class="home-coach-wrap">
             <div class="home-coach-message">
                 <strong id="homeCoachTitle">今のペースをチェック中…</strong>
