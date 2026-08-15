@@ -1310,6 +1310,88 @@ if(nextMonthBtn){
 /* ===========================
    ⑦ AI分析
 =========================== */
+function getAtmPlan(){
+
+    const foodBudget =
+        Number(app.budgets.find(item=>item.id==="food")?.budget || 80000);
+
+    const gasBudget =
+        Number(app.budgets.find(item=>item.id==="gas")?.budget || 17000);
+
+    const coop =
+        Number(app.atm.coop || 0);
+
+    const foodCashBudget =
+        Math.max(foodBudget - coop, 0);
+
+    const withdrawn =
+        Number(app.atm.withdrawn || 0);
+
+    const gasCashBudget =
+        Math.min(gasBudget, Math.max(withdrawn - foodCashBudget, 0));
+
+    const holidayBudget =
+        Math.max(
+            withdrawn - foodCashBudget - gasCashBudget,
+            0
+        );
+
+    const cashBalance =
+        Math.max(
+            withdrawn - Number(app.atm.cashSpent || 0),
+            0
+        );
+
+    return {
+        foodBudget,
+        gasBudget,
+        coop,
+        foodCashBudget,
+        gasCashBudget,
+        holidayBudget,
+        cashBalance
+    };
+
+}
+
+function getTodayCategoryTotal(categoryId){
+
+    const today = getTodayString();
+
+    return (app.history || [])
+        .filter(item =>
+            item.category ===
+            app.budgets.find(b=>b.id===categoryId)?.name
+            && item.date === today
+            && !item.annual
+            && !item.income
+        )
+        .reduce(
+            (sum,item)=>sum + Number(item.amount || 0),
+            0
+        );
+
+}
+
+function getDistinctHolidaySpendDays(){
+
+    const holidayName =
+        app.budgets.find(
+            item=>item.id==="holiday"
+        )?.name;
+
+    return new Set(
+        (app.history || [])
+            .filter(item =>
+                item.category === holidayName &&
+                !item.annual &&
+                !item.income
+            )
+            .map(item=>item.date)
+    ).size;
+
+}
+
 function getRemainingHolidayCount(){
 
     const total =
@@ -1854,6 +1936,45 @@ function getMonthlyCoachProgress(){
     return result;
 }
 
+function getGoalContinuationForecast(annual, monthlyCoach){
+
+    const monthlyImprovement =
+        Number(monthlyCoach.target || 0);
+
+    const continuedImprovement =
+        monthlyImprovement *
+        Number(annual.futureMonths || 0);
+
+    const continuedForecast =
+        Number(annual.noChangeForecast || 0) +
+        continuedImprovement;
+
+    const remainingGap =
+        Math.max(
+            Number(annual.goal || 0) -
+            continuedForecast,
+            0
+        );
+
+    const remainingSurplus =
+        Math.max(
+            continuedForecast -
+            Number(annual.goal || 0),
+            0
+        );
+
+    return {
+        monthlyImprovement,
+        continuedImprovement,
+        continuedForecast,
+        remainingGap,
+        remainingSurplus
+    };
+}
+
+/* ===========================
+   ⑦ AI分析
+=========================== */
 function drawAI(){
 
     const ai =
