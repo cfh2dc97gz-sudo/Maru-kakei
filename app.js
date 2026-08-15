@@ -92,6 +92,7 @@ const app={
     },
 
     startBank:0,
+    bankConfirmed:false,
 
     income:{
 
@@ -277,6 +278,7 @@ function save(){
     const monthData = {
 
         bank: { ...app.bank },
+        bankConfirmed: app.bankConfirmed === true,
 
         income: { ...app.income },
 
@@ -358,6 +360,7 @@ function load(){
     };
 
     app.startBank=0;
+    app.bankConfirmed=false;
 
     app.reserveMin=500000;
 
@@ -413,6 +416,7 @@ app.bonus = {
             JSON.parse(monthSaved);
 
         app.bank=data.bank || app.bank;
+        app.bankConfirmed = data.bankConfirmed === true || (Number(app.bank.mitake || 0) + Number(app.bank.takizawa || 0) > 0);
 
         app.income=data.income || app.income;
 
@@ -1056,6 +1060,7 @@ function editBank(){
             app.bank.mitake = mitake;
 
             app.bank.takizawa = takizawa;
+            app.bankConfirmed = true;
 
             if(currentMonth===4){
 
@@ -1463,6 +1468,117 @@ function getHolidayCoach(){
         today,
         todayOver:Math.max(today-firstDaily,0)
     };
+
+}
+
+function getFiscalMonthInfo(month){
+
+    return {
+        year: month <= 3 ? currentYear + 1 : currentYear,
+        month
+    };
+
+}
+
+function isBankConfirmedData(data){
+
+    if(!data) return false;
+    if(data.bankConfirmed === true) return true;
+
+    const bank = data.bank || {};
+
+    return (
+        Number(bank.mitake || 0) +
+        Number(bank.takizawa || 0)
+    ) > 0;
+
+}
+
+function getMonthIncomeTotal(data){
+
+    if(!data || !data.income) return 0;
+
+    return (
+        Number(data.income.papa || 0) +
+        Number(data.income.mama || 0) +
+        Number(data.income.extra || 0)
+    );
+
+}
+
+function getMonthBankOutflow(data){
+
+    if(!data) return 0;
+
+    const budgets = data.budgets || [];
+
+    let directSpent = budgets.reduce((sum,item)=>{
+
+        if(["food","holiday","gas"].includes(item.id)) return sum;
+        return sum + Number(item.spent || 0);
+
+    },0);
+
+    const cashOther = (data.history || []).reduce((sum,item)=>{
+
+        if(
+            item.category === "📦 その他" &&
+            item.paymentMethod === "cash"
+        ){
+            return sum + Number(item.amount || 0);
+        }
+
+        return sum;
+
+    },0);
+
+    directSpent = Math.max(0, directSpent - cashOther);
+
+    const atm = data.atm || {};
+    const coop = Number(atm.coop || 0);
+    const withdrawn = Number(atm.withdrawn || 0);
+
+    return directSpent + coop + withdrawn;
+
+}
+
+function getBankForecast(){
+
+    const months = getFiscalMonths();
+    const currentIndex = months.indexOf(currentMonth);
+
+    let balance = Number(app.startBank || 0);
+    let baseIndex = -1;
+
+    for(let i=0; i<currentIndex; i++){
+
+        const info = getFiscalMonthInfo(months[i]);
+        const data = getMonthData(info.year,info.month);
+
+        if(isBankConfirmedData(data)){
+
+            balance =
+                Number(data.bank?.mitake || 0) +
+                Number(data.bank?.takizawa || 0);
+
+            baseIndex = i;
+        }
+
+    }
+
+    for(let i=baseIndex + 1; i<=currentIndex; i++){
+
+        const info = getFiscalMonthInfo(months[i]);
+        const data = getMonthData(info.year,info.month);
+
+        if(!data) continue;
+
+        balance += getMonthIncomeTotal(data);
+        balance -= getMonthBankOutflow(data);
+
+    }
+
+    return Math.round(balance);
 
 }
 
