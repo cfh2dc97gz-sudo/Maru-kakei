@@ -1,4 +1,4 @@
-/* Ver12｜2026/7/24｜最終調整 */
+/* まる家計 Ver25｜デザインリフレッシュ */
 
 const DEFAULT_BUDGETS = [
 
@@ -4437,13 +4437,13 @@ window.addEventListener(
 );
 
 console.log(
-    "%c🌸 まる家計 Ver18",
+    "%c🌸 まる家計 Ver25",
     "color:#4CAF50;font-size:16px;font-weight:bold;"
 );
 
 console.log({
 
-    version:"18.0",
+    version:"25.0",
 
     fiscalYear:currentYear,
 
