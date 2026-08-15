@@ -78,26 +78,17 @@
         </div>
     </div>
 
-    <section class="home-menu">
-        <button class="home-menu-card category" onclick="openHomeCategory()">
-            <div class="home-menu-illust">👜🥕🧾</div>
-            <div class="home-menu-title">📒 カテゴリ</div>
-            <p>食費・休日・ガソリンなど</p>
-            <span class="home-menu-arrow">›</span>
+    <section class="home-menu image-home-menu">
+        <button class="image-menu-button" onclick="openHomeCategory()" aria-label="カテゴリ">
+            <img src="assets/category-button.jpg" alt="カテゴリ">
         </button>
 
-        <button class="home-menu-card income" onclick="openHomeIncome()">
-            <div class="home-menu-illust">👛💰✨</div>
-            <div class="home-menu-title">💰 収入</div>
-            <p>パパ・ママ・臨時</p>
-            <span class="home-menu-arrow">›</span>
+        <button class="image-menu-button" onclick="openHomeIncome()" aria-label="収入">
+            <img src="assets/income-button.jpg" alt="収入">
         </button>
 
-        <button class="home-menu-card coach" onclick="openAnnualCoach()">
-            <div class="home-menu-illust">📒📊🎯</div>
-            <div class="home-menu-title">🎯 年間コーチ</div>
-            <p>目標・予測・アドバイス</p>
-            <span class="home-menu-arrow">›</span>
+        <button class="image-menu-button" onclick="openAnnualCoach()" aria-label="年間コーチ">
+            <img src="assets/coach-button.jpg" alt="年間コーチ">
         </button>
     </section>
 
@@ -499,40 +490,26 @@ onclick="incomeFilter='extra';drawIncomeHistory();">
 </div>
 <!-- ナビゲーション -->
 
-<nav class="bottom-nav">
-
-    <button class="active">
-
-        🏠<br>
-
+<nav class="bottom-nav image-bottom-nav">
+    <button class="active" aria-label="ホーム">
+        <img src="assets/nav-home.jpg" alt="">
         <span>ホーム</span>
-
     </button>
 
-    <button>
-
-        📊<br>
-
+    <button aria-label="年間">
+        <img src="assets/nav-year.jpg" alt="">
         <span>年間</span>
-
     </button>
 
-    <button>
-
-        💰<br>
-
+    <button aria-label="特別費">
+        <img src="assets/nav-special.jpg" alt="">
         <span>特別費</span>
-
     </button>
 
-    <button>
-
-        ⚙️<br>
-
+    <button aria-label="設定">
+        <img src="assets/nav-settings.png" alt="">
         <span>設定</span>
-
     </button>
-
 </nav>
 <!-- 数字入力モーダル -->
 <div id="numberModal" class="modal" style="display:none;">
