@@ -3202,8 +3202,14 @@ function drawYearSummary(){
 
     });
 
-    const remain =
-        income - spent;
+    /*
+       年間ページの「残り」は、
+       年間収入 − 年間支出で統一する。
+
+       ボーナスを年間収入に含めているのに、
+       以前は残りの計算だけ通常収入から計算していたため、
+       「収入＋ボーナス」と「残り」の数字が一致しない状態だった。
+    */
 
     const saving =
         (
@@ -3235,6 +3241,14 @@ const bonusTotal =
     const totalIncome =
         income + bonusTotal;
 
+    /*
+       年間残りは、画面に表示する年間収入と同じ母集団で計算。
+       つまり「通常収入＋ボーナス − 支出」。
+    */
+
+    const remain =
+        totalIncome - spent;
+
     document.getElementById("yearIncome").textContent =
         "¥" + totalIncome.toLocaleString();
 
@@ -3251,8 +3265,20 @@ const bonusTotal =
         "summary-money " +
         (remain >= 0 ? "plus" : "minus");
 
-    document.getElementById("yearGoal").textContent =
-        `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+    const goalEl =
+        document.getElementById("yearGoal");
+
+    if(progress >= app.goal){
+
+        goalEl.textContent =
+            `🎉 目標達成👏  +¥${(progress - app.goal).toLocaleString()}`;
+
+    }else{
+
+        goalEl.textContent =
+            `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+
+    }
 
     document.getElementById("goalBar").style.width =
         Math.min(
