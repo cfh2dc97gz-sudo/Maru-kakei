@@ -1543,11 +1543,33 @@ function drawYearSummary(){
     }
 
     /* ===========================
-       年度末予測（安全版）
-       ※既存のボタン・画面遷移には触れない
+       年度末予測（ボーナスなし／ボーナス込み）
+       ※年間目標カードの直下に動的生成
+       ※既存のボタン・画面遷移・保存処理には触れない
     =========================== */
-    const forecastCard =
+    let forecastCard =
         document.getElementById("yearForecastCard");
+
+    if(!forecastCard){
+
+        forecastCard = document.createElement("div");
+        forecastCard.id = "yearForecastCard";
+        forecastCard.className = "card";
+        forecastCard.style.marginTop = "12px";
+
+        const goalElement =
+            document.getElementById("yearGoal");
+
+        const goalCard =
+            goalElement?.closest(".card");
+
+        if(goalCard && goalCard.parentElement){
+            goalCard.parentElement.insertBefore(
+                forecastCard,
+                goalCard.nextSibling
+            );
+        }
+    }
 
     if(forecastCard){
 
@@ -1561,6 +1583,7 @@ function drawYearSummary(){
             0
         );
 
+        // これまでの「自然に貯まりそうな額」の基準を維持。
         const monthlyNatural = 70000;
 
         const bankTotal =
@@ -1570,31 +1593,26 @@ function drawYearSummary(){
         const currentSaving =
             bankTotal - Number(app.startBank || 0);
 
-        const bonus = getBonusKeepTotal();
+        const bonusForecast = getBonusKeepTotal();
+
         const baseForecast =
             currentSaving +
             monthlyNatural * futureMonths;
 
         const forecastNoBonus = baseForecast;
-        const forecastWithBonus = baseForecast + bonus;
+        const forecastWithBonus =
+            baseForecast + bonusForecast;
 
         const goal = Number(app.goal || 0);
 
-        const noBonusGap = Math.max(
-            goal - forecastNoBonus,
-            0
-        );
+        const gapText = (forecast)=>{
+            const diff = forecast - goal;
 
-        const withBonusGap = Math.max(
-            goal - forecastWithBonus,
-            0
-        );
-
-        const status = (value,gap)=>{
-            if(gap <= 0){
-                return "🎉 目標達成圏内";
+            if(diff >= 0){
+                return `🎉 目標より＋¥${diff.toLocaleString()}`;
             }
-            return `あと¥${gap.toLocaleString()}`;
+
+            return `あと¥${Math.abs(diff).toLocaleString()}`;
         };
 
         forecastCard.innerHTML = `
@@ -1602,36 +1620,46 @@ function drawYearSummary(){
 
             <div style="
                 margin-top:10px;
-                padding:12px;
+                padding:13px;
                 border-radius:12px;
                 background:#f8f8f8;
                 line-height:1.8;
             ">
-                <strong>① ボーナスなし</strong><br>
-                年度末予測：
-                <strong>¥${forecastNoBonus.toLocaleString()}</strong><br>
-                目標との差：${status(forecastNoBonus,noBonusGap)}
+                <strong>💰 ボーナスなし</strong><br>
+                今の貯金ペース ＋ 残り${futureMonths}か月の自然な貯金<br>
+                <strong style="font-size:21px;">
+                    ¥${forecastNoBonus.toLocaleString()}
+                </strong><br>
+                <span style="opacity:.78;">
+                    ${gapText(forecastNoBonus)}
+                </span>
             </div>
 
             <div style="
                 margin-top:10px;
-                padding:12px;
+                padding:13px;
                 border-radius:12px;
                 background:#fff8dc;
                 line-height:1.8;
             ">
-                <strong>② ボーナス込み</strong><br>
-                年度末予測：
-                <strong>¥${forecastWithBonus.toLocaleString()}</strong><br>
-                目標との差：${status(forecastWithBonus,withBonusGap)}
+                <strong>🎁 ボーナス込み</strong><br>
+                ボーナス見込み ¥${bonusForecast.toLocaleString()} を含む場合<br>
+                <strong style="font-size:21px;">
+                    ¥${forecastWithBonus.toLocaleString()}
+                </strong><br>
+                <span style="opacity:.78;">
+                    ${gapText(forecastWithBonus)}
+                </span>
             </div>
 
             <div style="
                 margin-top:9px;
                 font-size:12px;
                 opacity:.7;
+                line-height:1.6;
             ">
-                ※通常分は月約¥70,000、ボーナスは現在の積立実績／予定を反映。
+                ※ボーナスなし＝ボーナスを当てにしない予測。
+                ボーナス込み＝現在のボーナス実績／予定を反映した予測。
             </div>
         `;
     }
