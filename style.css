@@ -686,3 +686,117 @@ body{background:var(--v29-cream)}
 .image-home-menu .special-expense-image-button{
     grid-column:2;
 }
+
+/* =========================================================
+   参考画像そのものをベースにしたホーム
+   数字・コメントだけHTMLで動的表示
+   ========================================================= */
+#homePage.reference-home{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:0 0 105px;
+    background:transparent;
+}
+.reference-home-art{
+    position:relative;
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    line-height:1;
+    overflow:hidden;
+}
+.reference-home-base{
+    display:block;
+    width:100%;
+    height:auto;
+    user-select:none;
+    -webkit-user-drag:none;
+}
+.ref-hit,.ref-menu-hit,.ref-coach-hit,.ref-bank-hit{
+    position:absolute;
+    border:0;
+    margin:0;
+    padding:0;
+    background:transparent;
+    cursor:pointer;
+    z-index:5;
+    -webkit-tap-highlight-color:transparent;
+}
+.ref-hit:active,.ref-menu-hit:active,.ref-coach-hit:active,.ref-bank-hit:active{
+    transform:scale(.985);
+}
+.ref-prev{left:27.5%;top:4.5%;width:8%;height:8%;}
+.ref-reset{left:66.2%;top:4.2%;width:8%;height:8%;}
+.ref-next{left:74%;top:4.5%;width:8%;height:8%;}
+.ref-month-text{
+    position:absolute;
+    left:35.5%;top:4.2%;width:29%;height:7.5%;
+    z-index:4;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#4a3932;
+    pointer-events:none;
+    font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
+}
+.ref-month-text div{font-size:clamp(13px,3.4vw,27px);font-weight:900;line-height:1.05;margin-bottom:3px;}
+.ref-month-text strong{font-size:clamp(19px,5vw,40px);font-weight:950;line-height:1.05;white-space:nowrap;}
+.ref-year-select{
+    position:absolute;left:36%;top:4%;width:28%;height:8%;z-index:2;
+    opacity:0;pointer-events:none;
+}
+.ref-value{
+    position:absolute;
+    z-index:4;
+    pointer-events:none;
+    color:#4a3932;
+    font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
+    font-size:clamp(18px,5.4vw,43px);
+    font-weight:950;
+    letter-spacing:-.025em;
+    text-align:center;
+    white-space:nowrap;
+}
+.ref-income-value{left:6%;top:15.5%;width:27%;}
+.ref-spent-value{left:36.5%;top:15.5%;width:27%;}
+.ref-remain-value{left:68.5%;top:15.5%;width:27%;color:#2f8739;}
+.ref-remain-value.minus{color:#d83a32;}
+.ref-bank-hit{left:6%;top:24.7%;width:89%;height:6.2%;text-align:left;}
+.ref-bank-total{
+    position:absolute;left:10.5%;top:0;width:40%;
+    font-size:clamp(17px,4.8vw,38px);font-weight:950;color:#4a3932;white-space:nowrap;
+}
+.ref-saving{
+    position:absolute;right:0;top:0;width:23%;
+    font-size:clamp(17px,4.8vw,38px);font-weight:950;color:#d83a32;text-align:center;white-space:nowrap;
+}
+.ref-saving.plus{color:#2f8739!important;}
+.ref-coach-hit{left:3%;top:34%;width:94%;height:21%;}
+.ref-coach-copy{
+    position:absolute;left:31.5%;top:36.2%;width:39%;height:9.5%;
+    z-index:4;pointer-events:none;color:#6a5147;
+    font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
+}
+.ref-coach-copy strong{display:block;font-size:clamp(15px,4vw,32px);font-weight:950;line-height:1.12;color:#3e302b;margin-bottom:5px;}
+.ref-coach-copy span{display:block;font-size:clamp(10px,2.7vw,22px);font-weight:750;line-height:1.42;}
+.ref-challenge-value{
+    position:absolute;left:73.5%;top:39.7%;width:20%;
+    z-index:4;pointer-events:none;text-align:center;
+    color:#d79d18;font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
+    font-size:clamp(16px,4.6vw,37px);font-weight:950;white-space:nowrap;
+}
+.ref-menu-hit{top:59.2%;height:22%;}
+.ref-category-hit{left:2.5%;width:31.5%;}
+.ref-income-hit{left:35%;width:31.5%;}
+.ref-annual-hit{left:67.5%;width:31%;}
+
+/* 画像ホームでは既存のカードUIを表示しない */
+#homePage.reference-home > .card,
+#homePage.reference-home > .home-menu{display:none!important;}
+
+@media (max-width:600px){
+    #homePage.reference-home{padding-bottom:98px;}
+}
