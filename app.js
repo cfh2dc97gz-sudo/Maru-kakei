@@ -3250,72 +3250,63 @@ const bonusTotal =
         totalIncome - spent;
 
     /*
-       年度途中でも意味が分かるよう、
+       年度途中でも分かりやすいよう、
        「ここまでの実績」と「年度末の予測」を分ける。
-       HTMLを別ファイルで編集せず、このJSから表示を整える。
+
+       年度末予測は、ホームの年間コーチと同じ考え方：
+       現在の貯金ペース
+       ＋ 残り月の自然な貯金（70,000円/月）
+       ＋ ボーナス見込み
+       ＝ 年度末予測
     */
 
-    const yearIncomeEl =
-        document.getElementById("yearIncome");
+    const bankTotal =
+        Number(app.bank.mitake || 0) +
+        Number(app.bank.takizawa || 0);
 
-    const yearSpentEl =
-        document.getElementById("yearSpent");
+    const currentSaving =
+        bankTotal -
+        Number(app.startBank || 0);
 
-    const yearRemainEl =
-        document.getElementById("yearRemain");
+    const currentProgress =
+        currentSaving +
+        getBonusKeepTotal();
 
-    if(yearIncomeEl){
-
-        const title =
-            yearIncomeEl.parentElement
-                ?.querySelector(".summary-title");
-
-        if(title){
-            title.textContent =
-                "ここまでの収入";
-        }
-
-    }
-
-    if(yearSpentEl){
-
-        const title =
-            yearSpentEl.parentElement
-                ?.querySelector(".summary-title");
-
-        if(title){
-            title.textContent =
-                "ここまでの支出";
-        }
-
-    }
-
-    if(yearRemainEl){
-
-        const title =
-            yearRemainEl.parentElement
-                ?.querySelector(".summary-title");
-
-        if(title){
-            title.textContent =
-                "ここまでの差額";
-        }
-
-    }
-
-    /*
-       年間コーチと同じ予測値を使用する。
-       年間ページ独自の予測計算は作らない。
-    */
-
-    const annual =
-        getAnnualCoachData();
-
-    const yearForecast =
-        Number(
-            annual?.forecast ??
+    const monthsLeft =
+        Math.max(
+            currentMonth <= 3
+                ? 4 - currentMonth
+                : 16 - currentMonth,
             0
         );
+
+    const naturalSaving =
+        70000 * monthsLeft;
+
+    const summerBonusForecast =
+        (app.bonus.papaSummerActual ||
+         app.bonus.mamaSummerActual)
+            ? Number(app.bonus.papaSummerActual || 0) +
+              Number(app.bonus.mamaSummerActual || 0)
+            : Number(app.bonus.papaSummerForecast || 0) +
+              Number(app.bonus.mamaSummerForecast || 0);
+
+    const winterBonusForecast =
+        (app.bonus.papaWinterActual ||
+         app.bonus.mamaWinterActual)
+            ? Number(app.bonus.papaWinterActual || 0) +
+              Number(app.bonus.mamaWinterActual || 0)
+            : Number(app.bonus.papaWinterForecast || 0) +
+              Number(app.bonus.mamaWinterForecast || 0);
+
+    const bonusForecast =
+        summerBonusForecast +
+        winterBonusForecast;
+
+    const yearForecast =
+        currentProgress +
+        naturalSaving +
+        bonusForecast;
 
     let forecastCard =
         document.getElementById("yearForecastCard");
@@ -3367,19 +3358,48 @@ const bonusTotal =
             <h3>🔮 年度末の予測</h3>
 
             <div style="
+                margin-top:10px;
+                font-size:15px;
+                line-height:1.8;
+            ">
+
+                <div>
+                    💰 今の貯金ペース
+                    <strong>
+                        ¥${currentProgress.toLocaleString()}
+                    </strong>
+                </div>
+
+                <div>
+                    🌱 残り${monthsLeft}か月の自然な貯金
+                    <strong>
+                        ¥${naturalSaving.toLocaleString()}
+                    </strong>
+                </div>
+
+                <div>
+                    🎁 ボーナス見込み
+                    <strong>
+                        ¥${bonusForecast.toLocaleString()}
+                    </strong>
+                </div>
+
+            </div>
+
+            <div style="
+                margin-top:14px;
+                padding-top:12px;
+                border-top:1px solid rgba(0,0,0,.08);
                 display:flex;
                 justify-content:space-between;
                 align-items:center;
                 gap:12px;
-                margin-top:10px;
             ">
                 <span>このままなら</span>
 
-                <strong
-                    style="
-                        font-size:22px;
-                    "
-                >
+                <strong style="
+                    font-size:24px;
+                ">
                     ¥${yearForecast.toLocaleString()}
                 </strong>
 
@@ -3390,7 +3410,7 @@ const bonusTotal =
                 color:#777;
                 line-height:1.6;
             ">
-                現在のペースなら、
+                現在の生活ペースとボーナス見込みから、
                 年度末に約¥${yearForecast.toLocaleString()}
                 残る見込みです。
             </p>
