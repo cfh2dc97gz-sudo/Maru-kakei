@@ -642,8 +642,8 @@ body{
   max-width:680px !important;
 }
 .home-art{
-  /* 元画像より約6%だけ縦長に見せる */
-  height:106%;
+  /* 元画像より約10%だけ縦長に見せる */
+  height:110%;
   aspect-ratio:auto;
 }
 .home-reference{
