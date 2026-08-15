@@ -1542,128 +1542,228 @@ function drawYearSummary(){
             ) + "%";
     }
 
-    /* ===========================
-       年度末予測（ボーナスなし／ボーナス込み）
-       ※年間目標カードの直下に動的生成
-       ※既存のボタン・画面遷移・保存処理には触れない
-    =========================== */
-    let forecastCard =
-        document.getElementById("yearForecastCard");
-
-    if(!forecastCard){
-
-        forecastCard = document.createElement("div");
-        forecastCard.id = "yearForecastCard";
-        forecastCard.className = "card";
-        forecastCard.style.marginTop = "12px";
-
-        const goalElement =
-            document.getElementById("yearGoal");
-
-        const goalCard =
-            goalElement?.closest(".card");
-
-        if(goalCard && goalCard.parentElement){
-            goalCard.parentElement.insertBefore(
-                forecastCard,
-                goalCard.nextSibling
-            );
-        }
-    }
-
-    if(forecastCard){
-
-        const months = getFiscalMonths();
-        const currentIndex = Math.max(
-            months.indexOf(currentMonth),
-            0
-        );
-        const futureMonths = Math.max(
-            months.length - currentIndex - 1,
-            0
-        );
-
-        // これまでの「自然に貯まりそうな額」の基準を維持。
-        const monthlyNatural = 70000;
-
-        const bankTotal =
-            Number(app.bank.mitake || 0) +
-            Number(app.bank.takizawa || 0);
-
-        const currentSaving =
-            bankTotal - Number(app.startBank || 0);
-
-        const bonusForecast = getBonusKeepTotal();
-
-        const baseForecast =
-            currentSaving +
-            monthlyNatural * futureMonths;
-
-        const forecastNoBonus = baseForecast;
-        const forecastWithBonus =
-            baseForecast + bonusForecast;
-
-        const goal = Number(app.goal || 0);
-
-        const gapText = (forecast)=>{
-            const diff = forecast - goal;
-
-            if(diff >= 0){
-                return `🎉 目標より＋¥${diff.toLocaleString()}`;
-            }
-
-            return `あと¥${Math.abs(diff).toLocaleString()}`;
+    // 年間目標の内訳をタップで確認できるようにする。
+    if(goalEl){
+        goalEl.style.cursor = "pointer";
+        goalEl.title = "タップすると年間目標の内訳を表示";
+        goalEl.onclick = (event)=>{
+            event.stopPropagation();
+            showAnnualGoalDetail();
         };
-
-        forecastCard.innerHTML = `
-            <h3>🔮 年度末の予測</h3>
-
-            <div style="
-                margin-top:10px;
-                padding:13px;
-                border-radius:12px;
-                background:#f8f8f8;
-                line-height:1.8;
-            ">
-                <strong>💰 ボーナスなし</strong><br>
-                今の貯金ペース ＋ 残り${futureMonths}か月の自然な貯金<br>
-                <strong style="font-size:21px;">
-                    ¥${forecastNoBonus.toLocaleString()}
-                </strong><br>
-                <span style="opacity:.78;">
-                    ${gapText(forecastNoBonus)}
-                </span>
-            </div>
-
-            <div style="
-                margin-top:10px;
-                padding:13px;
-                border-radius:12px;
-                background:#fff8dc;
-                line-height:1.8;
-            ">
-                <strong>🎁 ボーナス込み</strong><br>
-                ボーナス見込み ¥${bonusForecast.toLocaleString()} を含む場合<br>
-                <strong style="font-size:21px;">
-                    ¥${forecastWithBonus.toLocaleString()}
-                </strong><br>
-                <span style="opacity:.78;">
-                    ${gapText(forecastWithBonus)}
-                </span>
-            </div>
-
-            <div style="
-                margin-top:9px;
-                font-size:12px;
-                opacity:.7;
-                line-height:1.6;
-            ">
-                ※ボーナスなし＝ボーナスを当てにしない予測。
-                ボーナス込み＝現在のボーナス実績／予定を反映した予測。
-            </div>
-        `;
     }
 
+    if(goalBar){
+        goalBar.style.cursor = "pointer";
+        goalBar.title = "タップすると年間目標の内訳を表示";
+        goalBar.onclick = (event)=>{
+            event.stopPropagation();
+            showAnnualGoalDetail();
+        };
+    }
+
+    const goalCard =
+        goalEl?.closest(".card");
+
+    if(goalCard){
+        goalCard.style.cursor = "pointer";
+        goalCard.onclick = (event)=>{
+            // 編集ボタン等が将来カード内に追加されても邪魔しない。
+            if(event.target.closest && event.target.closest("button")) return;
+            showAnnualGoalDetail();
+        };
+    }
+
+}
+
+
+/* ===========================
+   年間目標の内訳
+   ※現在の年間目標の計算値をそのまま表示する。
+   ※年度末予測はここでは行わない。
+=========================== */
+function showAnnualGoalDetail(){
+
+    const old = document.getElementById("annualGoalDetailOverlay");
+    if(old){
+        old.remove();
+    }
+
+    const bankTotal =
+        Number(app.bank.mitake || 0) +
+        Number(app.bank.takizawa || 0);
+
+    const currentSaving =
+        bankTotal - Number(app.startBank || 0);
+
+    const summerActualTotal =
+        Number(app.bonus.papaSummerActual || 0) +
+        Number(app.bonus.mamaSummerActual || 0);
+
+    const winterActualTotal =
+        Number(app.bonus.papaWinterActual || 0) +
+        Number(app.bonus.mamaWinterActual || 0);
+
+    const summerHasActual = summerActualTotal > 0;
+    const winterHasActual = winterActualTotal > 0;
+
+    // 年間目標が実際に使っている金額と同じルールで表示する。
+    const papaSummer = summerHasActual
+        ? Number(app.bonus.papaSummerActual || 0)
+        : Number(app.bonus.papaSummerForecast || 0);
+
+    const mamaSummer = summerHasActual
+        ? Number(app.bonus.mamaSummerActual || 0)
+        : Number(app.bonus.mamaSummerForecast || 0);
+
+    const papaWinter = winterHasActual
+        ? Number(app.bonus.papaWinterActual || 0)
+        : Number(app.bonus.papaWinterForecast || 0);
+
+    const mamaWinter = winterHasActual
+        ? Number(app.bonus.mamaWinterActual || 0)
+        : Number(app.bonus.mamaWinterForecast || 0);
+
+    const summerContribution = summerHasActual
+        ? Number(app.bonus.summerKeep || 0)
+        : Number(app.bonus.papaSummerForecast || 0) +
+          Number(app.bonus.mamaSummerForecast || 0);
+
+    const winterContribution = winterHasActual
+        ? Number(app.bonus.winterKeep || 0)
+        : Number(app.bonus.papaWinterForecast || 0) +
+          Number(app.bonus.mamaWinterForecast || 0);
+
+    const bonusContribution =
+        summerContribution + winterContribution;
+
+    const progress =
+        currentSaving + bonusContribution;
+
+    const overlay = document.createElement("div");
+    overlay.id = "annualGoalDetailOverlay";
+    overlay.style.cssText = `
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        background:rgba(255,255,255,.97);
+        overflow-y:auto;
+        padding:18px 16px 100px;
+        box-sizing:border-box;
+        font-family:inherit;
+    `;
+
+    const cardStyle = `
+        background:#fff;
+        border:1px solid #f0d98a;
+        border-radius:20px;
+        padding:18px;
+        margin-bottom:14px;
+        box-shadow:0 2px 10px rgba(0,0,0,.04);
+    `;
+
+    const rowStyle = `
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:12px;
+        padding:12px 0;
+        border-bottom:1px solid #eee;
+        font-size:17px;
+    `;
+
+    const yen = value =>
+        "¥" + Number(value || 0).toLocaleString();
+
+    overlay.innerHTML = `
+        <div style="max-width:720px;margin:0 auto;">
+            <button id="closeAnnualGoalDetail" style="
+                border:1px solid #f0d98a;
+                background:#fff;
+                border-radius:999px;
+                padding:10px 18px;
+                font-size:16px;
+                font-weight:700;
+                color:#6f554b;
+                margin-bottom:14px;
+            ">← 年間サマリーへ</button>
+
+            <div style="${cardStyle}">
+                <div style="font-size:22px;font-weight:800;color:#6f554b;">
+                    🎯 年間目標の内訳
+                </div>
+                <div style="text-align:center;margin-top:14px;font-size:31px;font-weight:900;color:#2e7d32;">
+                    ${yen(progress)}
+                </div>
+                <div style="text-align:center;color:#777;margin-top:4px;">
+                    目標 ${yen(app.goal)}
+                </div>
+            </div>
+
+            <div style="${cardStyle}">
+                <div style="font-size:20px;font-weight:800;margin-bottom:6px;">
+                    🏦 現在の貯金
+                </div>
+                <div style="${rowStyle}border-bottom:0;">
+                    <span>銀行残高から増えた貯金</span>
+                    <strong>${yen(currentSaving)}</strong>
+                </div>
+            </div>
+
+            <div style="${cardStyle}">
+                <div style="font-size:20px;font-weight:800;margin-bottom:4px;">
+                    ☀️ 夏ボーナス
+                </div>
+                <div style="${rowStyle}">
+                    <span>👨 パパ夏賞与</span>
+                    <strong>${yen(papaSummer)}</strong>
+                </div>
+                <div style="${rowStyle}">
+                    <span>👩 ママ夏賞与</span>
+                    <strong>${yen(mamaSummer)}</strong>
+                </div>
+                <div style="${rowStyle}border-bottom:0;">
+                    <span>🎯 年間目標への反映額</span>
+                    <strong>${yen(summerContribution)}</strong>
+                </div>
+            </div>
+
+            <div style="${cardStyle}">
+                <div style="font-size:20px;font-weight:800;margin-bottom:4px;">
+                    ❄️ 冬ボーナス
+                </div>
+                <div style="${rowStyle}">
+                    <span>👨 パパ冬賞与</span>
+                    <strong>${yen(papaWinter)}</strong>
+                </div>
+                <div style="${rowStyle}">
+                    <span>👩 ママ冬賞与</span>
+                    <strong>${yen(mamaWinter)}</strong>
+                </div>
+                <div style="${rowStyle}border-bottom:0;">
+                    <span>🎯 年間目標への反映額</span>
+                    <strong>${yen(winterContribution)}</strong>
+                </div>
+            </div>
+
+            <div style="${cardStyle};background:#fff8dc;">
+                <div style="font-size:20px;font-weight:800;">
+                    🎯 年間目標の達成額
+                </div>
+                <div style="font-size:30px;font-weight:900;margin-top:8px;color:#2e7d32;">
+                    ${yen(currentSaving)} ＋ ${yen(bonusContribution)}
+                </div>
+                <div style="font-size:14px;color:#666;margin-top:8px;line-height:1.7;">
+                    現在の貯金 ${yen(currentSaving)} と、年間目標に反映されているボーナス分 ${yen(bonusContribution)} の合計です。
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    document.getElementById("closeAnnualGoalDetail")?.addEventListener("click",()=>{
+        overlay.remove();
+    });
 }
 
 function showCategoryHistory(categoryId){
