@@ -10,7 +10,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>まる家計 Ver27</title>
+    <title>まる家計 Ver29</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -19,94 +19,138 @@
 <body>
 
 <!-- ホーム -->
+<div id="homePage" class="v29-home">
 
-<div id="homePage">
+  <div class="v29-top-doodle v29-top-left" aria-hidden="true">
+    <svg viewBox="0 0 90 70"><path d="M8 55L20 18l43 5 10 36z" fill="#fff7d8" stroke="#76564b" stroke-width="4" stroke-linejoin="round"/><path d="M20 18l5-10 43 6-5 9" fill="#f6d36a" stroke="#76564b" stroke-width="4" stroke-linejoin="round"/><path d="M31 29h22M29 38h28" stroke="#d59b76" stroke-width="3" stroke-linecap="round"/><circle cx="67" cy="14" r="4" fill="#f3b85b"/></svg>
+  </div>
+  <div class="v29-top-doodle v29-top-right" aria-hidden="true">
+    <svg viewBox="0 0 100 80"><circle cx="35" cy="34" r="25" fill="#f2c8ad" stroke="#76564b" stroke-width="4"/><circle cx="70" cy="34" r="25" fill="#f2c8ad" stroke="#76564b" stroke-width="4"/><path d="M15 26Q10 8 27 15M55 26Q60 8 77 15" fill="#f2c8ad" stroke="#76564b" stroke-width="4" stroke-linecap="round"/><circle cx="27" cy="36" r="3"/><circle cx="60" cy="36" r="3"/><path d="M32 46q4 5 9 0M65 46q4 5 9 0" fill="none" stroke="#76564b" stroke-width="3" stroke-linecap="round"/><circle cx="18" cy="45" r="5" fill="#efaaa0" opacity=".7"/><circle cx="73" cy="45" r="5" fill="#efaaa0" opacity=".7"/></svg>
+  </div>
 
-    <div class="home-decor home-decor-left">✦</div>
-    <div class="home-decor home-decor-right">🧸</div>
-
-    <div class="card summary-card">
-        <div class="month-header">
-            <button id="prevMonth">◀</button>
-            <div class="period-area">
-                <select id="yearSelect">
-                    <option value="2024">2024年度</option>
-                    <option value="2025">2025年度</option>
-                    <option value="2026" selected>2026年度</option>
-                    <option value="2027">2027年度</option>
-                </select>
-                <h2 id="period">4月</h2>
-            </div>
-            <div class="month-right">
-                <button id="resetMonth" class="mini-reset">🗑</button>
-                <button id="nextMonth">▶</button>
-            </div>
-        </div>
+  <div class="v29-month-card">
+    <button id="prevMonth" class="v29-round-btn" aria-label="前の月">‹</button>
+    <div class="v29-period">
+      <select id="yearSelect">
+        <option value="2024">2024年度</option>
+        <option value="2025">2025年度</option>
+        <option value="2026" selected>2026年度</option>
+        <option value="2027">2027年度</option>
+      </select>
+      <h2 id="period">4月</h2>
     </div>
-
-    <div class="card summary-main">
-        <div class="summary-grid">
-            <div class="summary-item income-summary">
-                <div class="summary-icon">💰</div>
-                <div class="summary-title">収入</div>
-                <div class="summary-money" id="incomeSummary">¥0</div>
-            </div>
-            <div class="summary-item expense-summary">
-                <div class="summary-icon">💸</div>
-                <div class="summary-title">支出</div>
-                <div class="summary-money" id="spent">¥0</div>
-            </div>
-            <div class="summary-item remain-summary">
-                <div class="summary-icon">👛</div>
-                <div class="summary-title">残り</div>
-                <div class="summary-money" id="remain">¥0</div>
-            </div>
-        </div>
-        <div class="summary-divider"></div>
-        <div class="bank-row" onclick="editBank()">
-            <span class="bank-label">🏦 銀行残高</span>
-            <span class="bank-total" id="bankTotal">¥0</span>
-            <span class="bank-saving plus" id="savingTotal">¥0</span>
-        </div>
+    <div class="v29-month-actions">
+      <button id="resetMonth" class="v29-round-btn v29-trash" aria-label="月データ削除">🗑️</button>
+      <button id="nextMonth" class="v29-round-btn" aria-label="次の月">›</button>
     </div>
+  </div>
 
-    <div class="card ai-card">
-        <div class="coach-heading"><span class="coach-bulb">💡</span><h2>今日のまるコーチ</h2></div>
-        <div class="home-coach-wrap">
-            <div class="home-coach-message">
-                <strong id="homeCoachTitle">今のペースをチェック中…</strong>
-                <span id="homeCoachMessage">今日の使い方を見ながら、今月の目標をわかりやすくお知らせするよ。</span>
-            </div>
-            <div class="home-coach-challenge">
-                <div class="label">🎯 今月の節約チャレンジ</div>
-                <div class="amount" id="homeChallengeAmount">¥0</div>
-                <div class="sub">今月の改善目標</div>
-            </div>
-        </div>
+  <div class="v29-summary-card">
+    <div class="v29-summary-top">
+      <div class="v29-summary-item">
+        <div class="v29-summary-icon">💰</div>
+        <div class="v29-summary-label">収入</div>
+        <div class="v29-summary-money" id="incomeSummary">¥0</div>
+      </div>
+      <div class="v29-summary-item">
+        <div class="v29-summary-icon">💸</div>
+        <div class="v29-summary-label">支出</div>
+        <div class="v29-summary-money" id="spent">¥0</div>
+      </div>
+      <div class="v29-summary-item v29-green">
+        <div class="v29-summary-icon">👛</div>
+        <div class="v29-summary-label">残り</div>
+        <div class="v29-summary-money" id="remain">¥0</div>
+      </div>
     </div>
+    <div class="v29-dotted-divider"></div>
+    <div class="v29-bank-row" onclick="editBank()">
+      <span class="v29-bank-icon">🏦</span>
+      <span class="v29-bank-label">銀行残高</span>
+      <span class="v29-bank-total" id="bankTotal">¥0</span>
+      <span class="v29-bank-saving" id="savingTotal">¥0</span>
+    </div>
+  </div>
 
-    <section class="home-menu">
-        <button class="home-menu-card category" onclick="openHomeCategory()">
-            <div class="home-menu-illust">👜🥕🧾</div>
-            <div class="home-menu-title">📒 カテゴリ</div>
-            <p>食費・休日・ガソリンなど</p>
-            <span class="home-menu-arrow">›</span>
-        </button>
+  <div class="v29-coach-card">
+    <div class="v29-coach-title-row">
+      <div class="v29-chick" aria-hidden="true">
+        <svg viewBox="0 0 90 90"><path d="M24 58Q16 40 25 24Q34 10 50 18Q68 9 76 28Q84 48 68 63Q55 76 39 68Z" fill="#ffe27a" stroke="#76564b" stroke-width="4"/><circle cx="39" cy="40" r="4" fill="#3e302b"/><circle cx="64" cy="40" r="4" fill="#3e302b"/><path d="M45 48l8 0-4 6z" fill="#eea84f" stroke="#76564b" stroke-width="2"/><path d="M30 62q10 7 20 1M68 23l10-8" fill="none" stroke="#76564b" stroke-width="4" stroke-linecap="round"/><circle cx="78" cy="15" r="5" fill="#f3b1b1"/></svg>
+      </div>
+      <h2>今日のまるコーチ</h2>
+      <span class="v29-sparkle">✦</span>
+    </div>
+    <div class="v29-coach-inner">
+      <div class="v29-coach-bubble">
+        <strong id="homeCoachTitle">今のペースをチェック中…</strong>
+        <span id="homeCoachMessage">今日の使い方を見ながら、今月の目標をわかりやすくお知らせするよ。</span>
+        <span class="v29-flower">🌼</span>
+      </div>
+      <div class="v29-challenge-note">
+        <div class="v29-note-title">🎯 今月の節約チャレンジ</div>
+        <div class="v29-note-amount" id="homeChallengeAmount">¥0</div>
+        <div class="v29-note-sub">今月の改善目標</div>
+        <div class="v29-note-line"></div>
+      </div>
+    </div>
+  </div>
 
-        <button class="home-menu-card income" onclick="openHomeIncome()">
-            <div class="home-menu-illust">👛💰✨</div>
-            <div class="home-menu-title">💰 収入</div>
-            <p>パパ・ママ・臨時</p>
-            <span class="home-menu-arrow">›</span>
-        </button>
+  <section class="v29-home-menu" aria-label="ホームメニュー">
+    <button class="v29-menu-card v29-menu-category" onclick="openHomeCategory()">
+      <div class="v29-menu-art">
+        <svg viewBox="0 0 220 155" aria-hidden="true">
+          <path d="M24 113q7-50 35-73l42 8q18 37 9 68z" fill="#f2b7c8" stroke="#76564b" stroke-width="4"/>
+          <path d="M37 51q10-18 31-15l25 5" fill="none" stroke="#76564b" stroke-width="7" stroke-linecap="round"/>
+          <path d="M52 76l24 12-10 18-25-13z" fill="#a8d9ed" stroke="#76564b" stroke-width="3"/>
+          <path d="M110 102q10-32 31-53l24 12q-2 33-19 54z" fill="#f5d34e" stroke="#76564b" stroke-width="4"/>
+          <path d="M142 52l12-20 17 7-8 24" fill="#6fb55c" stroke="#76564b" stroke-width="4"/>
+          <path d="M174 100q-6-42 12-62l18 8q-3 34-10 55z" fill="#fffdf7" stroke="#76564b" stroke-width="3"/>
+          <path d="M180 60h18M180 69h18M180 78h15" stroke="#d99b7c" stroke-width="2"/>
+          <circle cx="53" cy="27" r="5" fill="#f4c84d"/><path d="M45 18l-5-8M61 17l4-9" stroke="#f4c84d" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="v29-menu-label">📒 カテゴリ</div>
+      <p>食費・休日・ガソリンなど</p>
+      <span class="v29-arrow">›</span>
+    </button>
 
-        <button class="home-menu-card coach" onclick="openAnnualCoach()">
-            <div class="home-menu-illust">📒📊🎯</div>
-            <div class="home-menu-title">🎯 年間コーチ</div>
-            <p>目標・予測・アドバイス</p>
-            <span class="home-menu-arrow">›</span>
-        </button>
-    </section>
+    <button class="v29-menu-card v29-menu-income" onclick="openHomeIncome()">
+      <div class="v29-menu-art">
+        <svg viewBox="0 0 220 155" aria-hidden="true">
+          <path d="M44 91q-3-37 27-45l32 10q11 25-5 48z" fill="#ee8bb7" stroke="#76564b" stroke-width="4"/>
+          <path d="M52 55q18-17 35 0" fill="none" stroke="#76564b" stroke-width="7" stroke-linecap="round"/>
+          <path d="M110 54q24-15 46 7" fill="none" stroke="#76564b" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="121" cy="68" r="12" fill="#f5cf55" stroke="#76564b" stroke-width="3"/>
+          <circle cx="150" cy="79" r="12" fill="#f5cf55" stroke="#76564b" stroke-width="3"/>
+          <circle cx="133" cy="98" r="12" fill="#f5cf55" stroke="#76564b" stroke-width="3"/>
+          <path d="M171 48q10-20 26 0l-4 38q-12 12-25 0z" fill="#d7b06c" stroke="#76564b" stroke-width="4"/>
+          <path d="M173 47q12-15 22 0" fill="none" stroke="#76564b" stroke-width="4"/>
+          <text x="181" y="72" text-anchor="middle" font-size="18" font-weight="900" fill="#76564b">¥</text>
+          <path d="M62 24l5-10M78 23l2-11M96 28l8-8" stroke="#ef9a9a" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="v29-menu-label">💰 収入</div>
+      <p>パパ・ママ・臨時</p>
+      <span class="v29-arrow">›</span>
+    </button>
+
+    <button class="v29-menu-card v29-menu-coach" onclick="openAnnualCoach()">
+      <div class="v29-menu-art">
+        <svg viewBox="0 0 220 155" aria-hidden="true">
+          <rect x="31" y="24" width="82" height="100" rx="8" fill="#f7cf49" stroke="#76564b" stroke-width="4" transform="rotate(-6 31 24)"/>
+          <path d="M49 44l46-4M49 58l46-4" stroke="#fff7df" stroke-width="4" stroke-linecap="round"/>
+          <rect x="54" y="75" width="12" height="32" fill="#f08b8b" stroke="#76564b" stroke-width="2"/><rect x="71" y="63" width="12" height="44" fill="#67b77b" stroke="#76564b" stroke-width="2"/><rect x="88" y="52" width="12" height="55" fill="#68a8d7" stroke="#76564b" stroke-width="2"/>
+          <path d="M134 31l48 15v80l-48-15z" fill="#fffdf7" stroke="#76564b" stroke-width="4"/>
+          <circle cx="166" cy="72" r="25" fill="#fff1a8" stroke="#76564b" stroke-width="4"/><circle cx="166" cy="72" r="16" fill="none" stroke="#efb52d" stroke-width="4"/><circle cx="166" cy="72" r="6" fill="#efb52d"/>
+          <path d="M157 72l7 7 14-18" fill="none" stroke="#76564b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M17 18l6 9 11 1-8 7 2 11-10-5-10 5 2-11-8-7 11-1z" fill="#f4c84d" stroke="#76564b" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="v29-menu-label">🎯 年間コーチ</div>
+      <p>目標・予測・アドバイス</p>
+      <span class="v29-arrow">›</span>
+    </button>
+  </section>
 
 </div>
 
