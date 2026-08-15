@@ -696,7 +696,7 @@ function update(){
         "¥"+remain.toLocaleString();
 
     remainEl.className=
-        "ref-value ref-remain-value "+
+        "summary-money "+
         (remain>=0
             ?"plus"
             :"minus");
@@ -734,7 +734,7 @@ function update(){
 
         savingEl.className=
 
-            "ref-saving "+
+            "bank-saving "+
 
             (saving>=0
                 ?"plus"
@@ -1163,9 +1163,6 @@ const homeIncomePage =
 const annualCoachPage =
     document.getElementById("annualCoachPage");
 
-const dailyCoachPage =
-    document.getElementById("dailyCoachPage");
-
 const pages = [
     homePage,
     yearPage,
@@ -1176,8 +1173,7 @@ const pages = [
     incomePage,
     homeCategoryPage,
     homeIncomePage,
-    annualCoachPage,
-    dailyCoachPage
+    annualCoachPage
 ];
 
 const navButtons =
@@ -1271,13 +1267,6 @@ case "annualCoach":
     drawAI();
     break;
 
-case "dailyCoach":
-
-    dailyCoachPage.style.display = "block";
-    lastPage = "home";
-    drawAI("dailyCoachComment");
-    break;
-
 case "category":
 
     categoryPage.style.display = "block";
@@ -1301,8 +1290,7 @@ case "income":
         "category",
         "homeCategory",
         "homeIncome",
-        "annualCoach",
-        "dailyCoach"
+        "annualCoach"
     ];
 
     if(!transientPages.includes(page)){
@@ -1334,10 +1322,6 @@ function openHomeIncome(){
 
 function openAnnualCoach(){
     showPage("annualCoach");
-}
-
-function openDailyCoach(){
-    showPage("dailyCoach");
 }
 
 function drawHomeCoach(){
@@ -2233,10 +2217,10 @@ function getGoalContinuationForecast(annual, monthlyCoach){
 /* ===========================
    ⑦ AI分析
 =========================== */
-function drawAI(targetId = "aiComment"){
+function drawAI(){
 
     const ai =
-        document.getElementById(targetId);
+        document.getElementById("aiComment");
 
     if(!ai) return;
 
