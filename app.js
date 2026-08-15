@@ -195,7 +195,7 @@ let currentYear=2026;
 
 let currentMonth=4;
 
-let incomeFilter = "extra";
+let incomeFilter = "all";
 /* ===========================
    ② 保存・読込
 =========================== */
@@ -1461,12 +1461,11 @@ function drawYearSummary(){
         document.getElementById("yearTitle");
 
     if(title){
-
-        title.textContent =
-            `${currentYear}年度`;
-
+        title.textContent = `${currentYear}年度`;
     }
 
+    // 年間合計は「ここまでの実績」だけを表示。
+    // ボーナスの予測・見込みは年度末予測側で扱う。
     let income = 0;
     let spent = 0;
 
@@ -1479,8 +1478,7 @@ function drawYearSummary(){
                 ? currentYear + 1
                 : currentYear;
 
-        const data =
-            getMonthData(year,month);
+        const data = getMonthData(year,month);
 
         if(!data) return;
 
@@ -1498,8 +1496,7 @@ function drawYearSummary(){
 
     });
 
-    const remain =
-        income - spent;
+    const remain = income - spent;
 
     const saving =
         (
@@ -1508,215 +1505,27 @@ function drawYearSummary(){
         ) -
         Number(app.startBank || 0);
 
-const progress =
-    saving + getBonusKeepTotal();
+    const progress =
+        saving + getBonusKeepTotal();
 
- const summerBonus =
-    (app.bonus.papaSummerActual || app.bonus.mamaSummerActual)
-        ? Number(app.bonus.papaSummerActual || 0) +
-          Number(app.bonus.mamaSummerActual || 0)
-        : Number(app.bonus.papaSummerForecast || 0) +
-          Number(app.bonus.mamaSummerForecast || 0);
+    const incomeEl = document.getElementById("yearIncome");
+    const spentEl = document.getElementById("yearSpent");
+    const remainEl = document.getElementById("yearRemain");
 
-const winterBonus =
-    (app.bonus.papaWinterActual || app.bonus.mamaWinterActual)
-        ? Number(app.bonus.papaWinterActual || 0) +
-          Number(app.bonus.mamaWinterActual || 0)
-        : Number(app.bonus.papaWinterForecast || 0) +
-          Number(app.bonus.mamaWinterForecast || 0);
-
-const bonusTotal =
-    summerBonus + winterBonus;
-
-    const totalIncome =
-        income + bonusTotal;
-
-    /*
-       年度途中でも分かりやすくするため、
-       ここまでの実績と年度末予測を分けて表示。
-       既存の月データ集計・保存処理は変更しない。
-    */
-
-    const incomeTitle =
-        document
-            .getElementById("yearIncome")
-            ?.parentElement
-            ?.querySelector(".summary-title");
-
-    const spentTitle =
-        document
-            .getElementById("yearSpent")
-            ?.parentElement
-            ?.querySelector(".summary-title");
-
-    const remainTitle =
-        document
-            .getElementById("yearRemain")
-            ?.parentElement
-            ?.querySelector(".summary-title");
-
-    if(incomeTitle) incomeTitle.textContent = "ここまでの収入";
-    if(spentTitle) spentTitle.textContent = "ここまでの支出";
-    if(remainTitle) remainTitle.textContent = "ここまでの差額";
-
-    /*
-       ホームの年間コーチと同じ考え方で年度末を予測。
-       年間ページ独自の保存データは作らない。
-    */
-
-    const yearBankTotal =
-        Number(app.bank.mitake || 0) +
-        Number(app.bank.takizawa || 0);
-
-    const yearSaving =
-        yearBankTotal -
-        Number(app.startBank || 0);
-
-    const yearProgress =
-        yearSaving + getBonusKeepTotal();
-
-    const yearMonthsLeft =
-        currentMonth <= 3
-            ? Math.max(4 - currentMonth, 0)
-            : Math.max(16 - currentMonth, 0);
-
-    const yearNaturalSaving =
-        70000 * yearMonthsLeft;
-
-    const yearSummerBonus =
-        (app.bonus.papaSummerActual || app.bonus.mamaSummerActual)
-            ? Number(app.bonus.papaSummerActual || 0) +
-              Number(app.bonus.mamaSummerActual || 0)
-            : Number(app.bonus.papaSummerForecast || 0) +
-              Number(app.bonus.mamaSummerForecast || 0);
-
-    const yearWinterBonus =
-        (app.bonus.papaWinterActual || app.bonus.mamaWinterActual)
-            ? Number(app.bonus.papaWinterActual || 0) +
-              Number(app.bonus.mamaWinterActual || 0)
-            : Number(app.bonus.papaWinterForecast || 0) +
-              Number(app.bonus.mamaWinterForecast || 0);
-
-    const yearBonusForecast =
-        yearSummerBonus + yearWinterBonus;
-
-    const yearEndForecast =
-        yearProgress +
-        yearNaturalSaving +
-        yearBonusForecast;
-
-    let forecastCard =
-        document.getElementById("yearForecastCard");
-
-    if(!forecastCard){
-
-        forecastCard =
-            document.createElement("div");
-
-        forecastCard.id =
-            "yearForecastCard";
-
-        forecastCard.className =
-            "card";
-
-        forecastCard.style.marginTop =
-            "12px";
-
-        const summaryGrid =
-            document
-                .getElementById("yearIncome")
-                ?.closest(".summary-grid");
-
-        if(summaryGrid && summaryGrid.parentElement){
-
-            summaryGrid.parentElement.insertBefore(
-                forecastCard,
-                summaryGrid.nextSibling
-            );
-
-        }
-
+    if(incomeEl){
+        incomeEl.textContent = "¥" + income.toLocaleString();
     }
 
-    if(forecastCard){
-
-        forecastCard.innerHTML = `
-
-            <h3>🔮 年度末の予測</h3>
-
-            <div style="
-                margin-top:10px;
-                line-height:1.8;
-            ">
-
-                <div>
-                    💰 今の貯金ペース
-                    <strong>
-                        ¥${yearProgress.toLocaleString()}
-                    </strong>
-                </div>
-
-                <div>
-                    🌱 残り${yearMonthsLeft}か月の自然な貯金
-                    <strong>
-                        ¥${yearNaturalSaving.toLocaleString()}
-                    </strong>
-                </div>
-
-                <div>
-                    🎁 ボーナス見込み
-                    <strong>
-                        ¥${yearBonusForecast.toLocaleString()}
-                    </strong>
-                </div>
-
-            </div>
-
-            <div style="
-                margin-top:12px;
-                padding-top:12px;
-                border-top:1px solid rgba(0,0,0,.08);
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                gap:12px;
-            ">
-                <span>このままなら</span>
-
-                <strong style="font-size:24px;">
-                    ¥${yearEndForecast.toLocaleString()}
-                </strong>
-            </div>
-
-            <p style="
-                margin:8px 0 0;
-                color:#777;
-                line-height:1.6;
-            ">
-                今の生活ペースとボーナス見込みから、
-                年度末に約¥${yearEndForecast.toLocaleString()}
-                残る見込みです。
-            </p>
-
-        `;
-
+    if(spentEl){
+        spentEl.textContent = "¥" + spent.toLocaleString();
     }
 
-    document.getElementById("yearIncome").textContent =
-        "¥" + totalIncome.toLocaleString();
-
-    document.getElementById("yearSpent").textContent =
-        "¥" + spent.toLocaleString();
-
-    const remainEl =
-        document.getElementById("yearRemain");
-
-    remainEl.textContent =
-        "¥" + remain.toLocaleString();
-
-    remainEl.className =
-        "summary-money " +
-        (remain >= 0 ? "plus" : "minus");
+    if(remainEl){
+        remainEl.textContent = "¥" + remain.toLocaleString();
+        remainEl.className =
+            "summary-money " +
+            (remain >= 0 ? "plus" : "minus");
+    }
 
     document.getElementById("yearGoal").textContent =
         `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
@@ -1740,34 +1549,80 @@ function showCategoryHistory(categoryId){
     drawCategoryDetail(categoryId);
 
 }
+function getFiscalExpenseHistory(){
+
+    const list = [];
+
+    getFiscalMonths().forEach(month=>{
+
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
+
+        const data = getMonthData(year, month);
+
+        if(!data) return;
+
+        (data.history || []).forEach(item=>{
+
+            // 年間特別費は「カテゴリ履歴」の全カテゴリー合計には含めない。
+            if(item.income) return;
+            if(item.annual === true) return;
+
+            list.push({
+                ...item,
+                year,
+                month
+            });
+
+        });
+
+    });
+
+    return list;
+}
+
 function showCategoryList(){
 
-  window.lastPage = "setting";
-
-showPage("category");
+    window.lastPage = "setting";
+    showPage("category");
 
     document.getElementById("categoryTitle").innerHTML =
         "📒 カテゴリ履歴";
 
-     const historyList =
-    document.getElementById("categoryDetailHistory");
+    const historyList =
+        document.getElementById("categoryDetailHistory");
 
-historyList.innerHTML = "";
+    const allExpenses = getFiscalExpenseHistory();
+
+    const total = allExpenses.reduce(
+        (sum,item)=>sum + Number(item.amount || 0),
+        0
+    );
+
+    historyList.innerHTML = `
+        <div class="card" style="margin-bottom:15px;">
+            <div style="font-size:14px;color:#888;">
+                全カテゴリー合計
+            </div>
+            <div style="font-size:28px;font-weight:bold;color:#f5a623;">
+                ¥${total.toLocaleString()}
+            </div>
+        </div>
+    `;
 
     app.budgets.forEach(budget=>{
 
-       historyList.innerHTML += `
-        
+        historyList.innerHTML += `
             <button
                 class="setting-item"
-               onclick="
-    window.lastPage='category';
-    app.categoryFilter='${budget.name}';
-    drawCategoryDetail('${budget.id}');
-">
-
-                 ${budget.name}
-
+                onclick="
+                    window.lastPage='category';
+                    app.categoryFilter='${budget.name}';
+                    drawCategoryDetail('${budget.id}');
+                ">
+                ${budget.name}
             </button>
         `;
 
@@ -1793,9 +1648,7 @@ function getFiscalIncomeHistory(){
 
     const list = [];
 
-    const months = getFiscalMonths();
-
-    months.forEach(month=>{
+    getFiscalMonths().forEach(month=>{
 
         const year =
             month <= 3
@@ -1808,17 +1661,13 @@ function getFiscalIncomeHistory(){
 
         (data.incomeHistory || []).forEach(item=>{
 
-    list.push({
+            list.push({
+                ...item,
+                year,
+                month
+            });
 
-        ...item,
-
-        year,
-
-        month
-
-    });
-
-});
+        });
 
     });
 
@@ -1827,73 +1676,97 @@ function getFiscalIncomeHistory(){
     );
 
 }
+
 function drawIncomeHistory(){
 
     const area =
         document.getElementById("incomeHistoryList");
 
+    const allBtn =
+        document.getElementById("incomeAllFilter");
     const papaBtn =
         document.getElementById("incomePapaFilter");
-
     const mamaBtn =
         document.getElementById("incomeMamaFilter");
-
     const extraBtn =
-    document.getElementById("incomeExtraFilter");
-    
+        document.getElementById("incomeExtraFilter");
+
     if(!area) return;
-   [papaBtn, mamaBtn, extraBtn].forEach(btn=>{
-    if(btn){
-        btn.style.background = "";
-        btn.style.color = "";
-        btn.style.fontWeight = "";
+
+    [allBtn, papaBtn, mamaBtn, extraBtn].forEach(btn=>{
+        if(btn){
+            btn.style.background = "";
+            btn.style.color = "";
+            btn.style.fontWeight = "";
+        }
+    });
+
+    const activeBtn =
+        incomeFilter === "all" ? allBtn :
+        incomeFilter === "papa" ? papaBtn :
+        incomeFilter === "mama" ? mamaBtn :
+        extraBtn;
+
+    if(activeBtn){
+        activeBtn.style.background = "#F7C948";
+        activeBtn.style.fontWeight = "bold";
     }
-});
 
-if(incomeFilter === "papa" && papaBtn){
+    const allList = getFiscalIncomeHistory();
+    let list = [...allList];
 
-    papaBtn.style.background = "#F7C948";
-    papaBtn.style.fontWeight = "bold";
+    if(incomeFilter === "papa"){
+        list = list.filter(item=>item.type.includes("パパ"));
+    }else if(incomeFilter === "mama"){
+        list = list.filter(item=>item.type.includes("ママ"));
+    }else if(incomeFilter === "extra"){
+        list = list.filter(item=>item.type === "臨時");
+    }
 
-}else if(incomeFilter === "mama" && mamaBtn){
+    const papaTotal = allList
+        .filter(item=>item.type.includes("パパ"))
+        .reduce((sum,item)=>sum + Number(item.amount || 0),0);
 
-    mamaBtn.style.background = "#F7C948";
-    mamaBtn.style.fontWeight = "bold";
+    const mamaTotal = allList
+        .filter(item=>item.type.includes("ママ"))
+        .reduce((sum,item)=>sum + Number(item.amount || 0),0);
 
-}else if(incomeFilter === "extra" && extraBtn){
+    const extraTotal = allList
+        .filter(item=>item.type === "臨時")
+        .reduce((sum,item)=>sum + Number(item.amount || 0),0);
 
-    extraBtn.style.background = "#F7C948";
-    extraBtn.style.fontWeight = "bold";
+    const total = papaTotal + mamaTotal + extraTotal;
 
-}
+    area.innerHTML = `
+        <div class="card" style="margin-bottom:15px;">
+            <div style="font-size:14px;color:#888;margin-bottom:8px;">
+                年間収入合計
+            </div>
 
-const allList = getFiscalIncomeHistory();
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+                <div style="padding:10px;background:#FFF9EF;border-radius:10px;">
+                    <div style="font-size:13px;color:#8A7768;">👨 パパ</div>
+                    <div style="font-size:20px;font-weight:bold;">¥${papaTotal.toLocaleString()}</div>
+                </div>
+                <div style="padding:10px;background:#FFF9EF;border-radius:10px;">
+                    <div style="font-size:13px;color:#8A7768;">👩 ママ</div>
+                    <div style="font-size:20px;font-weight:bold;">¥${mamaTotal.toLocaleString()}</div>
+                </div>
+                <div style="padding:10px;background:#FFF9EF;border-radius:10px;">
+                    <div style="font-size:13px;color:#8A7768;">🎁 臨時</div>
+                    <div style="font-size:20px;font-weight:bold;">¥${extraTotal.toLocaleString()}</div>
+                </div>
+                <div style="padding:10px;background:#FFF9EF;border-radius:10px;">
+                    <div style="font-size:13px;color:#8A7768;">💰 合計</div>
+                    <div style="font-size:20px;font-weight:bold;color:#F5A623;">¥${total.toLocaleString()}</div>
+                </div>
+            </div>
+        </div>
+    `;
 
-let list = [...allList];
-
-   if(incomeFilter === "papa"){
-
-    list = list.filter(item=>
-        item.type.includes("パパ")
-    );
-
-}else if(incomeFilter === "mama"){
-
-    list = list.filter(item=>
-        item.type.includes("ママ")
-    );
-
-}else if(incomeFilter === "extra"){
-
-    list = list.filter(item=>
-        item.type === "臨時"
-    );
-
-}
-    
     if(list.length === 0){
 
-        area.innerHTML = `
+        area.innerHTML += `
             <div class="card">
                 <div style="text-align:center;padding:20px;color:#888;">
                     まだ収入履歴はありません😊
@@ -1902,76 +1775,59 @@ let list = [...allList];
         `;
 
         return;
-
     }
 
-   const total = allList.reduce((sum,item)=>{
-    return sum + Number(item.amount || 0);
-},0);
+    const monthMap = {};
 
-    area.innerHTML = `
-        <div class="card" style="margin-bottom:15px;">
-            <div style="font-size:14px;color:#888;">
-                年間収入合計
-            </div>
-            <div style="font-size:28px;font-weight:bold;color:#f5a623;">
-                ¥${total.toLocaleString()}
-            </div>
-        </div>
-    `;
+    list.forEach(item=>{
 
- const monthMap = {};
+        const month = Number(
+            (item.targetMonth || item.date.substring(0,7))
+                .split("-")[1]
+        );
 
-list.forEach(item=>{
+        if(!monthMap[month]){
+            monthMap[month] = [];
+        }
 
-const month = Number(
-    (item.targetMonth || item.date.substring(0,7))
-        .split("-")[1]
-);
-
-    if(!monthMap[month]){
-        monthMap[month] = [];
-    }
-
-    monthMap[month].push(item);
-
-});
-
-Object.keys(monthMap)
-.sort((a,b)=>b-a)
-.forEach(month=>{
-
-    area.innerHTML += `
-        <div class="card">
-            <h3>${month}月</h3>
-        </div>
-    `;
-
-    monthMap[month].forEach(item=>{
-
-        area.innerHTML += `
-            <button
-                class="setting-item"
-               onclick="deleteIncomeHistory('${item.id}')"
-
-             <span>
-    <b>${item.type}</b><br>
-    ${item.date}<br>
-    <small>${item.memo || ""}</small>
-</span>
-
-                <span style="font-weight:bold;">
-                    ¥${Number(item.amount).toLocaleString()}
-                </span>
-
-            </button>
-        `;
+        monthMap[month].push(item);
 
     });
 
-});
-}
+    Object.keys(monthMap)
+    .sort((a,b)=>{
+        const order = [4,5,6,7,8,9,10,11,12,1,2,3];
+        return order.indexOf(Number(b)) - order.indexOf(Number(a));
+    })
+    .forEach(month=>{
 
+        area.innerHTML += `
+            <div class="card">
+                <h3>${month}月</h3>
+            </div>
+        `;
+
+        monthMap[month].forEach(item=>{
+
+            area.innerHTML += `
+                <button
+                    class="setting-item"
+                    onclick="deleteIncomeHistory('${item.id}')">
+                    <span>
+                        <b>${item.type}</b><br>
+                        ${item.date}<br>
+                        <small>${item.memo || ""}</small>
+                    </span>
+                    <span style="font-weight:bold;">
+                        ¥${Number(item.amount).toLocaleString()}
+                    </span>
+                </button>
+            `;
+
+        });
+
+    });
+}
 
 function changeCategoryFilter(name){
 
