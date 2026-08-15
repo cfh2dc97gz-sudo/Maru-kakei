@@ -3249,6 +3249,156 @@ const bonusTotal =
     const remain =
         totalIncome - spent;
 
+    /*
+       年度途中でも意味が分かるよう、
+       「ここまでの実績」と「年度末の予測」を分ける。
+       HTMLを別ファイルで編集せず、このJSから表示を整える。
+    */
+
+    const yearIncomeEl =
+        document.getElementById("yearIncome");
+
+    const yearSpentEl =
+        document.getElementById("yearSpent");
+
+    const yearRemainEl =
+        document.getElementById("yearRemain");
+
+    if(yearIncomeEl){
+
+        const title =
+            yearIncomeEl.parentElement
+                ?.querySelector(".summary-title");
+
+        if(title){
+            title.textContent =
+                "ここまでの収入";
+        }
+
+    }
+
+    if(yearSpentEl){
+
+        const title =
+            yearSpentEl.parentElement
+                ?.querySelector(".summary-title");
+
+        if(title){
+            title.textContent =
+                "ここまでの支出";
+        }
+
+    }
+
+    if(yearRemainEl){
+
+        const title =
+            yearRemainEl.parentElement
+                ?.querySelector(".summary-title");
+
+        if(title){
+            title.textContent =
+                "ここまでの差額";
+        }
+
+    }
+
+    /*
+       年間コーチと同じ予測値を使用する。
+       年間ページ独自の予測計算は作らない。
+    */
+
+    const annual =
+        getAnnualCoachData();
+
+    const yearForecast =
+        Number(
+            annual?.forecast ??
+            0
+        );
+
+    let forecastCard =
+        document.getElementById("yearForecastCard");
+
+    if(!forecastCard){
+
+        forecastCard =
+            document.createElement("div");
+
+        forecastCard.id =
+            "yearForecastCard";
+
+        forecastCard.className =
+            "card";
+
+        forecastCard.style.marginTop =
+            "12px";
+
+        const summaryGrid =
+            yearIncomeEl
+                ?.closest(".summary-grid");
+
+        if(summaryGrid &&
+           summaryGrid.parentElement){
+
+            summaryGrid.parentElement
+                .insertBefore(
+                    forecastCard,
+                    summaryGrid.nextSibling
+                );
+
+        }else if(yearRemainEl?.parentElement){
+
+            yearRemainEl.parentElement
+                .parentElement
+                ?.insertAdjacentElement(
+                    "afterend",
+                    forecastCard
+                );
+
+        }
+
+    }
+
+    if(forecastCard){
+
+        forecastCard.innerHTML = `
+
+            <h3>🔮 年度末の予測</h3>
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:12px;
+                margin-top:10px;
+            ">
+                <span>このままなら</span>
+
+                <strong
+                    style="
+                        font-size:22px;
+                    "
+                >
+                    ¥${yearForecast.toLocaleString()}
+                </strong>
+
+            </div>
+
+            <p style="
+                margin:8px 0 0;
+                color:#777;
+                line-height:1.6;
+            ">
+                現在のペースなら、
+                年度末に約¥${yearForecast.toLocaleString()}
+                残る見込みです。
+            </p>
+
+        `;
+
+    }
+
     document.getElementById("yearIncome").textContent =
         "¥" + totalIncome.toLocaleString();
 
