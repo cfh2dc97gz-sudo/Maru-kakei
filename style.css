@@ -397,3 +397,54 @@ body{background:var(--v29-cream)}
   .v29-summary-money{font-size:23px}.v29-bank-label{font-size:14px}.v29-bank-total{font-size:18px}.v29-bank-saving{font-size:17px}
   .v29-menu-card{min-height:225px}.v29-menu-art{height:119px}.v29-menu-label{font-size:14px}.v29-menu-card p{font-size:9px}.v29-arrow{width:31px;height:31px;font-size:27px;line-height:28px}
 }
+
+
+/* ===== Ver30: 手描きイラスト・手帳風仕上げ ===== */
+#homePage.v29-home{
+  background:
+    radial-gradient(circle at 8% 5%, rgba(246,205,92,.18) 0 4px, transparent 5px),
+    radial-gradient(circle at 92% 7%, rgba(239,170,160,.16) 0 5px, transparent 6px),
+    var(--bg);
+}
+#homePage.v29-home:before,
+#homePage.v29-home:after{
+  content:"✦";
+  position:absolute;
+  z-index:0;
+  color:#efc74f;
+  font-size:28px;
+  font-weight:900;
+  opacity:.9;
+}
+#homePage.v29-home:before{left:6px;top:92px;transform:rotate(-12deg)}
+#homePage.v29-home:after{right:12px;top:106px;transform:rotate(14deg)}
+.v29-top-doodle{filter:drop-shadow(0 3px 0 rgba(111,85,75,.08))}
+.v29-top-left{width:104px;left:-2px;top:8px}
+.v29-top-right{width:104px;right:-1px;top:4px}
+.v29-month-card{border:3px solid #f1cf58!important;border-radius:36px!important;background:#fffdf7!important;box-shadow:0 5px 0 #f4e5b5,0 10px 24px rgba(111,85,75,.07)!important;padding:10px 12px!important;min-height:106px!important}
+.v29-round-btn{border-width:3px!important;box-shadow:0 3px 0 rgba(239,205,93,.18)!important}
+.v29-summary-card{border:3px solid #f0d98c!important;border-radius:34px!important;box-shadow:0 5px 0 #f4e6bd,0 10px 24px rgba(111,85,75,.06)!important}
+.v29-coach-card{border:3px solid #f0ca4d!important;border-radius:34px!important;background:linear-gradient(180deg,#fff2a9 0%,#fff6c9 100%)!important;box-shadow:0 5px 0 #eedda5,0 10px 22px rgba(111,85,75,.07)!important}
+.v29-coach-card:before{content:"♡  ✦  ♡";position:absolute;right:18px;top:12px;color:#e7b94a;font-size:18px;font-weight:900;letter-spacing:5px;opacity:.85}
+.v29-coach-bubble{border:3px solid #eadfc7!important;border-radius:28px!important;background:#fffefa!important;box-shadow:0 4px 0 rgba(227,216,190,.55)!important}
+.v29-challenge-note{border:3px solid #eadfc7!important;border-radius:28px!important;background:#fffefa!important;box-shadow:0 4px 0 rgba(227,216,190,.55)!important}
+.v29-home-menu{gap:12px!important;margin-top:20px!important}
+.v29-menu-card{border:3px solid #f0cf59!important;border-radius:31px!important;box-shadow:0 5px 0 #eadfae,0 8px 16px rgba(111,85,75,.07)!important;min-height:245px!important}
+.v29-menu-card:before{content:"";position:absolute;left:13px;right:13px;top:10px;height:3px;border-radius:99px;background:rgba(255,255,255,.6);opacity:.75}
+.v29-menu-art{height:156px!important;padding-top:5px}
+.v29-menu-art svg{max-width:218px!important}
+.v29-menu-label{font-family:inherit!important;font-size:18px!important;border:3px solid #e7d9bd!important;border-radius:22px!important;background:#fffdf8!important;box-shadow:0 3px 0 #e8dec5!important;padding:7px 14px!important;min-width:105px}
+.v29-menu-card p{font-size:11px!important;line-height:1.45!important;margin-top:11px!important}
+.v29-arrow{background:#f3c83f!important;box-shadow:0 3px 0 rgba(207,158,25,.22)!important}
+.bottom-nav{height:88px!important;border-top:2px solid #efdfad!important;background:rgba(255,253,248,.98)!important;box-shadow:0 -6px 18px rgba(111,85,75,.08)!important}
+.bottom-nav button{border-radius:30px!important}
+#homePage.v29-home{padding-bottom:122px!important}
+@media (max-width:430px){
+  .v29-top-left{width:82px;left:-2px;top:5px}.v29-top-right{width:82px;right:-3px;top:3px}
+  .v29-month-card{min-height:100px!important;border-radius:32px!important}
+  .v29-menu-card{min-height:236px!important;border-radius:28px!important}
+  .v29-menu-art{height:142px!important}
+  .v29-menu-label{font-size:16px!important;padding:6px 11px!important}
+  .v29-menu-card p{font-size:9.5px!important}
+  #homePage.v29-home{padding-bottom:124px!important}
+}
