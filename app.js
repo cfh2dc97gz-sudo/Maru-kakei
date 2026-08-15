@@ -1,4 +1,4 @@
-/* まる家計 Ver25｜デザインリフレッシュ */
+/* まる家計 Ver26｜ホーム入口リニューアル */
 
 const DEFAULT_BUDGETS = [
 
@@ -745,6 +745,7 @@ function update(){
     drawCategories();
 
     drawAI();
+    drawHomeCoach();
 
     drawYearSummary();
 
@@ -1153,6 +1154,15 @@ const bonusPage =
 const incomePage =
     document.getElementById("incomePage");
 
+const homeCategoryPage =
+    document.getElementById("homeCategoryPage");
+
+const homeIncomePage =
+    document.getElementById("homeIncomePage");
+
+const annualCoachPage =
+    document.getElementById("annualCoachPage");
+
 const pages = [
     homePage,
     yearPage,
@@ -1160,7 +1170,10 @@ const pages = [
     categoryPage,
     settingPage,
     bonusPage,
-    incomePage
+    incomePage,
+    homeCategoryPage,
+    homeIncomePage,
+    annualCoachPage
 ];
 
 const navButtons =
@@ -1234,6 +1247,26 @@ function showPage(page){
     lastPage = "setting";
     break;
 
+case "homeCategory":
+
+    homeCategoryPage.style.display = "block";
+    lastPage = "home";
+    drawCategories();
+    break;
+
+case "homeIncome":
+
+    homeIncomePage.style.display = "block";
+    lastPage = "home";
+    break;
+
+case "annualCoach":
+
+    annualCoachPage.style.display = "block";
+    lastPage = "home";
+    drawAI();
+    break;
+
 case "category":
 
     categoryPage.style.display = "block";
@@ -1253,7 +1286,14 @@ case "income":
 
     }
 
-    if(page !== "category"){
+    const transientPages = [
+        "category",
+        "homeCategory",
+        "homeIncome",
+        "annualCoach"
+    ];
+
+    if(!transientPages.includes(page)){
 
         const session =
             JSON.parse(
@@ -1270,6 +1310,60 @@ case "income":
 
     }
 
+}
+
+function openHomeCategory(){
+    showPage("homeCategory");
+}
+
+function openHomeIncome(){
+    showPage("homeIncome");
+}
+
+function openAnnualCoach(){
+    showPage("annualCoach");
+}
+
+function drawHomeCoach(){
+
+    const title = document.getElementById("homeCoachTitle");
+    const message = document.getElementById("homeCoachMessage");
+    const challenge = document.getElementById("homeChallengeAmount");
+
+    if(!title || !message || !challenge) return;
+
+    const monthlyCoach = getMonthlyCoachProgress();
+    const target = Number(monthlyCoach.target || 0);
+
+    challenge.textContent = "¥" + target.toLocaleString();
+
+    const allOnTrack =
+        monthlyCoach.categories.length > 0 &&
+        monthlyCoach.categories.every(item => item.overTarget <= 0);
+
+    if(target <= 0){
+        title.textContent = "今月はいいペース！";
+        message.textContent = "今月の節約チャレンジはありません。今の使い方をキープできればOKだよ😊";
+        return;
+    }
+
+    if(allOnTrack){
+        title.textContent = "今のペースはいい感じ！🌼";
+    }else{
+        title.textContent = "ちょっとだけ見直してみよう💡";
+    }
+
+    const parts = monthlyCoach.categories.map(item => {
+        const label = item.id === "food" ? "食費" : "休日";
+        return label + "を¥" + Number(item.targetSpend || 0).toLocaleString() + "以内";
+    });
+
+    if(parts.length){
+        message.textContent =
+            "今月は「" + parts.join("・") + "」を目安にできれば、年間目標に近づけるよ。";
+    }else{
+        message.textContent = "今月の支出を入力していくと、年間目標から逆算したアドバイスが表示されるよ。";
+    }
 }
 
 function backPage(){
@@ -4437,13 +4531,13 @@ window.addEventListener(
 );
 
 console.log(
-    "%c🌸 まる家計 Ver25",
+    "%c🌸 まる家計 Ver26",
     "color:#4CAF50;font-size:16px;font-weight:bold;"
 );
 
 console.log({
 
-    version:"25.0",
+    version:"26.0",
 
     fiscalYear:currentYear,
 
