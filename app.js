@@ -2633,10 +2633,6 @@ function drawAI(){
 
     if(holidayCoach.hasPlan){
 
-    
-    const historicalTrendMessage =
-        getHistoricalTrendMessage();
-
     html += `
 <div style="
     margin-top:18px;
@@ -2883,6 +2879,9 @@ function drawAI(){
 
     const annual =
         getAnnualCoachData();
+
+    const historicalTrendMessage =
+        getHistoricalTrendMessage();
 
     const goalForecast =
         getGoalContinuationForecast(
@@ -3340,26 +3339,51 @@ historyList.innerHTML = "";
 
 function getHistoricalTrendData(){
 
-    const historical =
-        getHistoricalLearningData();
+    /*
+       現在月と同じ月だけを見る。
+       過去2年度分までを参考データとして読む。
 
-    const result = {};
+       以前のv9では過去年度の全24か月を毎回読み込み、
+       その全履歴を集計していたため、履歴が多い家庭では
+       AI表示中に画面全体が重くなる可能性があった。
 
-    historical.forEach(monthData => {
+       季節傾向で必要なのは「今月の過去傾向」なので、
+       必要な月だけを読む。
+    */
 
-        const key =
-            `${monthData.month}`;
+    const result = {
+        months: 0,
+        categories: {}
+    };
 
-        if(!result[key]){
-            result[key] = {
-                months: 0,
-                categories: {}
-            };
-        }
+    const startFiscalYear =
+        Math.max(
+            2024,
+            currentYear - 2
+        );
 
-        result[key].months += 1;
+    for(
+        let fiscalYear = startFiscalYear;
+        fiscalYear < currentYear;
+        fiscalYear++
+    ){
 
-        (monthData.history || []).forEach(item => {
+        const year =
+            currentMonth <= 3
+                ? fiscalYear + 1
+                : fiscalYear;
+
+        const data =
+            getMonthData(
+                year,
+                currentMonth
+            );
+
+        if(!data) continue;
+
+        result.months += 1;
+
+        (data.history || []).forEach(item => {
 
             const category =
                 item.category || "その他";
@@ -3367,49 +3391,45 @@ function getHistoricalTrendData(){
             const amount =
                 Number(item.amount || 0);
 
-            if(!result[key].categories[category]){
-                result[key].categories[category] = {
+            if(!result.categories[category]){
+
+                result.categories[category] = {
                     total: 0,
                     count: 0
                 };
+
             }
 
-            result[key].categories[category].total += amount;
-            result[key].categories[category].count += 1;
+            result.categories[category].total +=
+                amount;
+
+            result.categories[category].count +=
+                1;
 
         });
 
-    });
+    }
 
-    Object.keys(result).forEach(month => {
+    Object.keys(
+        result.categories
+    ).forEach(category => {
 
-        Object.keys(
-            result[month].categories
-        ).forEach(category => {
+        const item =
+            result.categories[category];
 
-            const item =
-                result[month].categories[category];
-
-            item.average =
-                result[month].months > 0
-                    ? Math.round(
-                        item.total /
-                        result[month].months
-                    )
-                    : 0;
-
-        });
+        item.average =
+            result.months > 0
+                ? Math.round(
+                    item.total /
+                    result.months
+                )
+                : 0;
 
     });
 
     return result;
 
 }
-
-/*
-   現在月の過去傾向を取得。
-   現在の予算・目標判定には使わない。
-*/
 
 function getCurrentMonthHistoricalTrends(){
 
