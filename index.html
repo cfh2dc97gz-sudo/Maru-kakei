@@ -259,9 +259,12 @@
 
         <div class="summary-grid">
 
-            <div class="summary-item">
+            <button
+                class="summary-item"
+                onclick="showPage('income')"
+                style="cursor:pointer;">
 
-                <div class="summary-title">収入</div>
+                <div class="summary-title">ここまでの収入</div>
 
                 <div class="summary-money" id="yearIncome">
 
@@ -269,11 +272,14 @@
 
                 </div>
 
-            </div>
+            </button>
 
-            <div class="summary-item">
+            <button
+                class="summary-item"
+                onclick="showCategoryList()"
+                style="cursor:pointer;">
 
-                <div class="summary-title">支出</div>
+                <div class="summary-title">ここまでの支出</div>
 
                 <div class="summary-money" id="yearSpent">
 
@@ -281,7 +287,7 @@
 
                 </div>
 
-            </div>
+            </button>
 
             <div class="summary-item">
 
@@ -513,8 +519,19 @@ gap:8px;
 margin-bottom:15px;">
 
 <button
+id="incomeAllFilter"
+class="setting-item"
+style="flex:1;width:auto;margin:0;padding:12px 4px;text-align:center;"
+onclick="incomeFilter='all';drawIncomeHistory();">
+
+💰 全部
+
+</button>
+
+<button
 id="incomePapaFilter"
 class="setting-item"
+style="flex:1;width:auto;margin:0;padding:12px 4px;text-align:center;"
 onclick="incomeFilter='papa';drawIncomeHistory();">
 
 👨 パパ
@@ -524,6 +541,7 @@ onclick="incomeFilter='papa';drawIncomeHistory();">
 <button
 id="incomeMamaFilter"
 class="setting-item"
+style="flex:1;width:auto;margin:0;padding:12px 4px;text-align:center;"
 onclick="incomeFilter='mama';drawIncomeHistory();">
 
 👩 ママ
@@ -533,6 +551,7 @@ onclick="incomeFilter='mama';drawIncomeHistory();">
 <button
 id="incomeExtraFilter"
 class="setting-item"
+style="flex:1;width:auto;margin:0;padding:12px 4px;text-align:center;"
 onclick="incomeFilter='extra';drawIncomeHistory();">
 
 🎁 臨時
