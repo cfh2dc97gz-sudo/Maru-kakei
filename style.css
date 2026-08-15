@@ -680,3 +680,9 @@ body{background:var(--v29-cream)}
         font-size:12px !important;
     }
 }
+
+
+/* まる家計：特別費カードは2段目の中央に配置 */
+.image-home-menu .special-expense-image-button{
+    grid-column:2;
+}
