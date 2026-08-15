@@ -451,352 +451,166 @@ body{background:var(--v29-cream)}
 
 
 /* =========================================================
-   まる家計 Ver31｜参考デザイン完成版
-   数字・コメント・既存機能は変更せず、ホームの見た目だけ整理
-========================================================= */
-
-#homePage.v31-home{
-  max-width:430px;
-  margin:0 auto;
-  padding:18px 12px 118px;
-  background:#fffaf0;
-}
-
-#homePage.v31-home .v29-top-left{width:76px;left:-1px;top:2px}
-#homePage.v31-home .v29-top-right{width:78px;right:-2px;top:0}
-
-#homePage.v31-home .v29-month-card{
-  margin-top:64px;
-  min-height:112px;
-  grid-template-columns:54px 1fr 112px;
-  gap:6px;
-  padding:9px 10px;
-  border:3px solid #f2ce58!important;
-  border-radius:34px!important;
-  background:#fffdf8!important;
-  box-shadow:0 5px 0 #f1e1b4,0 8px 18px rgba(111,85,75,.06)!important;
-}
-#homePage.v31-home .v29-round-btn{
-  width:52px;height:52px;border:3px solid #f2ce58;
-  background:#fffdf8;color:#6d5148;font-size:34px;
-}
-#homePage.v31-home .v29-round-btn.v29-trash{font-size:21px}
-#homePage.v31-home #yearSelect{font-size:18px;color:#6d5148}
-#homePage.v31-home #period{margin:0;font-size:29px;line-height:1.15;color:#3e302b}
-
-#homePage.v31-home .v29-summary-card{
-  margin-top:14px;padding:17px 10px 12px;
-  border:3px solid #efda8a;border-radius:31px;background:#fff;
-  box-shadow:0 5px 0 #f2e4bd,0 9px 20px rgba(111,85,75,.055);
-}
-#homePage.v31-home .v29-summary-item{padding:0 2px}
-#homePage.v31-home .v29-summary-item:not(:last-child):after{
-  top:8px;bottom:4px;border-right:3px dotted #eadcb9;
-}
-#homePage.v31-home .v29-summary-icon{font-size:24px;height:29px}
-#homePage.v31-home .v29-summary-label{font-size:16px}
-#homePage.v31-home .v29-summary-money{font-size:25px;letter-spacing:-.035em}
-#homePage.v31-home .v29-dotted-divider{margin:14px 0 9px;border-top:3px dashed #eadfca}
-#homePage.v31-home .v29-bank-row{grid-template-columns:27px auto 1fr auto;gap:4px}
-#homePage.v31-home .v29-bank-icon{font-size:22px}
-#homePage.v31-home .v29-bank-label{font-size:16px}
-#homePage.v31-home .v29-bank-total{font-size:19px}
-#homePage.v31-home .v29-bank-saving{font-size:18px}
-
-#homePage.v31-home .v29-coach-card{
-  margin-top:14px;padding:14px 12px 16px;
-  border:3px solid #efc94e;border-radius:31px;
-  background:linear-gradient(180deg,#fff0a5 0%,#fff5c7 100%)!important;
-  box-shadow:0 5px 0 #eedda5,0 9px 20px rgba(111,85,75,.06);
-}
-#homePage.v31-home .v29-coach-title-row{gap:7px;margin-bottom:10px}
-#homePage.v31-home .v29-chick{width:42px;height:42px}
-#homePage.v31-home .v29-coach-title-row h2{font-size:24px;line-height:1.1}
-#homePage.v31-home .v29-coach-inner{grid-template-columns:minmax(0,1fr) 116px;gap:8px}
-#homePage.v31-home .v29-coach-bubble,
-#homePage.v31-home .v29-challenge-note{
-  border:2px solid #e5d9bd!important;border-radius:26px!important;
-  background:#fffefa!important;box-shadow:0 4px 0 #e6ddca!important;
-}
-#homePage.v31-home .v29-coach-bubble{
-  min-height:151px;padding:14px 11px;font-size:14px;line-height:1.55;
-}
-#homePage.v31-home .v29-coach-bubble strong{font-size:18px;margin-bottom:8px}
-#homePage.v31-home .v29-flower{font-size:22px;right:8px;top:9px}
-#homePage.v31-home .v29-challenge-note{padding:13px 8px;transform:none}
-#homePage.v31-home .v29-note-title{font-size:12px;line-height:1.4}
-#homePage.v31-home .v29-note-amount{font-size:24px;margin-top:10px}
-#homePage.v31-home .v29-note-sub{font-size:11px}
-#homePage.v31-home .v29-note-line{height:4px;margin-top:9px}
-
-#homePage.v31-home .v29-home-menu{
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:7px;margin-top:14px;
-}
-#homePage.v31-home .v29-menu-card{
-  min-height:238px!important;padding:8px 5px 10px;
-  border:3px solid #efd05a!important;border-radius:27px!important;
-  box-shadow:0 5px 0 #eadfae,0 8px 15px rgba(111,85,75,.055)!important;
-}
-#homePage.v31-home .v29-menu-category{background:linear-gradient(180deg,#fff7d9,#fff0c7)!important}
-#homePage.v31-home .v29-menu-income{background:linear-gradient(180deg,#ffeaf2,#f8ddeb)!important}
-#homePage.v31-home .v29-menu-coach{background:linear-gradient(180deg,#eaf5df,#e2efd8)!important}
-#homePage.v31-home .v29-menu-art{height:128px!important;padding-top:3px}
-#homePage.v31-home .v29-menu-art svg{width:100%;height:100%;max-width:190px!important}
-#homePage.v31-home .v29-menu-label{
-  font-size:16px!important;padding:6px 8px!important;min-width:0;
-  border:2px solid #e3d6ba!important;border-radius:17px!important;
-}
-#homePage.v31-home .v29-menu-card p{
-  margin:8px 1px 0;min-height:36px;font-size:9.5px!important;line-height:1.35;
-}
-#homePage.v31-home .v29-arrow{
-  width:32px;height:32px;right:5px;bottom:5px;
-  font-size:28px;line-height:30px;background:#f3c641!important;
-}
-
-#homePage.v31-home{min-height:calc(100vh - 88px)}
-
-.bottom-nav{
-  height:88px!important;
-  padding:6px 8px calc(7px + env(safe-area-inset-bottom))!important;
-  background:rgba(255,253,248,.98)!important;
-  border-top:2px solid #efdfad!important;
-}
-.bottom-nav button{min-height:72px!important;border-radius:28px!important;font-size:27px!important}
-.bottom-nav button span{font-size:13px!important}
-.bottom-nav button.active{background:#fff5d7!important;color:#d39b16!important}
-
-@media(max-width:390px){
-  #homePage.v31-home{padding-left:9px;padding-right:9px}
-  #homePage.v31-home .v29-month-card{grid-template-columns:50px 1fr 105px}
-  #homePage.v31-home .v29-round-btn{width:48px;height:48px;font-size:31px}
-  #homePage.v31-home .v29-summary-money{font-size:23px}
-  #homePage.v31-home .v29-bank-label{font-size:14px}
-  #homePage.v31-home .v29-bank-total{font-size:18px}
-  #homePage.v31-home .v29-bank-saving{font-size:17px}
-  #homePage.v31-home .v29-menu-card{min-height:225px!important}
-  #homePage.v31-home .v29-menu-art{height:119px!important}
-  #homePage.v31-home .v29-menu-label{font-size:14px!important}
-  #homePage.v31-home .v29-menu-card p{font-size:9px!important}
-}
-
-
-/* =========================================================
-   今回追加：ユーザー提供画像をそのままボタンとして使用
+   Ver31｜参考画像そのものをホームの土台にする
+   数字・コメントだけHTMLで差し替え可能
    ========================================================= */
-
-.image-home-menu{
-    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-    gap:8px !important;
-    align-items:start;
+.image-home{
+  padding:0 0 92px !important;
+  margin:0 auto !important;
+  max-width:680px !important;
+  background:#fffdf8 !important;
+}
+.home-art{
+  position:relative;
+  width:100%;
+  container-type:inline-size;
+  line-height:1;
+}
+.home-reference{
+  display:block;
+  width:100%;
+  height:auto;
+  user-select:none;
+  -webkit-user-drag:none;
+  max-width:none;
+}
+.home-hit,
+.home-bank-hit{
+  position:absolute;
+  border:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  z-index:30;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.home-hit:active,
+.home-bank-hit:active{transform:none !important;opacity:1 !important}
+.home-erase{
+  position:absolute;
+  z-index:8;
+  pointer-events:none;
+}
+.home-value,
+.home-date-overlay,
+.home-coach-overlay,
+.home-challenge-overlay,
+.home-bank-hit{
+  position:absolute;
+  z-index:20;
 }
 
-.image-menu-button{
-    display:block;
-    width:100%;
-    min-width:0;
-    padding:0 !important;
-    margin:0;
-    border:0 !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    border-radius:0 !important;
-    overflow:hidden;
-    cursor:pointer;
-    line-height:0;
-    transition:transform .12s ease;
+/* 背景画像内のサンプル値を隠す */
+.home-erase-date{left:34%;top:3.5%;width:34%;height:5.7%;background:#fff2bd;border-radius:24px}
+.home-erase-income{left:5.3%;top:14.6%;width:26%;height:6.0%;background:#fffefa;border-radius:10px}
+.home-erase-spent{left:37.6%;top:14.6%;width:26.5%;height:6.0%;background:#fffefa;border-radius:10px}
+.home-erase-remain{left:69.0%;top:14.6%;width:27%;height:6.0%;background:#fffefa;border-radius:10px}
+.home-erase-bank{left:35.0%;top:22.0%;width:25%;height:5.0%;background:#fffefa;border-radius:8px}
+.home-erase-saving{left:72.2%;top:22.0%;width:17.5%;height:5.0%;background:#f8e0e1;border-radius:16px}
+.home-erase-coach{left:30.0%;top:35.2%;width:39.5%;height:10.0%;background:#fffefa;border-radius:40px}
+.home-erase-challenge{left:73.0%;top:37.0%;width:19.0%;height:6.0%;background:#fffefa;border-radius:10px}
+
+.home-date-overlay{
+  left:34%;top:3.7%;width:34%;height:5.3%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#604c45;text-align:center;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  pointer-events:none;
+}
+.home-date-overlay select{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  width:100%;
+  height:100%;
+  pointer-events:auto;
+  appearance:none;
+  -webkit-appearance:none;
+  border:0;
+  background:transparent;
+}
+.home-date-overlay #period{
+  font-size:clamp(23px,7cqw,45px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  color:#604c45 !important;
+  margin:0 !important;
+  white-space:nowrap;
 }
 
-.image-menu-button:active{
-    transform:scale(.97);
+.home-value{
+  top:14.6%;
+  width:27%;
+  height:6%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(17px,5.1cqw,34px);
+  font-weight:900;
+  color:#3e302b;
+  white-space:nowrap;
+}
+.home-income{left:5%;}
+.home-spent{left:37%;}
+.home-remain{left:69%;color:#2e7d32}
+.home-bank-hit{
+  left:34%;top:21.5%;width:58%;height:6.5%;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3% !important;
+  color:#3e302b !important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(15px,4.2cqw,28px);
+  font-weight:900;
+  pointer-events:auto;
+}
+.home-bank-hit span:first-child{margin-left:0}
+.home-bank-hit span:last-child{color:#d83a32}
+
+.home-coach-overlay{
+  left:30.5%;top:35.6%;width:38.5%;height:9.2%;
+  padding:1.1% 1.6%;
+  display:flex;flex-direction:column;justify-content:center;
+  color:#604c45;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  line-height:1.38;
+  pointer-events:none;
+}
+.home-coach-overlay strong{
+  display:block;
+  font-size:clamp(13px,3.8cqw,25px);
+  font-weight:900;
+  margin-bottom:.6em;
+}
+.home-coach-overlay span{
+  display:block;
+  font-size:clamp(9px,2.6cqw,17px);
+  font-weight:700;
+}
+.home-challenge-overlay{
+  left:73.2%;top:37.1%;width:18.5%;height:5.5%;
+  display:flex;align-items:center;justify-content:center;
+  color:#d59b14;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(18px,5.1cqw,34px);
+  font-weight:900;
+  white-space:nowrap;
+  pointer-events:none;
 }
 
-.image-menu-button img{
-    display:block;
-    width:100%;
-    height:auto;
-    border:0;
-    border-radius:0;
-    object-fit:contain;
-}
+/* 透明タップ領域 */
+.home-prev{left:26%;top:3.2%;width:8.5%;height:7.0%}
+.home-next{left:66.0%;top:3.2%;width:8.5%;height:7.0%}
+.home-trash{left:90.0%;top:3.2%;width:7.0%;height:7.0%}
+.home-card-1{left:2.6%;top:49.0%;width:31.3%;height:21.0%}
+.home-card-2{left:34.3%;top:49.0%;width:31.3%;height:21.0%}
+.home-card-3{left:66.8%;top:49.0%;width:31.0%;height:21.0%}
+.home-card-4{left:2.6%;top:71.2%;width:31.3%;height:20.7%}
+.home-card-5{left:34.3%;top:71.2%;width:31.3%;height:20.7%}
+.home-card-6{left:66.8%;top:71.2%;width:31.0%;height:20.7%}
 
-.image-bottom-nav button{
-    padding:4px 3px !important;
-}
-
-.image-bottom-nav button img{
-    display:block;
-    width:44px;
-    height:36px;
-    object-fit:contain;
-    margin:0 auto 2px;
-}
-
-.image-bottom-nav button:first-child img{
-    width:54px;
-}
-
-.image-bottom-nav button:nth-child(3) img{
-    width:46px;
-}
-
-.image-bottom-nav button:nth-child(4) img{
-    width:40px;
-    height:36px;
-}
-
-.image-bottom-nav button span{
-    display:block;
-    font-size:13px !important;
-    line-height:1.1;
-}
-
-@media(max-width:390px){
-    .image-home-menu{
-        gap:6px !important;
-        margin-top:12px !important;
-    }
-
-    .image-bottom-nav button img{
-        width:39px;
-        height:32px;
-    }
-
-    .image-bottom-nav button:first-child img{
-        width:48px;
-    }
-
-    .image-bottom-nav button:nth-child(3) img{
-        width:42px;
-    }
-
-    .image-bottom-nav button:nth-child(4) img{
-        width:36px;
-        height:32px;
-    }
-
-    .image-bottom-nav button span{
-        font-size:12px !important;
-    }
-}
-
-
-/* まる家計：特別費カードは2段目の中央に配置 */
-.image-home-menu .special-expense-image-button{
-    grid-column:2;
-}
-
-/* =========================================================
-   参考画像そのものをベースにしたホーム
-   数字・コメントだけHTMLで動的表示
-   ========================================================= */
-#homePage.reference-home{
-    width:100%;
-    max-width:760px;
-    margin:0 auto;
-    padding:0 0 105px;
-    background:transparent;
-}
-.reference-home-art{
-    position:relative;
-    width:100%;
-    max-width:760px;
-    margin:0 auto;
-    line-height:1;
-    overflow:hidden;
-}
-.reference-home-base{
-    display:block;
-    width:100%;
-    height:auto;
-    user-select:none;
-    -webkit-user-drag:none;
-}
-.ref-hit,.ref-menu-hit,.ref-coach-hit,.ref-bank-hit{
-    position:absolute;
-    border:0;
-    margin:0;
-    padding:0;
-    background:transparent;
-    cursor:pointer;
-    z-index:5;
-    -webkit-tap-highlight-color:transparent;
-}
-.ref-hit:active,.ref-menu-hit:active,.ref-coach-hit:active,.ref-bank-hit:active{
-    transform:scale(.985);
-}
-.ref-prev{left:27.5%;top:4.5%;width:8%;height:8%;}
-.ref-reset{left:66.2%;top:4.2%;width:8%;height:8%;}
-.ref-next{left:74%;top:4.5%;width:8%;height:8%;}
-.ref-month-text{
-    position:absolute;
-    left:35.5%;top:4.2%;width:29%;height:7.5%;
-    z-index:4;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:#4a3932;
-    pointer-events:none;
-    font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
-}
-.ref-month-text div{font-size:clamp(13px,3.4vw,27px);font-weight:900;line-height:1.05;margin-bottom:3px;}
-.ref-month-text strong{font-size:clamp(19px,5vw,40px);font-weight:950;line-height:1.05;white-space:nowrap;}
-.ref-year-select{
-    position:absolute;left:36%;top:4%;width:28%;height:8%;z-index:2;
-    opacity:0;pointer-events:none;
-}
-.ref-value{
-    position:absolute;
-    z-index:4;
-    pointer-events:none;
-    color:#4a3932;
-    font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
-    font-size:clamp(18px,5.4vw,43px);
-    font-weight:950;
-    letter-spacing:-.025em;
-    text-align:center;
-    white-space:nowrap;
-}
-.ref-income-value{left:6%;top:15.5%;width:27%;}
-.ref-spent-value{left:36.5%;top:15.5%;width:27%;}
-.ref-remain-value{left:68.5%;top:15.5%;width:27%;color:#2f8739;}
-.ref-remain-value.minus{color:#d83a32;}
-.ref-bank-hit{left:6%;top:24.7%;width:89%;height:6.2%;text-align:left;}
-.ref-bank-total{
-    position:absolute;left:10.5%;top:0;width:40%;
-    font-size:clamp(17px,4.8vw,38px);font-weight:950;color:#4a3932;white-space:nowrap;
-}
-.ref-saving{
-    position:absolute;right:0;top:0;width:23%;
-    font-size:clamp(17px,4.8vw,38px);font-weight:950;color:#d83a32;text-align:center;white-space:nowrap;
-}
-.ref-saving.plus{color:#2f8739!important;}
-.ref-coach-hit{left:3%;top:34%;width:94%;height:21%;}
-.ref-coach-copy{
-    position:absolute;left:31.5%;top:36.2%;width:39%;height:9.5%;
-    z-index:4;pointer-events:none;color:#6a5147;
-    font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
-}
-.ref-coach-copy strong{display:block;font-size:clamp(15px,4vw,32px);font-weight:950;line-height:1.12;color:#3e302b;margin-bottom:5px;}
-.ref-coach-copy span{display:block;font-size:clamp(10px,2.7vw,22px);font-weight:750;line-height:1.42;}
-.ref-challenge-value{
-    position:absolute;left:73.5%;top:39.7%;width:20%;
-    z-index:4;pointer-events:none;text-align:center;
-    color:#d79d18;font-family:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold",sans-serif;
-    font-size:clamp(16px,4.6vw,37px);font-weight:950;white-space:nowrap;
-}
-.ref-menu-hit{top:59.2%;height:22%;}
-.ref-category-hit{left:2.5%;width:31.5%;}
-.ref-income-hit{left:35%;width:31.5%;}
-.ref-annual-hit{left:67.5%;width:31%;}
-
-/* 画像ホームでは既存のカードUIを表示しない */
-#homePage.reference-home > .card,
-#homePage.reference-home > .home-menu{display:none!important;}
-
-@media (max-width:600px){
-    #homePage.reference-home{padding-bottom:98px;}
+/* ホーム上では元画像の下部ナビを使わず、アプリ側の固定ナビを表示 */
+.image-home + .page{margin-top:0}
+@media(max-width:430px){
+  .image-home{padding-bottom:88px !important}
 }
