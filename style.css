@@ -19,6 +19,26 @@ button,input,select{font:inherit}
 button{color:inherit}
 .page{min-height:100vh;padding:10px 16px 110px}
 #homePage{padding:10px 16px 100px}
+.home-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 100px}
+.home-menu-card{position:relative;min-height:170px;padding:12px 8px 13px;border:1.5px solid var(--line);border-radius:24px;cursor:pointer;text-align:center;box-shadow:0 4px 12px rgba(96,75,56,.06);transition:transform .12s ease,box-shadow .12s ease;overflow:hidden}
+.home-menu-card:active{transform:scale(.97);box-shadow:0 2px 7px rgba(96,75,56,.05)}
+.home-menu-card.category{background:#fff8df}
+.home-menu-card.income{background:#fff0f5}
+.home-menu-card.coach{background:#edf7e6}
+.home-menu-illust{height:82px;display:flex;align-items:center;justify-content:center;font-size:44px;letter-spacing:-7px}
+.home-menu-title{display:inline-block;margin-top:2px;padding:5px 8px;border:1px solid #e7d7b8;background:#fffdf7;border-radius:15px;color:var(--brown-dark);font-size:16px;font-weight:950;line-height:1.1}
+.home-menu-card p{margin:7px 0 0;color:#78665d;font-size:10.5px;font-weight:750;line-height:1.35}
+.home-menu-arrow{position:absolute;right:8px;bottom:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--yellow-strong);color:#fff;font-size:23px;font-weight:950}
+.home-coach-wrap{display:grid;grid-template-columns:1fr 116px;gap:12px;align-items:stretch}
+.home-coach-message{background:#fff;border:1px solid #eadfbf;border-radius:18px;padding:13px 14px;color:#66554d;line-height:1.55;font-size:14px}
+.home-coach-message strong{display:block;color:var(--brown-dark);font-size:16px;margin-bottom:5px}
+.home-coach-challenge{background:#fff;border:1px solid #eadfbf;border-radius:18px;padding:12px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.home-coach-challenge .label{font-size:11px;font-weight:850;color:#76594d;line-height:1.3}
+.home-coach-challenge .amount{font-size:23px;font-weight:950;color:#d79d18;margin-top:5px}
+.home-coach-challenge .sub{font-size:10px;color:#8b786f;margin-top:3px}
+.home-subpage-title{display:flex;align-items:center;gap:8px}
+.home-subpage-back{width:100%;border:1.5px solid var(--line);background:#fffaf0;border-radius:18px;padding:12px 15px;text-align:left;font-weight:900;color:var(--brown);margin-bottom:10px}
+.home-subpage-note{font-size:13px;color:var(--muted);line-height:1.6;margin:0 2px 12px}
 .card{background:var(--card);border:1.5px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:18px;margin:10px 0}
 .card h2{margin:0;color:var(--brown);font-size:22px;line-height:1.25;font-weight:900;letter-spacing:.01em}
 .card h3{color:var(--brown);font-weight:900}
@@ -93,6 +113,16 @@ button{color:inherit}
   .card{padding:22px}
 }
 @media (max-width:390px){
+  .home-menu{gap:7px}
+  .home-menu-card{min-height:158px;padding:10px 5px 11px;border-radius:21px}
+  .home-menu-illust{height:70px;font-size:37px}
+  .home-menu-title{font-size:14px;padding:5px 5px;border-radius:13px}
+  .home-menu-card p{font-size:9.5px}
+  .home-menu-arrow{width:25px;height:25px;font-size:20px;right:6px;bottom:6px}
+  .home-coach-wrap{grid-template-columns:1fr 100px;gap:8px}
+  .home-coach-message{font-size:13px;padding:11px 12px}
+  .home-coach-message strong{font-size:15px}
+  .home-coach-challenge .amount{font-size:20px}
   .month-header{grid-template-columns:44px 1fr 90px}
   .month-header button{width:44px;height:44px}
   #period{font-size:22px}
