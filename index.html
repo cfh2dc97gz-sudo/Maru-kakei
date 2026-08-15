@@ -22,183 +22,125 @@
 
 <div id="homePage">
 
-    <!-- 月 -->
-
     <div class="card summary-card">
-
         <div class="month-header">
-
             <button id="prevMonth">◀</button>
-
             <div class="period-area">
-
                 <select id="yearSelect">
-
                     <option value="2024">2024年度</option>
-
                     <option value="2025">2025年度</option>
-
                     <option value="2026" selected>2026年度</option>
-
                     <option value="2027">2027年度</option>
-
                 </select>
-
-                <h2 id="period">
-
-                    4月
-
-                </h2>
-
+                <h2 id="period">4月</h2>
             </div>
-
             <div class="month-right">
-
-                <button id="resetMonth" class="mini-reset">
-
-                    🗑
-
-                </button>
-
-                <button id="nextMonth">
-
-                    ▶
-
-                </button>
-
+                <button id="resetMonth" class="mini-reset">🗑</button>
+                <button id="nextMonth">▶</button>
             </div>
-
         </div>
-
     </div>
-
- <!-- 今月のお金 -->
-
-<div class="card">
-
-    <div class="summary-grid">
-
-        <div class="summary-item">
-
-            <div class="summary-title">
-                収入
-            </div>
-
-            <div class="summary-money" id="incomeSummary">
-                ¥0
-            </div>
-
-        </div>
-
-        <div class="summary-item">
-
-            <div class="summary-title">
-                支出
-            </div>
-
-            <div class="summary-money" id="spent">
-                ¥0
-            </div>
-
-        </div>
-
-        <div class="summary-item">
-
-            <div class="summary-title">
-                残り
-            </div>
-
-            <div class="summary-money" id="remain">
-                ¥0
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="bank-row" onclick="editBank()">
-
-        <span class="bank-label">
-            🏦 銀行残高
-        </span>
-
-        <span class="bank-total" id="bankTotal">
-            ¥0
-        </span>
-
-        <span class="bank-saving plus" id="savingTotal">
-            ¥0
-        </span>
-
-    </div>
-
-</div>
-    <!-- AI -->
-
-    <div class="card ai-card">
-
-        <h2>🤖 AIコンサルタント</h2>
-
-       <div id="aiComment">
-
-    分析中...
-
-</div>
-    </div>
-
-    <!-- カテゴリ -->
 
     <div class="card">
-
-        <div class="category-header">
-
-            <h2>📒 カテゴリ</h2>
-
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="summary-title">収入</div>
+                <div class="summary-money" id="incomeSummary">¥0</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-title">支出</div>
+                <div class="summary-money" id="spent">¥0</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-title">残り</div>
+                <div class="summary-money" id="remain">¥0</div>
+            </div>
         </div>
-
-        <div id="gridArea">
-
+        <div class="bank-row" onclick="editBank()">
+            <span class="bank-label">🏦 銀行残高</span>
+            <span class="bank-total" id="bankTotal">¥0</span>
+            <span class="bank-saving plus" id="savingTotal">¥0</span>
         </div>
-
     </div>
 
-    <!-- 収入 -->
-
-    <div class="card income-card">
-
-        <h2>💰 収入</h2>
-
-        <div class="income-grid">
-
-            <button id="incomePapa">
-
-                👨<br>パパ
-
-            </button>
-
-            <button id="incomeMama">
-
-                👩<br>ママ
-
-            </button>
-
-            <button id="incomeExtra">
-
-                🎁<br>臨時
-
-            </button>
-
+    <div class="card ai-card">
+        <h2>💡 今日のまるコーチ</h2>
+        <div class="home-coach-wrap">
+            <div class="home-coach-message">
+                <strong id="homeCoachTitle">今のペースをチェック中…</strong>
+                <span id="homeCoachMessage">今日の使い方を見ながら、今月の目標をわかりやすくお知らせするよ。</span>
+            </div>
+            <div class="home-coach-challenge">
+                <div class="label">🎯 今月の節約チャレンジ</div>
+                <div class="amount" id="homeChallengeAmount">¥0</div>
+                <div class="sub">今月の改善目標</div>
+            </div>
         </div>
-
-        <div class="money" id="income">
-
-            ¥0
-
-        </div>
-
     </div>
+
+    <section class="home-menu">
+        <button class="home-menu-card category" onclick="openHomeCategory()">
+            <div class="home-menu-illust">👜🥕🧾</div>
+            <div class="home-menu-title">📒 カテゴリ</div>
+            <p>食費・休日・ガソリンなど</p>
+            <span class="home-menu-arrow">›</span>
+        </button>
+
+        <button class="home-menu-card income" onclick="openHomeIncome()">
+            <div class="home-menu-illust">👛💰✨</div>
+            <div class="home-menu-title">💰 収入</div>
+            <p>パパ・ママ・臨時</p>
+            <span class="home-menu-arrow">›</span>
+        </button>
+
+        <button class="home-menu-card coach" onclick="openAnnualCoach()">
+            <div class="home-menu-illust">📒📊🎯</div>
+            <div class="home-menu-title">🎯 年間コーチ</div>
+            <p>目標・予測・アドバイス</p>
+            <span class="home-menu-arrow">›</span>
+        </button>
+    </section>
 
 </div>
+
+<!-- ホームから開くカテゴリ入力画面 -->
+<div id="homeCategoryPage" class="page" style="display:none;">
+    <div class="card">
+        <button class="home-subpage-back" onclick="showPage('home')">← ホームへ戻る</button>
+        <h2 class="home-subpage-title">📒 カテゴリ</h2>
+        <p class="home-subpage-note">使った金額をカテゴリごとに入力できます。ATMは現金の振り分け管理として使います。</p>
+        <div id="gridArea"></div>
+    </div>
+</div>
+
+<!-- ホームから開く収入入力画面 -->
+<div id="homeIncomePage" class="page" style="display:none;">
+    <div class="card">
+        <button class="home-subpage-back" onclick="showPage('home')">← ホームへ戻る</button>
+        <h2 class="home-subpage-title">💰 収入</h2>
+        <p class="home-subpage-note">パパ・ママ・臨時の収入を入力できます。</p>
+        <div class="income-grid">
+            <button id="incomePapa">👨<br>パパ</button>
+            <button id="incomeMama">👩<br>ママ</button>
+            <button id="incomeExtra">🎁<br>臨時</button>
+        </div>
+        <div class="money" id="income">¥0</div>
+        <button class="setting-item" onclick="showPage('income')">💰 年間収入履歴を見る</button>
+    </div>
+</div>
+
+<!-- ホームから開く年間コーチ画面 -->
+<div id="annualCoachPage" class="page" style="display:none;">
+    <div class="card">
+        <button class="home-subpage-back" onclick="showPage('home')">← ホームへ戻る</button>
+        <h2 class="home-subpage-title">🎯 年間コーチ</h2>
+        <p class="home-subpage-note">年間目標・年度末予測・ボーナス・節約チャレンジをまとめて確認できます。</p>
+    </div>
+    <div class="card ai-card">
+        <div id="aiComment">分析中...</div>
+    </div>
+</div>
+
 <!-- 年間 -->
 
 <div id="yearPage" class="page" style="display:none;">
