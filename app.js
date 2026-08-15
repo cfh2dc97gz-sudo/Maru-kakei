@@ -1464,14 +1464,18 @@ function drawYearSummary(){
         title.textContent = `${currentYear}年度`;
     }
 
-    // 年間合計は「ここまでの実績」だけを表示。
-    // ボーナスの予測・見込みは年度末予測側で扱う。
-    let income = 0;
+    // 「年間合計」は実際に入力された収入・支出だけ。
+    // 収入は収入履歴を正本として集計し、賞与の重複も除外する。
+    const incomeHistory = getFiscalIncomeHistory();
+
+    const income = incomeHistory.reduce(
+        (sum,item)=>sum + Number(item.amount || 0),
+        0
+    );
+
     let spent = 0;
 
-    const months = getFiscalMonths();
-
-    months.forEach(month=>{
+    getFiscalMonths().forEach(month=>{
 
         const year =
             month <= 3
@@ -1481,11 +1485,6 @@ function drawYearSummary(){
         const data = getMonthData(year,month);
 
         if(!data) return;
-
-        income +=
-            Number(data.income?.papa || 0) +
-            Number(data.income?.mama || 0) +
-            Number(data.income?.extra || 0);
 
         spent +=
             (data.budgets || []).reduce(
@@ -1500,8 +1499,8 @@ function drawYearSummary(){
 
     const saving =
         (
-            app.bank.mitake +
-            app.bank.takizawa
+            Number(app.bank.mitake || 0) +
+            Number(app.bank.takizawa || 0)
         ) -
         Number(app.startBank || 0);
 
@@ -1527,16 +1526,21 @@ function drawYearSummary(){
             (remain >= 0 ? "plus" : "minus");
     }
 
-    document.getElementById("yearGoal").textContent =
-        `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+    const goalEl = document.getElementById("yearGoal");
+    const goalBar = document.getElementById("goalBar");
 
-    document.getElementById("goalBar").style.width =
-        Math.min(
-            progress /
-            Math.max(app.goal,1) *
-            100,
-            100
-        ) + "%";
+    if(goalEl){
+        goalEl.textContent =
+            `¥${progress.toLocaleString()} / ¥${app.goal.toLocaleString()}`;
+    }
+
+    if(goalBar){
+        goalBar.style.width =
+            Math.min(
+                progress / Math.max(app.goal,1) * 100,
+                100
+            ) + "%";
+    }
 
 }
 
@@ -1614,15 +1618,26 @@ function showCategoryList(){
 
     app.budgets.forEach(budget=>{
 
+        const categoryTotal = allExpenses
+            .filter(item => item.category === budget.name)
+            .reduce(
+                (sum,item)=>sum + Number(item.amount || 0),
+                0
+            );
+
         historyList.innerHTML += `
             <button
                 class="setting-item"
+                style="display:flex;justify-content:space-between;align-items:center;gap:12px;"
                 onclick="
                     window.lastPage='category';
                     app.categoryFilter='${budget.name}';
                     drawCategoryDetail('${budget.id}');
                 ">
-                ${budget.name}
+                <span>${budget.name}</span>
+                <strong style="font-size:18px;white-space:nowrap;">
+                    ¥${categoryTotal.toLocaleString()}
+                </strong>
             </button>
         `;
 
@@ -1644,6 +1659,37 @@ function getFiscalMonths(){
 
 }
 
+function normalizeIncomeHistoryItem(item, year, month, index){
+
+    const rawDate = item?.date || "";
+    const targetMonth = item?.targetMonth || `${year}-${String(month).padStart(2,"0")}`;
+
+    let monthNumber = Number(String(targetMonth).split("-")[1]);
+
+    if(!Number.isFinite(monthNumber)){
+        const m = String(rawDate).match(/(?:^|\D)(\d{1,2})(?:\D\d{1,2})?$/);
+        monthNumber = m ? Number(m[1]) : month;
+    }
+
+    const isBonus = /賞与/.test(String(item?.type || ""));
+
+    const stableKey =
+        `${year}-${String(month).padStart(2,"0")}|` +
+        `${item?.type || ""}|` +
+        `${Number(item?.amount || 0)}|` +
+        `${rawDate}`;
+
+    return {
+        ...item,
+        id: item?.id || `income-${stableKey}-${index}`,
+        year,
+        month: monthNumber,
+        targetMonth,
+        isBonus
+    };
+
+}
+
 function getFiscalIncomeHistory(){
 
     const list = [];
@@ -1659,19 +1705,39 @@ function getFiscalIncomeHistory(){
 
         if(!data) return;
 
-        (data.incomeHistory || []).forEach(item=>{
+        (data.incomeHistory || []).forEach((item,index)=>{
 
-            list.push({
-                ...item,
-                year,
-                month
-            });
+            list.push(
+                normalizeIncomeHistoryItem(item, year, month, index)
+            );
 
         });
 
     });
 
-    return list.sort(
+    // 賞与は管理画面が正しい数字の基準。
+    // 履歴側に同じ賞与が複数保存されていても、表示は1件にする。
+    const seenBonus = new Set();
+    const normalized = [];
+
+    list.forEach(item=>{
+
+        if(item.isBonus){
+
+            const key =
+                `${item.year}-${String(item.month).padStart(2,"0")}|` +
+                `${item.type}|${Number(item.amount || 0)}`;
+
+            if(seenBonus.has(key)) return;
+            seenBonus.add(key);
+
+        }
+
+        normalized.push(item);
+
+    });
+
+    return normalized.sort(
         (a,b)=>new Date(b.date)-new Date(a.date)
     );
 
@@ -1781,10 +1847,8 @@ function drawIncomeHistory(){
 
     list.forEach(item=>{
 
-        const month = Number(
-            (item.targetMonth || item.date.substring(0,7))
-                .split("-")[1]
-        );
+        const month = Number(item.month || 0);
+        if(!Number.isFinite(month) || month < 1 || month > 12) return;
 
         if(!monthMap[month]){
             monthMap[month] = [];
@@ -1957,10 +2021,16 @@ if(categoryId){
 
 history.forEach(item => {
 
-const month = Number(
-    (item.targetMonth || item.date.substring(0,7))
-        .split("-")[1]
+let month = Number(
+    (item.targetMonth || "").split("-")[1]
 );
+
+if(!Number.isFinite(month)){
+    const match = String(item.date || "").match(/(?:^|\D)(\d{1,2})(?:\D\d{1,2})?$/);
+    month = match ? Number(match[1]) : null;
+}
+
+if(!Number.isFinite(month) || month < 1 || month > 12) return;
 
     if(!monthMap[month]){
         monthMap[month] = [];
@@ -2089,65 +2159,94 @@ function deleteIncomeHistory(id){
 
     if(!target) return;
 
-    const data = getMonthData(target.year, target.month);
+    // 賞与は「ボーナス管理」が正本。
+    // 履歴だけを削除し、ボーナス管理の金額は変更しない。
+    getFiscalMonths().forEach(month=>{
 
-    if(!data) return;
+        const year =
+            month <= 3
+                ? currentYear + 1
+                : currentYear;
 
-data.incomeHistory =
-    (data.incomeHistory || []).filter(item =>
-        item.id !== id
-    );
+        const data = getMonthData(year, month);
 
-    // 収入合計も減らす
-    data.income = data.income || {
-        papa:0,
-        mama:0,
-        extra:0
-    };
+        if(!data) return;
 
-    switch(target.type){
+        const original = data.incomeHistory || [];
 
-        case "パパ":
-        case "パパ賞与":
-            data.income.papa = Math.max(
-                0,
-                Number(data.income.papa || 0) - Number(target.amount || 0)
-            );
-            break;
+        if(target.isBonus){
 
-        case "ママ":
-        case "ママ賞与":
-            data.income.mama = Math.max(
-                0,
-                Number(data.income.mama || 0) - Number(target.amount || 0)
-            );
-            break;
+            data.incomeHistory = original.filter(item => {
 
-        case "臨時":
-            data.income.extra = Math.max(
-                0,
-                Number(data.income.extra || 0) - Number(target.amount || 0)
-            );
-            break;
+                const sameType =
+                    String(item.type || "") === String(target.type || "");
 
-    }
+                const sameAmount =
+                    Number(item.amount || 0) === Number(target.amount || 0);
 
-    localStorage.setItem(
+                const sameMonth =
+                    String(item.targetMonth || "") === String(target.targetMonth || "")
+                    || month === target.month;
 
-        `maru-kakei-${target.year}-${String(target.month).padStart(2,"0")}`,
+                return !(sameType && sameAmount && sameMonth);
 
-        JSON.stringify(data)
+            });
 
-    );
+        }else{
 
-    // 今表示中の月なら読み直す
-    if(
-        target.year === getDisplayYear(currentMonth) &&
-        target.month === currentMonth
-    ){
-        load();
-    }
+            data.incomeHistory = original.filter(item => {
 
+                if(item.id && item.id === id) return false;
+
+                return true;
+
+            });
+
+            if(year === target.year && month === target.month){
+
+                data.income = data.income || {
+                    papa:0,
+                    mama:0,
+                    extra:0
+                };
+
+                switch(target.type){
+
+                    case "パパ":
+                        data.income.papa = Math.max(
+                            0,
+                            Number(data.income.papa || 0) - Number(target.amount || 0)
+                        );
+                        break;
+
+                    case "ママ":
+                        data.income.mama = Math.max(
+                            0,
+                            Number(data.income.mama || 0) - Number(target.amount || 0)
+                        );
+                        break;
+
+                    case "臨時":
+                        data.income.extra = Math.max(
+                            0,
+                            Number(data.income.extra || 0) - Number(target.amount || 0)
+                        );
+                        break;
+
+                }
+
+            }
+
+        }
+
+        localStorage.setItem(
+            `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
+            JSON.stringify(data)
+        );
+
+    });
+
+    load();
     update();
 
 }
@@ -2984,6 +3083,68 @@ if(editBonusBtn){
     };
 
 }
+function upsertBonusHistory(type, amount){
+
+    const targetMonth =
+        `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
+
+    const data = getMonthData(
+        getDisplayYear(),
+        currentMonth
+    );
+
+    if(data){
+
+        data.incomeHistory =
+            (data.incomeHistory || []).filter(item =>
+                !(String(item.type || "") === type &&
+                  String(item.targetMonth || "") === targetMonth)
+            );
+
+        data.incomeHistory.unshift({
+            id: `bonus-${type}-${targetMonth}`,
+            date: new Date().toLocaleDateString(
+                "ja-JP",
+                {
+                    year:"numeric",
+                    month:"2-digit",
+                    day:"2-digit"
+                }
+            ),
+            type,
+            amount:Number(amount || 0),
+            targetMonth
+        });
+
+        app.incomeHistory = data.incomeHistory;
+
+    }else{
+
+        app.incomeHistory =
+            (app.incomeHistory || []).filter(item =>
+                !(String(item.type || "") === type &&
+                  String(item.targetMonth || "") === targetMonth)
+            );
+
+        app.incomeHistory.unshift({
+            id:`bonus-${type}-${targetMonth}`,
+            date:new Date().toLocaleDateString(
+                "ja-JP",
+                {
+                    year:"numeric",
+                    month:"2-digit",
+                    day:"2-digit"
+                }
+            ),
+            type,
+            amount:Number(amount || 0),
+            targetMonth
+        });
+
+    }
+
+}
+
 const summerBtn =
     document.getElementById("editSummerBonus");
 
@@ -3002,39 +3163,9 @@ summerBtn.onclick = ()=>{
             openNumberModal("積立額",(keep)=>{
 
                 app.bonus.summerKeep = keep;
-app.incomeHistory.unshift({
+upsertBonusHistory("パパ夏賞与", app.bonus.papaSummerActual);
 
-    date: new Date().toLocaleDateString(
-        "ja-JP",
-        {
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
-        }
-    ),
-
-    type:"パパ夏賞与",
-
-    amount: app.bonus.papaSummerActual
-
-});
-
-app.incomeHistory.unshift({
-
-    date: new Date().toLocaleDateString(
-        "ja-JP",
-        {
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
-        }
-    ),
-
-    type:"ママ夏賞与",
-
-    amount: app.bonus.mamaSummerActual
-
-});
+upsertBonusHistory("ママ夏賞与", app.bonus.mamaSummerActual);
                 update();
 
                 drawBonusPage();
@@ -3066,39 +3197,9 @@ if(winterBtn){
             openNumberModal("積立額",(keep)=>{
 
                 app.bonus.winterKeep = keep;
-app.incomeHistory.unshift({
+upsertBonusHistory("パパ冬賞与", app.bonus.papaWinterActual);
 
-    date: new Date().toLocaleDateString(
-        "ja-JP",
-        {
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
-        }
-    ),
-
-    type:"パパ冬賞与",
-
-    amount: app.bonus.papaWinterActual
-
-});
-
-app.incomeHistory.unshift({
-
-    date: new Date().toLocaleDateString(
-        "ja-JP",
-        {
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
-        }
-    ),
-
-    type:"ママ冬賞与",
-
-    amount: app.bonus.mamaWinterActual
-
-});
+upsertBonusHistory("ママ冬賞与", app.bonus.mamaWinterActual);
                 update();
 
                 drawBonusPage();
