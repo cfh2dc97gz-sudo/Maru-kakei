@@ -2633,7 +2633,11 @@ function drawAI(){
 
     if(holidayCoach.hasPlan){
 
-        html += `
+    
+    const historicalTrendMessage =
+        getHistoricalTrendMessage();
+
+    html += `
 <div style="
     margin-top:18px;
     padding-top:16px;
@@ -2992,6 +2996,25 @@ function drawAI(){
     </div>
 `;
 
+
+    if(historicalTrendMessage){
+
+        html += `
+<div style="
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:#f5f5f5;
+    line-height:1.7;
+    font-size:12px;
+    opacity:.9;
+">
+${historicalTrendMessage}
+</div>
+`;
+
+    }
+
     if(annual.gap > 0){
 
         html += `
@@ -3306,6 +3329,152 @@ historyList.innerHTML = "";
    将来、季節傾向や過去傾向を分析するときだけ、
    getHistoricalLearningData() を学習材料として使う。
 */
+
+
+/*
+   過去データの季節・カテゴリ傾向
+   --------------------------------
+   過去年度は現在のAI判定には混ぜず、
+   「過去にはどんな傾向があったか」を見るためだけに使う。
+*/
+
+function getHistoricalTrendData(){
+
+    const historical =
+        getHistoricalLearningData();
+
+    const result = {};
+
+    historical.forEach(monthData => {
+
+        const key =
+            `${monthData.month}`;
+
+        if(!result[key]){
+            result[key] = {
+                months: 0,
+                categories: {}
+            };
+        }
+
+        result[key].months += 1;
+
+        (monthData.history || []).forEach(item => {
+
+            const category =
+                item.category || "その他";
+
+            const amount =
+                Number(item.amount || 0);
+
+            if(!result[key].categories[category]){
+                result[key].categories[category] = {
+                    total: 0,
+                    count: 0
+                };
+            }
+
+            result[key].categories[category].total += amount;
+            result[key].categories[category].count += 1;
+
+        });
+
+    });
+
+    Object.keys(result).forEach(month => {
+
+        Object.keys(
+            result[month].categories
+        ).forEach(category => {
+
+            const item =
+                result[month].categories[category];
+
+            item.average =
+                result[month].months > 0
+                    ? Math.round(
+                        item.total /
+                        result[month].months
+                    )
+                    : 0;
+
+        });
+
+    });
+
+    return result;
+
+}
+
+/*
+   現在月の過去傾向を取得。
+   現在の予算・目標判定には使わない。
+*/
+
+function getCurrentMonthHistoricalTrends(){
+
+    const trends =
+        getHistoricalTrendData();
+
+    return trends[currentMonth] || {
+        months: 0,
+        categories: {}
+    };
+
+}
+
+/*
+   画面に出すための参考コメント。
+   データが十分にない場合は何も表示しない。
+*/
+
+function getHistoricalTrendMessage(){
+
+    const trend =
+        getCurrentMonthHistoricalTrends();
+
+    if(!trend.months || trend.months < 2){
+        return "";
+    }
+
+    const categories =
+        Object.entries(
+            trend.categories
+        )
+        .filter(([_,item]) => item.average > 0)
+        .sort(
+            (a,b) =>
+                b[1].average -
+                a[1].average
+        );
+
+    if(!categories.length){
+        return "";
+    }
+
+    const top =
+        categories.slice(0,3);
+
+    let message =
+        `📊 過去${trend.months}年の同じ時期では、`;
+
+    top.forEach(([category,item],index) => {
+
+        message +=
+            `${category}が平均約¥${item.average.toLocaleString()}`;
+
+        if(index < top.length - 1){
+            message += "、";
+        }
+
+    });
+
+    message +=
+        "でした。これは現在の予算判定には使わず、参考として表示しています。";
+
+    return message;
+
+}
 
 function getCurrentAIDataScope(){
 
