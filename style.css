@@ -1487,7 +1487,7 @@ body{background:var(--v29-cream)}
 
 @media(max-width:430px){
   .home-date-overlay #period{font-size:clamp(16px,4.35cqw,25px) !important;}
-  .home-value,.home-income,.home-spent,.home-remain{top:11.8% !important;height:5.4% !important;}
+  .home-value,.home-income,.home-spent,.home-remain{top:11% !important;height:5.4% !important;}
   .home-bank-hit{top:15.65% !important;}
   .home-bank-hit span:first-child,.home-bank-hit span:last-child{top:41% !important;}
   .home-challenge-overlay{top:31.2% !important;font-size:clamp(13px,3.8cqw,22px) !important;}
