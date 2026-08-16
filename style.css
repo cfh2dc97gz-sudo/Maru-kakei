@@ -1298,7 +1298,7 @@ body{background:var(--v29-cream)}
 
 /* 銀行残高と前月比：横位置・縦位置を個別に固定 */
 .home-bank-hit span:first-child{
-  left:37.2% !important;
+  left:34.5% !important;
   top:50% !important;
   transform:translateY(-50%) !important;
   line-height:1 !important;
@@ -1444,7 +1444,7 @@ body{background:var(--v29-cream)}
 }
 .home-bank-hit span:first-child,
 .home-bank-hit span:last-child{
-  top:41% !important;
+  top:44% !important;
 }
 
 /* 上のまるコーチ内に節約チャレンジ合計を配置 */
@@ -1489,7 +1489,7 @@ body{background:var(--v29-cream)}
   .home-date-overlay #period{font-size:clamp(16px,4.35cqw,25px) !important;}
   .home-value,.home-income,.home-spent,.home-remain{top:11% !important;height:5.4% !important;}
   .home-bank-hit{top:15.65% !important;}
-  .home-bank-hit span:first-child,.home-bank-hit span:last-child{top:41% !important;}
+  .home-bank-hit span:first-child,.home-bank-hit span:last-child{top:44% !important;}
   .home-challenge-overlay{top:31.2% !important;font-size:clamp(13px,3.8cqw,22px) !important;}
   .home-use-value{font-size:clamp(9px,2.65cqw,14px) !important;}
   .home-challenge-value{font-size:clamp(8px,2.35cqw,13px) !important;}
