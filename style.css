@@ -1015,3 +1015,133 @@ body{background:var(--v29-cream)}
   .home-value{font-size:clamp(15px,4.7cqw,27px) !important;}
   .home-bank-hit{font-size:clamp(13px,4.0cqw,22px) !important;}
 }
+
+/* =========================================================
+   Ver44｜2026-08-16
+   ユーザーが数字・日付などを完全に消したホーム画像へ差し替え。
+   画像内は空欄なので、旧マスクは使用しない。
+   ========================================================= */
+.image-home{
+  padding:0 !important;
+  margin:0 auto !important;
+  max-width:680px !important;
+  background:#fffdf8 !important;
+  overflow:hidden !important;
+}
+.home-art{
+  width:100% !important;
+  height:auto !important;
+  aspect-ratio:auto !important;
+  overflow:hidden !important;
+}
+.home-reference{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  object-fit:contain !important;
+}
+
+/* 数字を消した新画像なので、旧白マスクは全部OFF */
+.home-erase{
+  display:none !important;
+}
+
+/* 年月：黄色い台座は画像そのものを使用 */
+.home-date-overlay{
+  left:24% !important;
+  top:2.0% !important;
+  width:52% !important;
+  height:7.0% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  z-index:20 !important;
+  pointer-events:none;
+}
+.home-date-overlay select{
+  pointer-events:auto !important;
+}
+.home-date-overlay #period{
+  font-size:clamp(18px,5.0cqw,31px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+}
+
+/* 収入・支出・残り：画像の空欄の中央 */
+.home-value{
+  top:13.0% !important;
+  height:6.5% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:clamp(15px,4.7cqw,28px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  z-index:20 !important;
+}
+.home-income{left:4% !important;width:27% !important;}
+.home-spent{left:36.5% !important;width:27% !important;}
+.home-remain{left:69% !important;width:27% !important;color:#2e7d32 !important;}
+
+/* 銀行残高・前月比：画像の空欄位置に1回だけ表示 */
+.home-bank-hit{
+  left:0 !important;
+  top:16.8% !important;
+  width:100% !important;
+  height:6.8% !important;
+  display:block !important;
+  font-size:clamp(14px,4.0cqw,24px) !important;
+  line-height:1 !important;
+  z-index:30 !important;
+}
+.home-bank-hit span:first-child{
+  position:absolute !important;
+  left:37% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  margin:0 !important;
+}
+.home-bank-hit span:last-child{
+  position:absolute !important;
+  left:66.5% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  margin:0 !important;
+  font-size:1.12em !important;
+}
+
+/* まるコーチ本文は現在検討中なので非表示 */
+.home-coach-overlay{
+  display:none !important;
+}
+.home-challenge-overlay{
+  display:none !important;
+}
+
+/* 画像内の3×2カードを正しい位置でタップ */
+.home-card-1{left:2.5% !important;top:61.5% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-2{left:34.2% !important;top:61.5% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-3{left:66% !important;top:61.5% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-4{left:2.5% !important;top:72.0% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-5{left:34.2% !important;top:72.0% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-6{left:66% !important;top:72.0% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-7{left:5% !important;top:83.8% !important;width:43.5% !important;height:8.0% !important;}
+.home-card-8{left:51% !important;top:83.8% !important;width:44% !important;height:8.0% !important;}
+
+/* 画像そのものの下バーを使用。固定バーは表示しない */
+.home-bottom-home{left:0 !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+.home-bottom-year{left:25% !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+.home-bottom-special{left:50% !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+.home-bottom-setting{left:75% !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+
+@supports selector(body:has(*)){
+  body:has(#homePage:not([style*="display: none"])) .bottom-nav{
+    display:none !important;
+  }
+}
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(18px,5.0cqw,29px) !important;}
+  .home-value{font-size:clamp(15px,4.7cqw,27px) !important;}
+  .home-bank-hit{font-size:clamp(13px,4.0cqw,22px) !important;}
+}
