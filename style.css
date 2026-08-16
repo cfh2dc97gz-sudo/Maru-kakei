@@ -1383,7 +1383,7 @@ body{background:var(--v29-cream)}
 /* まるコーチ上部の「今日の節約チャレンジ 合計」へ合計額を表示 */
 .home-challenge-overlay{
   display:flex !important;
-  left:71.0% !important;
+  left:69.0% !important;
   top:34.4% !important;
   width:20.5% !important;
   height:5.5% !important;
