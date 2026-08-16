@@ -1626,14 +1626,27 @@ body{background:var(--v29-cream)}
 .home-challenge-gas{
   top:61.3% !important;
 }
-/* 使用目安・節約チャレンジの数字を小さく＋左へ */
-
+/* 今月の使用目安：小さく＋左へ */
 .home-use-value{
-  left:29% !important;
-  font-size:clamp(8px,2.4cqw,14px) !important;
+  left:30% !important;
+  width:15% !important;
+  font-size:clamp(8px,2.5cqw,14px) !important;
 }
 
+/* 節約チャレンジ：小さく */
 .home-challenge-value{
-  left:74% !important;
-  font-size:clamp(8px,2.4cqw,14px) !important;
+  font-size:clamp(8px,2.4cqw,13px) !important;
+}
+
+/* iPhone */
+@media(max-width:430px){
+  .home-use-value{
+    left:30% !important;
+    width:15% !important;
+    font-size:clamp(8px,2.5cqw,13px) !important;
+  }
+
+  .home-challenge-value{
+    font-size:clamp(8px,2.3cqw,12px) !important;
+  }
 }
