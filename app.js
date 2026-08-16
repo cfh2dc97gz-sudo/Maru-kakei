@@ -692,7 +692,7 @@ function update(){
         "¥"+remain.toLocaleString();
 
     remainEl.className=
-        "summary-money "+
+        "home-value home-remain summary-money "+
         (remain>=0
             ?"plus"
             :"minus");
@@ -1150,6 +1150,16 @@ const bonusPage =
 const incomePage =
     document.getElementById("incomePage");
 
+/* ホームから開く追加ページ */
+const homeCategoryPage =
+    document.getElementById("homeCategoryPage");
+
+const homeIncomePage =
+    document.getElementById("homeIncomePage");
+
+const annualCoachPage =
+    document.getElementById("annualCoachPage");
+
 const pages = [
     homePage,
     yearPage,
@@ -1157,7 +1167,10 @@ const pages = [
     categoryPage,
     settingPage,
     bonusPage,
-    incomePage
+    incomePage,
+    homeCategoryPage,
+    homeIncomePage,
+    annualCoachPage
 ];
 
 const navButtons =
@@ -1248,6 +1261,34 @@ case "income":
 
     break;
 
+case "homeCategory":
+
+    homeCategoryPage.style.display = "block";
+
+    drawCategories();
+
+    lastPage = "homeCategory";
+
+    break;
+
+case "homeIncome":
+
+    homeIncomePage.style.display = "block";
+
+    lastPage = "homeIncome";
+
+    break;
+
+case "annualCoach":
+
+    annualCoachPage.style.display = "block";
+
+    drawAI();
+
+    lastPage = "annualCoach";
+
+    break;
+
     }
 
     if(page !== "category"){
@@ -1267,6 +1308,21 @@ case "income":
 
     }
 
+}
+
+/* ===========================
+   ホームカード遷移
+=========================== */
+function openHomeCategory(){
+    showPage("homeCategory");
+}
+
+function openHomeIncome(){
+    showPage("homeIncome");
+}
+
+function openAnnualCoach(){
+    showPage("annualCoach");
 }
 
 function backPage(){
