@@ -1556,3 +1556,21 @@ body{background:var(--v29-cream)}
     top:0.8% !important;
   }
 }
+/* 銀行残高・前月比を少し上へ */
+.home-bank-hit span:first-child{
+  top:47% !important;
+}
+
+.home-bank-hit span:last-child{
+  top:40% !important;
+}
+
+@media(max-width:430px){
+  .home-bank-hit span:first-child{
+    top:47% !important;
+  }
+
+  .home-bank-hit span:last-child{
+    top:40% !important;
+  }
+}
