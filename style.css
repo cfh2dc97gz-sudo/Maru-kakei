@@ -863,3 +863,10 @@ body{background:var(--v29-cream)}
 /* Ver40｜年月をもう少しだけ小さく */
 .home-date-overlay #period{font-size:clamp(18px,5.1cqw,31px) !important;}
 @media(max-width:430px){.home-date-overlay #period{font-size:clamp(18px,5.1cqw,29px) !important;}}
+
+
+/* Ver41｜2026-08-16 ホーム確定版
+   ・Ver40のレイアウトをそのまま確定
+   ・年月サイズ、銀行残高、前月比、まるコーチ非表示を維持
+   ・使用目安＆節約チャレンジのカードをホームに配置した現在のデザインを維持
+*/
