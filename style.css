@@ -1603,26 +1603,26 @@ body{background:var(--v29-cream)}
 }
 /* 今月の使用目安：3つとも少し上へ */
 .home-use-food{
-  top:30% !important;
+  top:27% !important;
 }
 
 .home-use-holiday{
-  top:45% !important;
+  top:42% !important;
 }
 
 .home-use-gas{
-  top:60% !important;
+  top:57% !important;
 }
 
 /* 節約チャレンジ：3つとも少し上へ */
 .home-challenge-food{
-  top:45% !important;
+  top:27% !important;
 }
 
 .home-challenge-holiday{
-  top:60% !important;
+  top:42% !important;
 }
 
 .home-challenge-gas{
-  top:75% !important;
+  top:57% !important;
 }
