@@ -1411,3 +1411,86 @@ body{background:var(--v29-cream)}
   .home-challenge-overlay{font-size:clamp(14px,4.2cqw,24px) !important;}
   .home-challenge-value{font-size:clamp(9px,2.6cqw,14px) !important;}
 }
+
+
+/* =========================================================
+   Ver49｜ホーム配置を実画面に合わせて再調整
+   ========================================================= */
+/* 年月 */
+.home-date-overlay #period{
+  font-size:clamp(16px,4.35cqw,27px) !important;
+}
+
+/* 収入・支出・残り：ラベル下の数字を少し上へ */
+.home-value,
+.home-income,
+.home-spent,
+.home-remain{
+  top:12.15% !important;
+  height:5.4% !important;
+}
+
+/* 残りは必ず表示 */
+.home-remain{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  z-index:50 !important;
+}
+
+/* 銀行残高・前月比を少し上へ */
+.home-bank-hit{
+  top:15.65% !important;
+}
+.home-bank-hit span:first-child,
+.home-bank-hit span:last-child{
+  top:41% !important;
+}
+
+/* 上のまるコーチ内に節約チャレンジ合計を配置 */
+.home-challenge-overlay{
+  display:flex !important;
+  left:71.5% !important;
+  top:31.2% !important;
+  width:20% !important;
+  height:6% !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:clamp(14px,4.0cqw,23px) !important;
+  z-index:60 !important;
+}
+
+/* 下段右カードには合計額を二重表示しない */
+.home-challenge-total{
+  display:none !important;
+}
+
+/* 使用目安：小さく、各行の右端へ */
+.home-use-value{
+  width:16% !important;
+  left:34.2% !important;
+  font-size:clamp(9px,2.7cqw,15px) !important;
+}
+.home-use-food{top:34% !important;}
+.home-use-holiday{top:49% !important;}
+.home-use-gas{top:64% !important;}
+
+/* 節約チャレンジ：小さく、各行の右端へ */
+.home-challenge-value{
+  left:78.5% !important;
+  width:13.5% !important;
+  font-size:clamp(8px,2.45cqw,14px) !important;
+}
+.home-challenge-food{top:49% !important;}
+.home-challenge-holiday{top:64% !important;}
+.home-challenge-gas{top:79% !important;}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(16px,4.35cqw,26px) !important;}
+  .home-value,.home-income,.home-spent,.home-remain{top:12.15% !important;height:5.4% !important;}
+  .home-bank-hit{top:15.65% !important;}
+  .home-bank-hit span:first-child,.home-bank-hit span:last-child{top:41% !important;}
+  .home-challenge-overlay{top:31.2% !important;font-size:clamp(13px,3.8cqw,22px) !important;}
+  .home-use-value{font-size:clamp(9px,2.65cqw,14px) !important;}
+  .home-challenge-value{font-size:clamp(8px,2.35cqw,13px) !important;}
+}
