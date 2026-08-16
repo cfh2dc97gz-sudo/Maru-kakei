@@ -1558,7 +1558,7 @@ body{background:var(--v29-cream)}
 }
 /* 銀行残高・前月比を少し上へ */
 .home-bank-hit span:first-child{
-  top:44% !important;
+  top:42% !important;
 }
 
 .home-bank-hit span:last-child{
@@ -1567,7 +1567,7 @@ body{background:var(--v29-cream)}
 
 @media(max-width:430px){
   .home-bank-hit span:first-child{
-    top:44% !important;
+    top:42% !important;
   }
 
   .home-bank-hit span:last-child{
@@ -1578,7 +1578,7 @@ body{background:var(--v29-cream)}
 .home-income,
 .home-spent,
 .home-remain{
-  top:10.5% !important;
+  top:9.8% !important;
   height:5.9% !important;
   display:flex !important;
   visibility:visible !important;
@@ -1598,6 +1598,6 @@ body{background:var(--v29-cream)}
   .home-income,
   .home-spent,
   .home-remain{
-    top:10.5% !important;
+    top:9.8% !important;
   }
 }
