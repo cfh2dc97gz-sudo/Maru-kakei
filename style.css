@@ -833,3 +833,29 @@ body{background:var(--v29-cream)}
   .home-coach-overlay strong{font-size:clamp(11px,2.8cqw,18px) !important;}
   .home-coach-overlay span{font-size:clamp(8px,1.9cqw,12px) !important;}
 }
+
+/* Ver39｜ホーム最終微調整
+   ・年月をさらに少し小さく
+   ・銀行残高の金額をラベルから離して右へ
+   ・前月比をほんの少し上へ
+   ・今日のまるコーチ本文は検討中のため一旦非表示
+*/
+.home-date-overlay #period{
+  font-size:clamp(19px,5.5cqw,34px) !important;
+}
+.home-bank-hit span:first-child{
+  left:38% !important;
+}
+.home-bank-hit span:last-child{
+  left:64.5% !important;
+  top:44% !important;
+}
+.home-coach-overlay{
+  display:none !important;
+}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(19px,5.5cqw,32px) !important;}
+  .home-bank-hit span:first-child{left:38% !important;}
+  .home-bank-hit span:last-child{top:44% !important;}
+}
