@@ -1542,3 +1542,7 @@ body{background:var(--v29-cream)}
 .home-bank-hit span:first-child{
   top:51% !important;
 }
+/* 今日のまるコーチ内の節約チャレンジ金額 */
+.home-challenge-overlay{
+  top:27% !important;
+}
