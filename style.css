@@ -1628,7 +1628,7 @@ body{background:var(--v29-cream)}
 }
 /* 今月の使用目安：小さく＋左へ */
 .home-use-value{
-  left:35% !important;
+  left:32% !important;
   width:15% !important;
   font-size:clamp(8px,2.5cqw,14px) !important;
 }
@@ -1638,13 +1638,13 @@ body{background:var(--v29-cream)}
   font-size:clamp(8px,2.4cqw,13px) !important;
 }
 .home-challenge-value{
-  left:82% !important;
+  left:80% !important;
 }
 
 /* iPhone */
 @media(max-width:430px){
   .home-use-value{
-    left:35% !important;
+    left:32% !important;
     width:15% !important;
     font-size:clamp(8px,2.5cqw,13px) !important;
   }
