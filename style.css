@@ -1252,3 +1252,73 @@ body{background:var(--v29-cream)}
   .home-challenge-total{font-size:clamp(14px,4.15cqw,23px);}
   .home-challenge-value{font-size:clamp(10px,3.1cqw,17px);}
 }
+
+
+/* =========================================================
+   Ver47｜ホーム固定表示＋数字位置の最終調整
+   ・ホーム表示中は画面自体をスクロールさせない
+   ・画像内の下部バーを含め、1画面に固定
+   ・上部3金額と銀行残高／前月比を同じ基準で整列
+   ========================================================= */
+@supports selector(body:has(*)){
+  body:has(#homePage:not([style*="display: none"])),
+  html:has(#homePage:not([style*="display: none"])){ 
+    overflow:hidden !important;
+    height:100dvh !important;
+    overscroll-behavior:none !important;
+  }
+  body:has(#homePage:not([style*="display: none"])) #homePage{
+    height:100dvh !important;
+    min-height:100dvh !important;
+    overflow:hidden !important;
+    padding-bottom:0 !important;
+  }
+  body:has(#homePage:not([style*="display: none"])) .image-home{
+    height:100dvh !important;
+    overflow:hidden !important;
+    padding:0 !important;
+  }
+  body:has(#homePage:not([style*="display: none"])) .home-art{
+    max-height:100dvh !important;
+    overflow:hidden !important;
+  }
+}
+
+/* 上段3つ：文字の中心を完全に同じ高さへ */
+.home-value{
+  top:13.05% !important;
+  height:5.9% !important;
+  align-items:center !important;
+  line-height:1 !important;
+}
+.home-income,.home-spent,.home-remain{
+  top:13.05% !important;
+  height:5.9% !important;
+}
+
+/* 銀行残高と前月比：横位置・縦位置を個別に固定 */
+.home-bank-hit span:first-child{
+  left:37.2% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  line-height:1 !important;
+}
+.home-bank-hit span:last-child{
+  left:66.0% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  line-height:1 !important;
+}
+
+/* iPhone幅ではほんの少しだけ詰める */
+@media(max-width:430px){
+  .home-value{
+    top:13.05% !important;
+    height:5.9% !important;
+  }
+  .home-income,.home-spent,.home-remain{
+    top:13.05% !important;
+  }
+  .home-bank-hit span:first-child{left:37.2% !important;}
+  .home-bank-hit span:last-child{left:66.0% !important;}
+}
