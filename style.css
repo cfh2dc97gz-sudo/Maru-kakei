@@ -1548,11 +1548,11 @@ body{background:var(--v29-cream)}
 }
 /* 年月を少し上へ */
 .home-date-overlay{
-  top: 2.5% !important;
+  top:1.4% !important;
 }
 
 @media(max-width:430px){
   .home-date-overlay{
-    top: 2.5% !important;
+    top: 1.4% !important;
   }
 }
