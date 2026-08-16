@@ -1319,7 +1319,7 @@ body{background:var(--v29-cream)}
   .home-income,.home-spent,.home-remain{
     top:13.05% !important;
   }
-  .home-bank-hit span:first-child{left:34.0% !important;}
+  .home-bank-hit span:first-child{left:32.0% !important;}
   .home-bank-hit span:last-child{left:66.0% !important;}
 }
 
