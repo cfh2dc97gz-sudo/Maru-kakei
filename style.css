@@ -729,6 +729,12 @@ body{background:var(--v29-cream)}
 .home-card-6{left:66.0%;top:66.2%;width:31.5%;height:17.5%}
 .home-card-7{left:5.0%;top:83.2%;width:43.5%;height:10.5%}
 .home-card-8{left:51.0%;top:83.2%;width:44.0%;height:10.5%}
+
+/* Ver36：画像内の下部バーをそのまま押せる透明ボタン */
+.home-bottom-home{left:0%;top:93.2%;width:25%;height:6.8%;z-index:20;}
+.home-bottom-year{left:25%;top:93.2%;width:25%;height:6.8%;z-index:20;}
+.home-bottom-special{left:50%;top:93.2%;width:25%;height:6.8%;z-index:20;}
+.home-bottom-setting{left:75%;top:93.2%;width:25%;height:6.8%;z-index:20;}
 /* 既存の固定ナビは残す。ホームでは画像内のバーをそのまま見せる */
 @supports selector(body:has(*)){
   body:has(#homePage:not([style*="display: none"])) .bottom-nav{
