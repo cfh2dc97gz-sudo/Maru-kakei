@@ -1558,19 +1558,46 @@ body{background:var(--v29-cream)}
 }
 /* 銀行残高・前月比を少し上へ */
 .home-bank-hit span:first-child{
-  top:47% !important;
+  top:44% !important;
 }
 
 .home-bank-hit span:last-child{
-  top:40% !important;
+  top:37% !important;
 }
 
 @media(max-width:430px){
   .home-bank-hit span:first-child{
-    top:47% !important;
+    top:44% !important;
   }
 
   .home-bank-hit span:last-child{
-    top:40% !important;
+    top:37% !important;
+  }
+}
+/* 上段：収入・支出・残りを少し上へ＆残りを表示 */
+.home-income,
+.home-spent,
+.home-remain{
+  top:10.5% !important;
+  height:5.9% !important;
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  align-items:center !important;
+  justify-content:center !important;
+  z-index:50 !important;
+}
+
+/* 残りは緑色 */
+.home-remain{
+  color:#2e7d32 !important;
+}
+
+/* iPhone */
+@media(max-width:430px){
+  .home-income,
+  .home-spent,
+  .home-remain{
+    top:10.5% !important;
   }
 }
