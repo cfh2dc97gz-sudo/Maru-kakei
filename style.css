@@ -1539,3 +1539,6 @@ body{background:var(--v29-cream)}
   /* 前月比：少し右 */
   left:70% !important;
 }
+.home-bank-hit span:first-child{
+  top:49% !important;
+}
