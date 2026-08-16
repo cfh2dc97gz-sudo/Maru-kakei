@@ -1532,7 +1532,7 @@ body{background:var(--v29-cream)}
 
 .home-bank-hit span:first-child{
   /* 銀行残高：もう少し左 */
-  left:32.5% !important;
+  left:31.5% !important;
 }
 
 .home-bank-hit span:last-child{
