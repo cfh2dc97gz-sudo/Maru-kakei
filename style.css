@@ -1145,3 +1145,12 @@ body{background:var(--v29-cream)}
   .home-value{font-size:clamp(15px,4.7cqw,27px) !important;}
   .home-bank-hit{font-size:clamp(13px,4.0cqw,22px) !important;}
 }
+
+/* Ver45｜ホーム全体をほんの少し縦短く
+   画像の比率はそのまま、横幅を97%にして高さも自然に約3%縮小。
+   中央寄せなので左右の余白も均等になります。
+*/
+.image-home .home-art{
+  width:97% !important;
+  margin:0 auto !important;
+}
