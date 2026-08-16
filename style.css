@@ -764,3 +764,72 @@ body{background:var(--v29-cream)}
     padding-bottom:0 !important;
   }
 }
+
+
+/* Ver38｜ホーム微調整
+   ・年月を少し小さく
+   ・収入/支出/残りの数値位置を画像の空き位置へ
+   ・銀行残高と前月比をそれぞれ独立配置
+   ・前月比の金額を少し大きく
+   ・今日のまるコーチの文章を吹き出し中央へ
+   ・節約チャレンジの動的金額は一旦保留（画像のデザインだけ残す）
+*/
+.home-date-overlay{
+  left:24.5% !important; top:2.0% !important; width:51% !important; height:7.0% !important;
+}
+.home-date-overlay #period{
+  font-size:clamp(21px,6.1cqw,38px) !important;
+  line-height:1 !important;
+}
+
+.home-value{
+  top:12.5% !important;
+  height:6.5% !important;
+  font-size:clamp(16px,4.7cqw,31px) !important;
+}
+.home-income{left:4.0% !important;}
+.home-spent{left:36.0% !important;}
+.home-remain{left:68.0% !important;}
+
+.home-bank-hit{
+  left:0 !important; top:20.0% !important; width:100% !important; height:8.0% !important;
+  padding:0 !important;
+  display:block !important;
+  font-size:clamp(14px,4.0cqw,25px) !important;
+}
+.home-bank-hit span:first-child{
+  position:absolute; left:29.5%; top:50%; transform:translateY(-50%);
+  margin:0 !important;
+}
+.home-bank-hit span:last-child{
+  position:absolute; left:64.5%; top:50%; transform:translateY(-50%);
+  font-size:1.12em !important;
+}
+
+.home-coach-overlay{
+  left:25.5% !important; top:34.0% !important; width:46.5% !important; height:12.8% !important;
+  padding:0 2% !important;
+  justify-content:center !important;
+  text-align:left !important;
+  box-sizing:border-box !important;
+}
+.home-coach-overlay strong{
+  font-size:clamp(11px,2.8cqw,19px) !important;
+  margin-bottom:.45em !important;
+}
+.home-coach-overlay span{
+  font-size:clamp(8px,1.9cqw,13px) !important;
+  line-height:1.45 !important;
+}
+
+/* 節約チャレンジは内容を決めるまで金額表示を止める */
+.home-challenge-overlay{display:none !important;}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(21px,6.1cqw,35px) !important;}
+  .home-value{font-size:clamp(15px,4.7cqw,27px) !important;}
+  .home-bank-hit{font-size:clamp(13px,4.0cqw,22px) !important;}
+  .home-coach-overlay{top:34.0% !important; height:12.8% !important;}
+  .home-coach-overlay strong{font-size:clamp(11px,2.8cqw,18px) !important;}
+  .home-coach-overlay span{font-size:clamp(8px,1.9cqw,12px) !important;}
+}
