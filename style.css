@@ -1108,3 +1108,25 @@ body:has(#yearPage[style*="display: block"]) #annualBonusList .annual-bonus-row 
   }
 
 }
+/* 年間ページ：銀行・ボーナスのラベルを非表示 */
+
+.annual-bank-row span,
+.annual-bonus-row span{
+  display:none !important;
+}
+
+.annual-bank-row strong,
+.annual-bonus-row strong{
+  margin-left:0 !important;
+  padding-left:0 !important;
+}
+
+.annual-bank-row strong{
+  width:100% !important;
+  text-align:left !important;
+}
+
+.annual-bonus-row strong{
+  width:100% !important;
+  text-align:left !important;
+}
