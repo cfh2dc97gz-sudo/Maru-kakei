@@ -3642,3 +3642,74 @@ document
         e.target.value = "";
 
     });
+/* =========================================
+   年間ページ：ボーナスを数字だけにする
+   ========================================= */
+
+function drawAnnualBonusList(){
+
+    const list =
+        document.getElementById("annualBonusList");
+
+    if(!list) return;
+
+    const rows = [
+
+        {
+            value: Number(app.bonus.papaSummerActual || 0) > 0
+                ? Number(app.bonus.papaSummerActual || 0)
+                : Number(app.bonus.papaSummerForecast || 0),
+
+            className:
+                Number(app.bonus.papaSummerActual || 0) > 0
+                    ? "is-actual"
+                    : "is-forecast"
+        },
+
+        {
+            value: Number(app.bonus.papaWinterActual || 0) > 0
+                ? Number(app.bonus.papaWinterActual || 0)
+                : Number(app.bonus.papaWinterForecast || 0),
+
+            className:
+                Number(app.bonus.papaWinterActual || 0) > 0
+                    ? "is-actual"
+                    : "is-forecast"
+        },
+
+        {
+            value: Number(app.bonus.mamaSummerActual || 0) > 0
+                ? Number(app.bonus.mamaSummerActual || 0)
+                : Number(app.bonus.mamaSummerForecast || 0),
+
+            className:
+                Number(app.bonus.mamaSummerActual || 0) > 0
+                    ? "is-actual"
+                    : "is-forecast"
+        },
+
+        {
+            value: Number(app.bonus.mamaWinterActual || 0) > 0
+                ? Number(app.bonus.mamaWinterActual || 0)
+                : Number(app.bonus.mamaWinterForecast || 0),
+
+            className:
+                Number(app.bonus.mamaWinterActual || 0) > 0
+                    ? "is-actual"
+                    : "is-forecast"
+        }
+
+    ];
+
+    list.innerHTML = rows.map(row => `
+
+        <div class="annual-bonus-row">
+
+            <strong class="${row.className}">
+                ¥${row.value.toLocaleString()}
+            </strong>
+
+        </div>
+
+    `).join("");
+}
