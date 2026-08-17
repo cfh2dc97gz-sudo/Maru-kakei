@@ -521,3 +521,150 @@ body{background:var(--v29-cream, #fffaf0)}
     font-size:clamp(8px,2.3cqw,12px)!important;
   }
 }
+
+
+/* =========================================================
+   まる家計｜年間ページ 2026-08-17
+   参考画像ベース
+   ========================================================= */
+
+.annual-image-page{
+  max-width:720px!important;
+  margin:0 auto!important;
+  padding:12px 16px 108px!important;
+  background:var(--bg)!important;
+}
+.annual-year-head{
+  height:54px;display:flex;align-items:center;justify-content:center;
+  gap:16px;color:var(--brown-dark);font-size:20px;font-weight:950;
+}
+.annual-year-deco{color:#f1c63e;font-size:20px}
+.annual-goal-card,.annual-total-card,.annual-panel{
+  position:relative;background:#fff;border:2px solid #f0dda0;
+  border-radius:28px;box-shadow:0 5px 15px rgba(111,85,75,.045);
+}
+.annual-goal-card{
+  min-height:176px;padding:25px 28px;overflow:hidden;margin-bottom:12px;
+}
+.annual-card-title,.annual-panel-title{display:flex;align-items:center;gap:9px}
+.annual-card-title h2,.annual-panel-title h2{
+  margin:0;color:#3e302b;font-size:23px;font-weight:950;
+}
+.annual-title-icon{font-size:31px;line-height:1}
+.annual-goal-bar{
+  position:absolute;left:70px;right:115px;bottom:48px;height:17px;
+  border-radius:999px;background:#eef0f1;overflow:hidden;
+}
+.annual-goal-bar #goalBar{
+  height:100%;width:0;background:linear-gradient(90deg,#f6d46a,#f4c84d);
+  border-radius:999px;
+}
+#yearGoal{
+  position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;
+}
+.annual-goal-bear{
+  position:absolute;right:25px;bottom:20px;font-size:55px;transform:rotate(-4deg);
+}
+.annual-sparkle{position:absolute;color:#f1c63e;font-size:27px}
+.annual-sparkle-left{left:20px;bottom:42px}
+.annual-sparkle-right{right:22px;top:52px}
+.annual-total-card{padding:20px 17px 17px;margin-bottom:12px}
+.annual-total-title{padding:0 4px 13px}
+.annual-title-sparkle{margin-left:auto;color:#f1c63e;font-size:25px}
+.annual-total-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.annual-total-item{
+  min-width:0;min-height:145px;border-radius:23px;padding:15px 8px 10px;
+  border:1.5px solid #e2dfd0;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;background:#fff;text-align:center;cursor:pointer;
+}
+.annual-total-item:active,.annual-action-card:active{transform:scale(.985)}
+.annual-income-item{background:#f5fbf0;border-color:#d7e8cc}
+.annual-spent-item{background:#fff4f5;border-color:#f2d6dc}
+.annual-remain-item{background:#fffaf0;border-color:#f0dda0}
+.annual-total-label{
+  font-size:15px;font-weight:900;color:#456a4c;white-space:nowrap;
+}
+.annual-spent-item .annual-total-label{color:#c33d3b}
+.annual-remain-item .annual-total-label{color:#5a514b}
+.annual-total-item strong{
+  margin-top:4px;font-size:19px;line-height:1.25;color:#3e302b;word-break:break-all;
+}
+.annual-total-item .plus{color:var(--green)}
+.annual-total-item .minus{color:var(--red)}
+.annual-total-illust{margin-top:auto;font-size:31px;line-height:1}
+.annual-two-column{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;
+}
+.annual-panel{min-width:0;padding:17px 14px 14px}
+.annual-panel-title{margin-bottom:10px;white-space:nowrap}
+.annual-panel-title>span:first-child{font-size:28px}
+.annual-panel-title h2{font-size:20px}
+.annual-flower{margin-left:auto;font-size:27px}
+.annual-bank-list,.annual-bonus-list{width:100%}
+.annual-bank-row,.annual-bonus-row{
+  min-height:29px;display:grid;align-items:center;
+  border-bottom:1px solid #eee4d3;font-size:13px;
+}
+.annual-bank-row{grid-template-columns:48px 1fr}
+.annual-bank-row strong{text-align:right;font-size:12px;font-weight:900}
+.annual-bank-row strong.is-up{color:#2e7d32}
+.annual-bank-row strong.is-down{color:#d83a32}
+.annual-bank-row strong.is-same{color:#8f8178}
+.annual-bonus-row{grid-template-columns:1fr auto;min-height:48px;font-size:13px}
+.annual-bonus-row span{font-weight:900}
+.annual-bonus-row strong{font-size:13px;font-weight:950}
+.annual-bonus-row strong.is-forecast{color:#8f8178}
+.annual-bonus-row strong.is-actual{color:#3e302b}
+.annual-action-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;
+}
+.annual-action-card{
+  position:relative;min-height:132px;border:1.5px solid;border-radius:23px;
+  padding:12px 8px 11px;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;text-align:center;cursor:pointer;overflow:hidden;
+  transition:transform .12s ease;
+}
+.annual-action-detail{background:#fff1f4;border-color:#f1ccd5}
+.annual-action-month{background:#f4faef;border-color:#d6e6cf}
+.annual-action-setting{background:#eef8ff;border-color:#cde5f3}
+.annual-action-icon{font-size:37px;line-height:1;margin-bottom:7px}
+.annual-action-card strong{font-size:18px;color:#3e302b;font-weight:950}
+.annual-action-card small{margin-top:5px;font-size:11px;color:#6f625b;font-weight:800}
+.annual-action-arrow{
+  position:absolute;right:9px;bottom:7px;font-size:27px;font-weight:950;
+}
+.annual-action-detail .annual-action-arrow{color:#d54b52}
+.annual-action-month .annual-action-arrow{color:#4d8a58}
+.annual-action-setting .annual-action-arrow{color:#3982bd}
+
+@media(max-width:520px){
+  .annual-image-page{padding-left:11px!important;padding-right:11px!important}
+  .annual-goal-card{min-height:164px;padding:22px 23px}
+  .annual-card-title h2{font-size:21px}
+  .annual-goal-bar{left:60px;right:92px;bottom:44px}
+  .annual-goal-bear{right:16px;bottom:17px;font-size:47px}
+  .annual-total-card{padding:17px 10px 12px}
+  .annual-total-grid{gap:7px}
+  .annual-total-item{min-height:137px;border-radius:20px;padding:13px 5px 9px}
+  .annual-total-label{font-size:12px}
+  .annual-total-item strong{font-size:17px}
+  .annual-total-illust{font-size:28px}
+  .annual-two-column{gap:8px}
+  .annual-panel{padding:14px 10px 11px;border-radius:23px}
+  .annual-panel-title{gap:5px}
+  .annual-panel-title>span:first-child{font-size:23px}
+  .annual-panel-title h2{font-size:16px}
+  .annual-flower{font-size:22px}
+  .annual-bank-row{grid-template-columns:38px 1fr;min-height:28px}
+  .annual-bank-row,.annual-bonus-row{font-size:11px}
+  .annual-bank-row strong,.annual-bonus-row strong{font-size:10px}
+  .annual-bonus-row{min-height:46px}
+  .annual-action-grid{gap:7px}
+  .annual-action-card{
+    min-height:123px;border-radius:20px;padding-left:5px;padding-right:5px;
+  }
+  .annual-action-icon{font-size:32px}
+  .annual-action-card strong{font-size:15px}
+  .annual-action-card small{font-size:9px}
+  .annual-action-arrow{font-size:23px;right:6px;bottom:5px}
+}
