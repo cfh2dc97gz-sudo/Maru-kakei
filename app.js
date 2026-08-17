@@ -1209,8 +1209,7 @@ function showPage(page){
             yearPage.style.display = "block";
             navButtons[1].classList.add("active");
 
-            drawYearSummary();
-            drawYearChart();
+            drawAnnualPage();
 
             lastPage = "year";
             break;
@@ -1597,6 +1596,139 @@ if(advice.length){
 
 }
 /* ===========================
+   年間ページ
+=========================== */
+
+function getAnnualMonthData(month){
+    const year = month <= 3 ? currentYear + 1 : currentYear;
+    return getMonthData(year, month);
+}
+
+function getAnnualBankTotal(month){
+    const data = getAnnualMonthData(month);
+
+    if(data && data.bank){
+        return Number(data.bank.mitake || 0) +
+               Number(data.bank.takizawa || 0);
+    }
+
+    return null;
+}
+
+function formatAnnualChange(value){
+    if(value === null || value === undefined) return "";
+
+    const number = Number(value || 0);
+    const sign = number > 0 ? "+" : number < 0 ? "-" : "";
+
+    return sign + "¥" + Math.abs(number).toLocaleString();
+}
+
+function drawAnnualBankList(){
+    const list = document.getElementById("annualBankList");
+    if(!list) return;
+
+    const months = getFiscalMonths();
+
+    list.innerHTML = months.map((month,index)=>{
+        const current = getAnnualBankTotal(month);
+
+        let previous = null;
+
+        if(index === 0){
+            previous = Number(app.startBank || 0);
+        }else{
+            previous = getAnnualBankTotal(months[index - 1]);
+        }
+
+        const change =
+            current === null || previous === null
+                ? ""
+                : formatAnnualChange(current - previous);
+
+        const changeClass =
+            current === null || previous === null
+                ? ""
+                : (current - previous > 0
+                    ? "is-up"
+                    : current - previous < 0
+                        ? "is-down"
+                        : "is-same");
+
+        return `
+            <div class="annual-bank-row">
+                <span>${month}月</span>
+                <strong class="${changeClass}">${change}</strong>
+            </div>
+        `;
+    }).join("");
+}
+
+function getAnnualBonusDisplay(actual, forecast){
+    const actualValue = Number(actual || 0);
+
+    if(actualValue > 0){
+        return { value: actualValue, className: "is-actual" };
+    }
+
+    return {
+        value: Number(forecast || 0),
+        className: "is-forecast"
+    };
+}
+
+function drawAnnualBonusList(){
+    const list = document.getElementById("annualBonusList");
+    if(!list) return;
+
+    const rows = [
+        {
+            label:"パパ　夏",
+            ...getAnnualBonusDisplay(
+                app.bonus.papaSummerActual,
+                app.bonus.papaSummerForecast
+            )
+        },
+        {
+            label:"パパ　冬",
+            ...getAnnualBonusDisplay(
+                app.bonus.papaWinterActual,
+                app.bonus.papaWinterForecast
+            )
+        },
+        {
+            label:"ママ　夏",
+            ...getAnnualBonusDisplay(
+                app.bonus.mamaSummerActual,
+                app.bonus.mamaSummerForecast
+            )
+        },
+        {
+            label:"ママ　冬",
+            ...getAnnualBonusDisplay(
+                app.bonus.mamaWinterActual,
+                app.bonus.mamaWinterForecast
+            )
+        }
+    ];
+
+    list.innerHTML = rows.map(row=>`
+        <div class="annual-bonus-row">
+            <span>${row.label}</span>
+            <strong class="${row.className}">
+                ¥${row.value.toLocaleString()}
+            </strong>
+        </div>
+    `).join("");
+}
+
+function drawAnnualPage(){
+    drawYearSummary();
+    drawAnnualBankList();
+    drawAnnualBonusList();
+}
+
+/* ===========================
    ⑧ 年間サマリー
 =========================== */
 
@@ -1714,9 +1846,9 @@ function showCategoryHistory(categoryId){
     drawCategoryDetail(categoryId);
 
 }
-function showCategoryList(){
+function showCategoryList(fromAnnual = false){
 
-  window.lastPage = "setting";
+  window.lastPage = fromAnnual ? "year" : "setting";
 
 showPage("category");
 
