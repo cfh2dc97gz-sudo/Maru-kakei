@@ -633,7 +633,149 @@ body:has(#yearPage[style*="display: block"]) .bottom-nav{display:none!important;
 body:has(#yearPage[style*="display: block"]){
   overflow:hidden!important;
 }
-/* 年間ページ全体を少し上へ */
-.annual-reference-page {
-  transform: translateY(-3.3%);
+
+/* =========================================================
+   年間ページ v3 微調整
+   ・画面を完全固定
+   ・全体を約3.4%上へ
+   ・数字のはみ出しを防止
+   ========================================================= */
+
+html:has(#yearPage[style*="display: block"]),
+body:has(#yearPage[style*="display: block"]){
+  width:100%;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+  position:fixed!important;
+  inset:0!important;
 }
+
+body:has(#yearPage[style*="display: block"]) #yearPage{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  transform:none!important;
+}
+
+body:has(#yearPage[style*="display: block"]) .annual-reference-art{
+  width:100vw!important;
+  height:103.4dvh!important;
+  max-width:none!important;
+  aspect-ratio:auto!important;
+  transform:translateY(-3.4%)!important;
+  overflow:hidden!important;
+}
+
+/* 年度表示 */
+.annual-ref-year{
+  top:8.2%!important;
+  font-size:clamp(21px,4.6vw,32px)!important;
+}
+
+/* 年間目標：少し小さく、中央に収める */
+.annual-ref-goal{
+  left:15%!important;
+  right:15%!important;
+  top:18.4%!important;
+  font-size:clamp(18px,4.1vw,29px)!important;
+  line-height:1.05!important;
+}
+
+/* 年間合計 */
+.annual-ref-income,
+.annual-ref-spent,
+.annual-ref-remain{
+  top:35.5%!important;
+  font-size:clamp(15px,3.55vw,25px)!important;
+}
+
+.annual-ref-income{left:5%!important;width:27%!important;}
+.annual-ref-spent{left:36.5%!important;width:27%!important;}
+.annual-ref-remain{
+  left:68%!important;
+  width:25%!important;
+  color:#2e7d32!important;
+}
+
+/* 銀行残高・前月比 */
+.annual-ref-bank-list{
+  left:5.7%!important;
+  top:47.7%!important;
+  width:40%!important;
+  height:28.5%!important;
+}
+
+.annual-ref-bank-row{
+  font-size:clamp(9px,2.05vw,13px)!important;
+}
+
+.annual-ref-bank-row strong{
+  font-size:clamp(8px,1.85vw,12px)!important;
+}
+
+/* ボーナス */
+.annual-ref-bonus-list{
+  left:53%!important;
+  top:47.7%!important;
+  width:40%!important;
+  height:28.5%!important;
+}
+
+.annual-ref-bonus-row{
+  font-size:clamp(9px,2.05vw,13px)!important;
+}
+
+.annual-ref-bonus-row strong{
+  font-size:clamp(9px,1.95vw,13px)!important;
+}
+
+/* iPhone */
+@media(max-width:430px){
+  .annual-ref-year{
+    top:8.2%!important;
+    font-size:clamp(20px,4.6vw,29px)!important;
+  }
+
+  .annual-ref-goal{
+    left:14%!important;
+    right:14%!important;
+    top:18.4%!important;
+    font-size:clamp(17px,4.0vw,27px)!important;
+  }
+
+  .annual-ref-income,
+  .annual-ref-spent,
+  .annual-ref-remain{
+    top:35.5%!important;
+    font-size:clamp(14px,3.45vw,23px)!important;
+  }
+
+  .annual-ref-income{left:5%!important;width:27%!important;}
+  .annual-ref-spent{left:36.5%!important;width:27%!important;}
+  .annual-ref-remain{left:68%!important;width:25%!important;}
+
+  .annual-ref-bank-row{
+    font-size:clamp(8px,1.95vw,12px)!important;
+  }
+
+  .annual-ref-bank-row strong{
+    font-size:clamp(8px,1.75vw,11px)!important;
+  }
+
+  .annual-ref-bonus-row{
+    font-size:clamp(8px,1.95vw,12px)!important;
+  }
+
+  .annual-ref-bonus-row strong{
+    font-size:clamp(8px,1.85vw,12px)!important;
+  }
+}
+
