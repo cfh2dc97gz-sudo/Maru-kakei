@@ -944,7 +944,7 @@ style.css の一番下にそのまま追加してください。
   align-items:center !important;
   justify-content:flex-start !important;
   box-sizing:border-box !important;
-  border-bottom:1px solid rgba(238,228,211,.75) !important;
+  border-bottom:none !important;
 }
 
 /* 銀行は数字だけ */
@@ -954,11 +954,11 @@ style.css の一番下にそのまま追加してください。
 
 #annualBankList .annual-bank-row strong{
   display:block !important;
-  margin:0 0 0 42px !important;
+  margin:0 0 0 58px !important;
   padding:0 !important;
   white-space:nowrap !important;
   font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
-  font-size:clamp(11px,2.7vw,16px) !important;
+  font-size:clamp(10px,2.4vw,14px) !important;
   line-height:1 !important;
 }
 
@@ -971,7 +971,7 @@ style.css の一番下にそのまま追加してください。
   align-items:center !important;
   justify-content:flex-start !important;
   box-sizing:border-box !important;
-  border-bottom:1px solid rgba(238,228,211,.75) !important;
+  border-bottom:none !important;
 }
 
 /* ボーナスは数字だけ */
@@ -981,11 +981,11 @@ style.css の一番下にそのまま追加してください。
 
 #annualBonusList .annual-bonus-row strong{
   display:block !important;
-  margin:0 0 0 28px !important;
+  margin:0 0 0 42px !important;
   padding:0 !important;
   white-space:nowrap !important;
   font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
-  font-size:clamp(11px,2.7vw,16px) !important;
+  font-size:clamp(10px,2.4vw,14px) !important;
   line-height:1 !important;
 }
 
@@ -1005,11 +1005,11 @@ style.css の一番下にそのまま追加してください。
 
   #annualBankList .annual-bank-row strong{
     margin-left:42px !important;
-    font-size:clamp(11px,2.7vw,16px) !important;
+    font-size:clamp(10px,2.4vw,14px) !important;
   }
 
   #annualBonusList .annual-bonus-row strong{
     margin-left:28px !important;
-    font-size:clamp(11px,2.7vw,16px) !important;
+    font-size:clamp(10px,2.4vw,14px) !important;
   }
 }
