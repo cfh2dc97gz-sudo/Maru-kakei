@@ -800,3 +800,41 @@ body:has(#yearPage[style*="display: block"]) .annual-ref-goal{
 body:has(#yearPage[style*="display: block"]) .annual-ref-goal{
   transform:translateX(-8%)!important;
 }
+【年間ページ・微調整用CSS】
+style.css の一番下にそのまま追加してください。
+今あるCSSは削除しなくてOKです。
+
+/* 年間ページ：ホームと同じフォント */
+body:has(#yearPage[style*="display: block"]) .annual-ref-value,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row{
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+}
+
+/* 年間合計「残り」を表示 */
+body:has(#yearPage[style*="display: block"]) #yearRemain{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:absolute!important;
+  z-index:50!important;
+  left:68%!important;
+  width:25%!important;
+  top:35.5%!important;
+  color:#2e7d32!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+  font-weight:950!important;
+  font-size:clamp(14px,3.45vw,23px)!important;
+  line-height:1!important;
+}
+
+@media(max-width:430px){
+  body:has(#yearPage[style*="display: block"]) #yearRemain{
+    left:68%!important;
+    width:25%!important;
+    top:35.5%!important;
+    font-size:clamp(14px,3.45vw,23px)!important;
+  }
+}
