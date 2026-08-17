@@ -707,7 +707,7 @@ body:has(#yearPage[style*="display: block"]) .annual-reference-art{
 
 /* 銀行残高・前月比 */
 .annual-ref-bank-list{
-  left:3.7%!important;
+  left:5.7%!important;
   top:47.7%!important;
   width:40%!important;
   height:28.5%!important;
@@ -904,309 +904,112 @@ style.css の一番下にそのまま追加してください。
 今までのCSSは削除しなくてOKです。
 
 /* =========================================================
-   年間ページ：銀行残高・ボーナス
-   「月」「パパ 夏」などのラベルを消して数字だけ表示
+   まる家計｜年間ページ 最終調整
+   ・銀行残高：月ラベルなし、数字だけ
+   ・ボーナス：パパ夏などのラベルなし、数字だけ
+   ・数字をカード内で少し右へ
+   ・年間ページの表示状態に依存しない
    ========================================================= */
 
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-list{
-  left:5.7%!important;
-  top:49.2%!important;
-  width:40%!important;
-  height:28.5%!important;
+#annualBankList,
+#annualBonusList{
+  position:absolute !important;
+  z-index:5 !important;
+  pointer-events:none !important;
+  box-sizing:border-box !important;
 }
 
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-list{
-  left:53%!important;
-  top:49.2%!important;
-  width:40%!important;
-  height:28.5%!important;
+/* 左：銀行残高 */
+#annualBankList{
+  left:5.7% !important;
+  top:49.2% !important;
+  width:40% !important;
+  height:28.5% !important;
 }
 
-/* 銀行：月の文字を非表示 */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row span{
-  display:none!important;
+/* 右：ボーナス */
+#annualBonusList{
+  left:53% !important;
+  top:49.2% !important;
+  width:40% !important;
+  height:28.5% !important;
 }
 
-/* 銀行：金額だけ中央寄せ */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
+/* 12か月を均等配置 */
+#annualBankList .annual-bank-row{
+  position:relative !important;
+  height:8.3333% !important;
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  box-sizing:border-box !important;
+  border-bottom:1px solid rgba(238,228,211,.75) !important;
 }
 
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong{
-  margin:0!important;
-  padding:0!important;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-  font-size:clamp(11px,2.7vw,16px)!important;
-}
-
-/* ボーナス：「パパ 夏」「パパ 冬 予測」などを非表示 */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row span{
-  display:none!important;
-}
-
-/* ボーナス：金額だけ中央寄せ */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-}
-
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
-  margin:0!important;
-  padding:0!important;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-  font-size:clamp(11px,2.7vw,16px)!important;
-}
-
-/* iPhone */
-@media(max-width:430px){
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bank-list{
-    left:5.7%!important;
-    top:49.2%!important;
-  }
-
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-list{
-    left:53%!important;
-    top:49.2%!important;
-  }
-
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong,
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
-    font-size:clamp(11px,2.7vw,16px)!important;
-  }
-}
-まる家計｜年間ページ 追記用CSS
-※既存コードの置き換え不要です。
-※style.css の一番下にそのまま追記してください。
-
-今回の修正：
-・銀行残高の「4月、5月、6月…」を非表示
-・銀行残高は数字だけ表示
-・ボーナスの「パパ 夏、パパ 冬予測、ママ 夏、ママ 冬予測」を非表示
-・ボーナスも数字だけ表示
-・今の年間ページの配置・背景・画像は変更しない
-・iPhoneでも同じ表示にする
-
---------------------------------------------------
-ここから追記
---------------------------------------------------
-
-/* =========================================
-   年間ページ
-   銀行残高・ボーナスのラベルを非表示
-   数字だけ表示
-   ========================================= */
-
-/* 銀行残高：〇月を消す */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row span{
-  display:none!important;
-}
-
-/* 銀行残高：数字だけ */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong{
-  width:100%!important;
-  margin-left:0!important;
-  padding-left:0!important;
-  padding-right:0!important;
-  text-align:left!important;
-  font-size:clamp(12px,2.8vw,18px)!important;
-}
-
-/* ボーナス：パパ夏・パパ冬・ママ夏・ママ冬などの文字を消す */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row span{
-  display:none!important;
-}
-
-/* ボーナス：数字だけ */
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
-  width:100%!important;
-  margin-left:0!important;
-  padding-left:0!important;
-  padding-right:0!important;
-  text-align:left!important;
-  font-size:clamp(12px,2.8vw,18px)!important;
-}
-
-/* iPhone */
-@media(max-width:430px){
-
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong{
-    width:100%!important;
-    margin-left:0!important;
-    padding:0!important;
-    text-align:left!important;
-    font-size:clamp(12px,3.1vw,16px)!important;
-  }
-
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
-    width:100%!important;
-    margin-left:0!important;
-    padding:0!important;
-    text-align:left!important;
-    font-size:clamp(12px,3.1vw,16px)!important;
-  }
-
-}
-
---------------------------------------------------
-ここまで
---------------------------------------------------
-
-※今回はJSを触らなくてOK。
-※既存の .annual-ref-bank-row / .annual-ref-bonus-row を使って、
-  「文字だけ非表示」にしています。
-/* =========================================
-   年間ページ：銀行残高・ボーナス
-   ラベルを消して数字だけ表示
-   ========================================= */
-
-/* 銀行残高の「4月・5月・6月…」を消す */
-body:has(#yearPage[style*="display: block"]) #annualBankList .annual-bank-row span{
-  display:none!important;
-}
-
-/* 銀行残高の数字 */
-body:has(#yearPage[style*="display: block"]) #annualBankList .annual-bank-row strong{
-  display:block!important;
-  width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  text-align:left!important;
-}
-
-/* ボーナスの「パパ夏・パパ冬・ママ夏・ママ冬」を消す */
-body:has(#yearPage[style*="display: block"]) #annualBonusList .annual-bonus-row span{
-  display:none!important;
-}
-
-/* ボーナスの数字 */
-body:has(#yearPage[style*="display: block"]) #annualBonusList .annual-bonus-row strong{
-  display:block!important;
-  width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  text-align:left!important;
-}
-
-/* iPhone */
-@media(max-width:430px){
-
-  body:has(#yearPage[style*="display: block"]) #annualBankList .annual-bank-row strong{
-    width:100%!important;
-    margin:0!important;
-    padding:0!important;
-    text-align:left!important;
-  }
-
-  body:has(#yearPage[style*="display: block"]) #annualBonusList .annual-bonus-row strong{
-    width:100%!important;
-    margin:0!important;
-    padding:0!important;
-    text-align:left!important;
-  }
-
-}
-/* 年間ページ：銀行・ボーナスのラベルを非表示 */
-
-.annual-bank-row span,
-.annual-bonus-row span{
+/* 銀行は数字だけ */
+#annualBankList .annual-bank-row span{
   display:none !important;
 }
 
-.annual-bank-row strong,
-.annual-bonus-row strong{
-  margin-left:0 !important;
-  padding-left:0 !important;
+#annualBankList .annual-bank-row strong{
+  display:block !important;
+  margin:0 0 0 42px !important;
+  padding:0 !important;
+  white-space:nowrap !important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
+  font-size:clamp(11px,2.7vw,16px) !important;
+  line-height:1 !important;
 }
 
-.annual-bank-row strong{
-  width:100% !important;
-  text-align:left !important;
+/* ボーナス4行 */
+#annualBonusList .annual-bonus-row{
+  position:relative !important;
+  height:25% !important;
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  box-sizing:border-box !important;
+  border-bottom:1px solid rgba(238,228,211,.75) !important;
 }
 
-.annual-bonus-row strong{
-  width:100% !important;
-  text-align:left !important;
-}
-まる家計｜年間ページ 最終微調整CSS
-
-※置き換え不要
-※style.css の一番下にそのまま追加してください
-※今回は「数字を右へずらす」ことだけをします
-※背景画像に元から入っている「4月・5月」「パパ 夏」などは画像そのものなので、CSSでは消せません。
-　そのため数字を右側へ移動して、背景の文字と重ならないようにします。
-
-/* =========================================
-   年間ページ
-   銀行残高：数字を右へ
-   ========================================= */
-
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row{
-  position:relative!important;
-  display:block!important;
+/* ボーナスは数字だけ */
+#annualBonusList .annual-bonus-row span{
+  display:none !important;
 }
 
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong{
-  position:absolute!important;
-  left:22%!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-
-  width:76%!important;
-  margin:0!important;
-  padding:0!important;
-
-  text-align:left!important;
-  white-space:nowrap!important;
-
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-  font-size:clamp(13px,3.2vw,18px)!important;
-  line-height:1!important;
-}
-
-/* =========================================
-   年間ページ
-   ボーナス：数字を右へ
-   ========================================= */
-
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row{
-  position:relative!important;
-  display:block!important;
-}
-
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
-  position:absolute!important;
-  left:24%!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-
-  width:74%!important;
-  margin:0!important;
-  padding:0!important;
-
-  text-align:left!important;
-  white-space:nowrap!important;
-
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-  font-size:clamp(13px,3.2vw,18px)!important;
-  line-height:1!important;
+#annualBonusList .annual-bonus-row strong{
+  display:block !important;
+  margin:0 0 0 28px !important;
+  padding:0 !important;
+  white-space:nowrap !important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
+  font-size:clamp(11px,2.7vw,16px) !important;
+  line-height:1 !important;
 }
 
 /* iPhone */
 @media(max-width:430px){
-
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong{
-    left:22%!important;
-    width:76%!important;
-    font-size:clamp(13px,3.2vw,17px)!important;
+  #annualBankList{
+    left:5.7% !important;
+    top:49.2% !important;
+    width:40% !important;
   }
 
-  body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
-    left:24%!important;
-    width:74%!important;
-    font-size:clamp(13px,3.2vw,17px)!important;
+  #annualBonusList{
+    left:53% !important;
+    top:49.2% !important;
+    width:40% !important;
   }
 
+  #annualBankList .annual-bank-row strong{
+    margin-left:42px !important;
+    font-size:clamp(11px,2.7vw,16px) !important;
+  }
+
+  #annualBonusList .annual-bonus-row strong{
+    margin-left:28px !important;
+    font-size:clamp(11px,2.7vw,16px) !important;
+  }
 }
