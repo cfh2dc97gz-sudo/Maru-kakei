@@ -838,3 +838,50 @@ body:has(#yearPage[style*="display: block"]) #yearRemain{
     font-size:clamp(14px,3.45vw,23px)!important;
   }
 }
+【年間ページ｜ホームと同じフォントに統一】
+
+style.css の一番下に追加してください。
+今あるCSSは削除しなくてOKです。
+
+/* =========================================================
+   年間ページ：表示されている文字をホームと同じフォントに統一
+   ========================================================= */
+
+body:has(#yearPage[style*="display: block"]) .annual-ref-value,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-list,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row span,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-list,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row span,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+}
+
+/* ホームと同じ、やわらかい文字の太さ */
+body:has(#yearPage[style*="display: block"]) .annual-ref-value,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row,
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row{
+  font-weight:900!important;
+}
+
+/* 年間目標・年間合計の数字 */
+body:has(#yearPage[style*="display: block"]) #yearGoal,
+body:has(#yearPage[style*="display: block"]) #yearIncome,
+body:has(#yearPage[style*="display: block"]) #yearSpent,
+body:has(#yearPage[style*="display: block"]) #yearRemain{
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+}
+
+/* 銀行残高・前月比 */
+body:has(#yearPage[style*="display: block"]) #annualBankList,
+body:has(#yearPage[style*="display: block"]) #annualBankList *{
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+}
+
+/* ボーナス */
+body:has(#yearPage[style*="display: block"]) #annualBonusList,
+body:has(#yearPage[style*="display: block"]) #annualBonusList *{
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+}
