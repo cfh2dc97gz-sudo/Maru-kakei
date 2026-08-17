@@ -798,5 +798,5 @@ body:has(#yearPage[style*="display: block"]) .annual-ref-goal{
   font-size:clamp(21px,5.5vw,38px)!important;
 }
 body:has(#yearPage[style*="display: block"]) .annual-ref-goal{
-  transform:translateX(-3%)!important;
+  transform:translateX(-8%)!important;
 }
