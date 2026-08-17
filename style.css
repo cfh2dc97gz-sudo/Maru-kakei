@@ -794,6 +794,6 @@ body:has(#yearPage[style*="display: block"]) .annual-ref-year{
 }
 /* 年間目標の数字 */
 body:has(#yearPage[style*="display: block"]) .annual-ref-goal{
-  top:16.5%!important;
-  font-size:clamp(24px,5.5vw,38px)!important;
+  top:14.5%!important;
+  font-size:clamp(21px,5.5vw,38px)!important;
 }
