@@ -633,3 +633,7 @@ body:has(#yearPage[style*="display: block"]) .bottom-nav{display:none!important;
 body:has(#yearPage[style*="display: block"]){
   overflow:hidden!important;
 }
+/* 年間ページ全体を少し上へ */
+.annual-reference-page {
+  transform: translateY(-2%);
+}
