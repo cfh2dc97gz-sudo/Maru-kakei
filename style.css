@@ -635,5 +635,5 @@ body:has(#yearPage[style*="display: block"]){
 }
 /* 年間ページ全体を少し上へ */
 .annual-reference-page {
-  transform: translateY(-2%);
+  transform: translateY(-3.3%);
 }
