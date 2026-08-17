@@ -1688,41 +1688,28 @@ function drawAnnualBonusList(){
     if(!list) return;
 
     const rows = [
-        {
-            label:"パパ　夏",
-            ...getAnnualBonusDisplay(
-                app.bonus.papaSummerActual,
-                app.bonus.papaSummerForecast
-            )
-        },
-        {
-            label:"パパ　冬",
-            ...getAnnualBonusDisplay(
-                app.bonus.papaWinterActual,
-                app.bonus.papaWinterForecast
-            )
-        },
-        {
-            label:"ママ　夏",
-            ...getAnnualBonusDisplay(
-                app.bonus.mamaSummerActual,
-                app.bonus.mamaSummerForecast
-            )
-        },
-        {
-            label:"ママ　冬",
-            ...getAnnualBonusDisplay(
-                app.bonus.mamaWinterActual,
-                app.bonus.mamaWinterForecast
-            )
-        }
+        getAnnualBonusDisplay(
+            app.bonus.papaSummerActual,
+            app.bonus.papaSummerForecast
+        ),
+        getAnnualBonusDisplay(
+            app.bonus.papaWinterActual,
+            app.bonus.papaWinterForecast
+        ),
+        getAnnualBonusDisplay(
+            app.bonus.mamaSummerActual,
+            app.bonus.mamaSummerForecast
+        ),
+        getAnnualBonusDisplay(
+            app.bonus.mamaWinterActual,
+            app.bonus.mamaWinterForecast
+        )
     ];
 
     list.innerHTML = rows.map(row=>`
         <div class="annual-bonus-row">
-            <span>${row.label}</span>
             <strong class="${row.className}">
-                ${row.prefix || ""}¥${row.value.toLocaleString()}
+                ¥${row.value.toLocaleString()}
             </strong>
         </div>
     `).join("");
@@ -3642,144 +3629,3 @@ document
         e.target.value = "";
 
     });
-/* =========================================
-   年間ページ：ボーナスを数字だけにする
-   ========================================= */
-
-function drawAnnualBonusList(){
-
-    const list =
-        document.getElementById("annualBonusList");
-
-    if(!list) return;
-
-    const rows = [
-
-        {
-            value: Number(app.bonus.papaSummerActual || 0) > 0
-                ? Number(app.bonus.papaSummerActual || 0)
-                : Number(app.bonus.papaSummerForecast || 0),
-
-            className:
-                Number(app.bonus.papaSummerActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        },
-
-        {
-            value: Number(app.bonus.papaWinterActual || 0) > 0
-                ? Number(app.bonus.papaWinterActual || 0)
-                : Number(app.bonus.papaWinterForecast || 0),
-
-            className:
-                Number(app.bonus.papaWinterActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        },
-
-        {
-            value: Number(app.bonus.mamaSummerActual || 0) > 0
-                ? Number(app.bonus.mamaSummerActual || 0)
-                : Number(app.bonus.mamaSummerForecast || 0),
-
-            className:
-                Number(app.bonus.mamaSummerActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        },
-
-        {
-            value: Number(app.bonus.mamaWinterActual || 0) > 0
-                ? Number(app.bonus.mamaWinterActual || 0)
-                : Number(app.bonus.mamaWinterForecast || 0),
-
-            className:
-                Number(app.bonus.mamaWinterActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        }
-
-    ];
-
-    list.innerHTML = rows.map(row => `
-
-        <div class="annual-bonus-row">
-
-            <strong class="${row.className}">
-                ¥${row.value.toLocaleString()}
-            </strong>
-
-        </div>
-
-    `).join("");
-}
-/* 年間ページ：銀行・ボーナスを数字だけにする */
-
-function fixAnnualLabels(){
-
-    /* 銀行残高 */
-    document.querySelectorAll(
-        "#annualBankList .annual-bank-row"
-    ).forEach(row => {
-
-        const label = row.querySelector("span");
-        if(label) label.remove();
-
-    });
-
-
-    /* ボーナス */
-    document.querySelectorAll(
-        "#annualBonusList .annual-bonus-row"
-    ).forEach(row => {
-
-        const label = row.querySelector("span");
-        if(label) label.remove();
-
-        const amount = row.querySelector("strong");
-
-        if(amount){
-            amount.textContent =
-                amount.textContent
-                    .replace("予測 ", "")
-                    .trim();
-        }
-
-    });
-
-}
-
-
-/* 年間ページを表示・更新したあとにも実行 */
-const annualLabelObserver =
-    new MutationObserver(() => {
-        fixAnnualLabels();
-    });
-
-const annualBankList =
-    document.getElementById("annualBankList");
-
-const annualBonusList =
-    document.getElementById("annualBonusList");
-
-if(annualBankList){
-    annualLabelObserver.observe(
-        annualBankList,
-        {
-            childList:true,
-            subtree:true
-        }
-    );
-}
-
-if(annualBonusList){
-    annualLabelObserver.observe(
-        annualBonusList,
-        {
-            childList:true,
-            subtree:true
-        }
-    );
-}
-
-fixAnnualLabels();
