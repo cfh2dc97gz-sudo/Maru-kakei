@@ -888,13 +888,13 @@ body:has(#yearPage[style*="display: block"]) #annualBonusList *{
 /* 年間合計の数字を個別に調整 */
 
 body:has(#yearPage[style*="display: block"]) #yearIncome{
-  transform:translate(-3.8px, -5px)!important;
+  transform:translate(0px, -3px)!important;
 }
 
 body:has(#yearPage[style*="display: block"]) #yearSpent{
-  transform:translate(0px, -5px)!important;
+  transform:translate(0px, -3px)!important;
 }
 
 body:has(#yearPage[style*="display: block"]) #yearRemain{
-  transform:translate(8px, -5px)!important;
+  transform:translate(10px, -3px)!important;
 }
