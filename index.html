@@ -145,97 +145,109 @@
 
 <!-- 年間 -->
 
-<div id="yearPage" class="page" style="display:none;">
+<div id="yearPage" class="page annual-image-page" style="display:none;">
 
-    <div class="card">
-<h2>📅 <span id="fiscalYear"><span id="yearTitle">2026年度</span></span></h2>
+    <div class="annual-year-head">
+        <span class="annual-year-deco">✦</span>
+        <span id="fiscalYear"><span id="yearTitle">2026年度</span></span>
+        <span class="annual-year-deco">✦</span>
     </div>
 
-    <div class="card">
-
-        <h2>🎯 年間目標</h2>
-
-        <div id="yearGoal">
-
-            ¥0 / ¥3,400,000
-
+    <section class="annual-goal-card">
+        <div class="annual-card-title">
+            <span class="annual-title-icon">🎯</span>
+            <h2>年間目標</h2>
         </div>
-
-        <div class="progress">
-
+        <div class="annual-goal-bar">
             <div id="goalBar"></div>
+        </div>
+        <div id="yearGoal" aria-hidden="true">¥0 / ¥3,400,000</div>
+        <div class="annual-goal-bear" aria-hidden="true">🐻</div>
+        <span class="annual-sparkle annual-sparkle-left" aria-hidden="true">✦</span>
+        <span class="annual-sparkle annual-sparkle-right" aria-hidden="true">✦</span>
+    </section>
 
+    <section class="annual-total-card">
+        <div class="annual-card-title annual-total-title">
+            <span class="annual-title-icon">💰</span>
+            <h2>年間合計</h2>
+            <span class="annual-title-sparkle">✦</span>
         </div>
 
-    </div>
-
-    <div class="card">
-
-        <h2>💰 年間合計</h2>
-
-        <div class="summary-grid">
-
-            <button
-                class="summary-item"
-                onclick="showPage('income')"
-                style="cursor:pointer;">
-
-                <div class="summary-title">ここまでの収入</div>
-
-                <div class="summary-money" id="yearIncome">
-
-                    ¥0
-
-                </div>
-
+        <div class="annual-total-grid">
+            <button class="annual-total-item annual-income-item"
+                    onclick="showPage('income')">
+                <span class="annual-total-label">ここまでの収入</span>
+                <strong id="yearIncome">¥0</strong>
+                <span class="annual-total-illust" aria-hidden="true">🌱</span>
             </button>
 
-            <button
-                class="summary-item"
-                onclick="showCategoryList()"
-                style="cursor:pointer;">
-
-                <div class="summary-title">ここまでの支出</div>
-
-                <div class="summary-money" id="yearSpent">
-
-                    ¥0
-
-                </div>
-
+            <button class="annual-total-item annual-spent-item"
+                    onclick="showCategoryList(true)">
+                <span class="annual-total-label">ここまでの支出</span>
+                <strong id="yearSpent">¥0</strong>
+                <span class="annual-total-illust" aria-hidden="true">👛</span>
             </button>
 
-            <div class="summary-item">
-
-                <div class="summary-title">残り</div>
-
-                <div class="summary-money" id="yearRemain">
-
-                    ¥0
-
-                </div>
-
+            <div class="annual-total-item annual-remain-item">
+                <span class="annual-total-label">残り</span>
+                <strong id="yearRemain">¥0</strong>
+                <span class="annual-total-illust" aria-hidden="true">🐷</span>
             </div>
-
         </div>
+    </section>
+
+    <div class="annual-two-column">
+
+        <section class="annual-panel annual-bank-panel">
+            <div class="annual-panel-title">
+                <span>🏠</span>
+                <h2>銀行残高 前月比</h2>
+                <span class="annual-flower">🌼</span>
+            </div>
+            <div id="annualBankList" class="annual-bank-list"></div>
+        </section>
+
+        <section class="annual-panel annual-bonus-panel">
+            <div class="annual-panel-title">
+                <span>🎁</span>
+                <h2>ボーナス</h2>
+                <span class="annual-flower">🌼</span>
+            </div>
+            <div id="annualBonusList" class="annual-bonus-list"></div>
+        </section>
 
     </div>
 
-    <div class="card">
+    <div class="annual-action-grid">
+        <button class="annual-action-card annual-action-detail"
+                onclick="showCategoryList(true)">
+            <span class="annual-action-icon">👛</span>
+            <strong>年間明細</strong>
+            <small>収入・支出の内訳</small>
+            <span class="annual-action-arrow">›</span>
+        </button>
 
-        <h2>📈 月別推移</h2>
+        <button class="annual-action-card annual-action-month"
+                onclick="showPage('home')">
+            <span class="annual-action-icon">📝</span>
+            <strong>月別で見る</strong>
+            <small>月ごとの記録</small>
+            <span class="annual-action-arrow">›</span>
+        </button>
 
-  <canvas
-    id="yearChart"
-    class="year-chart"
-    width="600"
-    height="220">
-</canvas>
-
+        <button class="annual-action-card annual-action-setting"
+                onclick="showPage('setting')">
+            <span class="annual-action-icon">🌱</span>
+            <strong>設定</strong>
+            <small>目標・予算の調整</small>
+            <span class="annual-action-arrow">›</span>
+        </button>
     </div>
 
 </div>
 </div>
+
 <!-- 特別費 -->
 
 <div id="annualPage"
