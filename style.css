@@ -707,7 +707,7 @@ body:has(#yearPage[style*="display: block"]) .annual-reference-art{
 
 /* 銀行残高・前月比 */
 .annual-ref-bank-list{
-  left:5.7%!important;
+  left:3.7%!important;
   top:47.7%!important;
   width:40%!important;
   height:28.5%!important;
@@ -1129,4 +1129,84 @@ body:has(#yearPage[style*="display: block"]) #annualBonusList .annual-bonus-row 
 .annual-bonus-row strong{
   width:100% !important;
   text-align:left !important;
+}
+まる家計｜年間ページ 最終微調整CSS
+
+※置き換え不要
+※style.css の一番下にそのまま追加してください
+※今回は「数字を右へずらす」ことだけをします
+※背景画像に元から入っている「4月・5月」「パパ 夏」などは画像そのものなので、CSSでは消せません。
+　そのため数字を右側へ移動して、背景の文字と重ならないようにします。
+
+/* =========================================
+   年間ページ
+   銀行残高：数字を右へ
+   ========================================= */
+
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row{
+  position:relative!important;
+  display:block!important;
+}
+
+body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong{
+  position:absolute!important;
+  left:22%!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+
+  width:76%!important;
+  margin:0!important;
+  padding:0!important;
+
+  text-align:left!important;
+  white-space:nowrap!important;
+
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+  font-size:clamp(13px,3.2vw,18px)!important;
+  line-height:1!important;
+}
+
+/* =========================================
+   年間ページ
+   ボーナス：数字を右へ
+   ========================================= */
+
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row{
+  position:relative!important;
+  display:block!important;
+}
+
+body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
+  position:absolute!important;
+  left:24%!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+
+  width:74%!important;
+  margin:0!important;
+  padding:0!important;
+
+  text-align:left!important;
+  white-space:nowrap!important;
+
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
+  font-size:clamp(13px,3.2vw,18px)!important;
+  line-height:1!important;
+}
+
+/* iPhone */
+@media(max-width:430px){
+
+  body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong{
+    left:22%!important;
+    width:76%!important;
+    font-size:clamp(13px,3.2vw,17px)!important;
+  }
+
+  body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
+    left:24%!important;
+    width:74%!important;
+    font-size:clamp(13px,3.2vw,17px)!important;
+  }
+
 }
