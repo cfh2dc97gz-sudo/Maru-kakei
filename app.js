@@ -1194,6 +1194,11 @@ function showPage(page){
         btn.classList.remove("active")
     );
 
+    const globalBottomNav = document.querySelector(".bottom-nav");
+    if(globalBottomNav){
+        globalBottomNav.style.display = page === "year" ? "none" : "";
+    }
+
     switch(page){
 
         case "home":
@@ -1668,12 +1673,13 @@ function getAnnualBonusDisplay(actual, forecast){
     const actualValue = Number(actual || 0);
 
     if(actualValue > 0){
-        return { value: actualValue, className: "is-actual" };
+        return { value: actualValue, className: "is-actual", prefix: "" };
     }
 
     return {
         value: Number(forecast || 0),
-        className: "is-forecast"
+        className: "is-forecast",
+        prefix: "予測 "
     };
 }
 
@@ -1716,7 +1722,7 @@ function drawAnnualBonusList(){
         <div class="annual-bonus-row">
             <span>${row.label}</span>
             <strong class="${row.className}">
-                ¥${row.value.toLocaleString()}
+                ${row.prefix || ""}¥${row.value.toLocaleString()}
             </strong>
         </div>
     `).join("");
