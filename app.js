@@ -3713,3 +3713,73 @@ function drawAnnualBonusList(){
 
     `).join("");
 }
+/* 年間ページ：銀行・ボーナスを数字だけにする */
+
+function fixAnnualLabels(){
+
+    /* 銀行残高 */
+    document.querySelectorAll(
+        "#annualBankList .annual-bank-row"
+    ).forEach(row => {
+
+        const label = row.querySelector("span");
+        if(label) label.remove();
+
+    });
+
+
+    /* ボーナス */
+    document.querySelectorAll(
+        "#annualBonusList .annual-bonus-row"
+    ).forEach(row => {
+
+        const label = row.querySelector("span");
+        if(label) label.remove();
+
+        const amount = row.querySelector("strong");
+
+        if(amount){
+            amount.textContent =
+                amount.textContent
+                    .replace("予測 ", "")
+                    .trim();
+        }
+
+    });
+
+}
+
+
+/* 年間ページを表示・更新したあとにも実行 */
+const annualLabelObserver =
+    new MutationObserver(() => {
+        fixAnnualLabels();
+    });
+
+const annualBankList =
+    document.getElementById("annualBankList");
+
+const annualBonusList =
+    document.getElementById("annualBonusList");
+
+if(annualBankList){
+    annualLabelObserver.observe(
+        annualBankList,
+        {
+            childList:true,
+            subtree:true
+        }
+    );
+}
+
+if(annualBonusList){
+    annualLabelObserver.observe(
+        annualBonusList,
+        {
+            childList:true,
+            subtree:true
+        }
+    );
+}
+
+fixAnnualLabels();
