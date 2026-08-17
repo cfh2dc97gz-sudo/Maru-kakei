@@ -1130,3 +1130,97 @@ body:has(#yearPage[style*="display: block"]) #annualBonusList .annual-bonus-row 
   width:100% !important;
   text-align:left !important;
 }
+/* 年間ページ：銀行・ボーナスの最終微調整
+   ※既存CSSの一番下に追記
+   ※置き換え不要
+*/
+
+/* =========================
+   銀行残高
+   ========================= */
+
+/* 「4月・5月…」を確実に非表示 */
+.annual-ref-bank-list .annual-ref-bank-row span{
+  display:none !important;
+}
+
+/* 12か月を均等配置 */
+.annual-ref-bank-list .annual-ref-bank-row{
+  height:8.333333% !important;
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  border-bottom:1px solid rgba(238,228,211,.75) !important;
+  line-height:1 !important;
+  font-size:18px !important;
+  box-sizing:border-box !important;
+}
+
+/* 銀行残高の数字 */
+.annual-ref-bank-list .annual-ref-bank-row strong{
+  display:block !important;
+  width:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  text-align:left !important;
+  white-space:nowrap !important;
+}
+
+
+/* =========================
+   ボーナス
+   ========================= */
+
+/* 「パパ 夏・パパ 冬・ママ 夏・ママ 冬」を確実に非表示 */
+.annual-ref-bonus-list .annual-ref-bonus-row span{
+  display:none !important;
+}
+
+/* 4つを均等配置 */
+.annual-ref-bonus-list .annual-ref-bonus-row{
+  height:25% !important;
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  border-bottom:1px solid rgba(238,228,211,.75) !important;
+  line-height:1 !important;
+  font-size:18px !important;
+  box-sizing:border-box !important;
+}
+
+/* ボーナスの数字 */
+.annual-ref-bonus-list .annual-ref-bonus-row strong{
+  display:block !important;
+  width:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  text-align:left !important;
+  white-space:nowrap !important;
+}
+
+
+/* =========================
+   iPhone
+   ========================= */
+@media(max-width:430px){
+
+  .annual-ref-bank-list .annual-ref-bank-row strong,
+  .annual-ref-bonus-list .annual-ref-bonus-row strong{
+    font-size:17px !important;
+    line-height:1 !important;
+  }
+
+  .annual-ref-bank-list .annual-ref-bank-row,
+  .annual-ref-bonus-list .annual-ref-bonus-row{
+    line-height:1 !important;
+  }
+
+}
