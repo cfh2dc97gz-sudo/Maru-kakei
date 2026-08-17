@@ -1662,25 +1662,10 @@ function drawAnnualBankList(){
 
         return `
             <div class="annual-bank-row">
-                <span>${month}月</span>
                 <strong class="${changeClass}">${change}</strong>
             </div>
         `;
     }).join("");
-}
-
-function getAnnualBonusDisplay(actual, forecast){
-    const actualValue = Number(actual || 0);
-
-    if(actualValue > 0){
-        return { value: actualValue, className: "is-actual", prefix: "" };
-    }
-
-    return {
-        value: Number(forecast || 0),
-        className: "is-forecast",
-        prefix: "予測 "
-    };
 }
 
 function drawAnnualBonusList(){
@@ -1688,29 +1673,26 @@ function drawAnnualBonusList(){
     if(!list) return;
 
     const rows = [
-        getAnnualBonusDisplay(
-            app.bonus.papaSummerActual,
-            app.bonus.papaSummerForecast
-        ),
-        getAnnualBonusDisplay(
-            app.bonus.papaWinterActual,
-            app.bonus.papaWinterForecast
-        ),
-        getAnnualBonusDisplay(
-            app.bonus.mamaSummerActual,
-            app.bonus.mamaSummerForecast
-        ),
-        getAnnualBonusDisplay(
-            app.bonus.mamaWinterActual,
-            app.bonus.mamaWinterForecast
-        )
+        Number(app.bonus.papaSummerActual || 0) > 0
+            ? Number(app.bonus.papaSummerActual || 0)
+            : Number(app.bonus.papaSummerForecast || 0),
+
+        Number(app.bonus.papaWinterActual || 0) > 0
+            ? Number(app.bonus.papaWinterActual || 0)
+            : Number(app.bonus.papaWinterForecast || 0),
+
+        Number(app.bonus.mamaSummerActual || 0) > 0
+            ? Number(app.bonus.mamaSummerActual || 0)
+            : Number(app.bonus.mamaSummerForecast || 0),
+
+        Number(app.bonus.mamaWinterActual || 0) > 0
+            ? Number(app.bonus.mamaWinterActual || 0)
+            : Number(app.bonus.mamaWinterForecast || 0)
     ];
 
-    list.innerHTML = rows.map(row=>`
+    list.innerHTML = rows.map(value => `
         <div class="annual-bonus-row">
-            <strong class="${row.className}">
-                ¥${row.value.toLocaleString()}
-            </strong>
+            <strong>¥${value.toLocaleString()}</strong>
         </div>
     `).join("");
 }
