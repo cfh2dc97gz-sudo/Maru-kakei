@@ -778,4 +778,17 @@ body:has(#yearPage[style*="display: block"]) .annual-reference-art{
     font-size:clamp(8px,1.85vw,12px)!important;
   }
 }
+/* ===== 年間ページ：年度表示 最終調整 ===== */
 
+body:has(#yearPage[style*="display: block"]) .annual-ref-year{
+  top:5.8%!important;
+  left:25%!important;
+  right:25%!important;
+
+  font-family:"Klee One","Hiragino Maru Gothic ProN",
+              "Yu Gothic",sans-serif!important;
+
+  font-size:clamp(20px,4.35vw,30px)!important;
+  font-weight:700!important;
+  line-height:1!important;
+}
