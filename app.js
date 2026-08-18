@@ -1638,14 +1638,9 @@ function drawAnnualBankList(){
 
     const rows = months.map((month,index)=>{
         const current = getAnnualBankTotal(month);
-
-        let previous = null;
-
-        if(index === 0){
-            previous = Number(app.startBank || 0);
-        }else{
-            previous = getAnnualBankTotal(months[index - 1]);
-        }
+        const previous = index === 0
+            ? Number(app.startBank || 0)
+            : getAnnualBankTotal(months[index - 1]);
 
         const change =
             current === null || previous === null
@@ -1655,18 +1650,16 @@ function drawAnnualBankList(){
         changes.push(change);
 
         const changeText =
-            change === null
-                ? ""
-                : formatAnnualChange(change);
+            change === null ? "" : formatAnnualChange(change);
 
         const changeClass =
             change === null
                 ? ""
-                : (change > 0
+                : change > 0
                     ? "is-up"
                     : change < 0
                         ? "is-down"
-                        : "is-same");
+                        : "is-same";
 
         return `
             <div class="annual-bank-row">
@@ -1675,11 +1668,9 @@ function drawAnnualBankList(){
         `;
     });
 
-    /* 4月から3月までの合計 */
-    const totalChange =
-        changes
-            .filter(value => value !== null)
-            .reduce((sum,value) => sum + value, 0);
+    const totalChange = changes
+        .filter(value => value !== null)
+        .reduce((sum,value) => sum + value, 0);
 
     const totalClass =
         totalChange > 0
@@ -1690,13 +1681,25 @@ function drawAnnualBankList(){
 
     rows.push(`
         <div class="annual-bank-total-row">
-            <strong class="${totalClass}">
-                ${formatAnnualChange(totalChange)}
-            </strong>
+            <strong class="${totalClass}">${formatAnnualChange(totalChange)}</strong>
         </div>
     `);
 
     list.innerHTML = rows.join("");
+}
+
+function getAnnualBonusDisplay(actual, forecast){
+    const actualValue = Number(actual || 0);
+
+    if(actualValue > 0){
+        return { value: actualValue, className: "is-actual", prefix: "" };
+    }
+
+    return {
+        value: Number(forecast || 0),
+        className: "is-forecast",
+        prefix: "予測 "
+    };
 }
 
 function drawAnnualBonusList(){
@@ -1707,23 +1710,29 @@ function drawAnnualBonusList(){
         Number(app.bonus.papaSummerActual || 0) > 0
             ? Number(app.bonus.papaSummerActual || 0)
             : Number(app.bonus.papaSummerForecast || 0),
-
         Number(app.bonus.papaWinterActual || 0) > 0
             ? Number(app.bonus.papaWinterActual || 0)
             : Number(app.bonus.papaWinterForecast || 0),
-
         Number(app.bonus.mamaSummerActual || 0) > 0
             ? Number(app.bonus.mamaSummerActual || 0)
             : Number(app.bonus.mamaSummerForecast || 0),
-
         Number(app.bonus.mamaWinterActual || 0) > 0
             ? Number(app.bonus.mamaWinterActual || 0)
             : Number(app.bonus.mamaWinterForecast || 0)
     ];
 
-    list.innerHTML = rows.map(value => `
+    const actuals = [
+        app.bonus.papaSummerActual,
+        app.bonus.papaWinterActual,
+        app.bonus.mamaSummerActual,
+        app.bonus.mamaWinterActual
+    ];
+
+    list.innerHTML = rows.map((value,index)=>`
         <div class="annual-bonus-row">
-            <strong>¥${value.toLocaleString()}</strong>
+            <strong class="${Number(actuals[index] || 0) > 0 ? "is-actual" : "is-forecast"}">
+                ¥${value.toLocaleString()}
+            </strong>
         </div>
     `).join("");
 }
@@ -3642,3 +3651,6 @@ document
         e.target.value = "";
 
     });
+/* =========================================
+   年間ページ：ボーナスを数字だけにする
+   ========================================= */
