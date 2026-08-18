@@ -1634,8 +1634,9 @@ function drawAnnualBankList(){
     if(!list) return;
 
     const months = getFiscalMonths();
+    const changes = [];
 
-    list.innerHTML = months.map((month,index)=>{
+    const rows = months.map((month,index)=>{
         const current = getAnnualBankTotal(month);
 
         let previous = null;
@@ -1648,24 +1649,54 @@ function drawAnnualBankList(){
 
         const change =
             current === null || previous === null
+                ? null
+                : current - previous;
+
+        changes.push(change);
+
+        const changeText =
+            change === null
                 ? ""
-                : formatAnnualChange(current - previous);
+                : formatAnnualChange(change);
 
         const changeClass =
-            current === null || previous === null
+            change === null
                 ? ""
-                : (current - previous > 0
+                : (change > 0
                     ? "is-up"
-                    : current - previous < 0
+                    : change < 0
                         ? "is-down"
                         : "is-same");
 
         return `
             <div class="annual-bank-row">
-                <strong class="${changeClass}">${change}</strong>
+                <strong class="${changeClass}">${changeText}</strong>
             </div>
         `;
-    }).join("");
+    });
+
+    /* 4月から3月までの合計 */
+    const totalChange =
+        changes
+            .filter(value => value !== null)
+            .reduce((sum,value) => sum + value, 0);
+
+    const totalClass =
+        totalChange > 0
+            ? "is-up"
+            : totalChange < 0
+                ? "is-down"
+                : "is-same";
+
+    rows.push(`
+        <div class="annual-bank-total-row">
+            <strong class="${totalClass}">
+                ${formatAnnualChange(totalChange)}
+            </strong>
+        </div>
+    `);
+
+    list.innerHTML = rows.join("");
 }
 
 function drawAnnualBonusList(){
