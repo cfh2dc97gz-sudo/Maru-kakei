@@ -1013,3 +1013,8 @@ style.css の一番下にそのまま追加してください。
     font-size:clamp(10px,2.4vw,14px) !important;
   }
 }
+/* 年間ページ：銀行残高の行間調整 */
+.annual-ref-bank-row{
+  height:6.9% !important;
+  border-bottom:none !important;
+}
