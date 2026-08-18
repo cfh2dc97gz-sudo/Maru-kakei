@@ -1018,3 +1018,9 @@ style.css の一番下にそのまま追加してください。
   height:2% !important;
   border-bottom:none !important;
 }
+/* 年間ページ：銀行残高の行間調整 */
+.annual-bank-row{
+  height:6.9% !important;
+  min-height:0 !important;
+  border-bottom:none !important;
+}
