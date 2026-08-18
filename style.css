@@ -1019,58 +1019,56 @@ style.css の一番下にそのまま追加してください。
   border-bottom:none !important;
 }
 
-
 /* =========================================================
-   まる家計｜年間ページ 中央2ブロック最終調整
-   上半分・下3ボタン・ホームバーには触れない
+   2026/08/18｜年間ページ 中央2ブロック完全整理
+   上半分・下3ボタン・ホームバーは変更しない
    ========================================================= */
 
-/* 左：銀行残高・前月比
-   4月〜3月＋4月からの合計 = 13行 */
+/* 銀行：4月〜3月＋4月からの合計の13行 */
 #annualBankList{
-    position:absolute !important;
-    z-index:5 !important;
-    left:5.7% !important;
-    top:49.2% !important;
-    width:40% !important;
-    height:28.5% !important;
-    box-sizing:border-box !important;
-    pointer-events:none !important;
+  left:5.7% !important;
+  top:49.75% !important;
+  width:40% !important;
+  height:26% !important;
+  position:absolute !important;
+  z-index:8 !important;
+  pointer-events:none !important;
+  overflow:visible !important;
 }
 
 #annualBankList .annual-bank-row,
 #annualBankList .annual-bank-total-row{
-    position:relative !important;
-    height:7.6923% !important;
-    min-height:0 !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:flex-start !important;
-    box-sizing:border-box !important;
-    border:0 !important;
-    padding:0 !important;
-    margin:0 !important;
+  height:2% !important;
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  border:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
 }
 
 #annualBankList .annual-bank-row span,
 #annualBankList .annual-bank-total-row span{
-    display:none !important;
+  display:none !important;
 }
 
 #annualBankList .annual-bank-row strong,
 #annualBankList .annual-bank-total-row strong{
-    display:block !important;
-    margin-left:42px !important;
-    padding:0 !important;
-    white-space:nowrap !important;
-    line-height:1 !important;
-    font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
-    font-size:clamp(10px,2.4vw,14px) !important;
-    font-weight:900 !important;
+  position:relative !important;
+  left:76px !important;
+  margin:0 !important;
+  padding:0 !important;
+  white-space:nowrap !important;
+  line-height:1 !important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
+  font-size:clamp(10px,2.35vw,14px) !important;
+  font-weight:900 !important;
 }
 
 #annualBankList .annual-bank-total-row strong{
-    font-weight:950 !important;
+  font-weight:950 !important;
 }
 
 #annualBankList .is-up{color:#2e7d32 !important;}
@@ -1078,72 +1076,72 @@ style.css の一番下にそのまま追加してください。
 #annualBankList .is-same{color:#8f8178 !important;}
 
 
-/* 右：ボーナス
-   今まで通り4行、金額だけ表示 */
+/* ボーナス：4つの金額だけ */
 #annualBonusList{
-    position:absolute !important;
-    z-index:5 !important;
+  left:53% !important;
+  top:49.2% !important;
+  width:40% !important;
+  height:28.5% !important;
+  position:absolute !important;
+  z-index:8 !important;
+  pointer-events:none !important;
+  overflow:visible !important;
+}
+
+#annualBonusList .annual-bonus-row{
+  height:25% !important;
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  border:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+
+#annualBonusList .annual-bonus-row span{
+  display:none !important;
+}
+
+#annualBonusList .annual-bonus-row strong{
+  position:relative !important;
+  left:45px !important;
+  margin:0 !important;
+  padding:0 !important;
+  white-space:nowrap !important;
+  line-height:1 !important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
+  font-size:clamp(10px,2.35vw,14px) !important;
+  font-weight:900 !important;
+}
+
+#annualBonusList .is-actual{color:#3e302b !important;}
+#annualBonusList .is-forecast{color:#8f8178 !important;}
+
+@media(max-width:430px){
+  #annualBankList{
+    left:5.7% !important;
+    top:49.75% !important;
+    width:40% !important;
+    height:26% !important;
+  }
+
+  #annualBankList .annual-bank-row strong,
+  #annualBankList .annual-bank-total-row strong{
+    left:76px !important;
+    font-size:clamp(10px,2.35vw,14px) !important;
+  }
+
+  #annualBonusList{
     left:53% !important;
     top:49.2% !important;
     width:40% !important;
     height:28.5% !important;
-    box-sizing:border-box !important;
-    pointer-events:none !important;
-}
+  }
 
-#annualBonusList .annual-bonus-row{
-    position:relative !important;
-    height:25% !important;
-    min-height:0 !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:flex-start !important;
-    box-sizing:border-box !important;
-    border:0 !important;
-    padding:0 !important;
-    margin:0 !important;
-}
-
-#annualBonusList .annual-bonus-row span{
-    display:none !important;
-}
-
-#annualBonusList .annual-bonus-row strong{
-    display:block !important;
-    margin-left:28px !important;
-    padding:0 !important;
-    white-space:nowrap !important;
-    line-height:1 !important;
-    font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
-    font-size:clamp(10px,2.4vw,14px) !important;
-    font-weight:900 !important;
-}
-
-
-/* iPhone */
-@media(max-width:430px){
-    #annualBankList{
-        left:5.7% !important;
-        top:49.2% !important;
-        width:40% !important;
-        height:28.5% !important;
-    }
-
-    #annualBonusList{
-        left:53% !important;
-        top:49.2% !important;
-        width:40% !important;
-        height:28.5% !important;
-    }
-
-    #annualBankList .annual-bank-row strong,
-    #annualBankList .annual-bank-total-row strong{
-        margin-left:42px !important;
-        font-size:clamp(10px,2.4vw,14px) !important;
-    }
-
-    #annualBonusList .annual-bonus-row strong{
-        margin-left:28px !important;
-        font-size:clamp(10px,2.4vw,14px) !important;
-    }
+  #annualBonusList .annual-bonus-row strong{
+    left:45px !important;
+    font-size:clamp(10px,2.35vw,14px) !important;
+  }
 }
