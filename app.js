@@ -1662,25 +1662,10 @@ function drawAnnualBankList(){
 
         return `
             <div class="annual-bank-row">
-                <span>${month}月</span>
                 <strong class="${changeClass}">${change}</strong>
             </div>
         `;
     }).join("");
-}
-
-function getAnnualBonusDisplay(actual, forecast){
-    const actualValue = Number(actual || 0);
-
-    if(actualValue > 0){
-        return { value: actualValue, className: "is-actual", prefix: "" };
-    }
-
-    return {
-        value: Number(forecast || 0),
-        className: "is-forecast",
-        prefix: "予測 "
-    };
 }
 
 function drawAnnualBonusList(){
@@ -1688,42 +1673,26 @@ function drawAnnualBonusList(){
     if(!list) return;
 
     const rows = [
-        {
-            label:"パパ　夏",
-            ...getAnnualBonusDisplay(
-                app.bonus.papaSummerActual,
-                app.bonus.papaSummerForecast
-            )
-        },
-        {
-            label:"パパ　冬",
-            ...getAnnualBonusDisplay(
-                app.bonus.papaWinterActual,
-                app.bonus.papaWinterForecast
-            )
-        },
-        {
-            label:"ママ　夏",
-            ...getAnnualBonusDisplay(
-                app.bonus.mamaSummerActual,
-                app.bonus.mamaSummerForecast
-            )
-        },
-        {
-            label:"ママ　冬",
-            ...getAnnualBonusDisplay(
-                app.bonus.mamaWinterActual,
-                app.bonus.mamaWinterForecast
-            )
-        }
+        Number(app.bonus.papaSummerActual || 0) > 0
+            ? Number(app.bonus.papaSummerActual || 0)
+            : Number(app.bonus.papaSummerForecast || 0),
+
+        Number(app.bonus.papaWinterActual || 0) > 0
+            ? Number(app.bonus.papaWinterActual || 0)
+            : Number(app.bonus.papaWinterForecast || 0),
+
+        Number(app.bonus.mamaSummerActual || 0) > 0
+            ? Number(app.bonus.mamaSummerActual || 0)
+            : Number(app.bonus.mamaSummerForecast || 0),
+
+        Number(app.bonus.mamaWinterActual || 0) > 0
+            ? Number(app.bonus.mamaWinterActual || 0)
+            : Number(app.bonus.mamaWinterForecast || 0)
     ];
 
-    list.innerHTML = rows.map(row=>`
+    list.innerHTML = rows.map(value => `
         <div class="annual-bonus-row">
-            <span>${row.label}</span>
-            <strong class="${row.className}">
-                ${row.prefix || ""}¥${row.value.toLocaleString()}
-            </strong>
+            <strong>¥${value.toLocaleString()}</strong>
         </div>
     `).join("");
 }
@@ -3642,207 +3611,3 @@ document
         e.target.value = "";
 
     });
-/* =========================================
-   年間ページ：ボーナスを数字だけにする
-   ========================================= */
-
-function drawAnnualBonusList(){
-
-    const list =
-        document.getElementById("annualBonusList");
-
-    if(!list) return;
-
-    const rows = [
-
-        {
-            value: Number(app.bonus.papaSummerActual || 0) > 0
-                ? Number(app.bonus.papaSummerActual || 0)
-                : Number(app.bonus.papaSummerForecast || 0),
-
-            className:
-                Number(app.bonus.papaSummerActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        },
-
-        {
-            value: Number(app.bonus.papaWinterActual || 0) > 0
-                ? Number(app.bonus.papaWinterActual || 0)
-                : Number(app.bonus.papaWinterForecast || 0),
-
-            className:
-                Number(app.bonus.papaWinterActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        },
-
-        {
-            value: Number(app.bonus.mamaSummerActual || 0) > 0
-                ? Number(app.bonus.mamaSummerActual || 0)
-                : Number(app.bonus.mamaSummerForecast || 0),
-
-            className:
-                Number(app.bonus.mamaSummerActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        },
-
-        {
-            value: Number(app.bonus.mamaWinterActual || 0) > 0
-                ? Number(app.bonus.mamaWinterActual || 0)
-                : Number(app.bonus.mamaWinterForecast || 0),
-
-            className:
-                Number(app.bonus.mamaWinterActual || 0) > 0
-                    ? "is-actual"
-                    : "is-forecast"
-        }
-
-    ];
-
-    list.innerHTML = rows.map(row => `
-
-        <div class="annual-bonus-row">
-
-            <strong class="${row.className}">
-                ¥${row.value.toLocaleString()}
-            </strong>
-
-        </div>
-
-    `).join("");
-}
-/* 年間ページ：銀行・ボーナスを数字だけにする */
-
-function fixAnnualLabels(){
-
-    /* 銀行残高 */
-    document.querySelectorAll(
-        "#annualBankList .annual-bank-row"
-    ).forEach(row => {
-
-        const label = row.querySelector("span");
-        if(label) label.remove();
-
-    });
-
-
-    /* ボーナス */
-    document.querySelectorAll(
-        "#annualBonusList .annual-bonus-row"
-    ).forEach(row => {
-
-        const label = row.querySelector("span");
-        if(label) label.remove();
-
-        const amount = row.querySelector("strong");
-
-        if(amount){
-            amount.textContent =
-                amount.textContent
-                    .replace("予測 ", "")
-                    .trim();
-        }
-
-    });
-
-}
-
-
-/* 年間ページを表示・更新したあとにも実行 */
-const annualLabelObserver =
-    new MutationObserver(() => {
-        fixAnnualLabels();
-    });
-
-const annualBankList =
-    document.getElementById("annualBankList");
-
-const annualBonusList =
-    document.getElementById("annualBonusList");
-
-if(annualBankList){
-    annualLabelObserver.observe(
-        annualBankList,
-        {
-            childList:true,
-            subtree:true
-        }
-    );
-}
-
-if(annualBonusList){
-    annualLabelObserver.observe(
-        annualBonusList,
-        {
-            childList:true,
-            subtree:true
-        }
-    );
-}
-
-fixAnnualLabels();
-
-
-/* =========================================================
-   2026/08/18｜年間ページ中央2ブロック 最終整理版
-   銀行：4月〜3月＋4月からの合計
-   ボーナス：4つの金額だけ
-   ========================================================= */
-
-function drawAnnualBankList(){
-    const list = document.getElementById("annualBankList");
-    if(!list) return;
-
-    const months = getFiscalMonths();
-    let firstBank = Number(app.startBank || 0);
-    let lastBank = firstBank;
-
-    const rows = months.map((month,index)=>{
-        const current = getAnnualBankTotal(month);
-        let previous = index === 0
-            ? firstBank
-            : getAnnualBankTotal(months[index - 1]);
-
-        const change =
-            current === null || previous === null
-                ? ""
-                : formatAnnualChange(current - previous);
-
-        const changeClass =
-            current === null || previous === null
-                ? ""
-                : (current - previous > 0
-                    ? "is-up"
-                    : current - previous < 0
-                        ? "is-down"
-                        : "is-same");
-
-        if(current !== null) lastBank = current;
-
-        return `
-            <div class="annual-bank-row">
-                <span>${month}月</span>
-                <strong class="${changeClass}">${change}</strong>
-            </div>
-        `;
-    }).join("");
-
-    const totalChange = lastBank - firstBank;
-    const totalClass =
-        totalChange > 0 ? "is-up" :
-        totalChange < 0 ? "is-down" : "is-same";
-
-    list.innerHTML = rows + `
-        <div class="annual-bank-total-row">
-            <span>合計</span>
-            <strong class="${totalClass}">${formatAnnualChange(totalChange)}</strong>
-        </div>
-    `;
-}
-
-/* 初回表示・年間ページ切替時に中央2ブロックを再描画 */
-if(typeof drawAnnualBankList === "function") drawAnnualBankList();
-if(typeof drawAnnualBonusList === "function") drawAnnualBonusList();
-fixAnnualLabels();
