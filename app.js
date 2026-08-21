@@ -692,7 +692,7 @@ function update(){
         "¥"+remain.toLocaleString();
 
     remainEl.className=
-        "home-value home-remain summary-money "+
+        "summary-money "+
         (remain>=0
             ?"plus"
             :"minus");
@@ -1150,16 +1150,6 @@ const bonusPage =
 const incomePage =
     document.getElementById("incomePage");
 
-/* ホームから開く追加ページ */
-const homeCategoryPage =
-    document.getElementById("homeCategoryPage");
-
-const homeIncomePage =
-    document.getElementById("homeIncomePage");
-
-const annualCoachPage =
-    document.getElementById("annualCoachPage");
-
 const pages = [
     homePage,
     yearPage,
@@ -1167,10 +1157,7 @@ const pages = [
     categoryPage,
     settingPage,
     bonusPage,
-    incomePage,
-    homeCategoryPage,
-    homeIncomePage,
-    annualCoachPage
+    incomePage
 ];
 
 const navButtons =
@@ -1194,11 +1181,6 @@ function showPage(page){
         btn.classList.remove("active")
     );
 
-    const globalBottomNav = document.querySelector(".bottom-nav");
-    if(globalBottomNav){
-        globalBottomNav.style.display = page === "year" ? "none" : "";
-    }
-
     switch(page){
 
         case "home":
@@ -1214,7 +1196,8 @@ function showPage(page){
             yearPage.style.display = "block";
             navButtons[1].classList.add("active");
 
-            drawAnnualPage();
+            drawYearSummary();
+            drawYearChart();
 
             lastPage = "year";
             break;
@@ -1265,34 +1248,6 @@ case "income":
 
     break;
 
-case "homeCategory":
-
-    homeCategoryPage.style.display = "block";
-
-    drawCategories();
-
-    lastPage = "homeCategory";
-
-    break;
-
-case "homeIncome":
-
-    homeIncomePage.style.display = "block";
-
-    lastPage = "homeIncome";
-
-    break;
-
-case "annualCoach":
-
-    annualCoachPage.style.display = "block";
-
-    drawAI();
-
-    lastPage = "annualCoach";
-
-    break;
-
     }
 
     if(page !== "category"){
@@ -1312,21 +1267,6 @@ case "annualCoach":
 
     }
 
-}
-
-/* ===========================
-   ホームカード遷移
-=========================== */
-function openHomeCategory(){
-    showPage("homeCategory");
-}
-
-function openHomeIncome(){
-    showPage("homeIncome");
-}
-
-function openAnnualCoach(){
-    showPage("annualCoach");
 }
 
 function backPage(){
@@ -1601,109 +1541,6 @@ if(advice.length){
 
 }
 /* ===========================
-   年間ページ
-=========================== */
-
-function getAnnualMonthData(month){
-    const year = month <= 3 ? currentYear + 1 : currentYear;
-    return getMonthData(year, month);
-}
-
-function getAnnualBankTotal(month){
-    const data = getAnnualMonthData(month);
-
-    if(data && data.bank){
-        return Number(data.bank.mitake || 0) +
-               Number(data.bank.takizawa || 0);
-    }
-
-    return null;
-}
-
-function formatAnnualChange(value){
-    if(value === null || value === undefined) return "";
-
-    const number = Number(value || 0);
-    const sign = number > 0 ? "+" : number < 0 ? "-" : "";
-
-    return sign + "¥" + Math.abs(number).toLocaleString();
-}
-
-function drawAnnualBankList(){
-    const list = document.getElementById("annualBankList");
-    if(!list) return;
-
-    const months = getFiscalMonths();
-
-    list.innerHTML = months.map((month,index)=>{
-        const current = getAnnualBankTotal(month);
-
-        let previous = null;
-
-        if(index === 0){
-            previous = Number(app.startBank || 0);
-        }else{
-            previous = getAnnualBankTotal(months[index - 1]);
-        }
-
-        const change =
-            current === null || previous === null
-                ? ""
-                : formatAnnualChange(current - previous);
-
-        const changeClass =
-            current === null || previous === null
-                ? ""
-                : (current - previous > 0
-                    ? "is-up"
-                    : current - previous < 0
-                        ? "is-down"
-                        : "is-same");
-
-        return `
-            <div class="annual-bank-row">
-                <strong class="${changeClass}">${change}</strong>
-            </div>
-        `;
-    }).join("");
-}
-
-function drawAnnualBonusList(){
-    const list = document.getElementById("annualBonusList");
-    if(!list) return;
-
-    const rows = [
-        Number(app.bonus.papaSummerActual || 0) > 0
-            ? Number(app.bonus.papaSummerActual || 0)
-            : Number(app.bonus.papaSummerForecast || 0),
-
-        Number(app.bonus.papaWinterActual || 0) > 0
-            ? Number(app.bonus.papaWinterActual || 0)
-            : Number(app.bonus.papaWinterForecast || 0),
-
-        Number(app.bonus.mamaSummerActual || 0) > 0
-            ? Number(app.bonus.mamaSummerActual || 0)
-            : Number(app.bonus.mamaSummerForecast || 0),
-
-        Number(app.bonus.mamaWinterActual || 0) > 0
-            ? Number(app.bonus.mamaWinterActual || 0)
-            : Number(app.bonus.mamaWinterForecast || 0)
-    ];
-
-    list.innerHTML = rows.map(value => `
-        <div class="annual-bonus-row">
-            <strong>¥${value.toLocaleString()}</strong>
-        </div>
-    `).join("");
-}
-
-function drawAnnualPage(){
-    drawYearSummary();
-    drawAnnualBankList();
-    drawAnnualBonusList();
-}
-
-/* ===========================
    ⑧ 年間サマリー
 =========================== */
 
@@ -1821,9 +1658,9 @@ function showCategoryHistory(categoryId){
     drawCategoryDetail(categoryId);
 
 }
-function showCategoryList(fromAnnual = false){
+function showCategoryList(){
 
-  window.lastPage = fromAnnual ? "year" : "setting";
+  window.lastPage = "setting";
 
 showPage("category");
 
