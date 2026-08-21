@@ -171,102 +171,366 @@ button{color:inherit}
   .home-menu-title{font-size:14px;padding:5px 4px;border-radius:14px}
   .home-menu-card p{font-size:9px;margin-top:7px}
   .home-menu-arrow{width:28px;height:28px;font-size:22px;right:5px;bottom:5px}
-/* ===== 現在の共通見た目 ===== */
-body{background:var(--v29-cream, #fffaf0)}
+}
 
+/* ===== Ver28 final home visual override ===== */
+#homePage{position:relative;padding:18px 16px 100px;max-width:760px;margin:0 auto}
+#homePage>.card,#homePage>.home-menu{position:relative;z-index:1}
+.home-decor{position:absolute;z-index:0;pointer-events:none;opacity:.72}
+.home-decor-left{left:18px;top:7px;color:#f3c94e;font-size:28px}
+.home-decor-right{right:12px;top:0;font-size:40px;transform:rotate(8deg)}
+#homePage .summary-card{padding:9px 12px;border-radius:30px;background:linear-gradient(180deg,#fffdf7,#fff9e9);border:2px solid #f2d477;box-shadow:0 7px 20px rgba(111,85,75,.08)}
+#homePage .month-header{grid-template-columns:58px 1fr 118px;min-height:82px}
+#homePage .month-header button{width:58px;height:58px;border:2px solid #f1cd5b;background:#fffdf9;border-radius:50%;font-size:20px;color:var(--brown);box-shadow:0 2px 0 rgba(244,200,77,.25)}
+#homePage #yearSelect{font-size:20px;font-weight:950}
+#homePage #period{font-size:29px;color:var(--brown-dark)}
+#homePage .summary-main{padding:17px 18px 13px;border-radius:30px;background:#fff;border:2px solid #f0dda0;box-shadow:0 7px 20px rgba(111,85,75,.07)}
+#homePage .summary-main .summary-grid{gap:0}
+#homePage .summary-main .summary-item{padding:2px 4px;position:relative}
+#homePage .summary-main .summary-item:not(:last-child):after{content:"";position:absolute;right:0;top:14px;bottom:4px;border-right:2px dotted #e6d9bd}
+#homePage .summary-icon{font-size:22px;height:25px;line-height:25px}
+#homePage .summary-main .summary-title{font-size:15px;color:var(--brown);font-weight:900}
+#homePage .summary-main .summary-money{font-size:28px}
+#homePage .remain-summary .summary-money{color:var(--green)}
+#homePage .summary-divider{height:1px;background:#eadfca;margin:10px 0 0}
+#homePage .summary-main .bank-row{margin-top:0;padding:13px 3px 2px;border-top:0}
+#homePage .bank-label{font-size:18px;font-weight:900;color:var(--brown-dark)}
+#homePage .bank-total{font-size:23px;font-weight:950}
+#homePage .bank-saving{font-size:21px;font-weight:950;color:var(--red)!important}
+#homePage .ai-card{padding:17px 18px 18px;border-radius:30px;background:linear-gradient(135deg,#fff9d9,#fffdf4);border:2px solid #f1d56c;box-shadow:0 7px 20px rgba(111,85,75,.08)}
+#homePage .coach-heading{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+#homePage .coach-heading h2{margin:0;color:var(--brown-dark);font-size:25px;font-weight:950}
+#homePage .coach-bulb{font-size:28px}
+#homePage .home-coach-wrap{grid-template-columns:1fr 145px;gap:12px}
+#homePage .home-coach-message{background:#fffefb;border:2px solid #eadfca;border-radius:22px;padding:14px 15px;font-size:15px;line-height:1.55}
+#homePage .home-coach-message strong{font-size:18px;margin-bottom:7px}
+#homePage .home-coach-challenge{background:#fff;border:2px solid #eadfca;border-radius:22px;padding:12px 10px}
+#homePage .home-coach-challenge .label{font-size:13px;font-weight:900}
+#homePage .home-coach-challenge .amount{font-size:28px;color:#d79d18}
+#homePage .home-menu{grid-template-columns:repeat(3,1fr);gap:11px;margin:14px 0 18px}
+#homePage .home-menu-card{min-height:225px;padding:13px 7px 14px;border:2px solid #efd77b;border-radius:28px;box-shadow:0 6px 15px rgba(96,75,56,.07)}
+#homePage .home-menu-card.category{background:linear-gradient(180deg,#fff8df,#fff4d0)}
+#homePage .home-menu-card.income{background:linear-gradient(180deg,#fff0f5,#ffedf4)}
+#homePage .home-menu-card.coach{grid-column:auto;min-height:225px;background:linear-gradient(180deg,#eef8e7,#e8f4df)}
+#homePage .home-menu-illust,#homePage .home-menu-card.coach .home-menu-illust{height:125px;font-size:55px;display:flex;align-items:center;justify-content:center;letter-spacing:-8px}
+#homePage .home-menu-title{font-size:18px;padding:6px 10px;border:2px solid #e6d7b8;background:#fffdf7;border-radius:18px}
+#homePage .home-menu-card p{font-size:11px;margin:9px 0 0}
+#homePage .home-menu-arrow{width:34px;height:34px;right:8px;bottom:8px;font-size:27px;background:#f1c542}
+@media (max-width:390px){
+  #homePage{padding:14px 11px 96px}
+  #homePage .month-header{grid-template-columns:48px 1fr 98px;min-height:74px}
+  #homePage .month-header button{width:48px;height:48px}
+  #homePage #yearSelect{font-size:18px}
+  #homePage #period{font-size:25px}
+  #homePage .summary-main{padding:14px 10px 11px}
+  #homePage .summary-icon{font-size:19px}
+  #homePage .summary-main .summary-title{font-size:13px}
+  #homePage .summary-main .summary-money{font-size:23px}
+  #homePage .bank-label{font-size:15px}
+  #homePage .bank-total{font-size:19px}
+  #homePage .bank-saving{font-size:18px}
+  #homePage .ai-card{padding:15px 13px}
+  #homePage .coach-heading h2{font-size:22px}
+  #homePage .home-coach-wrap{grid-template-columns:1fr 108px;gap:8px}
+  #homePage .home-coach-message{font-size:13px;padding:11px 10px}
+  #homePage .home-coach-message strong{font-size:16px}
+  #homePage .home-coach-challenge .label{font-size:11px}
+  #homePage .home-coach-challenge .amount{font-size:22px}
+  #homePage .home-menu{gap:7px;margin-top:12px}
+  #homePage .home-menu-card,#homePage .home-menu-card.coach{min-height:192px;padding:9px 4px 10px;border-radius:22px}
+  #homePage .home-menu-illust,#homePage .home-menu-card.coach .home-menu-illust{height:100px;font-size:42px}
+  #homePage .home-menu-title{font-size:14px;padding:5px 4px;border-radius:14px}
+  #homePage .home-menu-card p{font-size:9px;margin-top:7px}
+  #homePage .home-menu-arrow{width:28px;height:28px;font-size:22px;right:5px;bottom:5px}
+}
+
+/* =========================================================
+   まる家計 Ver29 — イラスト手帳風ホーム
+   参考イメージを「カード」ではなく「イラストUI」として再設計
+========================================================= */
+:root{
+  --v29-cream:#fffaf0;
+  --v29-paper:#fffdf8;
+  --v29-yellow:#f5cf55;
+  --v29-yellow-deep:#e7b82f;
+  --v29-brown:#6d5148;
+  --v29-brown-dark:#3e302b;
+  --v29-pink:#f6dce7;
+  --v29-green:#e6f0d9;
+  --v29-blue:#dff0f6;
+}
+
+body{background:var(--v29-cream)}
+#homePage.v29-home{
+  max-width:760px;
+  margin:0 auto;
+  padding:26px 18px 108px;
+  position:relative;
+  overflow:visible;
+}
+.v29-top-doodle{position:absolute;z-index:0;pointer-events:none}
+.v29-top-left{left:5px;top:6px;width:86px;transform:rotate(-5deg)}
+.v29-top-right{right:2px;top:3px;width:90px;transform:rotate(5deg)}
+.v29-month-card,.v29-summary-card,.v29-coach-card,.v29-menu-card{position:relative;z-index:1}
+
+.v29-month-card{
+  margin-top:58px;
+  display:grid;
+  grid-template-columns:66px 1fr 142px;
+  align-items:center;
+  gap:8px;
+  min-height:128px;
+  padding:12px 14px;
+  background:var(--v29-paper);
+  border:4px solid var(--v29-yellow);
+  border-radius:36px;
+  box-shadow:0 3px 0 rgba(231,184,47,.18);
+}
+.v29-round-btn{
+  width:62px;height:62px;border-radius:50%;
+  border:3px solid var(--v29-yellow);
+  background:#fffdf7;color:var(--v29-brown);
+  font-size:40px;line-height:1;font-weight:800;
+  display:grid;place-items:center;
+  padding:0;
+}
+.v29-month-actions{display:flex;justify-content:flex-end;gap:8px}
+.v29-round-btn.v29-trash{font-size:25px}
+.v29-period{text-align:center}
+#homePage.v29-home #yearSelect{font-size:23px;font-weight:950;color:var(--v29-brown);appearance:none;background:transparent;border:0;outline:0;text-align:center}
+#homePage.v29-home #period{margin:0;font-size:36px;line-height:1.15;font-weight:950;color:var(--v29-brown-dark)}
+
+.v29-summary-card{
+  margin-top:18px;padding:24px 22px 16px;
+  background:#fff;
+  border:4px solid #efda8a;
+  border-radius:34px;
+  box-shadow:0 4px 0 rgba(231,184,47,.13);
+}
+.v29-summary-top{display:grid;grid-template-columns:repeat(3,1fr)}
+.v29-summary-item{text-align:center;position:relative;padding:0 6px}
+.v29-summary-item:not(:last-child):after{content:"";position:absolute;right:0;top:10px;bottom:5px;border-right:4px dotted #e9d9b6}
+.v29-summary-icon{font-size:31px;height:38px;display:flex;justify-content:center;align-items:center}
+.v29-summary-label{font-size:21px;font-weight:900;color:var(--v29-brown);margin-top:1px}
+.v29-summary-money{font-size:36px;font-weight:950;color:var(--v29-brown-dark);letter-spacing:-.03em;white-space:nowrap}
+.v29-green .v29-summary-money{color:#2f7d39}
+.v29-dotted-divider{border-top:3px dashed #e8dcc2;margin:18px 0 10px}
+.v29-bank-row{display:grid;grid-template-columns:34px auto 1fr auto;align-items:center;gap:7px;cursor:pointer}
+.v29-bank-icon{font-size:28px}.v29-bank-label{font-size:22px;font-weight:950;color:var(--v29-brown-dark);white-space:nowrap}
+.v29-bank-total{font-size:27px;font-weight:950;white-space:nowrap}
+.v29-bank-saving{font-size:26px;font-weight:950;color:#df3b35;white-space:nowrap}
+
+.v29-coach-card{
+  margin-top:20px;padding:18px 20px 22px;
+  background:#fff3ae;
+  border:4px solid var(--v29-yellow);
+  border-radius:34px;
+  box-shadow:0 4px 0 rgba(231,184,47,.14);
+}
+.v29-coach-title-row{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.v29-chick{width:50px;height:50px;flex:0 0 auto}.v29-chick svg{width:100%;height:100%}
+.v29-coach-title-row h2{margin:0;font-size:29px;color:var(--v29-brown-dark);font-weight:950}
+.v29-sparkle{margin-left:auto;color:#e6b62f;font-size:28px}
+.v29-coach-inner{display:grid;grid-template-columns:1fr 190px;gap:13px;align-items:stretch}
+.v29-coach-bubble,.v29-challenge-note{
+  position:relative;background:#fffdf9;border:3px solid #e5d9bd;border-radius:28px;
+  box-shadow:0 2px 0 rgba(109,81,72,.06)
+}
+.v29-coach-bubble{padding:20px 22px;font-size:18px;line-height:1.7;color:var(--v29-brown)}
+.v29-coach-bubble strong{display:block;color:var(--v29-brown-dark);font-size:23px;margin-bottom:7px}
+.v29-flower{position:absolute;right:18px;top:16px;font-size:28px}
+.v29-challenge-note{padding:18px 15px 13px;transform:rotate(1deg)}
+.v29-note-title{font-size:17px;line-height:1.35;font-weight:950;color:var(--v29-brown-dark)}
+.v29-note-amount{font-size:31px;font-weight:950;color:#d79f18;margin-top:12px;white-space:nowrap}
+.v29-note-sub{font-size:14px;color:#8d7d73;margin-top:2px;font-weight:800}
+.v29-note-line{height:5px;background:#f0aaa7;border-radius:5px;margin-top:12px;transform:rotate(-2deg)}
+
+.v29-home-menu{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.v29-menu-card{
+  min-width:0;min-height:310px;padding:12px 10px 15px;border-radius:30px;
+  border:4px solid #efd26a;box-shadow:0 4px 0 rgba(231,184,47,.13);
+  position:relative;overflow:hidden;text-align:center;cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.v29-menu-card:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(231,184,47,.13)}
+.v29-menu-category{background:linear-gradient(180deg,#fff6d8,#fff0c5)}
+.v29-menu-income{background:linear-gradient(180deg,#ffeaf1,#f8ddea)}
+.v29-menu-coach{background:linear-gradient(180deg,#eaf5df,#e1eed7)}
+.v29-menu-art{height:172px;display:flex;align-items:center;justify-content:center}
+.v29-menu-art svg{width:100%;height:100%;max-width:210px;overflow:visible}
+.v29-menu-label{
+  display:inline-block;padding:7px 14px 6px;border-radius:18px;background:#fffdf8;
+  border:3px solid #e3d6ba;font-size:22px;line-height:1;font-weight:950;color:var(--v29-brown-dark);
+  box-shadow:0 2px 0 rgba(109,81,72,.06)
+}
+.v29-menu-card p{margin:12px 2px 0;font-size:14px;line-height:1.35;font-weight:850;color:var(--v29-brown);min-height:38px}
+.v29-arrow{position:absolute;right:10px;bottom:10px;width:42px;height:42px;border-radius:50%;background:#f3c641;color:#fff;font-size:37px;line-height:38px;font-weight:800;box-shadow:0 2px 0 rgba(170,125,20,.18)}
+
+/* bottom nav: reference image's soft paper look */
 .bottom-nav{
   background:rgba(255,253,247,.97)!important;
   border-top:3px solid #efd98d!important;
   box-shadow:0 -3px 18px rgba(109,81,72,.05)!important;
   padding:8px 12px 10px!important;
 }
-.bottom-nav button{
-  font-size:29px!important;
-  color:#6d5148!important;
-  border-radius:30px!important;
-  min-height:76px!important;
-  font-weight:900!important;
-}
+.bottom-nav button{font-size:29px!important;color:var(--v29-brown)!important;border-radius:28px!important;min-height:76px!important;font-weight:900!important}
 .bottom-nav button span{font-size:15px!important}
-.bottom-nav button.active{
-  background:#fff5d7!important;
-  color:#d59d16!important;
+.bottom-nav button.active{background:#fff5d7!important;color:#d59d16!important}
+
+@media (max-width:620px){
+  #homePage.v29-home{padding:18px 10px 100px}
+  .v29-top-left{width:70px;left:0;top:3px}.v29-top-right{width:74px;right:-2px;top:2px}
+  .v29-month-card{margin-top:52px;grid-template-columns:55px 1fr 116px;min-height:108px;padding:9px 10px;border-width:3px;border-radius:30px}
+  .v29-round-btn{width:52px;height:52px;font-size:34px;border-width:3px}.v29-round-btn.v29-trash{font-size:22px}.v29-month-actions{gap:5px}
+  #homePage.v29-home #yearSelect{font-size:18px}#homePage.v29-home #period{font-size:29px}
+  .v29-summary-card{margin-top:14px;padding:17px 11px 12px;border-width:3px;border-radius:29px}
+  .v29-summary-icon{font-size:25px;height:30px}.v29-summary-label{font-size:16px}.v29-summary-money{font-size:26px}
+  .v29-bank-row{grid-template-columns:27px auto 1fr auto;gap:4px}.v29-bank-icon{font-size:22px}.v29-bank-label{font-size:16px}.v29-bank-total{font-size:20px}.v29-bank-saving{font-size:19px}
+  .v29-coach-card{margin-top:14px;padding:14px 12px 16px;border-width:3px;border-radius:29px}
+  .v29-chick{width:42px;height:42px}.v29-coach-title-row h2{font-size:24px}.v29-sparkle{font-size:22px}
+  .v29-coach-inner{grid-template-columns:1fr 116px;gap:8px}.v29-coach-bubble{padding:14px 12px;font-size:14px;line-height:1.55;border-width:2px}.v29-coach-bubble strong{font-size:18px}.v29-flower{font-size:22px;right:8px;top:10px}
+  .v29-challenge-note{padding:13px 8px;border-width:2px}.v29-note-title{font-size:12px}.v29-note-amount{font-size:23px;margin-top:9px}.v29-note-sub{font-size:11px}.v29-note-line{height:4px;margin-top:8px}
+  .v29-home-menu{gap:7px;margin-top:13px}.v29-menu-card{min-height:242px;padding:8px 5px 11px;border-width:3px;border-radius:25px}.v29-menu-art{height:132px}.v29-menu-label{font-size:16px;padding:6px 8px;border-width:2px;border-radius:15px}.v29-menu-card p{font-size:10px;margin-top:8px}.v29-arrow{width:34px;height:34px;font-size:30px;line-height:31px;right:6px;bottom:6px}
+  .bottom-nav{padding:6px 8px 8px!important}.bottom-nav button{min-height:70px!important;font-size:26px!important}.bottom-nav button span{font-size:13px!important}
 }
-@media(max-width:430px){
-  .bottom-nav{padding:6px 8px 8px!important}
-  .bottom-nav button{min-height:70px!important;font-size:26px!important}
-  .bottom-nav button span{font-size:13px!important}
+@media (max-width:390px){
+  .v29-summary-money{font-size:23px}.v29-bank-label{font-size:14px}.v29-bank-total{font-size:18px}.v29-bank-saving{font-size:17px}
+  .v29-menu-card{min-height:225px}.v29-menu-art{height:119px}.v29-menu-label{font-size:14px}.v29-menu-card p{font-size:9px}.v29-arrow{width:31px;height:31px;font-size:27px;line-height:28px}
 }
+
+
+/* ===== Ver30: 手描きイラスト・手帳風仕上げ ===== */
+#homePage.v29-home{
+  background:
+    radial-gradient(circle at 8% 5%, rgba(246,205,92,.18) 0 4px, transparent 5px),
+    radial-gradient(circle at 92% 7%, rgba(239,170,160,.16) 0 5px, transparent 6px),
+    var(--bg);
+}
+#homePage.v29-home:before,
+#homePage.v29-home:after{
+  content:"✦";
+  position:absolute;
+  z-index:0;
+  color:#efc74f;
+  font-size:28px;
+  font-weight:900;
+  opacity:.9;
+}
+#homePage.v29-home:before{left:6px;top:92px;transform:rotate(-12deg)}
+#homePage.v29-home:after{right:12px;top:106px;transform:rotate(14deg)}
+.v29-top-doodle{filter:drop-shadow(0 3px 0 rgba(111,85,75,.08))}
+.v29-top-left{width:104px;left:-2px;top:8px}
+.v29-top-right{width:104px;right:-1px;top:4px}
+.v29-month-card{border:3px solid #f1cf58!important;border-radius:36px!important;background:#fffdf7!important;box-shadow:0 5px 0 #f4e5b5,0 10px 24px rgba(111,85,75,.07)!important;padding:10px 12px!important;min-height:106px!important}
+.v29-round-btn{border-width:3px!important;box-shadow:0 3px 0 rgba(239,205,93,.18)!important}
+.v29-summary-card{border:3px solid #f0d98c!important;border-radius:34px!important;box-shadow:0 5px 0 #f4e6bd,0 10px 24px rgba(111,85,75,.06)!important}
+.v29-coach-card{border:3px solid #f0ca4d!important;border-radius:34px!important;background:linear-gradient(180deg,#fff2a9 0%,#fff6c9 100%)!important;box-shadow:0 5px 0 #eedda5,0 10px 22px rgba(111,85,75,.07)!important}
+.v29-coach-card:before{content:"♡  ✦  ♡";position:absolute;right:18px;top:12px;color:#e7b94a;font-size:18px;font-weight:900;letter-spacing:5px;opacity:.85}
+.v29-coach-bubble{border:3px solid #eadfc7!important;border-radius:28px!important;background:#fffefa!important;box-shadow:0 4px 0 rgba(227,216,190,.55)!important}
+.v29-challenge-note{border:3px solid #eadfc7!important;border-radius:28px!important;background:#fffefa!important;box-shadow:0 4px 0 rgba(227,216,190,.55)!important}
+.v29-home-menu{gap:12px!important;margin-top:20px!important}
+.v29-menu-card{border:3px solid #f0cf59!important;border-radius:31px!important;box-shadow:0 5px 0 #eadfae,0 8px 16px rgba(111,85,75,.07)!important;min-height:245px!important}
+.v29-menu-card:before{content:"";position:absolute;left:13px;right:13px;top:10px;height:3px;border-radius:99px;background:rgba(255,255,255,.6);opacity:.75}
+.v29-menu-art{height:156px!important;padding-top:5px}
+.v29-menu-art svg{max-width:218px!important}
+.v29-menu-label{font-family:inherit!important;font-size:18px!important;border:3px solid #e7d9bd!important;border-radius:22px!important;background:#fffdf8!important;box-shadow:0 3px 0 #e8dec5!important;padding:7px 14px!important;min-width:105px}
+.v29-menu-card p{font-size:11px!important;line-height:1.45!important;margin-top:11px!important}
+.v29-arrow{background:#f3c83f!important;box-shadow:0 3px 0 rgba(207,158,25,.22)!important}
+.bottom-nav{height:88px!important;border-top:2px solid #efdfad!important;background:rgba(255,253,248,.98)!important;box-shadow:0 -6px 18px rgba(111,85,75,.08)!important}
+.bottom-nav button{border-radius:30px!important}
+#homePage.v29-home{padding-bottom:122px!important}
+@media (max-width:430px){
+  .v29-top-left{width:82px;left:-2px;top:5px}.v29-top-right{width:82px;right:-3px;top:3px}
+  .v29-month-card{min-height:100px!important;border-radius:32px!important}
+  .v29-menu-card{min-height:236px!important;border-radius:28px!important}
+  .v29-menu-art{height:142px!important}
+  .v29-menu-label{font-size:16px!important;padding:6px 11px!important}
+  .v29-menu-card p{font-size:9.5px!important}
+  #homePage.v29-home{padding-bottom:124px!important}
+}
+
 
 /* =========================================================
-   まる家計｜現在のホームCSS
-   古いVer28〜Ver49の重複上書きを整理した統合版
+   Ver31｜参考画像そのものをホームの土台にする
+   数字・コメントだけHTMLで差し替え可能
    ========================================================= */
-
 .image-home{
-  padding:0!important;
-  margin:0 auto!important;
-  max-width:680px!important;
-  background:#fffdf8!important;
-  overflow:hidden!important;
+  padding:0 0 92px !important;
+  margin:0 auto !important;
+  max-width:680px !important;
+  background:#fffdf8 !important;
 }
-
 .home-art{
   position:relative;
-  width:95%!important;
-  height:auto!important;
-  aspect-ratio:auto!important;
-  margin:0 auto!important;
+  width:100%;
   container-type:inline-size;
   line-height:1;
-  overflow:hidden!important;
+  overflow:hidden;
 }
-
+.home-art:after{
+  content:"";
+  position:absolute;
+  z-index:12;
+  left:0;
+  right:0;
+  bottom:0;
+  height:8.9%;
+  background:#fffdf8;
+  pointer-events:none;
+}
 .home-reference{
-  display:block!important;
-  width:100%!important;
-  height:auto!important;
-  object-fit:contain!important;
+  display:block;
+  width:100%;
+  height:auto;
+  user-select:none;
+  -webkit-user-drag:none;
+  max-width:none;
 }
-
 .home-hit,
 .home-bank-hit{
   position:absolute;
-  border:0!important;
-  padding:0!important;
-  margin:0!important;
-  background:transparent!important;
-  box-shadow:none!important;
+  border:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
   z-index:30;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
-
 .home-hit:active,
-.home-bank-hit:active{
-  transform:none!important;
-  opacity:1!important;
+.home-bank-hit:active{transform:none !important;opacity:1 !important}
+.home-erase{
+  position:absolute;
+  z-index:8;
+  pointer-events:none;
+}
+.home-value,
+.home-date-overlay,
+.home-coach-overlay,
+.home-challenge-overlay,
+.home-bank-hit{
+  position:absolute;
+  z-index:20;
 }
 
-.home-erase{display:none!important}
+/* 背景画像内のサンプル値を隠す */
+.home-erase-date{left:34%;top:3.5%;width:34%;height:5.7%;background:#fff2bd;border-radius:24px}
+.home-erase-income{left:5.3%;top:14.6%;width:26%;height:6.0%;background:#fffefa;border-radius:10px}
+.home-erase-spent{left:37.6%;top:14.6%;width:26.5%;height:6.0%;background:#fffefa;border-radius:10px}
+.home-erase-remain{left:69.0%;top:14.6%;width:27%;height:6.0%;background:#fffefa;border-radius:10px}
+.home-erase-bank{left:35.0%;top:22.0%;width:25%;height:5.0%;background:#fffefa;border-radius:8px}
+.home-erase-saving{left:72.2%;top:22.0%;width:17.5%;height:5.0%;background:#f8e0e1;border-radius:16px}
+.home-erase-coach{left:30.2%;top:35.6%;width:39.0%;height:11.8%;background:#fffefa;border-radius:40px}
+.home-erase-challenge{left:73.0%;top:37.0%;width:19.0%;height:6.0%;background:#fffefa;border-radius:10px}
 
-/* 年月 */
 .home-date-overlay{
-  position:absolute;
-  left:24%!important;
-  top:.8%!important;
-  width:52%!important;
-  height:7%!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  z-index:20!important;
-  color:#604c45;
-  text-align:center;
+  left:34%;top:3.7%;width:34%;height:5.3%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#604c45;text-align:center;
   font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
   pointer-events:none;
 }
-
 .home-date-overlay select{
   position:absolute;
   inset:0;
@@ -279,101 +543,650 @@ body{background:var(--v29-cream, #fffaf0)}
   border:0;
   background:transparent;
 }
-
 .home-date-overlay #period{
-  font-size:clamp(16px,4.35cqw,27px)!important;
-  line-height:1!important;
-  font-weight:900!important;
-  color:#604c45!important;
-  margin:0!important;
+  font-size:clamp(23px,7cqw,45px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  color:#604c45 !important;
+  margin:0 !important;
   white-space:nowrap;
+}
+
+.home-value{
+  top:14.6%;
+  width:27%;
+  height:6%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(17px,5.1cqw,34px);
+  font-weight:900;
+  color:#3e302b;
+  white-space:nowrap;
+}
+.home-income{left:5%;}
+.home-spent{left:37%;}
+.home-remain{left:69%;color:#2e7d32}
+.home-bank-hit{
+  left:34%;top:21.5%;width:58%;height:6.5%;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3% !important;
+  color:#3e302b !important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(15px,4.2cqw,28px);
+  font-weight:900;
+  pointer-events:auto;
+}
+.home-bank-hit span:first-child{margin-left:0}
+.home-bank-hit span:last-child{color:#d83a32}
+
+.home-coach-overlay{
+  left:30.8%;top:35.9%;width:37.8%;height:10.9%;
+  padding:0.7% 1.3%;
+  display:flex;flex-direction:column;justify-content:center;
+  color:#604c45;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  line-height:1.38;
+  pointer-events:none;
+}
+.home-coach-overlay strong{
+  display:block;
+  font-size:clamp(12px,3.2cqw,22px);
+  font-weight:900;
+  margin-bottom:.6em;
+}
+.home-coach-overlay span{
+  display:block;
+  font-size:clamp(8px,2.15cqw,15px);
+  font-weight:700;
+}
+.home-challenge-overlay{
+  left:73.2%;top:37.1%;width:18.5%;height:5.5%;
+  display:flex;align-items:center;justify-content:center;
+  color:#d59b14;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(18px,5.1cqw,34px);
+  font-weight:900;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+/* 透明タップ領域 */
+.home-prev{left:26%;top:3.2%;width:8.5%;height:7.0%}
+.home-next{left:66.0%;top:3.2%;width:8.5%;height:7.0%}
+.home-trash{left:90.0%;top:3.2%;width:7.0%;height:7.0%}
+.home-card-1{left:2.6%;top:49.0%;width:31.3%;height:21.0%}
+.home-card-2{left:34.3%;top:49.0%;width:31.3%;height:21.0%}
+.home-card-3{left:66.8%;top:49.0%;width:31.0%;height:21.0%}
+.home-card-4{left:2.6%;top:71.2%;width:31.3%;height:19.0%}
+.home-card-5{left:34.3%;top:71.2%;width:31.3%;height:19.0%}
+.home-card-6{left:66.8%;top:71.2%;width:31.0%;height:19.0%}
+
+/* ホーム上では元画像の下部ナビを使わず、アプリ側の固定ナビを表示 */
+.image-home + .page{margin-top:0}
+@media(max-width:430px){
+  .image-home{padding-bottom:88px !important}
+}
+
+
+/* =========================================================
+   Ver34｜2026-08-16 新ホーム画像
+   ・ユーザー提供画像をそのまま使用
+   ・縦長化はしない
+   ・ホームの画像内バーを見せつつ、既存ナビの操作性も維持
+   ========================================================= */
+.image-home{
+  padding:0 0 88px !important;
+  max-width:680px !important;
+  margin:0 auto !important;
+  background:#fffdf8 !important;
+}
+.home-art{
+  position:relative;
+  width:100%;
+  height:auto !important;
+  aspect-ratio:auto !important;
+  container-type:inline-size;
+  line-height:1;
+  overflow:hidden;
+}
+.home-art:after{display:none !important;}
+.home-reference{
+  display:block;
+  width:100%;
+  height:auto !important;
+  object-fit:contain !important;
+}
+/* 新画像にはサンプル数字が入っていないので、旧マスクは全部無効化 */
+.home-erase{display:none !important;}
+/* 月表示 */
+.home-date-overlay{
+  left:24.5%; top:2.0%; width:51%; height:7.5%;
+  display:flex; align-items:center; justify-content:center;
+  color:#604c45; text-align:center;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  pointer-events:none;
+}
+.home-date-overlay select{
+  position:absolute; inset:0; opacity:0; width:100%; height:100%;
+  pointer-events:auto; appearance:none; -webkit-appearance:none;
+  border:0; background:transparent;
+}
+.home-date-overlay #period{
+  font-size:clamp(24px,7.0cqw,48px) !important;
+  line-height:1 !important; font-weight:900 !important;
+  color:#604c45 !important; margin:0 !important; white-space:nowrap;
+}
+/* 金額3つ */
+.home-value{
+  top:10.0%; width:28%; height:8.0%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(17px,5.1cqw,34px); font-weight:900;
+  color:#3e302b; white-space:nowrap;
+}
+.home-income{left:4.2%;}
+.home-spent{left:36.0%;}
+.home-remain{left:67.8%; color:#2e7d32;}
+/* 銀行残高・前月比 */
+.home-bank-hit{
+  left:18.5%; top:20.0%; width:73%; height:8.0%;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 3% !important; color:#3e302b !important;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(15px,4.2cqw,28px); font-weight:900;
+  pointer-events:auto;
+}
+.home-bank-hit span:last-child{color:#d83a32;}
+/* 今日のまるコーチ：吹き出し内だけ動的 */
+.home-coach-overlay{
+  left:25.0%; top:33.2%; width:48%; height:14.0%;
+  padding:1% 1.5%; display:flex; flex-direction:column; justify-content:center;
+  color:#604c45;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  line-height:1.38; pointer-events:none;
+}
+.home-coach-overlay strong{
+  display:block; font-size:clamp(12px,3.2cqw,22px); font-weight:900; margin-bottom:.6em;
+}
+.home-coach-overlay span{display:block; font-size:clamp(8px,2.15cqw,15px); font-weight:700;}
+.home-challenge-overlay{
+  left:70.5%; top:34.5%; width:23%; height:7.0%;
+  display:flex; align-items:center; justify-content:center;
+  color:#d59b14;
+  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  font-size:clamp(18px,5.1cqw,34px); font-weight:900;
+  white-space:nowrap; pointer-events:none;
+}
+/* 画像上のタップ領域 */
+.home-prev{left:27%;top:1.5%;width:9%;height:8.0%}
+.home-next{left:67%;top:1.5%;width:9%;height:8.0%}
+.home-trash{left:87%;top:1.5%;width:10%;height:8.0%}
+.home-card-1{left:2.5%;top:48.0%;width:31.5%;height:17.5%}
+.home-card-2{left:34.2%;top:48.0%;width:31.5%;height:17.5%}
+.home-card-3{left:66.0%;top:48.0%;width:31.5%;height:17.5%}
+.home-card-4{left:2.5%;top:66.2%;width:31.5%;height:17.5%}
+.home-card-5{left:34.2%;top:66.2%;width:31.5%;height:17.5%}
+.home-card-6{left:66.0%;top:66.2%;width:31.5%;height:17.5%}
+.home-card-7{left:5.0%;top:83.2%;width:43.5%;height:10.5%}
+.home-card-8{left:51.0%;top:83.2%;width:44.0%;height:10.5%}
+
+/* Ver36：画像内の下部バーをそのまま押せる透明ボタン */
+.home-bottom-home{left:0%;top:92.9%;width:25%;height:7.1%;z-index:20;}
+.home-bottom-year{left:25%;top:92.9%;width:25%;height:7.1%;z-index:20;}
+.home-bottom-special{left:50%;top:92.9%;width:25%;height:7.1%;z-index:20;}
+.home-bottom-setting{left:75%;top:92.9%;width:25%;height:7.1%;z-index:20;}
+/* 既存の固定ナビは残す。ホームでは画像内のバーをそのまま見せる */
+@supports selector(body:has(*)){
+  body:has(#homePage:not([style*="display: none"])) .bottom-nav{
+    display:none !important;
+  }
+  body:has(#homePage:not([style*="display: none"])) .image-home{
+    padding-bottom:0 !important;
+  }
+}
+@media(max-width:430px){
+  .image-home{padding-bottom:88px !important}
+  .home-date-overlay #period{font-size:clamp(22px,7cqw,38px) !important}
+  .home-value{font-size:clamp(15px,5.0cqw,28px)}
+  .home-bank-hit{font-size:clamp(13px,4.0cqw,23px)}
+  .home-coach-overlay{top:33.0%;height:14.2%}
+  .home-coach-overlay strong{font-size:clamp(11px,3.2cqw,20px)}
+  .home-coach-overlay span{font-size:clamp(8px,2.15cqw,13px)}
+  .home-challenge-overlay{font-size:clamp(16px,5.0cqw,28px)}
+}
+
+/* Ver35：ホームでは画像内の下部ナビだけを使用（固定ナビの重複を完全に非表示） */
+@supports selector(body:has(*)){
+  body:has(#homePage:not([style*="display: none"])) .bottom-nav{
+    display:none !important;
+  }
+  body:has(#homePage:not([style*="display: none"])) .image-home{
+    padding-bottom:0 !important;
+  }
+}
+
+
+/* Ver38｜ホーム微調整
+   ・年月を少し小さく
+   ・収入/支出/残りの数値位置を画像の空き位置へ
+   ・銀行残高と前月比をそれぞれ独立配置
+   ・前月比の金額を少し大きく
+   ・今日のまるコーチの文章を吹き出し中央へ
+   ・節約チャレンジの動的金額は一旦保留（画像のデザインだけ残す）
+*/
+.home-date-overlay{
+  left:24.5% !important; top:2.0% !important; width:51% !important; height:7.0% !important;
+}
+.home-date-overlay #period{
+  font-size:clamp(21px,6.1cqw,38px) !important;
+  line-height:1 !important;
+}
+
+.home-value{
+  top:12.5% !important;
+  height:6.5% !important;
+  font-size:clamp(16px,4.7cqw,31px) !important;
+}
+.home-income{left:4.0% !important;}
+.home-spent{left:36.0% !important;}
+.home-remain{left:68.0% !important;}
+
+.home-bank-hit{
+  left:0 !important; top:20.0% !important; width:100% !important; height:8.0% !important;
+  padding:0 !important;
+  display:block !important;
+  font-size:clamp(14px,4.0cqw,25px) !important;
+}
+.home-bank-hit span:first-child{
+  position:absolute; left:29.5%; top:50%; transform:translateY(-50%);
+  margin:0 !important;
+}
+.home-bank-hit span:last-child{
+  position:absolute; left:64.5%; top:50%; transform:translateY(-50%);
+  font-size:1.12em !important;
+}
+
+.home-coach-overlay{
+  left:25.5% !important; top:34.0% !important; width:46.5% !important; height:12.8% !important;
+  padding:0 2% !important;
+  justify-content:center !important;
+  text-align:left !important;
+  box-sizing:border-box !important;
+}
+.home-coach-overlay strong{
+  font-size:clamp(11px,2.8cqw,19px) !important;
+  margin-bottom:.45em !important;
+}
+.home-coach-overlay span{
+  font-size:clamp(8px,1.9cqw,13px) !important;
+  line-height:1.45 !important;
+}
+
+/* 節約チャレンジは内容を決めるまで金額表示を止める */
+.home-challenge-overlay{display:none !important;}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(21px,6.1cqw,35px) !important;}
+  .home-value{font-size:clamp(15px,4.7cqw,27px) !important;}
+  .home-bank-hit{font-size:clamp(13px,4.0cqw,22px) !important;}
+  .home-coach-overlay{top:34.0% !important; height:12.8% !important;}
+  .home-coach-overlay strong{font-size:clamp(11px,2.8cqw,18px) !important;}
+  .home-coach-overlay span{font-size:clamp(8px,1.9cqw,12px) !important;}
+}
+
+/* Ver39｜ホーム最終微調整
+   ・年月をさらに少し小さく
+   ・銀行残高の金額をラベルから離して右へ
+   ・前月比をほんの少し上へ
+   ・今日のまるコーチ本文は検討中のため一旦非表示
+*/
+.home-date-overlay #period{
+  font-size:clamp(19px,5.5cqw,34px) !important;
+}
+.home-bank-hit span:first-child{
+  left:38% !important;
+}
+.home-bank-hit span:last-child{
+  left:64.5% !important;
+  top:44% !important;
+}
+.home-coach-overlay{
+  display:none !important;
+}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(19px,5.5cqw,32px) !important;}
+  .home-bank-hit span:first-child{left:38% !important;}
+  .home-bank-hit span:last-child{top:44% !important;}
+}
+
+/* Ver40｜年月をもう少しだけ小さく */
+.home-date-overlay #period{font-size:clamp(18px,5.1cqw,31px) !important;}
+@media(max-width:430px){.home-date-overlay #period{font-size:clamp(18px,5.1cqw,29px) !important;}}
+
+
+/* Ver41｜2026-08-16 ホーム確定版
+   ・Ver40のレイアウトをそのまま確定
+   ・年月サイズ、銀行残高、前月比、まるコーチ非表示を維持
+   ・使用目安＆節約チャレンジのカードをホームに配置した現在のデザインを維持
+*/
+
+/* =========================================================
+   Ver42｜2026-08-16
+   ・ユーザー承認済みホーム画像へ差し替え
+   ・Ver41までの位置調整は維持
+   ・年月／銀行残高／前月比／まるコーチ非表示も維持
+   ========================================================= */
+.image-home .home-reference{
+  width:100% !important;
+  height:auto !important;
+  object-fit:contain !important;
+}
+
+/* =========================================================
+   Ver43｜2026-08-16 ホーム表示修正版
+   原因：
+   ・元画像にiPhoneのステータスバーが含まれていたため二重表示
+   ・Ver42では画像の上に旧HTMLの年月・金額が重なっていた
+   対応：
+   ・ステータスバー部分を画像からカット済み
+   ・画像内のサンプル値だけをマスクして、アプリの値を1回だけ表示
+   ========================================================= */
+
+.image-home{
+  padding-bottom:0 !important;
+  overflow:hidden !important;
+}
+
+.home-art{
+  overflow:hidden !important;
+  aspect-ratio:auto !important;
+}
+
+/* 画像内のサンプル値を隠す */
+.home-erase{
+  display:block !important;
+  pointer-events:none !important;
+  z-index:8 !important;
+}
+.home-erase-date{
+  left:34% !important;
+  top:1.8% !important;
+  width:34% !important;
+  height:5.8% !important;
+  background:#fff2bd !important;
+  border-radius:24px !important;
+}
+.home-erase-income{
+  left:5% !important;
+  top:10.8% !important;
+  width:27% !important;
+  height:5.5% !important;
+  background:#fffefa !important;
+}
+.home-erase-spent{
+  left:37% !important;
+  top:10.8% !important;
+  width:27% !important;
+  height:5.5% !important;
+  background:#fffefa !important;
+}
+.home-erase-remain{
+  left:69% !important;
+  top:10.8% !important;
+  width:27% !important;
+  height:5.5% !important;
+  background:#fffefa !important;
+}
+.home-erase-bank{
+  left:31% !important;
+  top:19.0% !important;
+  width:28% !important;
+  height:5.0% !important;
+  background:#fffefa !important;
+}
+.home-erase-saving{
+  left:64% !important;
+  top:19.0% !important;
+  width:28% !important;
+  height:5.0% !important;
+  background:#f8e0e1 !important;
+}
+
+/* 年月は画像の黄色い台座を残し、文字だけアプリ側で表示 */
+.home-date-overlay{
+  left:27% !important;
+  top:1.7% !important;
+  width:46% !important;
+  height:6.0% !important;
+}
+.home-date-overlay #period{
+  font-size:clamp(18px,5.1cqw,31px) !important;
 }
 
 /* 収入・支出・残り */
 .home-value{
-  position:absolute;
-  top:9.8%!important;
-  width:28%;
-  height:5.9%!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-  font-size:clamp(15px,4.7cqw,28px);
-  line-height:1!important;
-  font-weight:900;
-  color:#3e302b;
-  white-space:nowrap;
-  z-index:50!important;
+  top:10.5% !important;
+  height:6.0% !important;
+  font-size:clamp(15px,4.7cqw,29px) !important;
 }
-
-.home-income{left:4.0%}
-.home-spent{left:36.5%}
-.home-remain{
-  left:69%;
-  display:flex!important;
-  visibility:visible!important;
-  opacity:1!important;
-  color:#2e7d32!important;
-}
+.home-income{left:4% !important;}
+.home-spent{left:36% !important;}
+.home-remain{left:68% !important;}
 
 /* 銀行残高・前月比 */
 .home-bank-hit{
-  left:0!important;
-  top:15.65%!important;
-  width:100%!important;
-  height:6.8%!important;
-  display:block!important;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-  font-size:clamp(14px,4.0cqw,24px);
-  line-height:1;
-  font-weight:900;
-  color:#3e302b!important;
-  pointer-events:auto;
+  left:0 !important;
+  top:18.3% !important;
+  width:100% !important;
+  height:7.0% !important;
+  font-size:clamp(14px,4.0cqw,24px) !important;
+}
+.home-bank-hit span:first-child{
+  left:38% !important;
+  top:50% !important;
+}
+.home-bank-hit span:last-child{
+  left:64.5% !important;
+  top:42% !important;
+}
+
+/* 今日のまるコーチ本文は検討中のため非表示 */
+.home-coach-overlay{display:none !important;}
+
+/* 画像内バーのタップ位置を、ステータスバーを除いた画像に合わせる */
+.home-bottom-home{left:0;top:91.8%;width:25%;height:8.2%;z-index:30;}
+.home-bottom-year{left:25%;top:91.8%;width:25%;height:8.2%;z-index:30;}
+.home-bottom-special{left:50%;top:91.8%;width:25%;height:8.2%;z-index:30;}
+.home-bottom-setting{left:75%;top:91.8%;width:25%;height:8.2%;z-index:30;}
+
+/* 3×2カード */
+.home-card-1{left:2.5%;top:47.5%;width:31.5%;height:17.8%;}
+.home-card-2{left:34.2%;top:47.5%;width:31.5%;height:17.8%;}
+.home-card-3{left:66%;top:47.5%;width:31.5%;height:17.8%;}
+.home-card-4{left:2.5%;top:65.5%;width:31.5%;height:17.8%;}
+.home-card-5{left:34.2%;top:65.5%;width:31.5%;height:17.8%;}
+.home-card-6{left:66%;top:65.5%;width:31.5%;height:17.8%;}
+.home-card-7{left:5%;top:83.0%;width:43.5%;height:8.5%;}
+.home-card-8{left:51%;top:83.0%;width:44%;height:8.5%;}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(18px,5.1cqw,29px) !important;}
+  .home-value{font-size:clamp(15px,4.7cqw,27px) !important;}
+  .home-bank-hit{font-size:clamp(13px,4.0cqw,22px) !important;}
+}
+
+/* =========================================================
+   Ver44｜2026-08-16
+   ユーザーが数字・日付などを完全に消したホーム画像へ差し替え。
+   画像内は空欄なので、旧マスクは使用しない。
+   ========================================================= */
+.image-home{
+  padding:0 !important;
+  margin:0 auto !important;
+  max-width:680px !important;
+  background:#fffdf8 !important;
+  overflow:hidden !important;
+}
+.home-art{
+  width:100% !important;
+  height:auto !important;
+  aspect-ratio:auto !important;
+  overflow:hidden !important;
+}
+.home-reference{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  object-fit:contain !important;
+}
+
+/* 数字を消した新画像なので、旧白マスクは全部OFF */
+.home-erase{
+  display:none !important;
+}
+
+/* 年月：黄色い台座は画像そのものを使用 */
+.home-date-overlay{
+  left:24% !important;
+  top:2.0% !important;
+  width:52% !important;
+  height:7.0% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  z-index:20 !important;
+  pointer-events:none;
+}
+.home-date-overlay select{
+  pointer-events:auto !important;
+}
+.home-date-overlay #period{
+  font-size:clamp(18px,5.0cqw,31px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+}
+
+/* 収入・支出・残り：画像の空欄の中央 */
+.home-value{
+  top:13.0% !important;
+  height:6.5% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:clamp(15px,4.7cqw,28px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  z-index:20 !important;
+}
+.home-income{left:4% !important;width:27% !important;}
+.home-spent{left:36.5% !important;width:27% !important;}
+.home-remain{left:69% !important;width:27% !important;color:#2e7d32 !important;}
+
+/* 銀行残高・前月比：画像の空欄位置に1回だけ表示 */
+.home-bank-hit{
+  left:0 !important;
+  top:16.8% !important;
+  width:100% !important;
+  height:6.8% !important;
+  display:block !important;
+  font-size:clamp(14px,4.0cqw,24px) !important;
+  line-height:1 !important;
+  z-index:30 !important;
+}
+.home-bank-hit span:first-child{
+  position:absolute !important;
+  left:37% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  margin:0 !important;
+}
+.home-bank-hit span:last-child{
+  position:absolute !important;
+  left:66.5% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  margin:0 !important;
+  font-size:1.12em !important;
+}
+
+/* まるコーチ本文は現在検討中なので非表示 */
+.home-coach-overlay{
+  display:none !important;
+}
+.home-challenge-overlay{
+  display:none !important;
+}
+
+/* 画像内の3×2カードを正しい位置でタップ */
+.home-card-1{left:2.5% !important;top:61.5% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-2{left:34.2% !important;top:61.5% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-3{left:66% !important;top:61.5% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-4{left:2.5% !important;top:72.0% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-5{left:34.2% !important;top:72.0% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-6{left:66% !important;top:72.0% !important;width:31.5% !important;height:10.8% !important;}
+.home-card-7{left:5% !important;top:83.8% !important;width:43.5% !important;height:8.0% !important;}
+.home-card-8{left:51% !important;top:83.8% !important;width:44% !important;height:8.0% !important;}
+
+/* 画像そのものの下バーを使用。固定バーは表示しない */
+.home-bottom-home{left:0 !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+.home-bottom-year{left:25% !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+.home-bottom-special{left:50% !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+.home-bottom-setting{left:75% !important;top:92.2% !important;width:25% !important;height:7.8% !important;z-index:40 !important;}
+
+@supports selector(body:has(*)){
+  body:has(#homePage:not([style*="display: none"])) .bottom-nav{
+    display:none !important;
+  }
+}
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(18px,5.0cqw,29px) !important;}
+  .home-value{font-size:clamp(15px,4.7cqw,27px) !important;}
+  .home-bank-hit{font-size:clamp(13px,4.0cqw,22px) !important;}
+}
+
+/* Ver45｜ホーム全体をほんの少し縦短く
+   画像の比率はそのまま、横幅を97%にして高さも自然に約3%縮小。
+   中央寄せなので左右の余白も均等になります。
+*/
+.image-home .home-art{
+  width:97% !important;
+  margin:0 auto !important;
+}
+
+
+/* =========================================================
+   Ver46｜ホーム微調整＋年間コーチの数字をホームへ
+   ・画像全体をVer45より少しだけ縮小
+   ・上部の金額を同じ基準線で整列
+   ・「今月の使用目安」と「節約チャレンジ」の数値を動的表示
+========================================================= */
+.image-home .home-art{
+  width:95% !important;
+  margin:0 auto !important;
+}
+
+/* 数字の基準線を統一 */
+.home-value{
+  top:13.15% !important;
+  height:5.9% !important;
+  align-items:center !important;
+  transform:none !important;
+}
+.home-income,.home-spent,.home-remain{
+  top:13.15% !important;
 }
 
 .home-bank-hit span:first-child,
 .home-bank-hit span:last-child{
-  position:absolute!important;
-  top:37%!important;
-  transform:translateY(-50%)!important;
-  margin:0!important;
-  line-height:1!important;
-  font-size:clamp(10px,3.4cqw,20px)!important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
 }
+.home-bank-hit span:first-child{left:37.5% !important;}
+.home-bank-hit span:last-child{left:66.2% !important;}
 
-.home-bank-hit span:first-child{left:31.5%!important}
-.home-bank-hit span:last-child{
-  left:70%!important;
-  color:#d83a32!important;
-}
-
-/* 今日のまるコーチ本文は次の工程で追加 */
-.home-coach-overlay{display:none!important}
-
-/* 今日の節約チャレンジ合計 */
-.home-challenge-overlay{
-  position:absolute;
-  display:flex!important;
-  left:71.5%!important;
-  top:29%!important;
-  width:20%!important;
-  height:6%!important;
-  align-items:center!important;
-  justify-content:center!important;
-  color:#d59b14;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-  font-size:clamp(14px,4.0cqw,23px)!important;
-  line-height:1!important;
-  font-weight:900;
-  white-space:nowrap;
-  pointer-events:none;
-  z-index:60!important;
-}
-
-.home-challenge-total{display:none!important}
-
-/* 今月の使用目安＆節約チャレンジの数字 */
+/* 画像内「今月の使用目安＆節約チャレンジ」の空欄へ数字だけ重ねる */
 .home-monthly-coach{
   position:absolute;
   left:0;
@@ -383,13 +1196,11 @@ body{background:var(--v29-cream, #fffaf0)}
   z-index:25;
   pointer-events:none;
 }
-
 .home-monthly-values{
   position:relative;
   width:100%;
   height:100%;
 }
-
 .home-use-value,
 .home-challenge-value,
 .home-challenge-total{
@@ -402,619 +1213,443 @@ body{background:var(--v29-cream, #fffaf0)}
   font-weight:900;
 }
 
+/* 左：今月の使用目安 */
 .home-use-value{
-  width:15%!important;
-  left:32%!important;
+  width:15.5%;
+  height:6.7%;
+  left:31.8%;
   color:#58754f;
-  font-size:clamp(8px,2.5cqw,14px)!important;
+  font-size:clamp(12px,3.5cqw,20px);
 }
-.home-use-food{top:27.5%!important}
-.home-use-holiday{top:44.5%!important}
-.home-use-gas{top:61.3%!important}
+.home-use-food{top:34.0%;}
+.home-use-holiday{top:49.0%;}
+.home-use-gas{top:64.0%;}
 
-.home-challenge-value{
-  left:80%!important;
-  width:13.5%!important;
+/* 右：節約チャレンジ */
+.home-challenge-total{
+  left:61.0%;
+  top:31.0%;
+  width:28.0%;
+  height:9.5%;
   color:#d95a5a;
-  font-size:clamp(8px,2.4cqw,13px)!important;
+  font-size:clamp(15px,4.3cqw,25px);
 }
-.home-challenge-food{top:27.5%!important}
-.home-challenge-holiday{top:44.5%!important}
-.home-challenge-gas{top:61.3%!important}
-
-/* 画像上のタップ領域 */
-.home-prev{left:27%;top:1.5%;width:9%;height:8%;z-index:40}
-.home-next{left:67%;top:1.5%;width:9%;height:8%;z-index:40}
-.home-trash{left:87%;top:1.5%;width:10%;height:8%;z-index:40}
-
-.home-card-1{left:2.5%;top:61.5%;width:31.5%;height:10.8%;z-index:40}
-.home-card-2{left:34.2%;top:61.5%;width:31.5%;height:10.8%;z-index:40}
-.home-card-3{left:66%;top:61.5%;width:31.5%;height:10.8%;z-index:40}
-.home-card-4{left:2.5%;top:72%;width:31.5%;height:10.8%;z-index:40}
-.home-card-5{left:34.2%;top:72%;width:31.5%;height:10.8%;z-index:40}
-.home-card-6{left:66%;top:72%;width:31.5%;height:10.8%;z-index:40}
-.home-card-7{left:5%;top:83.8%;width:43.5%;height:8%;z-index:40}
-.home-card-8{left:51%;top:83.8%;width:44%;height:8%;z-index:40}
-
-/* 画像内の下部バー */
-.home-bottom-home{left:0;top:92.2%;width:25%;height:7.8%;z-index:40}
-.home-bottom-year{left:25%;top:92.2%;width:25%;height:7.8%;z-index:40}
-.home-bottom-special{left:50%;top:92.2%;width:25%;height:7.8%;z-index:40}
-.home-bottom-setting{left:75%;top:92.2%;width:25%;height:7.8%;z-index:40}
-
-/* ホーム表示中は画面を固定し、画像内のナビだけを使う */
-@supports selector(body:has(*)){
-  body:has(#homePage:not([style*="display: none"])),
-  html:has(#homePage:not([style*="display: none"])){
-    overflow:hidden!important;
-    height:100dvh!important;
-    overscroll-behavior:none!important;
-  }
-
-  body:has(#homePage:not([style*="display: none"])) #homePage{
-    height:100dvh!important;
-    min-height:100dvh!important;
-    overflow:hidden!important;
-    padding-bottom:0!important;
-  }
-
-  body:has(#homePage:not([style*="display: none"])) .image-home{
-    height:100dvh!important;
-    overflow:hidden!important;
-    padding:0!important;
-  }
-
-  body:has(#homePage:not([style*="display: none"])) .home-art{
-    max-height:100dvh!important;
-    overflow:hidden!important;
-  }
-
-  body:has(#homePage:not([style*="display: none"])) .bottom-nav{
-    display:none!important;
-  }
+.home-challenge-value{
+  left:76.2%;
+  width:15.5%;
+  height:6.7%;
+  color:#d95a5a;
+  font-size:clamp(11px,3.2cqw,18px);
 }
+.home-challenge-food{top:49.0%;}
+.home-challenge-holiday{top:64.0%;}
+.home-challenge-gas{top:79.0%;}
 
 @media(max-width:430px){
-  .image-home{padding-bottom:0!important}
+  .home-value{font-size:clamp(14px,4.45cqw,26px) !important;}
+  .home-bank-hit{font-size:clamp(13px,3.9cqw,21px) !important;}
+  .home-use-value{font-size:clamp(11px,3.45cqw,18px);}
+  .home-challenge-total{font-size:clamp(14px,4.15cqw,23px);}
+  .home-challenge-value{font-size:clamp(10px,3.1cqw,17px);}
+}
 
-  .home-date-overlay #period{
-    font-size:clamp(16px,4.35cqw,25px)!important;
+
+/* =========================================================
+   Ver47｜ホーム固定表示＋数字位置の最終調整
+   ・ホーム表示中は画面自体をスクロールさせない
+   ・画像内の下部バーを含め、1画面に固定
+   ・上部3金額と銀行残高／前月比を同じ基準で整列
+   ========================================================= */
+@supports selector(body:has(*)){
+  body:has(#homePage:not([style*="display: none"])),
+  html:has(#homePage:not([style*="display: none"])){ 
+    overflow:hidden !important;
+    height:100dvh !important;
+    overscroll-behavior:none !important;
   }
+  body:has(#homePage:not([style*="display: none"])) #homePage{
+    height:100dvh !important;
+    min-height:100dvh !important;
+    overflow:hidden !important;
+    padding-bottom:0 !important;
+  }
+  body:has(#homePage:not([style*="display: none"])) .image-home{
+    height:100dvh !important;
+    overflow:hidden !important;
+    padding:0 !important;
+  }
+  body:has(#homePage:not([style*="display: none"])) .home-art{
+    max-height:100dvh !important;
+    overflow:hidden !important;
+  }
+}
 
+/* 上段3つ：文字の中心を完全に同じ高さへ */
+.home-value{
+  top:13.05% !important;
+  height:5.9% !important;
+  align-items:center !important;
+  line-height:1 !important;
+}
+.home-income,.home-spent,.home-remain{
+  top:13.05% !important;
+  height:5.9% !important;
+}
+
+/* 銀行残高と前月比：横位置・縦位置を個別に固定 */
+.home-bank-hit span:first-child{
+  left:34.5% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  line-height:1 !important;
+}
+.home-bank-hit span:last-child{
+  left:66.0% !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  line-height:1 !important;
+}
+
+/* iPhone幅ではほんの少しだけ詰める */
+@media(max-width:430px){
   .home-value{
-    top:9.8%!important;
-    font-size:clamp(15px,4.7cqw,27px)!important;
+    top:13.05% !important;
+    height:5.9% !important;
   }
-
   .home-income,.home-spent,.home-remain{
-    top:9.8%!important;
+    top:13.05% !important;
   }
+  .home-bank-hit span:first-child{left:32.0% !important;}
+  .home-bank-hit span:last-child{left:66.0% !important;}
+}
 
-  .home-bank-hit{
-    top:15.65%!important;
-    font-size:clamp(13px,4.0cqw,22px)!important;
-  }
 
+/* =========================================================
+   Ver48｜ホーム微調整
+   ・年月を少し小さく
+   ・収入／支出／残り／銀行残高／前月比を少し上へ
+   ・残りを確実に表示
+   ・使用目安の金額を小さくして右寄せ
+   ・節約チャレンジの合計額を上部のまるコーチへ移動
+   ・食費／休日／ガソリンのチャレンジ額を小さくして右寄せ
+   ========================================================= */
+
+/* 年月：さらに少しだけ小さく */
+.home-date-overlay #period{
+  font-size:clamp(17px,4.7cqw,29px) !important;
+}
+
+/* 収入・支出・残り：少し上へ。3つとも同じ基準線 */
+.home-value,
+.home-income,
+.home-spent,
+.home-remain{
+  top:12.65% !important;
+  height:5.9% !important;
+  align-items:center !important;
+  line-height:1 !important;
+  z-index:35 !important;
+}
+
+/* 残りを確実に表示 */
+.home-remain{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  color:#2e7d32 !important;
+}
+
+/* 銀行残高・前月比も少し上へ */
+.home-bank-hit{
+  top:16.25% !important;
+  height:6.8% !important;
+}
+.home-bank-hit span:first-child,
+.home-bank-hit span:last-child{
+  top:43% !important;
+  transform:translateY(-50%) !important;
+}
+
+/* 今月の使用目安：数字を少し小さく、右へ */
+.home-use-value{
+  width:17% !important;
+  left:33.0% !important;
+  font-size:clamp(10px,3.0cqw,17px) !important;
+}
+.home-use-food{top:34% !important;}
+.home-use-holiday{top:49% !important;}
+.home-use-gas{top:64% !important;}
+
+/* まるコーチ上部の「今日の節約チャレンジ 合計」へ合計額を表示 */
+.home-challenge-overlay{
+  display:flex !important;
+  left:69.0% !important;
+  top:34.4% !important;
+  width:20.5% !important;
+  height:5.5% !important;
+  font-size:clamp(15px,4.5cqw,26px) !important;
+  line-height:1 !important;
+  z-index:36 !important;
+}
+
+/* 下の節約チャレンジ：食費／休日／ガソリンを小さくして右へ */
+.home-challenge-value{
+  left:78.0% !important;
+  width:14.5% !important;
+  font-size:clamp(9px,2.7cqw,15px) !important;
+}
+.home-challenge-food{top:49% !important;}
+.home-challenge-holiday{top:64% !important;}
+.home-challenge-gas{top:79% !important;}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(17px,4.7cqw,28px) !important;}
+  .home-value,
+  .home-income,.home-spent,.home-remain{top:12.65% !important;}
+  .home-bank-hit{top:16.25% !important;}
+  .home-use-value{font-size:clamp(10px,2.9cqw,16px) !important;}
+  .home-challenge-overlay{font-size:clamp(14px,4.2cqw,24px) !important;}
+  .home-challenge-value{font-size:clamp(9px,2.6cqw,14px) !important;}
+}
+
+
+/* =========================================================
+   Ver49｜ホーム配置を実画面に合わせて再調整
+   ========================================================= */
+/* 年月 */
+.home-date-overlay #period{
+  font-size:clamp(16px,4.35cqw,27px) !important;
+}
+
+/* 収入・支出・残り：ラベル下の数字を少し上へ */
+.home-value,
+.home-income,
+.home-spent,
+.home-remain{
+  top:12.15% !important;
+  height:5.4% !important;
+}
+
+/* 残りは必ず表示 */
+.home-remain{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  z-index:50 !important;
+}
+
+/* 銀行残高・前月比を少し上へ */
+.home-bank-hit{
+  top:15.65% !important;
+}
+.home-bank-hit span:first-child,
+.home-bank-hit span:last-child{
+  top:44% !important;
+}
+
+/* 上のまるコーチ内に節約チャレンジ合計を配置 */
+.home-challenge-overlay{
+  display:flex !important;
+  left:71.5% !important;
+  top:31.2% !important;
+  width:20% !important;
+  height:6% !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:clamp(14px,4.0cqw,23px) !important;
+  z-index:60 !important;
+}
+
+/* 下段右カードには合計額を二重表示しない */
+.home-challenge-total{
+  display:none !important;
+}
+
+/* 使用目安：小さく、各行の右端へ */
+.home-use-value{
+  width:16% !important;
+  left:34.2% !important;
+  font-size:clamp(9px,2.7cqw,15px) !important;
+}
+.home-use-food{top:34% !important;}
+.home-use-holiday{top:49% !important;}
+.home-use-gas{top:64% !important;}
+
+/* 節約チャレンジ：小さく、各行の右端へ */
+.home-challenge-value{
+  left:78.5% !important;
+  width:13.5% !important;
+  font-size:clamp(8px,2.45cqw,14px) !important;
+}
+.home-challenge-food{top:49% !important;}
+.home-challenge-holiday{top:64% !important;}
+.home-challenge-gas{top:79% !important;}
+
+@media(max-width:430px){
+  .home-date-overlay #period{font-size:clamp(16px,4.35cqw,25px) !important;}
+  .home-value,.home-income,.home-spent,.home-remain{top:11% !important;height:5.4% !important;}
+  .home-bank-hit{top:15.65% !important;}
+  .home-bank-hit span:first-child,.home-bank-hit span:last-child{top:44% !important;}
+  .home-challenge-overlay{top:31.2% !important;font-size:clamp(13px,3.8cqw,22px) !important;}
+  .home-use-value{font-size:clamp(9px,2.65cqw,14px) !important;}
+  .home-challenge-value{font-size:clamp(8px,2.35cqw,13px) !important;}
+}
+/* 銀行残高・前月比：微調整 */
+
+.home-bank-hit span:first-child{
+  /* 銀行残高：少し下＋少し左＋少し小さく */
+  left:34.5% !important;
+  top:47% !important;
+  transform:translateY(-50%) !important;
+  font-size:clamp(10px,3.4cqw,20px) !important;
+  line-height:1 !important;
+}
+
+.home-bank-hit span:last-child{
+  /* 前月比：少し下＋少し小さく */
+  left:66.0% !important;
+  top:47% !important;
+  transform:translateY(-50%) !important;
+  font-size:clamp(8px,3.4cqw,20px) !important;
+  line-height:1 !important;
+}
+
+/* iPhone */
+@media(max-width:430px){
   .home-bank-hit span:first-child{
-    left:32.8%!important;
-    top:37%!important;
+    left:32.8% !important;
+    top:47% !important;
+    font-size:clamp(10px,3.4cqw,20px) !important;
   }
 
   .home-bank-hit span:last-child{
-    left:66%!important;
-    top:37%!important;
+    left:66.0% !important;
+    top:47% !important;
+    font-size:clamp(10px,3.4cqw,20px) !important;
+  }
+}
+/* 銀行残高・前月比 微調整② */
+
+.home-bank-hit span:first-child{
+  /* 銀行残高：もう少し左 */
+  left:31.5% !important;
+}
+
+.home-bank-hit span:last-child{
+  /* 前月比：少し右 */
+  left:70% !important;
+}
+.home-bank-hit span:first-child{
+  top:51% !important;
+}
+/* 今日のまるコーチ内の節約チャレンジ金額 */
+.home-challenge-overlay{
+  top:29% !important;
+}
+/* 年月を少し上へ */
+.home-date-overlay{
+  top:0.8% !important;
+}
+
+@media(max-width:430px){
+  .home-date-overlay{
+    top:0.8% !important;
+  }
+}
+/* 銀行残高・前月比を少し上へ */
+.home-bank-hit span:first-child{
+  top:37% !important;
+}
+
+.home-bank-hit span:last-child{
+  top:37% !important;
+}
+
+@media(max-width:430px){
+  .home-bank-hit span:first-child{
+    top:37% !important;
   }
 
-  .home-challenge-overlay{
-    top:29%!important;
-    font-size:clamp(13px,3.8cqw,22px)!important;
+  .home-bank-hit span:last-child{
+    top:37% !important;
   }
+}
+/* 上段：収入・支出・残りを少し上へ＆残りを表示 */
+.home-income,
+.home-spent,
+.home-remain{
+  top:9.8% !important;
+  height:5.9% !important;
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  align-items:center !important;
+  justify-content:center !important;
+  z-index:50 !important;
+}
 
+/* 残りは緑色 */
+.home-remain{
+  color:#2e7d32 !important;
+}
+
+/* iPhone */
+@media(max-width:430px){
+  .home-income,
+  .home-spent,
+  .home-remain{
+    top:9.8% !important;
+  }
+}
+/* 今月の使用目安：3つとも少し上へ */
+.home-use-food{
+  top:27.5% !important;
+}
+
+.home-use-holiday{
+  top:44.5% !important;
+}
+
+.home-use-gas{
+  top:61.3% !important;
+}
+
+/* 節約チャレンジ：3つとも少し上へ */
+.home-challenge-food{
+  top:27.5% !important;
+}
+
+.home-challenge-holiday{
+  top:44.5% !important;
+}
+
+.home-challenge-gas{
+  top:61.3% !important;
+}
+/* 今月の使用目安：小さく＋左へ */
+.home-use-value{
+  left:32% !important;
+  width:15% !important;
+  font-size:clamp(8px,2.5cqw,14px) !important;
+}
+
+/* 節約チャレンジ：小さく */
+.home-challenge-value{
+  font-size:clamp(8px,2.4cqw,13px) !important;
+}
+.home-challenge-value{
+  left:80% !important;
+}
+
+/* iPhone */
+@media(max-width:430px){
   .home-use-value{
-    left:32%!important;
-    width:15%!important;
-    font-size:clamp(8px,2.5cqw,13px)!important;
+    left:32% !important;
+    width:15% !important;
+    font-size:clamp(8px,2.5cqw,13px) !important;
   }
 
   .home-challenge-value{
-    left:80%!important;
-    font-size:clamp(8px,2.3cqw,12px)!important;
+    font-size:clamp(8px,2.3cqw,12px) !important;
   }
-}
-
-
-.annual-reference-page{max-width:none}}
-
-
-
-/* 年間ページ：参考画像をそのまま土台にする */
-.annual-reference-page{
-  min-height:0!important;
-  padding:0!important;
-  margin:0 auto!important;
-  max-width:709px!important;
-  background:#fffdf8!important;
-  overflow:hidden!important;
-}
-.annual-reference-art{
-  position:relative;
-  width:100%;
-  aspect-ratio:709 / 1536;
-  overflow:hidden;
-  touch-action:manipulation;
-}
-.annual-reference-image{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:fill;
-  user-select:none;
-  -webkit-user-drag:none;
-  pointer-events:none;
-}
-.annual-ref-value{
-  position:absolute;
-  z-index:5;
-  white-space:nowrap;
-  font-weight:950;
-  color:#3e302b;
-  text-align:center;
-  pointer-events:none;
-}
-.annual-ref-year{
-  left:25%;right:25%;top:8.5%;
-  font-size:clamp(23px,5.2vw,37px);
-  line-height:1;
-}
-.annual-ref-goal{
-  left:13%;right:13%;top:18.2%;
-  font-size:clamp(22px,5vw,35px);
-  color:#2e7d32;
-  line-height:1.12;
-}
-.annual-ref-progress{
-  position:absolute;z-index:4;left:13%;right:28%;top:21.65%;height:1.45%;
-  border-radius:999px;background:rgba(238,240,241,.95);overflow:hidden;pointer-events:none;
-}
-.annual-ref-progress #goalBar{
-  width:0;height:100%;border-radius:999px;
-  background:linear-gradient(90deg,#f6d46a,#f4c84d);
-}
-.annual-ref-income,.annual-ref-spent,.annual-ref-remain{
-  top:35.4%;font-size:clamp(18px,4.2vw,30px);
-}
-.annual-ref-income{left:5%;width:28%;}
-.annual-ref-spent{left:36%;width:28%;}
-.annual-ref-remain{left:68%;width:27%;color:#2e7d32;}
-.annual-ref-bank-list,.annual-ref-bonus-list{
-  position:absolute;z-index:5;pointer-events:none;
-}
-.annual-ref-bank-list{left:5.7%;top:47.7%;width:40%;height:28.5%;}
-.annual-ref-bonus-list{left:53%;top:47.7%;width:40%;height:28.5%;}
-.annual-ref-bank-row,.annual-ref-bonus-row{
-  position:relative;height:7.55%;display:flex;align-items:center;
-  font-size:clamp(10px,2.3vw,15px);color:#3e302b;
-  border-bottom:1px solid rgba(238,228,211,.75);
-}
-.annual-ref-bank-row span{width:26%;padding-left:2%;}
-.annual-ref-bank-row strong{margin-left:auto;padding-right:2%;font-size:clamp(9px,2.1vw,14px);font-weight:950;}
-.annual-ref-bank-row strong.is-up{color:#2e7d32}.annual-ref-bank-row strong.is-down{color:#d83a32}.annual-ref-bank-row strong.is-same{color:#8f8178}
-.annual-ref-bonus-row{height:25%;font-size:clamp(10px,2.3vw,15px);}
-.annual-ref-bonus-row span{font-weight:900;}
-.annual-ref-bonus-row strong{margin-left:auto;font-size:clamp(10px,2.2vw,15px);font-weight:950;}
-.annual-ref-bonus-row strong.is-forecast{color:#8f8178}.annual-ref-bonus-row strong.is-actual{color:#3e302b}
-.annual-ref-hit{
-  position:absolute;z-index:20;border:0;background:transparent;padding:0;margin:0;cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
-.annual-ref-action-1{left:5%;top:77.7%;width:28.5%;height:9.5%;}
-.annual-ref-action-2{left:35.8%;top:77.7%;width:28.5%;height:9.5%;}
-.annual-ref-action-3{left:66.5%;top:77.7%;width:28.5%;height:9.5%;}
-.annual-ref-nav-home{left:0;top:90.0%;width:25%;height:9.5%;}
-.annual-ref-nav-year{left:25%;top:90.0%;width:25%;height:9.5%;}
-.annual-ref-nav-special{left:50%;top:90.0%;width:25%;height:9.5%;}
-.annual-ref-nav-setting{left:75%;top:90.0%;width:25%;height:9.5%;}
-body:has(#yearPage[style*="display: block"]) .bottom-nav{display:none!important;}
-@media(max-width:520px){
-  .annual-reference-page{width:100vw!important;max-width:709px!important;}
-}
-
-/* 年間ページ上書き */
-#yearGoal{
-  position:absolute!important;
-  width:auto!important;
-  height:auto!important;
-  overflow:visible!important;
-  opacity:1!important;
-  pointer-events:none!important;
-}
-body:has(#yearPage[style*="display: block"]){
-  overflow:hidden!important;
-}
-
-/* =========================================================
-   年間ページ v3 微調整
-   ・画面を完全固定
-   ・全体を約3.4%上へ
-   ・数字のはみ出しを防止
-   ========================================================= */
-
-html:has(#yearPage[style*="display: block"]),
-body:has(#yearPage[style*="display: block"]){
-  width:100%;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  overflow:hidden!important;
-  overscroll-behavior:none!important;
-  position:fixed!important;
-  inset:0!important;
-}
-
-body:has(#yearPage[style*="display: block"]) #yearPage{
-  position:fixed!important;
-  inset:0!important;
-  width:100vw!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  max-width:none!important;
-  margin:0!important;
-  padding:0!important;
-  overflow:hidden!important;
-  transform:none!important;
-}
-
-body:has(#yearPage[style*="display: block"]) .annual-reference-art{
-  width:100vw!important;
-  height:103.4dvh!important;
-  max-width:none!important;
-  aspect-ratio:auto!important;
-  transform:translateY(-3.4%)!important;
-  overflow:hidden!important;
-}
-
-/* 年度表示 */
-.annual-ref-year{
-  top:8.2%!important;
-  font-size:clamp(21px,4.6vw,32px)!important;
-}
-
-/* 年間目標：少し小さく、中央に収める */
-.annual-ref-goal{
-  left:15%!important;
-  right:15%!important;
-  top:18.4%!important;
-  font-size:clamp(18px,4.1vw,29px)!important;
-  line-height:1.05!important;
-}
-
-/* 年間合計 */
-.annual-ref-income,
-.annual-ref-spent,
-.annual-ref-remain{
-  top:35.5%!important;
-  font-size:clamp(15px,3.55vw,25px)!important;
-}
-
-.annual-ref-income{left:5%!important;width:27%!important;}
-.annual-ref-spent{left:36.5%!important;width:27%!important;}
-.annual-ref-remain{
-  left:68%!important;
-  width:25%!important;
-  color:#2e7d32!important;
-}
-
-/* 銀行残高・前月比 */
-.annual-ref-bank-list{
-  left:5.7%!important;
-  top:47.7%!important;
-  width:40%!important;
-  height:28.5%!important;
-}
-
-.annual-ref-bank-row{
-  font-size:clamp(9px,2.05vw,13px)!important;
-}
-
-.annual-ref-bank-row strong{
-  font-size:clamp(8px,1.85vw,12px)!important;
-}
-
-/* ボーナス */
-.annual-ref-bonus-list{
-  left:53%!important;
-  top:47.7%!important;
-  width:40%!important;
-  height:28.5%!important;
-}
-
-.annual-ref-bonus-row{
-  font-size:clamp(9px,2.05vw,13px)!important;
-}
-
-.annual-ref-bonus-row strong{
-  font-size:clamp(9px,1.95vw,13px)!important;
-}
-
-/* iPhone */
-@media(max-width:430px){
-  .annual-ref-year{
-    top:8.2%!important;
-    font-size:clamp(20px,4.6vw,29px)!important;
-  }
-
-  .annual-ref-goal{
-    left:14%!important;
-    right:14%!important;
-    top:18.4%!important;
-    font-size:clamp(17px,4.0vw,27px)!important;
-  }
-
-  .annual-ref-income,
-  .annual-ref-spent,
-  .annual-ref-remain{
-    top:35.5%!important;
-    font-size:clamp(14px,3.45vw,23px)!important;
-  }
-
-  .annual-ref-income{left:5%!important;width:27%!important;}
-  .annual-ref-spent{left:36.5%!important;width:27%!important;}
-  .annual-ref-remain{left:68%!important;width:25%!important;}
-
-  .annual-ref-bank-row{
-    font-size:clamp(8px,1.95vw,12px)!important;
-  }
-
-  .annual-ref-bank-row strong{
-    font-size:clamp(8px,1.75vw,11px)!important;
-  }
-
-  .annual-ref-bonus-row{
-    font-size:clamp(8px,1.95vw,12px)!important;
-  }
-
-  .annual-ref-bonus-row strong{
-    font-size:clamp(8px,1.85vw,12px)!important;
-  }
-}
-/* ===== 年間ページ：年度表示 最終調整 ===== */
-
-body:has(#yearPage[style*="display: block"]) .annual-ref-year{
-  top:5.8%!important;
-  left:25%!important;
-  right:25%!important;
-
-  font-family:"Klee One","Hiragino Maru Gothic ProN",
-              "Yu Gothic",sans-serif!important;
-
-  font-size:clamp(20px,4.35vw,30px)!important;
-  font-weight:700!important;
-  line-height:1!important;
-}
-/* 年間目標の数字 */
-body:has(#yearPage[style*="display: block"]) .annual-ref-goal{
-  top:14.5%!important;
-  font-size:clamp(21px,5.5vw,38px)!important;
-}
-body:has(#yearPage[style*="display: block"]) .annual-ref-goal{
-  transform:translateX(-8%)!important;
-}
-【年間ページ・微調整用CSS】
-style.css の一番下にそのまま追加してください。
-今あるCSSは削除しなくてOKです。
-
-/* 年間ページ：ホームと同じフォント */
-body:has(#yearPage[style*="display: block"]) .annual-ref-value,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row{
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-}
-
-/* 年間合計「残り」を表示 */
-body:has(#yearPage[style*="display: block"]) #yearRemain{
-  display:flex!important;
-  visibility:visible!important;
-  opacity:1!important;
-  position:absolute!important;
-  z-index:50!important;
-  left:68%!important;
-  width:25%!important;
-  top:35.5%!important;
-  color:#2e7d32!important;
-  text-align:center!important;
-  white-space:nowrap!important;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-  font-weight:950!important;
-  font-size:clamp(14px,3.45vw,23px)!important;
-  line-height:1!important;
-}
-
-@media(max-width:430px){
-  body:has(#yearPage[style*="display: block"]) #yearRemain{
-    left:68%!important;
-    width:25%!important;
-    top:35.5%!important;
-    font-size:clamp(14px,3.45vw,23px)!important;
-  }
-}
-【年間ページ｜ホームと同じフォントに統一】
-
-style.css の一番下に追加してください。
-今あるCSSは削除しなくてOKです。
-
-/* =========================================================
-   年間ページ：表示されている文字をホームと同じフォントに統一
-   ========================================================= */
-
-body:has(#yearPage[style*="display: block"]) .annual-ref-value,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-list,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row span,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row strong,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-list,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row span,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row strong{
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-}
-
-/* ホームと同じ、やわらかい文字の太さ */
-body:has(#yearPage[style*="display: block"]) .annual-ref-value,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bank-row,
-body:has(#yearPage[style*="display: block"]) .annual-ref-bonus-row{
-  font-weight:900!important;
-}
-
-/* 年間目標・年間合計の数字 */
-body:has(#yearPage[style*="display: block"]) #yearGoal,
-body:has(#yearPage[style*="display: block"]) #yearIncome,
-body:has(#yearPage[style*="display: block"]) #yearSpent,
-body:has(#yearPage[style*="display: block"]) #yearRemain{
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-}
-
-/* 銀行残高・前月比 */
-body:has(#yearPage[style*="display: block"]) #annualBankList,
-body:has(#yearPage[style*="display: block"]) #annualBankList *{
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-}
-
-/* ボーナス */
-body:has(#yearPage[style*="display: block"]) #annualBonusList,
-body:has(#yearPage[style*="display: block"]) #annualBonusList *{
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif!important;
-}
-/* 年間合計の数字を個別に調整 */
-
-body:has(#yearPage[style*="display: block"]) #yearIncome{
-  transform:translate(0px, -1px)!important;
-}
-
-body:has(#yearPage[style*="display: block"]) #yearSpent{
-  transform:translate(0px, -1px)!important;
-}
-
-body:has(#yearPage[style*="display: block"]) #yearRemain{
-  transform:translate(10px, -1px)!important;
-}
-【年間ページ｜銀行残高・ボーナス配置修正】
-
-style.css の一番下にそのまま追加してください。
-今までのCSSは削除しなくてOKです。
-
-/* =========================================================
-   まる家計｜年間ページ 最終調整
-   ・銀行残高：月ラベルなし、数字だけ
-   ・ボーナス：パパ夏などのラベルなし、数字だけ
-   ・数字をカード内で少し右へ
-   ・年間ページの表示状態に依存しない
-   ========================================================= */
-
-#annualBankList,
-#annualBonusList{
-  position:absolute !important;
-  z-index:5 !important;
-  pointer-events:none !important;
-  box-sizing:border-box !important;
-}
-
-/* 左：銀行残高 */
-#annualBankList{
-  left:5.7% !important;
-  top:49.2% !important;
-  width:40% !important;
-  height:28.5% !important;
-}
-
-/* 右：ボーナス */
-#annualBonusList{
-  left:53% !important;
-  top:49.2% !important;
-  width:40% !important;
-  height:28.5% !important;
-}
-
-/* 12か月を均等配置 */
-#annualBankList .annual-bank-row{
-  position:relative !important;
-  height:8.3333% !important;
-  min-height:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  box-sizing:border-box !important;
-  border-bottom:none !important;
-}
-
-/* 銀行は数字だけ */
-#annualBankList .annual-bank-row span{
-  display:none !important;
-}
-
-#annualBankList .annual-bank-row strong{
-  display:block !important;
-  margin:0 0 0 58px !important;
-  padding:0 !important;
-  white-space:nowrap !important;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
-  font-size:clamp(10px,2.4vw,14px) !important;
-  line-height:1 !important;
-}
-
-/* ボーナス4行 */
-#annualBonusList .annual-bonus-row{
-  position:relative !important;
-  height:25% !important;
-  min-height:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  box-sizing:border-box !important;
-  border-bottom:none !important;
-}
-
-/* ボーナスは数字だけ */
-#annualBonusList .annual-bonus-row span{
-  display:none !important;
-}
-
-#annualBonusList .annual-bonus-row strong{
-  display:block !important;
-  margin:0 0 0 42px !important;
-  padding:0 !important;
-  white-space:nowrap !important;
-  font-family:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif !important;
-  font-size:clamp(10px,2.4vw,14px) !important;
-  line-height:1 !important;
-}
-
-/* iPhone */
-@media(max-width:430px){
-  #annualBankList{
-    left:5.7% !important;
-    top:49.2% !important;
-    width:40% !important;
-  }
-
-  #annualBonusList{
-    left:53% !important;
-    top:49.2% !important;
-    width:40% !important;
-  }
-
-  #annualBankList .annual-bank-row strong{
-    margin-left:42px !important;
-    font-size:clamp(10px,2.4vw,14px) !important;
-  }
-
-  #annualBonusList .annual-bonus-row strong{
-    margin-left:28px !important;
-    font-size:clamp(10px,2.4vw,14px) !important;
-  }
-}
-/* 年間ページ：銀行残高の行間調整 */
-.annual-ref-bank-row{
-  height:2% !important;
-  border-bottom:none !important;
 }
