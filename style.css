@@ -100,3 +100,62 @@ button{color:inherit}
   .summary-money{font-size:22px}
   #gridArea{gap:7px}
 }
+
+
+/* ===== まる家計 compact refresh ===== */
+body{font-size:14px}
+#homePage,.page{padding-left:12px;padding-right:12px}
+.card{border-radius:18px;padding:13px;margin:7px 0}
+.card h2{font-size:18px}
+.summary-card{padding:7px 9px;border-radius:20px}
+.month-header{grid-template-columns:42px 1fr 84px;gap:5px;min-height:54px}
+.month-header button{width:40px;height:40px;font-size:16px}
+#period{font-size:20px}
+#yearSelect{font-size:14px}
+.summary-grid{gap:2px}
+.summary-title{font-size:11px;margin-bottom:1px}
+.summary-money{font-size:20px}
+.bank-row{margin-top:6px;padding:8px 2px 1px;gap:6px}
+.bank-label{font-size:13px}
+.bank-total{font-size:17px}
+.bank-saving{font-size:16px}
+.ai-card{padding:13px 13px 14px}
+#aiComment{font-size:14px;line-height:1.5}
+.category-header{margin-bottom:8px}
+#gridArea{gap:6px}
+#gridArea button{min-height:48px;padding:8px 9px;border-radius:14px}
+#gridArea button strong,#gridArea button span:last-child{font-size:15px}
+.income-card{display:none}
+.bottom-nav{height:68px;padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
+.bottom-nav button{font-size:18px;border-radius:14px;gap:2px}
+.bottom-nav button span{font-size:10px}
+.page{padding-bottom:82px}
+
+.annual-header-card{text-align:center;padding:10px}
+.annual-header-card h2{font-size:20px}
+.annual-coach-card{padding:13px}
+#annualCoach{font-size:13px;line-height:1.6}
+.annual-coach-main{font-size:18px;font-weight:900;margin:8px 0}
+.bank-trend-row{display:grid;grid-template-columns:38px 1fr auto;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #f1eadf}
+.bank-trend-row:last-child{border-bottom:0}
+.bank-trend-month{font-weight:800;color:var(--brown)}
+.bank-trend-value{font-weight:900;text-align:right}
+.bank-trend-change{text-align:right;font-size:11px;font-weight:800;min-width:62px}
+.bank-trend-change.plus{color:var(--green)}
+.bank-trend-change.minus{color:var(--red)}
+.bank-trend-difference{margin-top:10px;padding:10px 11px;border-radius:12px;background:#fff8dc;font-weight:800;text-align:center}
+.bonus-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f1eadf}
+.bonus-row:last-child{border-bottom:0}
+.bonus-label{font-weight:800}
+.bonus-value{font-weight:900;text-align:right}
+.bonus-forecast{font-size:11px;color:var(--muted);font-weight:700}
+.bonus-actual{color:var(--green)}
+@media (max-width:390px){
+  #homePage,.page{padding-left:10px;padding-right:10px}
+  .card{padding:11px;margin:6px 0}
+  #gridArea button{min-height:45px}
+  .summary-money{font-size:18px}
+  .bank-label{font-size:12px}
+  .bank-total{font-size:16px}
+  .bank-saving{font-size:15px}
+}
