@@ -746,9 +746,7 @@ function update(){
 
     drawAI();
 
-    drawYearSummary();
-
-    drawYearChart();
+    drawNewAnnualPage();
 
     drawAnnualManage();
 
@@ -1199,8 +1197,7 @@ function showPage(page){
             yearPage.style.display = "block";
             navButtons[1].classList.add("active");
 
-            drawYearSummary();
-            drawYearChart();
+            drawNewAnnualPage();
 
             lastPage = "year";
             break;
@@ -4414,6 +4411,165 @@ function deleteAnnualHistory(index){
     openAnnualCategory(currentAnnualCategory);
 
 }
+
+/* ===========================
+   新・年間ページ
+=========================== */
+
+function getFiscalMonthDataForYear(month){
+    const year = month <= 3 ? currentYear + 1 : currentYear;
+    return getMonthData(year, month);
+}
+
+function getBankTotalFromMonthData(data){
+    if(!data || !data.bank) return null;
+    const confirmed = isBankConfirmedData(data);
+    if(!confirmed) return null;
+    return Number(data.bank.mitake || 0) + Number(data.bank.takizawa || 0);
+}
+
+function getAnnualBankRows(){
+    const months = getFiscalMonths();
+    const rows = [];
+    let previous = null;
+
+    months.forEach(month=>{
+        const data = getFiscalMonthDataForYear(month);
+        const balance = getBankTotalFromMonthData(data);
+
+        rows.push({
+            month,
+            balance,
+            change: balance === null || previous === null ? null : balance - previous
+        });
+
+        if(balance !== null) previous = balance;
+    });
+
+    return rows;
+}
+
+function drawAnnualBankTrend(){
+    const area = document.getElementById("bankTrendList");
+    const diffArea = document.getElementById("bankTrendDifference");
+    if(!area || !diffArea) return;
+
+    const rows = getAnnualBankRows();
+
+    area.innerHTML = rows.map(row=>{
+        const balanceText = row.balance === null
+            ? "未入力"
+            : "¥" + row.balance.toLocaleString();
+
+        let changeText = "—";
+        let changeClass = "";
+
+        if(row.change !== null){
+            changeText =
+                (row.change >= 0 ? "+" : "") +
+                "¥" + row.change.toLocaleString();
+            changeClass = row.change >= 0 ? "plus" : "minus";
+        }
+
+        return `
+        <div class="bank-trend-row">
+            <span class="bank-trend-month">${row.month}月</span>
+            <span class="bank-trend-value">${balanceText}</span>
+            <span class="bank-trend-change ${changeClass}">
+                ${changeText}
+            </span>
+        </div>`;
+    }).join("");
+
+    const april = rows.find(r=>r.month === 4);
+    const current = rows.find(r=>r.month === currentMonth);
+
+    if(april?.balance !== null && current?.balance !== null){
+        const diff = current.balance - april.balance;
+        diffArea.innerHTML = `
+            4月 → ${currentMonth}月　
+            <strong>${diff >= 0 ? "+" : ""}¥${diff.toLocaleString()}</strong>
+        `;
+        diffArea.className =
+            "bank-trend-difference " + (diff >= 0 ? "plus" : "minus");
+    }else{
+        diffArea.textContent = "4月と現在の銀行残高を入力すると差額が表示されます";
+        diffArea.className = "bank-trend-difference";
+    }
+}
+
+function drawAnnualBonus(){
+    const area = document.getElementById("annualBonus");
+    if(!area) return;
+
+    const summerActual =
+        Number(app.bonus.papaSummerActual || 0) +
+        Number(app.bonus.mamaSummerActual || 0);
+
+    const winterActual =
+        Number(app.bonus.papaWinterActual || 0) +
+        Number(app.bonus.mamaWinterActual || 0);
+
+    const summerForecast =
+        Number(app.bonus.papaSummerForecast || 0) +
+        Number(app.bonus.mamaSummerForecast || 0);
+
+    const winterForecast =
+        Number(app.bonus.papaWinterForecast || 0) +
+        Number(app.bonus.mamaWinterForecast || 0);
+
+    const row = (label, forecast, actual) => {
+        const hasActual = actual > 0;
+        const value = hasActual ? actual : forecast;
+        const sub = hasActual
+            ? `<span class="bonus-actual">実績</span>`
+            : `<span class="bonus-forecast">予測</span>`;
+
+        return `
+        <div class="bonus-row">
+            <span class="bonus-label">${label}<br>${sub}</span>
+            <span class="bonus-value">¥${value.toLocaleString()}</span>
+        </div>`;
+    };
+
+    area.innerHTML =
+        row("🌻 夏", summerForecast, summerActual) +
+        row("⛄ 冬", winterForecast, winterActual) +
+        `<div style="margin-top:8px;font-size:11px;color:var(--muted);">
+            実績を入力すると予測から実績に切り替わります。
+        </div>`;
+}
+
+function drawAnnualCoach(){
+    const area = document.getElementById("annualCoach");
+    if(!area) return;
+
+    const annual = getAnnualCoachData();
+    const forecast = annual.withBonusForecast;
+    const goal = annual.goal;
+    const gap = Math.max(goal - forecast, 0);
+    const surplus = Math.max(forecast - goal, 0);
+
+    area.innerHTML = `
+        <div class="annual-coach-main">${annual.statusText}</div>
+        <div>
+            🎯 目標 ¥${goal.toLocaleString()}<br>
+            🔮 年度末予測 ¥${forecast.toLocaleString()}<br>
+            ${
+                gap > 0
+                ? `あと <strong>¥${gap.toLocaleString()}</strong>`
+                : `目標より <strong>¥${surplus.toLocaleString()}</strong>上回る予測`
+            }
+        </div>
+    `;
+}
+
+function drawNewAnnualPage(){
+    drawAnnualCoach();
+    drawAnnualBankTrend();
+    drawAnnualBonus();
+}
+
 /* ===========================
    ⑪ 初期表示
 =========================== */
