@@ -161,133 +161,29 @@
         </div>
 
     </div>
-
-    <!-- 収入 -->
-
-    <div class="card income-card">
-
-        <h2>💰 収入</h2>
-
-        <div class="income-grid">
-
-            <button id="incomePapa">
-
-                👨<br>パパ
-
-            </button>
-
-            <button id="incomeMama">
-
-                👩<br>ママ
-
-            </button>
-
-            <button id="incomeExtra">
-
-                🎁<br>臨時
-
-            </button>
-
-        </div>
-
-        <div class="money" id="income">
-
-            ¥0
-
-        </div>
-
-    </div>
-
 </div>
 <!-- 年間 -->
 
 <div id="yearPage" class="page" style="display:none;">
 
-    <div class="card">
-<h2>📅 <span id="fiscalYear"><span id="yearTitle">2026年度</span></span></h2>
+    <div class="card annual-header-card">
+        <h2>📅 <span id="yearTitle">2026年度</span></h2>
+    </div>
+
+    <div class="card annual-coach-card">
+        <h2>🏆 年間コーチ</h2>
+        <div id="annualCoach"></div>
     </div>
 
     <div class="card">
-
-        <h2>🎯 年間目標</h2>
-
-        <div id="yearGoal">
-
-            ¥0 / ¥3,400,000
-
-        </div>
-
-        <div class="progress">
-
-            <div id="goalBar"></div>
-
-        </div>
-
+        <h2>🏦 銀行残高の推移</h2>
+        <div id="bankTrendList"></div>
+        <div id="bankTrendDifference" class="bank-trend-difference"></div>
     </div>
 
-    <div class="card">
-
-        <h2>💰 年間合計</h2>
-
-        <div class="summary-grid">
-
-            <button
-                class="summary-item"
-                onclick="showPage('income')"
-                style="cursor:pointer;">
-
-                <div class="summary-title">ここまでの収入</div>
-
-                <div class="summary-money" id="yearIncome">
-
-                    ¥0
-
-                </div>
-
-            </button>
-
-            <button
-                class="summary-item"
-                onclick="showCategoryList()"
-                style="cursor:pointer;">
-
-                <div class="summary-title">ここまでの支出</div>
-
-                <div class="summary-money" id="yearSpent">
-
-                    ¥0
-
-                </div>
-
-            </button>
-
-            <div class="summary-item">
-
-                <div class="summary-title">残り</div>
-
-                <div class="summary-money" id="yearRemain">
-
-                    ¥0
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="card">
-
-        <h2>📈 月別推移</h2>
-
-  <canvas
-    id="yearChart"
-    class="year-chart"
-    width="600"
-    height="220">
-</canvas>
-
+    <div class="card bonus-card">
+        <h2>🎁 ボーナス</h2>
+        <div id="annualBonus"></div>
     </div>
 
 </div>
