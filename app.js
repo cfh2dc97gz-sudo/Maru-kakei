@@ -674,15 +674,10 @@ function update(){
 
         income-spent;
 
-    document
-        .getElementById("income")
-        .textContent=
-        "¥"+income.toLocaleString();
-
-    document
-        .getElementById("incomeSummary")
-        .textContent=
-        "¥"+income.toLocaleString();
+    const incomeSummaryEl = document.getElementById("incomeSummary");
+    if(incomeSummaryEl){
+        incomeSummaryEl.textContent = "¥"+income.toLocaleString();
+    }
 
     document
         .getElementById("spent")
@@ -995,17 +990,14 @@ function addIncome(type){
 
 }
 
-document
-.getElementById("incomePapa")
-.onclick = ()=>addIncome("パパ");
+const incomePapaBtn = document.getElementById("incomePapa");
+if(incomePapaBtn) incomePapaBtn.onclick = ()=>addIncome("パパ");
 
-document
-.getElementById("incomeMama")
-.onclick = ()=>addIncome("ママ");
+const incomeMamaBtn = document.getElementById("incomeMama");
+if(incomeMamaBtn) incomeMamaBtn.onclick = ()=>addIncome("ママ");
 
-document
-.getElementById("incomeExtra")
-.onclick = ()=>addIncome("臨時");
+const incomeExtraBtn = document.getElementById("incomeExtra");
+if(incomeExtraBtn) incomeExtraBtn.onclick = ()=>addIncome("臨時");
 
 document
 .getElementById("resetMonth")
@@ -4437,10 +4429,14 @@ function getAnnualBankRows(){
         const data = getFiscalMonthDataForYear(month);
         const balance = getBankTotalFromMonthData(data);
 
+        const previousMonthBalance = previous;
+
         rows.push({
             month,
             balance,
-            change: balance === null || previous === null ? null : balance - previous
+            change: balance === null || previousMonthBalance === null
+                ? null
+                : balance - previousMonthBalance
         });
 
         if(balance !== null) previous = balance;
