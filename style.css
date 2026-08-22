@@ -226,3 +226,85 @@ body{font-size:13px}
   #gridArea button .input-left{font-size:12px;white-space:nowrap}
   #gridArea .atm-card{grid-column:1 / -1;min-height:34px}
 }
+
+
+/* ===== v27：さらに一画面＆情報整理 ===== */
+html,body{font-size:13px}
+body{padding-bottom:64px}
+#homePage,.page{padding:4px 10px 72px}
+.card{padding:8px 10px;margin:4px 0;border-radius:16px}
+.card h2{font-size:16px}
+
+/* ホーム */
+.month-header{min-height:44px;grid-template-columns:38px 1fr 76px;gap:4px}
+.month-header button{width:34px;height:34px;font-size:13px}
+#period{font-size:19px}
+#yearSelect{font-size:12px}
+.summary-card{padding:6px 8px}
+.summary-title{font-size:10px}
+.summary-money{font-size:18px}
+.bank-row{margin-top:4px;padding:5px 1px 0;gap:5px}
+.bank-label{font-size:12px}.bank-total{font-size:15px}.bank-saving{font-size:15px}
+.ai-card{padding:8px 10px 9px;border-left-width:4px}
+.ai-card h2{font-size:16px;margin-bottom:4px}
+#aiComment{font-size:12px;line-height:1.25}
+.ai-section-title{font-size:13px;margin-bottom:2px}
+.ai-challenge-target{font-size:14px;margin-bottom:2px}
+.ai-mini-row{padding:4px 7px;margin:2px 0;border-radius:9px}
+.ai-mini-row strong{font-size:12px}
+.category-header{margin-bottom:3px}.category-header h2{font-size:16px}
+#gridArea{gap:4px}
+#gridArea button{min-height:34px;padding:5px 6px;border-radius:10px}
+#gridArea button .input-name{font-size:10px}.input-left{font-size:11px!important}
+.bottom-nav{height:60px;padding:2px 5px calc(2px + env(safe-area-inset-bottom))}
+.bottom-nav button{font-size:16px;border-radius:11px;gap:0}.bottom-nav button span{font-size:8px}
+
+/* 年間：コーチは折りたたみ、銀行12か月も極小 */
+.annual-header-card{padding:5px}.annual-header-card h2{font-size:17px}
+.annual-coach-card{padding:7px 9px}
+.annual-coach-card h2{font-size:15px;margin-bottom:2px}
+.annual-coach-toggle{width:100%;border:0;background:transparent;padding:2px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:900;text-align:left}
+.annual-coach-numbers{font-size:11px;gap:5px;justify-content:space-between}
+.annual-coach-gap{font-size:12px;margin-top:2px}
+.annual-coach-detail{margin-top:5px;padding-top:5px;border-top:1px solid #eee4d3;display:grid;gap:2px;font-size:11px;line-height:1.25}
+.coach-remaining{font-size:13px;font-weight:950;color:var(--green);padding:2px 0}
+.annual-bank-card{padding:6px 9px}.annual-bank-card h2{font-size:15px;margin-bottom:1px}.annual-bank-note{font-size:9px;margin-bottom:1px}
+.bank-trend-row{grid-template-columns:28px 1fr auto;gap:4px;padding:3px 0;min-height:22px}
+.bank-trend-month{font-size:11px}.bank-trend-value{font-size:12px}.bank-trend-change{font-size:10px;min-width:54px}
+.bank-trend-difference{margin-top:4px;padding:5px 7px;font-size:11px}
+.bonus-card{padding:6px 9px}.bonus-card h2{font-size:15px}.bonus-row{padding:4px 0;gap:5px}.bonus-label{font-size:12px}.bonus-value{font-size:13px}.bonus-forecast,.bonus-actual{font-size:9px}.bonus-bank-save{font-size:9px}
+
+/* 特別費：カードを2列にして一画面 */
+#annualPage{padding-bottom:70px}
+#annualPage>.card:first-child{padding:5px 9px;text-align:center}
+#annualPage>.card:first-child h2{font-size:16px}
+.special-expense-wrap{padding:6px}
+#annualManageList>.card:first-child{padding:7px 9px;margin:0 0 4px}
+#annualManageList>.card:first-child h3{font-size:14px;margin:0 0 2px}
+#annualManageList>.card:first-child p{display:inline;margin:0 8px 0 0;font-size:10px}
+#annualManageList{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+#annualManageList>.card:first-child,#annualManageList>button.card:last-child{grid-column:1 / -1}
+#annualManageList>button.card{margin:0;padding:6px 7px;border-radius:12px;min-height:70px}
+#annualManageList>button.card h3{font-size:13px;margin:0 0 2px}.annualManageList>button.card p,#annualManageList>button.card p{font-size:10px;margin:1px 0}
+#annualManageList>button.card .progress{height:5px;margin-top:4px}
+
+/* カテゴリ詳細：画面内スクロール */
+#categoryPage{padding-bottom:70px}
+#categoryPage>.card{padding:7px 9px}
+#categoryTitle{font-size:17px}
+#categoryDetailHistory{max-height:calc(100vh - 155px);overflow:auto}
+#categoryDetailHistory .card{padding:7px 9px;margin:3px 0}
+#categoryDetailHistory .setting-item{min-height:38px;padding:7px 9px;margin:2px 0;border-radius:10px}
+
+/* 設定・ボーナスも詰める */
+#settingPage .card{padding:7px 9px}
+.setting-item{min-height:38px;padding:7px 9px;border-radius:11px;margin:3px 0;font-size:12px}
+.setting-group h3{font-size:12px;margin:8px 3px 4px}
+#bonusPage .card{padding:7px 9px}
+#bonusPage .setting-item{min-height:36px}
+
+@media (max-width:390px){
+  #gridArea button .input-name{font-size:9.5px}
+  .summary-money{font-size:17px}
+  .annual-coach-detail{font-size:10px}
+}
