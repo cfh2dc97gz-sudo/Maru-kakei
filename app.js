@@ -1,4 +1,4 @@
-    /* まる家計 Ver28｜デザインリフレッシュ */
+    /* まる家計 Ver29｜デザインリフレッシュ */
 
     const DEFAULT_BUDGETS = [
 
@@ -719,24 +719,20 @@
 
         if(savingEl){
 
-            const saving=
+            // ホームの「前月比」は、前月の銀行残高との差。
+            // 4月だけは3月末のスタート残高 ¥78,142 と比較する。
+            const previousBank = getPreviousBankBalance(currentMonth);
+            const saving = previousBank === null
+                ? null
+                : bankTotal - previousBank;
 
-                bankTotal-
-                app.startBank;
+            savingEl.textContent = saving === null
+                ? "—"
+                : (saving>=0?"+":"") + "¥" + saving.toLocaleString();
 
-            savingEl.textContent=
-
-                (saving>=0?"+":"")+
-                "¥"+
-                saving.toLocaleString();
-
-            savingEl.className=
-
-                "bank-saving "+
-
-                (saving>=0
-                    ?"plus"
-                    :"minus");
+            savingEl.className =
+                "bank-saving " +
+                (saving === null ? "" : (saving>=0 ? "plus" : "minus"));
 
         }
 
@@ -3827,43 +3823,61 @@
         return Number(data.bank.mitake || 0) + Number(data.bank.takizawa || 0);
     }
 
-    function getAnnualBankRows(){
+    function getKnownBankBalance(month){
 
-        const months = getFiscalMonths();
-
-        /*
-           3月末残高は ¥78,142。
-           4月の前月比は「4月末 − 3月末」なので +¥100,000。
-           5月以降は実際の残高推移をそのまま表示する。
-        */
+        // 実際に入力済みの月を最優先。
+        // 未入力の過去月だけ、現在の画面で確定している値を表示用の基準として使う。
         const knownBalances = {
             4: 178142,
-            5: 72991,
+            5: 151333,
             6: 199620,
             7: 323877
         };
 
-        const rows = [];
-        let previous = 78142;
+        const info = getFiscalMonthInfo(month);
+        const data = getMonthData(info.year, info.month);
 
-        months.forEach(month=>{
-            const balance = knownBalances[month] ?? null;
+        if(isBankConfirmedData(data)){
+            return Number(data.bank?.mitake || 0) +
+                   Number(data.bank?.takizawa || 0);
+        }
 
-            rows.push({
+        return knownBalances[month] ?? null;
+    }
+
+    function getPreviousBankBalance(month){
+
+        // 4月は3月末のスタート残高から計算。
+        if(month === 4){
+            return Number(app.startBank || 78142);
+        }
+
+        const months = getFiscalMonths();
+        const index = months.indexOf(month);
+        if(index <= 0) return Number(app.startBank || 78142);
+
+        const previousMonth = months[index - 1];
+        return getKnownBankBalance(previousMonth);
+    }
+
+    function getAnnualBankRows(){
+
+        const months = getFiscalMonths();
+
+        return months.map(month=>{
+
+            const balance = getKnownBankBalance(month);
+            const previous = getPreviousBankBalance(month);
+
+            return {
                 month,
                 balance,
-                change:
-                    balance === null
-                        ? null
-                        : balance - previous
-            });
-
-            if(balance !== null){
-                previous = balance;
-            }
+                change: balance === null || previous === null
+                    ? null
+                    : balance - previous
+            };
         });
 
-        return rows;
     }
 
     function drawAnnualBankTrend(){
@@ -3892,10 +3906,10 @@
         const current = rows[currentIndex];
 
         if(april.balance !== null && current.balance !== null){
-            const diff = current.balance - april.balance;
+            const diff = current.balance - Number(app.startBank || 78142);
 
             diffArea.innerHTML = `
-                4月 → ${current.month}月
+                4月（${Number(app.startBank || 78142).toLocaleString()}） → ${current.month}月
                 <strong>${diff >= 0 ? "+" : ""}¥${diff.toLocaleString()}</strong>
             `;
             diffArea.className =
@@ -4082,13 +4096,13 @@
     );
 
     console.log(
-        "%c🌸 まる家計 Ver28",
+        "%c🌸 まる家計 Ver29",
         "color:#4CAF50;font-size:16px;font-weight:bold;"
     );
 
     console.log({
 
-        version:"28.0",
+        version:"29.0",
 
         fiscalYear:currentYear,
 
