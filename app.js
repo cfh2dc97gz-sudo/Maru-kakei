@@ -766,7 +766,12 @@
 
             app.budgets.forEach((item,index)=>{
 
-                const used = Number(item.spent || 0);
+                let used = Number(item.spent || 0);
+
+                // 生協引落はATM入力時点で食費として確定している。
+                if(item.id === "food"){
+                    used += Number(app.atm.coop || 0);
+                }
 
                 grid.innerHTML += `
                     <button
@@ -857,6 +862,8 @@
 
                                 amount,
 
+                                withdrawn: amount,
+
                                 coop,
 
                                 food,
@@ -864,6 +871,8 @@
                                 gas,
 
                                 holiday,
+
+                                cashSpent: 0,
 
                                 date:
                                     new Date()
@@ -1000,6 +1009,8 @@
 
                 amount:0,
 
+                withdrawn:0,
+
                 coop:0,
 
                 food:0,
@@ -1007,6 +1018,8 @@
                 gas:0,
 
                 holiday:0,
+
+                cashSpent:0,
 
                 date:null
 
@@ -1290,7 +1303,11 @@
                 Math.max(foodBudget - coop, 0);
 
             const withdrawn =
-                Number(app.atm.withdrawn || 0);
+                Number(
+                    app.atm.withdrawn ??
+                    app.atm.amount ??
+                    0
+                );
 
             const gasCashBudget =
                 Math.min(gasBudget, Math.max(withdrawn - foodCashBudget, 0));
@@ -1625,8 +1642,31 @@
                まだ実績がないものは予測値を使う。
             */
 
+            const summerActual =
+                Number(app.bonus.papaSummerActual || 0) +
+                Number(app.bonus.mamaSummerActual || 0);
+
+            const winterActual =
+                Number(app.bonus.papaWinterActual || 0) +
+                Number(app.bonus.mamaWinterActual || 0);
+
+            const winterForecast =
+                Number(app.bonus.papaWinterForecast || 0) +
+                Number(app.bonus.mamaWinterForecast || 0);
+
+            // 夏ボーナス実績は現在の銀行残高にすでに反映済みなので再加算しない。
+            // 冬ボーナスは未実績なら予測額を全額、実績があれば実績の銀行積立額を使う。
+            const winterForForecast =
+                winterActual > 0
+                    ? Number(app.bonus.winterKeep || 0)
+                    : winterForecast;
+
+            const childForecast =
+                Number(getRemainingChildAllowance().amount || 0);
+
             const bonusFuture =
-                getBonusKeepTotal();
+                winterForForecast +
+                childForecast;
 
             /*
                現在の自然な貯金
@@ -2093,11 +2133,20 @@
             const holidayCoach = getHolidayCoach();
             const monthlyCoach = getMonthlyCoachProgress();
 
+            const atmPlan = getAtmPlan();
+
+            // 食費・ガソリン・休日は、ATMで確保した現金から残額を計算。
+            // 生協は現金ではないので、食費の残額から別に差し引く。
             const foodRemaining = Math.max(
-                Number(food?.budget || 0) - Number(food?.spent || 0), 0
+                Number(atmPlan.foodCashBudget || 0) -
+                Number(food?.spent || 0),
+                0
             );
+
             const gasRemaining = Math.max(
-                Number(gas?.budget || 0) - Number(gas?.spent || 0), 0
+                Number(atmPlan.gasCashBudget || 0) -
+                Number(gas?.spent || 0),
+                0
             );
 
             if(monthlyCoach.target > 0){
@@ -2134,7 +2183,7 @@
             ai.innerHTML = `
                 <div class="ai-section-title">👛 今月あと使える</div>
                 <div class="ai-mini-row"><span>🍚 食費</span><strong>¥${foodRemaining.toLocaleString()}</strong></div>
-                <div class="ai-mini-row"><span>🎉 休日</span><strong>¥${holidayCoach.remaining.toLocaleString()}</strong></div>
+                <div class="ai-mini-row"><span>🎉 休日${holidayCoach.remainingCount > 0 ? `・あと${holidayCoach.remainingCount}回` : ""}</span><strong>¥${holidayCoach.remaining.toLocaleString()}</strong></div>
                 <div class="ai-mini-row"><span>⛽ ガソリン</span><strong>¥${gasRemaining.toLocaleString()}</strong></div>
             `;
         }
@@ -4014,13 +4063,11 @@
             const currentSaving = Math.max(Number(annual.currentSaving || 0), 0);
             // 目標から、すでに確保できているものを引く。
             // ・現在までの銀行残高の増加
-            // ・夏ボーナスから銀行へ入れた額
-            // ・冬ボーナスは未実績なので「予測額を全額」入れる
+            // ・冬ボーナスは未実績なら予測額を全額入れる
             // ・今後の児童手当（1回2万円）
             const remaining = Math.max(
                 Number(app.goal || 0)
                 - currentSaving
-                - bankKeep
                 - winterBonusForForecast
                 - child.amount,
                 0
