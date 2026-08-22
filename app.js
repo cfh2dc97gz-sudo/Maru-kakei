@@ -2093,32 +2093,32 @@ function drawAI(){
     if(!ai) return;
 
     const food = app.budgets.find(item=>item.id==="food");
-    const holiday = app.budgets.find(item=>item.id==="holiday");
     const gas = app.budgets.find(item=>item.id==="gas");
+    const holidayCoach = getHolidayCoach();
+    const monthlyCoach = getMonthlyCoachProgress();
 
     const foodRemaining = Math.max(
         Number(food?.budget || 0) - Number(food?.spent || 0), 0
     );
-
     const gasRemaining = Math.max(
         Number(gas?.budget || 0) - Number(gas?.spent || 0), 0
     );
 
-    const holidayCoach = getHolidayCoach();
-    const monthlyCoach = getMonthlyCoachProgress();
-
-    // 食費・休日を節約チャレンジにしている月は、
-    // 「あと使える金額」と重複させず、チャレンジだけ表示する。
     if(monthlyCoach.target > 0){
-
         const items = monthlyCoach.categories.map(item=>{
             const label = item.id === "food" ? "🍚 食費" : "🎉 休日";
             const remain = Math.max(Number(item.remainingToTarget || 0), 0);
             const over = Number(item.overTarget || 0);
 
+            let extra = "";
+            if(item.id === "holiday"){
+                const count = Number(app.atm.holidayCount || 0);
+                extra = count > 0 ? `・あと${count}回` : "";
+            }
+
             return `
                 <div class="ai-mini-row">
-                    <span>${label}</span>
+                    <span>${label}${extra}</span>
                     <strong>${over > 0
                         ? `あと¥${over.toLocaleString()}調整`
                         : `あと¥${remain.toLocaleString()}使える`
@@ -2128,29 +2128,18 @@ function drawAI(){
         }).join("");
 
         ai.innerHTML = `
-            <div class="ai-section-title">🎯 今月の節約チャレンジ</div>
-            <div class="ai-challenge-target">¥${monthlyCoach.target.toLocaleString()}減らす</div>
+            <div class="ai-section-title">🎯 節約チャレンジ</div>
+            <div class="ai-challenge-target">今月 ¥${monthlyCoach.target.toLocaleString()}減らす</div>
             ${items}
         `;
-
         return;
     }
 
-    // 節約チャレンジがない月だけ「あと使える」を表示。
     ai.innerHTML = `
         <div class="ai-section-title">👛 今月あと使える</div>
-        <div class="ai-mini-row">
-            <span>🍚 食費</span>
-            <strong>¥${foodRemaining.toLocaleString()}</strong>
-        </div>
-        <div class="ai-mini-row">
-            <span>🎉 休日</span>
-            <strong>¥${holidayCoach.remaining.toLocaleString()}</strong>
-        </div>
-        <div class="ai-mini-row">
-            <span>⛽ ガソリン</span>
-            <strong>¥${gasRemaining.toLocaleString()}</strong>
-        </div>
+        <div class="ai-mini-row"><span>🍚 食費</span><strong>¥${foodRemaining.toLocaleString()}</strong></div>
+        <div class="ai-mini-row"><span>🎉 休日</span><strong>¥${holidayCoach.remaining.toLocaleString()}</strong></div>
+        <div class="ai-mini-row"><span>⛽ ガソリン</span><strong>¥${gasRemaining.toLocaleString()}</strong></div>
     `;
 }
 
@@ -3841,6 +3830,8 @@ function getBankTotalFromMonthData(data){
 function getAnnualBankRows(){
 
     const months = getFiscalMonths();
+    // 3月末（年度スタート前）を78,142円。
+    // 4月はそこから+100,000円なので178,142円。
     const startBalance = 78142;
     const monthlyIncrease = 100000;
 
@@ -3932,26 +3923,88 @@ function drawAnnualBonus(){
         row("⛄ 冬", winterForecast, winterActual, app.bonus.winterKeep);
 }
 
+function getRemainingChildAllowance(){
+    // 児童手当は偶数月。現在月より後の偶数月を数える。
+    const months = getFiscalMonths();
+    const currentIndex = Math.max(months.indexOf(currentMonth), 0);
+    const futureMonths = months.slice(currentIndex + 1);
+    const count = futureMonths.filter(m => m % 2 === 0).length;
+    return { count, amount: count * 20000 };
+}
+
+function getAnnualCoachDetail(){
+    const annual = getAnnualCoachData();
+    const bonusActual =
+        Number(app.bonus.papaSummerActual || 0) +
+        Number(app.bonus.mamaSummerActual || 0) +
+        Number(app.bonus.papaWinterActual || 0) +
+        Number(app.bonus.mamaWinterActual || 0);
+
+    const summerActual =
+        Number(app.bonus.papaSummerActual || 0) +
+        Number(app.bonus.mamaSummerActual || 0);
+    const winterActual =
+        Number(app.bonus.papaWinterActual || 0) +
+        Number(app.bonus.mamaWinterActual || 0);
+
+    const bankKeep =
+        Number(app.bonus.summerKeep || 0) +
+        Number(app.bonus.winterKeep || 0);
+
+    const child = getRemainingChildAllowance();
+    const currentSaving = Math.max(Number(annual.currentSaving || 0), 0);
+    const remaining = Math.max(
+        Number(app.goal || 0) - currentSaving - bankKeep - child.amount,
+        0
+    );
+    const monthsLeft = Math.max(Number(annual.futureMonths || 0), 0);
+    const monthlyNeed = monthsLeft > 0 ? Math.ceil(remaining / monthsLeft) : remaining;
+    const natural = Number(annual.naturalMonthly || 70000);
+    const extraNeed = Math.max(monthlyNeed - natural, 0);
+
+    return {
+        annual, bonusActual, summerActual, winterActual, bankKeep, child,
+        currentSaving, remaining, monthsLeft, monthlyNeed, natural, extraNeed
+    };
+}
+
 function drawAnnualCoach(){
 
     const area = document.getElementById("annualCoach");
     if(!area) return;
 
     const annual = getAnnualCoachData();
+    const detail = getAnnualCoachDetail();
     const forecast = Number(annual.withBonusForecast || 0);
     const goal = Number(annual.goal || 0);
     const gap = Math.max(goal - forecast, 0);
 
     area.innerHTML = `
-        <div class="annual-coach-status">${annual.statusText}</div>
+        <button class="annual-coach-toggle" type="button" onclick="toggleAnnualCoachDetail()">
+            <span>${annual.statusText}</span><span>›</span>
+        </button>
         <div class="annual-coach-numbers">
             <span>🎯 ¥${goal.toLocaleString()}</span>
             <span>🔮 ¥${forecast.toLocaleString()}</span>
+            <span>${gap > 0 ? `あと ¥${gap.toLocaleString()}` : "達成ペース"}</span>
         </div>
-        <div class="annual-coach-gap">
-            ${gap > 0 ? `あと ¥${gap.toLocaleString()}` : "目標達成ペース"}
+        <div id="annualCoachDetail" class="annual-coach-detail" style="display:none;">
+            <div>🎯 目標　¥${goal.toLocaleString()}</div>
+            <div>🎁 ボーナス実績　¥${detail.bonusActual.toLocaleString()}</div>
+            <div>🏦 銀行へ　¥${detail.bankKeep.toLocaleString()}</div>
+            <div>🏦 銀行残高${currentMonth}月時点　¥${detail.currentSaving.toLocaleString()}</div>
+            <div>👶 児童手当あと${detail.child.count}回　¥${detail.child.amount.toLocaleString()}</div>
+            <div class="coach-remaining">残り　¥${detail.remaining.toLocaleString()}</div>
+            <div>残り${detail.monthsLeft}ヶ月 → 1ヶ月 ¥${detail.monthlyNeed.toLocaleString()}の貯金が必要</div>
+            <div>そのためには${detail.extraNeed > 0 ? `月 ¥${detail.extraNeed.toLocaleString()}を追加で節約` : "今のペースでOK"}</div>
         </div>
     `;
+}
+
+function toggleAnnualCoachDetail(){
+    const detail = document.getElementById("annualCoachDetail");
+    if(!detail) return;
+    detail.style.display = detail.style.display === "none" ? "grid" : "none";
 }
 
 function drawNewAnnualPage(){
