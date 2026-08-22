@@ -368,3 +368,11 @@
 
     /* 前月比の色分け */
     .bank-trend-change.minus{color:var(--red)}
+
+/* ===== Ver29: home / settings slightly taller ===== */ #homePage
+.card{padding-top:16px;padding-bottom:16px;margin:8px 0} #homePage
+.summary-card{padding-top:10px;padding-bottom:10px} #homePage
+.ai-card{padding-top:15px;padding-bottom:16px} #homePage #gridArea
+button{min-height:54px;padding:10px} #settingsPage
+.card{padding-top:16px;padding-bottom:16px} #settingsPage
+input,#settingsPage select,#settingsPage button{min-height:44px}
