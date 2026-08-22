@@ -1,378 +1,378 @@
-    :root{
-      --bg:#fffdf8;
-      --card:#ffffff;
-      --cream:#fff9ea;
-      --yellow:#f7d56a;
-      --yellow-strong:#f4c84d;
-      --line:#f0dda0;
-      --brown:#6f554b;
-      --brown-dark:#3e302b;
-      --muted:#8f8178;
-      --green:#2e7d32;
-      --red:#d83a32;
-      --shadow:0 4px 16px rgba(96,75,56,.07);
-    }
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--brown-dark);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;overflow-x:hidden}
-    body{padding-bottom:88px}
-    button,input,select{font:inherit}
-    button{color:inherit}
-    .page{min-height:100vh;padding:10px 16px 110px}
-    #homePage{padding:10px 16px 100px}
-    .card{background:var(--card);border:1.5px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:18px;margin:10px 0}
-    .card h2{margin:0;color:var(--brown);font-size:22px;line-height:1.25;font-weight:900;letter-spacing:.01em}
-    .card h3{color:var(--brown);font-weight:900}
-    .summary-card{padding:10px 12px;border-radius:26px}
-    .month-header{display:grid;grid-template-columns:52px 1fr 104px;align-items:center;gap:8px;min-height:72px}
-    .month-header button{width:52px;height:52px;border:1.5px solid var(--yellow);background:#fff;border-radius:50%;font-size:20px;font-weight:900;color:var(--brown);display:grid;place-items:center}
-    .period-area{text-align:center;min-width:0}
-    #yearSelect{appearance:none;border:0;background:transparent;color:var(--brown);font-weight:900;font-size:18px;text-align:center;padding:0;outline:none}
-    #period{margin:2px 0 0;font-size:25px;color:var(--brown);font-weight:950}
-    .month-right{display:flex;justify-content:flex-end;gap:8px}
-    .month-right .mini-reset{font-size:18px}
-    .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-    .summary-item{text-align:center;padding:4px 2px}
-    .summary-title{font-size:13px;color:var(--muted);font-weight:800;margin-bottom:3px}
-    .summary-money,.money{font-size:25px;font-weight:950;letter-spacing:.01em}
-    .summary-money.plus,.plus{color:var(--green)}
-    .summary-money.minus,.minus{color:var(--red)}
-    .bank-row{margin-top:10px;padding:11px 4px 2px;border-top:1px solid #eee4d3;display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:8px;cursor:pointer}
-    .bank-label{font-weight:850;color:var(--brown)}
-    .bank-total{font-size:21px;font-weight:950}
-    .bank-saving{text-align:right;font-size:20px;font-weight:950}
-    .ai-card{position:relative;padding:18px 18px 20px;overflow:hidden}
-    .ai-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--yellow-strong)}
-    .ai-card h2{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-    #aiComment{font-size:16px;line-height:1.65}
-    #aiComment>div{border-radius:16px!important}
-    .category-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-    .category-header h2{margin:0}
-    #gridArea{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-    #gridArea button{border:1.5px solid var(--line);background:#fffaf0;border-radius:18px;min-height:62px;padding:11px 13px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:850;box-shadow:0 2px 8px rgba(96,75,56,.035)}
-    #gridArea button:active,.income-grid button:active,.setting-item:active{transform:scale(.985)}
-    #gridArea button strong,#gridArea button span:last-child{font-size:18px}
-    .income-card{padding-bottom:14px}
-    .income-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
-    .income-grid button{border:1.5px solid var(--line);background:#fffaf0;border-radius:18px;padding:11px 5px;min-height:68px;font-weight:850;font-size:15px}
-    .income-grid button.active{background:var(--yellow);border-color:var(--yellow-strong)}
-    .income-card .money{text-align:center;color:var(--green);font-size:34px;margin-top:10px}
-    .progress{height:13px;background:#eee;border-radius:999px;overflow:hidden;margin-top:12px}
-    .progress>div,.progress-bar{height:100%;background:linear-gradient(90deg,#f6d46a,#f4c84d);border-radius:999px}
-    #yearPage>.card:first-child{text-align:center;padding:14px}
-    #yearPage>.card:first-child h2{font-size:24px}
-    #yearGoal{font-size:35px;color:var(--green);font-weight:950;text-align:center;margin:16px 0 10px;cursor:pointer}
-    #yearPage .summary-grid .summary-money{font-size:22px}
-    #yearChart{width:100%;height:auto;display:block;margin-top:6px}
-    #annualManageList>.card:first-child{margin-top:0;background:linear-gradient(180deg,#fffefb,#fffaf0)}
-    #annualManageList>button.card{width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:22px;margin:10px 0;padding:16px}
-    #annualManageList>button.card h3{margin:0 0 7px;font-size:19px}
-    #annualManageList>button.card p{margin:4px 0;color:#66564e}
-    #annualManageList>button.card .progress{margin-top:10px}
-    .setting-group h3{font-size:15px;color:var(--muted);margin:18px 4px 8px}
-    .setting-item{width:100%;min-height:58px;border:1.5px solid var(--line);background:#fffaf0;border-radius:18px;padding:13px 15px;margin:5px 0;display:flex;align-items:center;justify-content:space-between;text-align:left;font-weight:850;cursor:pointer}
-    .setting-item.danger{color:var(--red);background:#fff7f5}
-    #categoryTitle{font-size:23px;font-weight:950;color:var(--brown)}
-    #categoryDetailHistory .card{margin:8px 0;background:#fffaf0}
-    #categoryDetailHistory .setting-item{margin:4px 0}
-    .bottom-nav{position:fixed;z-index:1000;left:0;right:0;bottom:0;height:82px;background:rgba(255,255,255,.97);border-top:1.5px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:7px 8px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -5px 18px rgba(96,75,56,.06)}
-    .bottom-nav button{border:0;background:transparent;border-radius:18px;font-size:22px;line-height:1.05;font-weight:850;color:var(--brown);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px}
-    .bottom-nav button span{font-size:12px}
-    .bottom-nav button.active{color:#c89416;background:#fff9e7}
-    .modal{position:fixed;inset:0;z-index:9999;background:rgba(58,46,39,.38);backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center;padding:12px}
-    .modal-box{width:min(520px,100%);background:#fff;border:1.5px solid var(--line);border-radius:28px 28px 20px 20px;padding:20px;box-shadow:0 15px 40px rgba(0,0,0,.18);max-height:92vh;overflow:auto}
-    #numberTitle{text-align:center;color:var(--brown);margin:0 0 8px}
-    #numberDisplay{text-align:center;font-size:38px;font-weight:950;color:var(--green);margin:10px 0 14px}
-    .number-memo{width:100%;border:1.5px solid #e8ddca;border-radius:14px;padding:11px 12px;background:#fffaf2;outline:none}
-    .number-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
-    .number-grid button,.modal-buttons button{border:1.5px solid var(--line);background:#fffaf0;border-radius:16px;min-height:54px;font-size:20px;font-weight:900}
-    .modal-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-    .modal-buttons button:last-child{background:var(--yellow);border-color:var(--yellow-strong)}
-    @media (min-width:700px){
-      #homePage,.page{max-width:720px;margin:0 auto}
-      #gridArea{grid-template-columns:repeat(3,1fr)}
-      .card{padding:22px}
-    }
-    @media (max-width:390px){
-      .month-header{grid-template-columns:44px 1fr 90px}
-      .month-header button{width:44px;height:44px}
-      #period{font-size:22px}
-      #yearGoal{font-size:29px}
-      .summary-money{font-size:22px}
-      #gridArea{gap:7px}
-    }
+        :root{
+          --bg:#fffdf8;
+          --card:#ffffff;
+          --cream:#fff9ea;
+          --yellow:#f7d56a;
+          --yellow-strong:#f4c84d;
+          --line:#f0dda0;
+          --brown:#6f554b;
+          --brown-dark:#3e302b;
+          --muted:#8f8178;
+          --green:#2e7d32;
+          --red:#d83a32;
+          --shadow:0 4px 16px rgba(96,75,56,.07);
+        }
+        *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        html,body{margin:0;padding:0;background:var(--bg);color:var(--brown-dark);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;overflow-x:hidden}
+        body{padding-bottom:88px}
+        button,input,select{font:inherit}
+        button{color:inherit}
+        .page{min-height:100vh;padding:10px 16px 110px}
+        #homePage{padding:10px 16px 100px}
+        .card{background:var(--card);border:1.5px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:18px;margin:10px 0}
+        .card h2{margin:0;color:var(--brown);font-size:22px;line-height:1.25;font-weight:900;letter-spacing:.01em}
+        .card h3{color:var(--brown);font-weight:900}
+        .summary-card{padding:10px 12px;border-radius:26px}
+        .month-header{display:grid;grid-template-columns:52px 1fr 104px;align-items:center;gap:8px;min-height:72px}
+        .month-header button{width:52px;height:52px;border:1.5px solid var(--yellow);background:#fff;border-radius:50%;font-size:20px;font-weight:900;color:var(--brown);display:grid;place-items:center}
+        .period-area{text-align:center;min-width:0}
+        #yearSelect{appearance:none;border:0;background:transparent;color:var(--brown);font-weight:900;font-size:18px;text-align:center;padding:0;outline:none}
+        #period{margin:2px 0 0;font-size:25px;color:var(--brown);font-weight:950}
+        .month-right{display:flex;justify-content:flex-end;gap:8px}
+        .month-right .mini-reset{font-size:18px}
+        .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+        .summary-item{text-align:center;padding:4px 2px}
+        .summary-title{font-size:13px;color:var(--muted);font-weight:800;margin-bottom:3px}
+        .summary-money,.money{font-size:25px;font-weight:950;letter-spacing:.01em}
+        .summary-money.plus,.plus{color:var(--green)}
+        .summary-money.minus,.minus{color:var(--red)}
+        .bank-row{margin-top:10px;padding:11px 4px 2px;border-top:1px solid #eee4d3;display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:8px;cursor:pointer}
+        .bank-label{font-weight:850;color:var(--brown)}
+        .bank-total{font-size:21px;font-weight:950}
+        .bank-saving{text-align:right;font-size:20px;font-weight:950}
+        .ai-card{position:relative;padding:18px 18px 20px;overflow:hidden}
+        .ai-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--yellow-strong)}
+        .ai-card h2{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+        #aiComment{font-size:16px;line-height:1.65}
+        #aiComment>div{border-radius:16px!important}
+        .category-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+        .category-header h2{margin:0}
+        #gridArea{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+        #gridArea button{border:1.5px solid var(--line);background:#fffaf0;border-radius:18px;min-height:62px;padding:11px 13px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:850;box-shadow:0 2px 8px rgba(96,75,56,.035)}
+        #gridArea button:active,.income-grid button:active,.setting-item:active{transform:scale(.985)}
+        #gridArea button strong,#gridArea button span:last-child{font-size:18px}
+        .income-card{padding-bottom:14px}
+        .income-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+        .income-grid button{border:1.5px solid var(--line);background:#fffaf0;border-radius:18px;padding:11px 5px;min-height:68px;font-weight:850;font-size:15px}
+        .income-grid button.active{background:var(--yellow);border-color:var(--yellow-strong)}
+        .income-card .money{text-align:center;color:var(--green);font-size:34px;margin-top:10px}
+        .progress{height:13px;background:#eee;border-radius:999px;overflow:hidden;margin-top:12px}
+        .progress>div,.progress-bar{height:100%;background:linear-gradient(90deg,#f6d46a,#f4c84d);border-radius:999px}
+        #yearPage>.card:first-child{text-align:center;padding:14px}
+        #yearPage>.card:first-child h2{font-size:24px}
+        #yearGoal{font-size:35px;color:var(--green);font-weight:950;text-align:center;margin:16px 0 10px;cursor:pointer}
+        #yearPage .summary-grid .summary-money{font-size:22px}
+        #yearChart{width:100%;height:auto;display:block;margin-top:6px}
+        #annualManageList>.card:first-child{margin-top:0;background:linear-gradient(180deg,#fffefb,#fffaf0)}
+        #annualManageList>button.card{width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:22px;margin:10px 0;padding:16px}
+        #annualManageList>button.card h3{margin:0 0 7px;font-size:19px}
+        #annualManageList>button.card p{margin:4px 0;color:#66564e}
+        #annualManageList>button.card .progress{margin-top:10px}
+        .setting-group h3{font-size:15px;color:var(--muted);margin:18px 4px 8px}
+        .setting-item{width:100%;min-height:58px;border:1.5px solid var(--line);background:#fffaf0;border-radius:18px;padding:13px 15px;margin:5px 0;display:flex;align-items:center;justify-content:space-between;text-align:left;font-weight:850;cursor:pointer}
+        .setting-item.danger{color:var(--red);background:#fff7f5}
+        #categoryTitle{font-size:23px;font-weight:950;color:var(--brown)}
+        #categoryDetailHistory .card{margin:8px 0;background:#fffaf0}
+        #categoryDetailHistory .setting-item{margin:4px 0}
+        .bottom-nav{position:fixed;z-index:1000;left:0;right:0;bottom:0;height:82px;background:rgba(255,255,255,.97);border-top:1.5px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:7px 8px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -5px 18px rgba(96,75,56,.06)}
+        .bottom-nav button{border:0;background:transparent;border-radius:18px;font-size:22px;line-height:1.05;font-weight:850;color:var(--brown);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px}
+        .bottom-nav button span{font-size:12px}
+        .bottom-nav button.active{color:#c89416;background:#fff9e7}
+        .modal{position:fixed;inset:0;z-index:9999;background:rgba(58,46,39,.38);backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center;padding:12px}
+        .modal-box{width:min(520px,100%);background:#fff;border:1.5px solid var(--line);border-radius:28px 28px 20px 20px;padding:20px;box-shadow:0 15px 40px rgba(0,0,0,.18);max-height:92vh;overflow:auto}
+        #numberTitle{text-align:center;color:var(--brown);margin:0 0 8px}
+        #numberDisplay{text-align:center;font-size:38px;font-weight:950;color:var(--green);margin:10px 0 14px}
+        .number-memo{width:100%;border:1.5px solid #e8ddca;border-radius:14px;padding:11px 12px;background:#fffaf2;outline:none}
+        .number-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+        .number-grid button,.modal-buttons button{border:1.5px solid var(--line);background:#fffaf0;border-radius:16px;min-height:54px;font-size:20px;font-weight:900}
+        .modal-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+        .modal-buttons button:last-child{background:var(--yellow);border-color:var(--yellow-strong)}
+        @media (min-width:700px){
+          #homePage,.page{max-width:720px;margin:0 auto}
+          #gridArea{grid-template-columns:repeat(3,1fr)}
+          .card{padding:22px}
+        }
+        @media (max-width:390px){
+          .month-header{grid-template-columns:44px 1fr 90px}
+          .month-header button{width:44px;height:44px}
+          #period{font-size:22px}
+          #yearGoal{font-size:29px}
+          .summary-money{font-size:22px}
+          #gridArea{gap:7px}
+        }
 
 
-    /* ===== まる家計 compact refresh ===== */
-    body{font-size:14px}
-    #homePage,.page{padding-left:12px;padding-right:12px}
-    .card{border-radius:18px;padding:13px;margin:7px 0}
-    .card h2{font-size:18px}
-    .summary-card{padding:7px 9px;border-radius:20px}
-    .month-header{grid-template-columns:42px 1fr 84px;gap:5px;min-height:54px}
-    .month-header button{width:40px;height:40px;font-size:16px}
-    #period{font-size:20px}
-    #yearSelect{font-size:14px}
-    .summary-grid{gap:2px}
-    .summary-title{font-size:11px;margin-bottom:1px}
-    .summary-money{font-size:20px}
-    .bank-row{margin-top:6px;padding:8px 2px 1px;gap:6px}
-    .bank-label{font-size:13px}
-    .bank-total{font-size:17px}
-    .bank-saving{font-size:16px}
-    .ai-card{padding:13px 13px 14px}
-    #aiComment{font-size:14px;line-height:1.5}
-    .category-header{margin-bottom:8px}
-    #gridArea{gap:6px}
-    #gridArea button{min-height:48px;padding:8px 9px;border-radius:14px}
-    #gridArea button strong,#gridArea button span:last-child{font-size:15px}
-    .income-card{display:none}
-    .bottom-nav{height:68px;padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
-    .bottom-nav button{font-size:18px;border-radius:14px;gap:2px}
-    .bottom-nav button span{font-size:10px}
-    .page{padding-bottom:82px}
+        /* ===== まる家計 compact refresh ===== */
+        body{font-size:14px}
+        #homePage,.page{padding-left:12px;padding-right:12px}
+        .card{border-radius:18px;padding:13px;margin:7px 0}
+        .card h2{font-size:18px}
+        .summary-card{padding:7px 9px;border-radius:20px}
+        .month-header{grid-template-columns:42px 1fr 84px;gap:5px;min-height:54px}
+        .month-header button{width:40px;height:40px;font-size:16px}
+        #period{font-size:20px}
+        #yearSelect{font-size:14px}
+        .summary-grid{gap:2px}
+        .summary-title{font-size:11px;margin-bottom:1px}
+        .summary-money{font-size:20px}
+        .bank-row{margin-top:6px;padding:8px 2px 1px;gap:6px}
+        .bank-label{font-size:13px}
+        .bank-total{font-size:17px}
+        .bank-saving{font-size:16px}
+        .ai-card{padding:13px 13px 14px}
+        #aiComment{font-size:14px;line-height:1.5}
+        .category-header{margin-bottom:8px}
+        #gridArea{gap:6px}
+        #gridArea button{min-height:48px;padding:8px 9px;border-radius:14px}
+        #gridArea button strong,#gridArea button span:last-child{font-size:15px}
+        .income-card{display:none}
+        .bottom-nav{height:68px;padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
+        .bottom-nav button{font-size:18px;border-radius:14px;gap:2px}
+        .bottom-nav button span{font-size:10px}
+        .page{padding-bottom:82px}
 
-    .annual-header-card{text-align:center;padding:10px}
-    .annual-header-card h2{font-size:20px}
-    .annual-coach-card{padding:13px}
-    #annualCoach{font-size:13px;line-height:1.6}
-    .annual-coach-main{font-size:18px;font-weight:900;margin:8px 0}
-    .bank-trend-row{display:grid;grid-template-columns:38px 1fr auto;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #f1eadf}
-    .bank-trend-row:last-child{border-bottom:0}
-    .bank-trend-month{font-weight:800;color:var(--brown)}
-    .bank-trend-value{font-weight:900;text-align:right}
-    .bank-trend-change{text-align:right;font-size:11px;font-weight:800;min-width:62px}
-    .bank-trend-change.plus{color:var(--green)}
-    .bank-trend-change.minus{color:var(--red)}
-    .bank-trend-difference{margin-top:10px;padding:10px 11px;border-radius:12px;background:#fff8dc;font-weight:800;text-align:center}
-    .bonus-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f1eadf}
-    .bonus-row:last-child{border-bottom:0}
-    .bonus-label{font-weight:800}
-    .bonus-value{font-weight:900;text-align:right}
-    .bonus-forecast{font-size:11px;color:var(--muted);font-weight:700}
-    .bonus-actual{color:var(--green)}
-    @media (max-width:390px){
-      #homePage,.page{padding-left:10px;padding-right:10px}
-      .card{padding:11px;margin:6px 0}
-      #gridArea button{min-height:45px}
-      .summary-money{font-size:18px}
-      .bank-label{font-size:12px}
-      .bank-total{font-size:16px}
-      .bank-saving{font-size:15px}
-    }
-
-
-    /* ===== 2026/08 シンプル版：iPhone一画面優先 ===== */
-    body{font-size:13px}
-    #homePage{padding:6px 10px 76px}
-    .page{padding:6px 10px 80px}
-    .card{border-radius:18px;padding:10px 12px;margin:5px 0;box-shadow:none}
-    .card h2{font-size:17px}
-    .summary-card{padding:7px 9px}
-    .month-header{grid-template-columns:38px 1fr 78px;gap:4px;min-height:45px}
-    .month-header button{width:36px;height:36px;font-size:14px}
-    #period{font-size:19px}
-    #yearSelect{font-size:12px}
-    .summary-grid{gap:0}
-    .summary-title{font-size:10px}
-    .summary-money{font-size:18px}
-    .bank-row{margin-top:5px;padding:6px 0 0;gap:5px}
-    .bank-label{font-size:12px}
-    .bank-total,.bank-saving{font-size:15px}
-    .ai-card{padding:10px 12px;border-left:5px solid var(--yellow-strong)}
-    .ai-card h2{font-size:17px;margin-bottom:7px}
-    #aiComment{font-size:13px;line-height:1.35}
-    .ai-section-title{font-weight:900;font-size:15px;margin-bottom:6px}
-    .ai-challenge-target{font-size:16px;font-weight:900;margin-bottom:6px}
-    .ai-mini-row{display:flex;align-items:center;justify-content:space-between;padding:6px 9px;background:#fff8dc;border-radius:10px;margin:4px 0}
-    .ai-mini-row strong{font-size:14px}
-    .category-header{margin-bottom:5px}
-    .category-header h2{font-size:17px}
-    #gridArea{gap:5px}
-    #gridArea button{min-height:40px;padding:7px 8px;border-radius:12px;box-shadow:none}
-    #gridArea button .input-name{font-size:12px}
-    #gridArea button .input-left{font-size:14px}
-    .bottom-nav{height:62px;padding:3px 5px calc(3px + env(safe-area-inset-bottom))}
-    .bottom-nav button{font-size:17px;border-radius:12px;gap:1px}
-    .bottom-nav button span{font-size:9px}
-    .page{min-height:auto}
-
-    .annual-header-card{padding:7px;text-align:center}
-    .annual-header-card h2{font-size:18px}
-    .annual-coach-card{padding:10px 12px}
-    .annual-coach-card h2{margin-bottom:5px}
-    .annual-coach-status{font-size:16px;font-weight:900;margin-bottom:6px}
-    .annual-coach-numbers{display:flex;justify-content:space-between;gap:8px;font-weight:800;font-size:13px}
-    .annual-coach-gap{margin-top:5px;font-weight:900;font-size:15px}
-    .annual-bank-card{padding:9px 12px}
-    .annual-bank-card h2{margin-bottom:3px}
-    .annual-bank-note{font-size:10px;color:var(--muted);margin-bottom:3px}
-    .bank-trend-row{display:grid;grid-template-columns:34px 1fr auto;gap:5px;align-items:center;padding:5px 0;border-bottom:1px solid #f1eadf}
-    .bank-trend-month{font-size:12px;font-weight:900}
-    .bank-trend-value{font-size:14px;font-weight:900;text-align:right}
-    .bank-trend-change{font-size:11px;font-weight:900;text-align:right;min-width:58px}
-    .bank-trend-difference{margin-top:6px;padding:7px 8px;border-radius:10px;background:#fff8dc;font-size:13px;font-weight:900;text-align:center}
-    .bonus-card{padding:9px 12px}
-    .bonus-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid #f1eadf}
-    .bonus-row:last-child{border-bottom:0}
-    .bonus-label{font-size:14px;font-weight:900}
-    .bonus-value{font-size:15px;font-weight:900}
-    .bonus-forecast,.bonus-actual{font-size:10px}
-    .bonus-bank-save{font-size:10px;margin-top:2px;font-weight:800;color:var(--green)}
-
-    @media (max-width:430px){
-      #gridArea{grid-template-columns:repeat(3,1fr);gap:4px}
-      #gridArea button{min-height:36px;padding:6px 5px;border-radius:10px;gap:3px}
-      #gridArea button .input-name{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-      #gridArea button .input-left{font-size:12px;white-space:nowrap}
-      #gridArea .atm-card{grid-column:1 / -1;min-height:34px}
-    }
+        .annual-header-card{text-align:center;padding:10px}
+        .annual-header-card h2{font-size:20px}
+        .annual-coach-card{padding:13px}
+        #annualCoach{font-size:13px;line-height:1.6}
+        .annual-coach-main{font-size:18px;font-weight:900;margin:8px 0}
+        .bank-trend-row{display:grid;grid-template-columns:38px 1fr auto;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #f1eadf}
+        .bank-trend-row:last-child{border-bottom:0}
+        .bank-trend-month{font-weight:800;color:var(--brown)}
+        .bank-trend-value{font-weight:900;text-align:right}
+        .bank-trend-change{text-align:right;font-size:11px;font-weight:800;min-width:62px}
+        .bank-trend-change.plus{color:var(--green)}
+        .bank-trend-change.minus{color:var(--red)}
+        .bank-trend-difference{margin-top:10px;padding:10px 11px;border-radius:12px;background:#fff8dc;font-weight:800;text-align:center}
+        .bonus-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f1eadf}
+        .bonus-row:last-child{border-bottom:0}
+        .bonus-label{font-weight:800}
+        .bonus-value{font-weight:900;text-align:right}
+        .bonus-forecast{font-size:11px;color:var(--muted);font-weight:700}
+        .bonus-actual{color:var(--green)}
+        @media (max-width:390px){
+          #homePage,.page{padding-left:10px;padding-right:10px}
+          .card{padding:11px;margin:6px 0}
+          #gridArea button{min-height:45px}
+          .summary-money{font-size:18px}
+          .bank-label{font-size:12px}
+          .bank-total{font-size:16px}
+          .bank-saving{font-size:15px}
+        }
 
 
-    /* ===== v27：さらに一画面＆情報整理 ===== */
-    html,body{font-size:13px}
-    body{padding-bottom:64px}
-    #homePage,.page{padding:4px 10px 72px}
-    .card{padding:8px 10px;margin:4px 0;border-radius:16px}
-    .card h2{font-size:16px}
+        /* ===== 2026/08 シンプル版：iPhone一画面優先 ===== */
+        body{font-size:13px}
+        #homePage{padding:6px 10px 76px}
+        .page{padding:6px 10px 80px}
+        .card{border-radius:18px;padding:10px 12px;margin:5px 0;box-shadow:none}
+        .card h2{font-size:17px}
+        .summary-card{padding:7px 9px}
+        .month-header{grid-template-columns:38px 1fr 78px;gap:4px;min-height:45px}
+        .month-header button{width:36px;height:36px;font-size:14px}
+        #period{font-size:19px}
+        #yearSelect{font-size:12px}
+        .summary-grid{gap:0}
+        .summary-title{font-size:10px}
+        .summary-money{font-size:18px}
+        .bank-row{margin-top:5px;padding:6px 0 0;gap:5px}
+        .bank-label{font-size:12px}
+        .bank-total,.bank-saving{font-size:15px}
+        .ai-card{padding:10px 12px;border-left:5px solid var(--yellow-strong)}
+        .ai-card h2{font-size:17px;margin-bottom:7px}
+        #aiComment{font-size:13px;line-height:1.35}
+        .ai-section-title{font-weight:900;font-size:15px;margin-bottom:6px}
+        .ai-challenge-target{font-size:16px;font-weight:900;margin-bottom:6px}
+        .ai-mini-row{display:flex;align-items:center;justify-content:space-between;padding:6px 9px;background:#fff8dc;border-radius:10px;margin:4px 0}
+        .ai-mini-row strong{font-size:14px}
+        .category-header{margin-bottom:5px}
+        .category-header h2{font-size:17px}
+        #gridArea{gap:5px}
+        #gridArea button{min-height:40px;padding:7px 8px;border-radius:12px;box-shadow:none}
+        #gridArea button .input-name{font-size:12px}
+        #gridArea button .input-left{font-size:14px}
+        .bottom-nav{height:62px;padding:3px 5px calc(3px + env(safe-area-inset-bottom))}
+        .bottom-nav button{font-size:17px;border-radius:12px;gap:1px}
+        .bottom-nav button span{font-size:9px}
+        .page{min-height:auto}
 
-    /* ホーム */
-    .month-header{min-height:44px;grid-template-columns:38px 1fr 76px;gap:4px}
-    .month-header button{width:34px;height:34px;font-size:13px}
-    #period{font-size:19px}
-    #yearSelect{font-size:12px}
-    .summary-card{padding:6px 8px}
-    .summary-title{font-size:10px}
-    .summary-money{font-size:18px}
-    .bank-row{margin-top:4px;padding:5px 1px 0;gap:5px}
-    .bank-label{font-size:12px}.bank-total{font-size:15px}.bank-saving{font-size:15px}
-    .ai-card{padding:8px 10px 9px;border-left-width:4px}
-    .ai-card h2{font-size:16px;margin-bottom:4px}
-    #aiComment{font-size:12px;line-height:1.25}
-    .ai-section-title{font-size:13px;margin-bottom:2px}
-    .ai-challenge-target{font-size:14px;margin-bottom:2px}
-    .ai-mini-row{padding:4px 7px;margin:2px 0;border-radius:9px}
-    .ai-mini-row strong{font-size:12px}
-    .category-header{margin-bottom:3px}.category-header h2{font-size:16px}
-    #gridArea{gap:4px}
-    #gridArea button{min-height:34px;padding:5px 6px;border-radius:10px}
-    #gridArea button .input-name{font-size:10px}.input-left{font-size:11px!important}
-    .bottom-nav{height:60px;padding:2px 5px calc(2px + env(safe-area-inset-bottom))}
-    .bottom-nav button{font-size:16px;border-radius:11px;gap:0}.bottom-nav button span{font-size:8px}
+        .annual-header-card{padding:7px;text-align:center}
+        .annual-header-card h2{font-size:18px}
+        .annual-coach-card{padding:10px 12px}
+        .annual-coach-card h2{margin-bottom:5px}
+        .annual-coach-status{font-size:16px;font-weight:900;margin-bottom:6px}
+        .annual-coach-numbers{display:flex;justify-content:space-between;gap:8px;font-weight:800;font-size:13px}
+        .annual-coach-gap{margin-top:5px;font-weight:900;font-size:15px}
+        .annual-bank-card{padding:9px 12px}
+        .annual-bank-card h2{margin-bottom:3px}
+        .annual-bank-note{font-size:10px;color:var(--muted);margin-bottom:3px}
+        .bank-trend-row{display:grid;grid-template-columns:34px 1fr auto;gap:5px;align-items:center;padding:5px 0;border-bottom:1px solid #f1eadf}
+        .bank-trend-month{font-size:12px;font-weight:900}
+        .bank-trend-value{font-size:14px;font-weight:900;text-align:right}
+        .bank-trend-change{font-size:11px;font-weight:900;text-align:right;min-width:58px}
+        .bank-trend-difference{margin-top:6px;padding:7px 8px;border-radius:10px;background:#fff8dc;font-size:13px;font-weight:900;text-align:center}
+        .bonus-card{padding:9px 12px}
+        .bonus-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid #f1eadf}
+        .bonus-row:last-child{border-bottom:0}
+        .bonus-label{font-size:14px;font-weight:900}
+        .bonus-value{font-size:15px;font-weight:900}
+        .bonus-forecast,.bonus-actual{font-size:10px}
+        .bonus-bank-save{font-size:10px;margin-top:2px;font-weight:800;color:var(--green)}
 
-    /* 年間：コーチは折りたたみ、銀行12か月も極小 */
-    .annual-header-card{padding:5px}.annual-header-card h2{font-size:17px}
-    .annual-coach-card{padding:7px 9px}
-    .annual-coach-card h2{font-size:15px;margin-bottom:2px}
-    .annual-coach-toggle{width:100%;border:0;background:transparent;padding:2px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:900;text-align:left}
-    .annual-coach-numbers{font-size:11px;gap:5px;justify-content:space-between}
-    .annual-coach-gap{font-size:12px;margin-top:2px}
-    .annual-coach-detail{margin-top:5px;padding-top:5px;border-top:1px solid #eee4d3;display:grid;gap:2px;font-size:11px;line-height:1.25}
-    .coach-remaining{font-size:13px;font-weight:950;color:var(--green);padding:2px 0}
-    .annual-bank-card{padding:6px 9px}.annual-bank-card h2{font-size:15px;margin-bottom:1px}.annual-bank-note{font-size:9px;margin-bottom:1px}
-    .bank-trend-row{grid-template-columns:28px 1fr auto;gap:4px;padding:3px 0;min-height:22px}
-    .bank-trend-month{font-size:11px}.bank-trend-value{font-size:12px}.bank-trend-change{font-size:10px;min-width:54px}
-    .bank-trend-difference{margin-top:4px;padding:5px 7px;font-size:11px}
-    .bonus-card{padding:6px 9px}.bonus-card h2{font-size:15px}.bonus-row{padding:4px 0;gap:5px}.bonus-label{font-size:12px}.bonus-value{font-size:13px}.bonus-forecast,.bonus-actual{font-size:9px}.bonus-bank-save{font-size:9px}
+        @media (max-width:430px){
+          #gridArea{grid-template-columns:repeat(3,1fr);gap:4px}
+          #gridArea button{min-height:36px;padding:6px 5px;border-radius:10px;gap:3px}
+          #gridArea button .input-name{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+          #gridArea button .input-left{font-size:12px;white-space:nowrap}
+          #gridArea .atm-card{grid-column:1 / -1;min-height:34px}
+        }
 
-    /* 特別費：カードを2列にして一画面 */
-    #annualPage{padding-bottom:70px}
-    #annualPage>.card:first-child{padding:5px 9px;text-align:center}
-    #annualPage>.card:first-child h2{font-size:16px}
-    .special-expense-wrap{padding:6px}
-    #annualManageList>.card:first-child{padding:7px 9px;margin:0 0 4px}
-    #annualManageList>.card:first-child h3{font-size:14px;margin:0 0 2px}
-    #annualManageList>.card:first-child p{display:inline;margin:0 8px 0 0;font-size:10px}
-    #annualManageList{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-    #annualManageList>.card:first-child,#annualManageList>button.card:last-child{grid-column:1 / -1}
-    #annualManageList>button.card{margin:0;padding:6px 7px;border-radius:12px;min-height:70px}
-    #annualManageList>button.card h3{font-size:13px;margin:0 0 2px}.annualManageList>button.card p,#annualManageList>button.card p{font-size:10px;margin:1px 0}
-    #annualManageList>button.card .progress{height:5px;margin-top:4px}
 
-    /* カテゴリ詳細：画面内スクロール */
-    #categoryPage{padding-bottom:70px}
-    #categoryPage>.card{padding:7px 9px}
-    #categoryTitle{font-size:17px}
-    #categoryDetailHistory{max-height:calc(100vh - 155px);overflow:auto}
-    #categoryDetailHistory .card{padding:7px 9px;margin:3px 0}
-    #categoryDetailHistory .setting-item{min-height:38px;padding:7px 9px;margin:2px 0;border-radius:10px}
+        /* ===== v27：さらに一画面＆情報整理 ===== */
+        html,body{font-size:13px}
+        body{padding-bottom:64px}
+        #homePage,.page{padding:4px 10px 72px}
+        .card{padding:8px 10px;margin:4px 0;border-radius:16px}
+        .card h2{font-size:16px}
 
-    /* 設定・ボーナスも詰める */
-    #settingPage .card{padding:7px 9px}
-    .setting-item{min-height:38px;padding:7px 9px;border-radius:11px;margin:3px 0;font-size:12px}
-    .setting-group h3{font-size:12px;margin:8px 3px 4px}
-    #bonusPage .card{padding:7px 9px}
-    #bonusPage .setting-item{min-height:36px}
+        /* ホーム */
+        .month-header{min-height:44px;grid-template-columns:38px 1fr 76px;gap:4px}
+        .month-header button{width:34px;height:34px;font-size:13px}
+        #period{font-size:19px}
+        #yearSelect{font-size:12px}
+        .summary-card{padding:6px 8px}
+        .summary-title{font-size:10px}
+        .summary-money{font-size:18px}
+        .bank-row{margin-top:4px;padding:5px 1px 0;gap:5px}
+        .bank-label{font-size:12px}.bank-total{font-size:15px}.bank-saving{font-size:15px}
+        .ai-card{padding:8px 10px 9px;border-left-width:4px}
+        .ai-card h2{font-size:16px;margin-bottom:4px}
+        #aiComment{font-size:12px;line-height:1.25}
+        .ai-section-title{font-size:13px;margin-bottom:2px}
+        .ai-challenge-target{font-size:14px;margin-bottom:2px}
+        .ai-mini-row{padding:4px 7px;margin:2px 0;border-radius:9px}
+        .ai-mini-row strong{font-size:12px}
+        .category-header{margin-bottom:3px}.category-header h2{font-size:16px}
+        #gridArea{gap:4px}
+        #gridArea button{min-height:34px;padding:5px 6px;border-radius:10px}
+        #gridArea button .input-name{font-size:10px}.input-left{font-size:11px!important}
+        .bottom-nav{height:60px;padding:2px 5px calc(2px + env(safe-area-inset-bottom))}
+        .bottom-nav button{font-size:16px;border-radius:11px;gap:0}.bottom-nav button span{font-size:8px}
 
-    @media (max-width:390px){
-      #gridArea button .input-name{font-size:9.5px}
-      .summary-money{font-size:17px}
-      .annual-coach-detail{font-size:10px}
-    }
+        /* 年間：コーチは折りたたみ、銀行12か月も極小 */
+        .annual-header-card{padding:5px}.annual-header-card h2{font-size:17px}
+        .annual-coach-card{padding:7px 9px}
+        .annual-coach-card h2{font-size:15px;margin-bottom:2px}
+        .annual-coach-toggle{width:100%;border:0;background:transparent;padding:2px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:900;text-align:left}
+        .annual-coach-numbers{font-size:11px;gap:5px;justify-content:space-between}
+        .annual-coach-gap{font-size:12px;margin-top:2px}
+        .annual-coach-detail{margin-top:5px;padding-top:5px;border-top:1px solid #eee4d3;display:grid;gap:2px;font-size:11px;line-height:1.25}
+        .coach-remaining{font-size:13px;font-weight:950;color:var(--green);padding:2px 0}
+        .annual-bank-card{padding:6px 9px}.annual-bank-card h2{font-size:15px;margin-bottom:1px}.annual-bank-note{font-size:9px;margin-bottom:1px}
+        .bank-trend-row{grid-template-columns:28px 1fr auto;gap:4px;padding:3px 0;min-height:22px}
+        .bank-trend-month{font-size:11px}.bank-trend-value{font-size:12px}.bank-trend-change{font-size:10px;min-width:54px}
+        .bank-trend-difference{margin-top:4px;padding:5px 7px;font-size:11px}
+        .bonus-card{padding:6px 9px}.bonus-card h2{font-size:15px}.bonus-row{padding:4px 0;gap:5px}.bonus-label{font-size:12px}.bonus-value{font-size:13px}.bonus-forecast,.bonus-actual{font-size:9px}.bonus-bank-save{font-size:9px}
 
-    /* ===== v28: ホーム・設定だけ少しゆったり ===== */
-    #homePage{
-      padding-top:7px;
-      padding-left:11px;
-      padding-right:11px;
-    }
-    #homePage .card{
-      padding:10px 11px;
-      margin:5px 0;
-    }
-    #homePage .month-header{
-      min-height:50px;
-      grid-template-columns:40px 1fr 78px;
-    }
-    #homePage .month-header button{
-      width:38px;
-      height:38px;
-    }
-    #homePage #period{font-size:20px}
-    #homePage .summary-card{padding:8px 9px}
-    #homePage .summary-money{font-size:19px}
-    #homePage .bank-row{padding-top:7px}
-    #homePage .ai-card{padding:10px 11px 11px}
-    #homePage .ai-card h2{font-size:17px}
-    #homePage #aiComment{font-size:12.5px;line-height:1.35}
-    #homePage #gridArea{gap:5px}
-    #homePage #gridArea button{
-      min-height:39px;
-      padding:6px 7px;
-      border-radius:11px;
-    }
-    #homePage #gridArea button .input-name{font-size:10.5px}
-    #homePage #gridArea button .input-left{font-size:12px!important}
+        /* 特別費：カードを2列にして一画面 */
+        #annualPage{padding-bottom:70px}
+        #annualPage>.card:first-child{padding:5px 9px;text-align:center}
+        #annualPage>.card:first-child h2{font-size:16px}
+        .special-expense-wrap{padding:6px}
+        #annualManageList>.card:first-child{padding:7px 9px;margin:0 0 4px}
+        #annualManageList>.card:first-child h3{font-size:14px;margin:0 0 2px}
+        #annualManageList>.card:first-child p{display:inline;margin:0 8px 0 0;font-size:10px}
+        #annualManageList{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+        #annualManageList>.card:first-child,#annualManageList>button.card:last-child{grid-column:1 / -1}
+        #annualManageList>button.card{margin:0;padding:6px 7px;border-radius:12px;min-height:70px}
+        #annualManageList>button.card h3{font-size:13px;margin:0 0 2px}.annualManageList>button.card p,#annualManageList>button.card p{font-size:10px;margin:1px 0}
+        #annualManageList>button.card .progress{height:5px;margin-top:4px}
 
-    /* 設定は読みやすさ優先で少し戻す */
-    #settingPage{
-      padding-top:7px;
-      padding-left:11px;
-      padding-right:11px;
-    }
-    #settingPage .card{
-      padding:10px 11px;
-      margin:5px 0;
-    }
-    #settingPage .card h2{font-size:17px}
-    #settingPage .setting-item{
-      min-height:44px;
-      padding:9px 11px;
-      margin:4px 0;
-      border-radius:12px;
-      font-size:13px;
-    }
-    #settingPage .setting-group h3{
-      font-size:13px;
-      margin:9px 3px 5px;
-    }
+        /* カテゴリ詳細：画面内スクロール */
+        #categoryPage{padding-bottom:70px}
+        #categoryPage>.card{padding:7px 9px}
+        #categoryTitle{font-size:17px}
+        #categoryDetailHistory{max-height:calc(100vh - 155px);overflow:auto}
+        #categoryDetailHistory .card{padding:7px 9px;margin:3px 0}
+        #categoryDetailHistory .setting-item{min-height:38px;padding:7px 9px;margin:2px 0;border-radius:10px}
 
-    /* 前月比の色分け */
-    .bank-trend-change.minus{color:var(--red)}
+        /* 設定・ボーナスも詰める */
+        #settingPage .card{padding:7px 9px}
+        .setting-item{min-height:38px;padding:7px 9px;border-radius:11px;margin:3px 0;font-size:12px}
+        .setting-group h3{font-size:12px;margin:8px 3px 4px}
+        #bonusPage .card{padding:7px 9px}
+        #bonusPage .setting-item{min-height:36px}
 
-/* ===== Ver29: home / settings slightly taller ===== */ #homePage
-.card{padding-top:16px;padding-bottom:16px;margin:8px 0} #homePage
-.summary-card{padding-top:10px;padding-bottom:10px} #homePage
-.ai-card{padding-top:15px;padding-bottom:16px} #homePage #gridArea
-button{min-height:54px;padding:10px} #settingsPage
-.card{padding-top:16px;padding-bottom:16px} #settingsPage
-input,#settingsPage select,#settingsPage button{min-height:44px}
+        @media (max-width:390px){
+          #gridArea button .input-name{font-size:9.5px}
+          .summary-money{font-size:17px}
+          .annual-coach-detail{font-size:10px}
+        }
+
+        /* ===== v28: ホーム・設定だけ少しゆったり ===== */
+        #homePage{
+          padding-top:7px;
+          padding-left:11px;
+          padding-right:11px;
+        }
+        #homePage .card{
+          padding:10px 11px;
+          margin:5px 0;
+        }
+        #homePage .month-header{
+          min-height:50px;
+          grid-template-columns:40px 1fr 78px;
+        }
+        #homePage .month-header button{
+          width:38px;
+          height:38px;
+        }
+        #homePage #period{font-size:20px}
+        #homePage .summary-card{padding:8px 9px}
+        #homePage .summary-money{font-size:19px}
+        #homePage .bank-row{padding-top:7px}
+        #homePage .ai-card{padding:10px 11px 11px}
+        #homePage .ai-card h2{font-size:17px}
+        #homePage #aiComment{font-size:12.5px;line-height:1.35}
+        #homePage #gridArea{gap:5px}
+        #homePage #gridArea button{
+          min-height:39px;
+          padding:6px 7px;
+          border-radius:11px;
+        }
+        #homePage #gridArea button .input-name{font-size:10.5px}
+        #homePage #gridArea button .input-left{font-size:12px!important}
+
+        /* 設定は読みやすさ優先で少し戻す */
+        #settingPage{
+          padding-top:7px;
+          padding-left:11px;
+          padding-right:11px;
+        }
+        #settingPage .card{
+          padding:10px 11px;
+          margin:5px 0;
+        }
+        #settingPage .card h2{font-size:17px}
+        #settingPage .setting-item{
+          min-height:44px;
+          padding:9px 11px;
+          margin:4px 0;
+          border-radius:12px;
+          font-size:13px;
+        }
+        #settingPage .setting-group h3{
+          font-size:13px;
+          margin:9px 3px 5px;
+        }
+
+        /* 前月比の色分け */
+        .bank-trend-change.minus{color:var(--red)}
+
+    /* ===== Ver29: home / settings slightly taller ===== */ #homePage
+    .card{padding-top:16px;padding-bottom:16px;margin:8px 0} #homePage
+    .summary-card{padding-top:10px;padding-bottom:10px} #homePage
+    .ai-card{padding-top:15px;padding-bottom:16px} #homePage #gridArea
+    button{min-height:54px;padding:10px} #settingsPage
+    .card{padding-top:16px;padding-bottom:16px} #settingsPage
+    input,#settingsPage select,#settingsPage button{min-height:44px}
