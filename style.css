@@ -224,7 +224,7 @@
           #gridArea button{min-height:36px;padding:6px 5px;border-radius:10px;gap:3px}
           #gridArea button .input-name{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
           #gridArea button .input-left{font-size:12px;white-space:nowrap}
-          #gridArea .atm-card{grid-column:1 / -1;min-height:34px}
+          #gridArea .atm-card{grid-column:auto;min-height:36px}
         }
 
 
