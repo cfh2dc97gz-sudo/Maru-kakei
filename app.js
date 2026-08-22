@@ -1674,6 +1674,14 @@
                 winterForForecast +
                 childForecast;
 
+            // 年間予測の構成要素を固定：
+            // 現在の銀行残高増加 + 夏ボーナス銀行分 + 冬ボーナス + 児童手当
+            const annualForecast =
+                currentSaving +
+                summerBankFuture +
+                winterForForecast +
+                childForecast;
+
             /*
                現在の自然な貯金
                ＋ 今後の自然な貯金
@@ -1691,8 +1699,7 @@
                 currentSaving;
 
             const withBonusForecast =
-                currentSaving +
-                bonusFuture;
+                annualForecast;
 
             const goal =
                 Number(app.goal || 0);
@@ -4077,9 +4084,13 @@
             // ・現在までの銀行残高の増加
             // ・冬ボーナスは未実績なら予測額を全額入れる
             // ・今後の児童手当（1回2万円）
+            const summerBankKeep =
+                Number(app.bonus.summerKeep || 0);
+
             const remaining = Math.max(
                 Number(app.goal || 0)
                 - currentSaving
+                - summerBankKeep
                 - winterBonusForForecast
                 - child.amount,
                 0
@@ -4094,7 +4105,7 @@
 
             return {
                 annual, bonusActual, summerActual, winterActual,
-                bankKeep, winterForecast, winterBonusForForecast, child,
+                bankKeep, summerBankKeep, winterForecast, winterBonusForForecast, child,
                 currentSaving, remaining, monthsLeft, monthlyNeed, natural, extraNeed
             };
         }
@@ -4116,7 +4127,7 @@
                 </button>
                 <div class="annual-coach-numbers">
                     <span>🎯 ¥${goal.toLocaleString()}</span>
-                    <span>🔮 ¥${forecast.toLocaleString()}</span>
+                    <span>🔮 予測 ¥${forecast.toLocaleString()}</span>
                     <span>${gap > 0 ? `あと ¥${gap.toLocaleString()}` : "達成ペース"}</span>
                 </div>
                 <div id="annualCoachDetail" class="annual-coach-detail" style="display:none;">
