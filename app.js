@@ -1654,8 +1654,13 @@
                 Number(app.bonus.papaWinterForecast || 0) +
                 Number(app.bonus.mamaWinterForecast || 0);
 
-            // 夏ボーナス実績は現在の銀行残高にすでに反映済みなので再加算しない。
-            // 冬ボーナスは未実績なら予測額を全額、実績があれば実績の銀行積立額を使う。
+            // 夏ボーナス実績はまだ銀行残高に入っていない。
+            // 「銀行へ」は今後銀行に入る金額として予測へ加える。
+            const summerBankFuture =
+                Number(app.bonus.summerKeep || 0);
+
+            // 冬ボーナスは未実績なら予測額を全額、
+            // 実績があれば銀行へ入れる実績額を使う。
             const winterForForecast =
                 winterActual > 0
                     ? Number(app.bonus.winterKeep || 0)
@@ -1665,6 +1670,7 @@
                 Number(getRemainingChildAllowance().amount || 0);
 
             const bonusFuture =
+                summerBankFuture +
                 winterForForecast +
                 childForecast;
 
@@ -1675,12 +1681,17 @@
                ＝ 今のままの年間予測
             */
 
+            // 年間コーチの予測は、
+            // 「7月時点で実際に増えた銀行残高」
+            // ＋「これから銀行へ入れるボーナス」
+            // ＋「これから受け取る児童手当」
+            // だけで計算する。
+            // 未来の通常月貯金70,000円はここには先に足さない。
             const noBonusForecast =
-                currentSaving +
-                naturalFuture;
+                currentSaving;
 
             const withBonusForecast =
-                noBonusForecast +
+                currentSaving +
                 bonusFuture;
 
             const goal =
@@ -1715,6 +1726,7 @@
             const gap = withBonusGap;
             const surplus = withBonusSurplus;
 
+            // 1円未満を残さず、目標を確実に達成できるよう切り上げ。
             const monthlyExtra =
                 futureMonths > 0
                     ? Math.ceil(
@@ -4111,7 +4123,7 @@
                     <div>🎯 目標　¥${goal.toLocaleString()}</div>
                     <div>🎁 ボーナス実績　¥${detail.bonusActual.toLocaleString()}</div>
                     <div>⛄ 冬ボーナス予測　¥${detail.winterForecast.toLocaleString()}</div>
-                    <div>🏦 銀行へ　¥${detail.bankKeep.toLocaleString()}</div>
+                    <div>🏦 夏ボーナスから銀行へ　¥${detail.bankKeep.toLocaleString()}</div>
                     <div>🏦 銀行残高の増加 ${currentMonth}月時点　¥${detail.currentSaving.toLocaleString()}</div>
                     <div>👶 児童手当あと${detail.child.count}回　¥${detail.child.amount.toLocaleString()}（1回¥40,000・偶数月）</div>
                     <div class="coach-remaining">残り　¥${detail.remaining.toLocaleString()}</div>
