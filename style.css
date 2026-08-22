@@ -159,3 +159,70 @@ body{font-size:14px}
   .bank-total{font-size:16px}
   .bank-saving{font-size:15px}
 }
+
+
+/* ===== 2026/08 シンプル版：iPhone一画面優先 ===== */
+body{font-size:13px}
+#homePage{padding:6px 10px 76px}
+.page{padding:6px 10px 80px}
+.card{border-radius:18px;padding:10px 12px;margin:5px 0;box-shadow:none}
+.card h2{font-size:17px}
+.summary-card{padding:7px 9px}
+.month-header{grid-template-columns:38px 1fr 78px;gap:4px;min-height:45px}
+.month-header button{width:36px;height:36px;font-size:14px}
+#period{font-size:19px}
+#yearSelect{font-size:12px}
+.summary-grid{gap:0}
+.summary-title{font-size:10px}
+.summary-money{font-size:18px}
+.bank-row{margin-top:5px;padding:6px 0 0;gap:5px}
+.bank-label{font-size:12px}
+.bank-total,.bank-saving{font-size:15px}
+.ai-card{padding:10px 12px;border-left:5px solid var(--yellow-strong)}
+.ai-card h2{font-size:17px;margin-bottom:7px}
+#aiComment{font-size:13px;line-height:1.35}
+.ai-section-title{font-weight:900;font-size:15px;margin-bottom:6px}
+.ai-challenge-target{font-size:16px;font-weight:900;margin-bottom:6px}
+.ai-mini-row{display:flex;align-items:center;justify-content:space-between;padding:6px 9px;background:#fff8dc;border-radius:10px;margin:4px 0}
+.ai-mini-row strong{font-size:14px}
+.category-header{margin-bottom:5px}
+.category-header h2{font-size:17px}
+#gridArea{gap:5px}
+#gridArea button{min-height:40px;padding:7px 8px;border-radius:12px;box-shadow:none}
+#gridArea button .input-name{font-size:12px}
+#gridArea button .input-left{font-size:14px}
+.bottom-nav{height:62px;padding:3px 5px calc(3px + env(safe-area-inset-bottom))}
+.bottom-nav button{font-size:17px;border-radius:12px;gap:1px}
+.bottom-nav button span{font-size:9px}
+.page{min-height:auto}
+
+.annual-header-card{padding:7px;text-align:center}
+.annual-header-card h2{font-size:18px}
+.annual-coach-card{padding:10px 12px}
+.annual-coach-card h2{margin-bottom:5px}
+.annual-coach-status{font-size:16px;font-weight:900;margin-bottom:6px}
+.annual-coach-numbers{display:flex;justify-content:space-between;gap:8px;font-weight:800;font-size:13px}
+.annual-coach-gap{margin-top:5px;font-weight:900;font-size:15px}
+.annual-bank-card{padding:9px 12px}
+.annual-bank-card h2{margin-bottom:3px}
+.annual-bank-note{font-size:10px;color:var(--muted);margin-bottom:3px}
+.bank-trend-row{display:grid;grid-template-columns:34px 1fr auto;gap:5px;align-items:center;padding:5px 0;border-bottom:1px solid #f1eadf}
+.bank-trend-month{font-size:12px;font-weight:900}
+.bank-trend-value{font-size:14px;font-weight:900;text-align:right}
+.bank-trend-change{font-size:11px;font-weight:900;text-align:right;min-width:58px}
+.bank-trend-difference{margin-top:6px;padding:7px 8px;border-radius:10px;background:#fff8dc;font-size:13px;font-weight:900;text-align:center}
+.bonus-card{padding:9px 12px}
+.bonus-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid #f1eadf}
+.bonus-row:last-child{border-bottom:0}
+.bonus-label{font-size:14px;font-weight:900}
+.bonus-value{font-size:15px;font-weight:900}
+.bonus-forecast,.bonus-actual{font-size:10px}
+.bonus-bank-save{font-size:10px;margin-top:2px;font-weight:800;color:var(--green)}
+
+@media (max-width:430px){
+  #gridArea{grid-template-columns:repeat(3,1fr);gap:4px}
+  #gridArea button{min-height:36px;padding:6px 5px;border-radius:10px;gap:3px}
+  #gridArea button .input-name{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #gridArea button .input-left{font-size:12px;white-space:nowrap}
+  #gridArea .atm-card{grid-column:1 / -1;min-height:34px}
+}
