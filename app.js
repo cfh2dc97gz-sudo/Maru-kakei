@@ -795,13 +795,13 @@
 
             openNumberModal(
                 "🏧 ATM引出額",
-                (amount)=>{
+                (amount,atmMemo,atmDate)=>{
 
                     if(amount<=0) return;
 
                     openNumberModal(
                         "🛒 生協引落額（食費）",
-                        (coop)=>{
+                        (coop,coopMemo,coopDate)=>{
 
                             coop =
                                 Math.max(
@@ -875,15 +875,9 @@
                                 cashSpent: 0,
 
                                 date:
-                                    new Date()
-                                        .toLocaleDateString(
-                                            "ja-JP",
-                                            {
-                                                year:"numeric",
-                                                month:"2-digit",
-                                                day:"2-digit"
-                                            }
-                                        )
+                                    formatInputDate(
+                                        atmDate || coopDate
+                                    )
 
                             };
 
@@ -898,7 +892,7 @@
         }
         function addIncome(type){
 
-            openNumberModal("収入金額",(amount,memo)=>{
+            openNumberModal("収入金額",(amount,memo,dateValue)=>{
 
                 if(amount<=0) return;
 
@@ -920,14 +914,7 @@
 
                         app.history.unshift({
 
-                            date:new Date().toLocaleDateString(
-                                "ja-JP",
-                                {
-                                    year:"numeric",
-                                    month:"2-digit",
-                                    day:"2-digit"
-                                }
-                            ),
+                            date:formatInputDate(dateValue),
 
                             category:"🎁 臨時収入",
 
@@ -949,14 +936,7 @@
 
             id: Date.now().toString(),
 
-            date: new Date().toLocaleDateString(
-                "ja-JP",
-                {
-                    year:"numeric",
-                    month:"2-digit",
-                    day:"2-digit"
-                }
-            ),
+            date: formatInputDate(dateValue),
 
             type,
 
@@ -964,7 +944,7 @@
 
             memo,
 
-            targetMonth:`${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
+            targetMonth:getTargetMonthFromInputDate(dateValue)
 
         });
 
@@ -1056,7 +1036,7 @@
 
                 app.budgets[index].name,
 
-                (amount,memo)=>{
+                (amount,memo,dateValue)=>{
 
                     if(amount<=0) return;
 
@@ -1085,14 +1065,7 @@
 
                         id: Date.now().toString(),
 
-                        date: new Date().toLocaleDateString(
-                            "ja-JP",
-                            {
-                                year:"numeric",
-                                month:"2-digit",
-                                day:"2-digit"
-                            }
-                        ),
+                        date: formatInputDate(dateValue),
 
                         category: app.budgets[index].name,
 
@@ -1102,7 +1075,7 @@
 
                         annual: false,
 
-                        targetMonth: `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`
+                        targetMonth: getTargetMonthFromInputDate(dateValue)
 
                     });
 
@@ -4537,11 +4510,53 @@
 
         }
 
+        function getTodayInputDate(){
+
+            const now = new Date();
+
+            const y = now.getFullYear();
+            const m = String(now.getMonth()+1).padStart(2,"0");
+            const d = String(now.getDate()).padStart(2,"0");
+
+            return `${y}-${m}-${d}`;
+
+        }
+
+        function formatInputDate(dateValue){
+
+            if(!dateValue) return getTodayInputDate();
+
+            const parts = String(dateValue).split("-");
+
+            if(parts.length !== 3) return getTodayInputDate();
+
+            return `${parts[0]}/${parts[1]}/${parts[2]}`;
+
+        }
+
+        function getTargetMonthFromInputDate(dateValue){
+
+            if(!dateValue) return `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
+
+            const parts = String(dateValue).split("-");
+
+            if(parts.length !== 3) return `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
+
+            return `${parts[0]}-${parts[1]}`;
+
+        }
+
         function openNumberModal(title,callback){
 
             numberValue = "";
 
             document.getElementById("numberMemo").value = "";
+
+            const dateInput = document.getElementById("numberDate");
+
+            if(dateInput){
+                dateInput.value = getTodayInputDate();
+            }
 
             document.activeElement?.blur();
 
@@ -4607,11 +4622,19 @@
         const memo =
             document.getElementById("numberMemo").value.trim();
 
+        const dateValue =
+            document.getElementById("numberDate")?.value
+            || getTodayInputDate();
+
         closeNumberModal();
 
         if(numberCallback){
 
-            numberCallback(value,memo);
+            numberCallback(
+                value,
+                memo,
+                dateValue
+            );
 
         }
         };
