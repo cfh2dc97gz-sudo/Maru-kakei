@@ -402,3 +402,26 @@ width:100%; min-height:44px; box-sizing:border-box; padding:8px 10px;
 margin-bottom:8px; border:1.5px solid #ead38a; border-radius:12px;
 background:#fffdf7; color:var(--brown); font-size:16px; font-weight:700;
 }
+
+/\* その他：現金 / カード選択 \*/ .payment-modal-box{ max-width:420px; }
+
+.payment-help{ margin:0 0 16px; color:#6f625d; font-size:14px; }
+
+.payment-choice-grid{ display:grid; grid-template-columns:1fr 1fr;
+gap:12px; margin-bottom:14px; }
+
+.payment-choice-grid button{ min-height:78px; border:2px solid #f3d77a;
+border-radius:16px; background:#fffaf0; color:#3f332e; font-size:18px;
+font-weight:800; padding:12px 8px; }
+
+.payment-choice-grid button small{ display:block; margin-top:5px;
+font-size:12px; font-weight:600; color:#81736d; }
+
+@media (max-width:420px){ .payment-choice-grid{
+grid-template-columns:1fr; }
+
+    .payment-choice-grid button{
+        min-height:64px;
+    }
+
+}
