@@ -1,4 +1,4 @@
-        /* まる家計 Ver40｜デザインリフレッシュ */
+        /* まる家計 Ver41｜デザインリフレッシュ */
 
         const DEFAULT_BUDGETS = [
 
@@ -681,11 +681,16 @@
             const coopSpent =
                 Number(app.atm?.coop || 0);
 
-            const spent=
+            // ATM引出は銀行→現金の移動なので支出には含めない。
+            // 生協は食費として支出に含める。
+            const categorySpent =
                 app.budgets.reduce(
-                    (sum,b)=>sum+b.spent,
+                    (sum,b)=>sum+Number(b.spent || 0),
                     0
-                ) + coopSpent;
+                );
+
+            const spent =
+                categorySpent + coopSpent;
 
             const remain=
 
@@ -2331,6 +2336,7 @@
 
                 if(!data) return;
 
+                // ATM引出は支出ではない。生協は食費として支出に含める。
                 spent +=
                     (data.budgets || []).reduce(
                         (sum,item)=>
@@ -4291,13 +4297,13 @@
         );
 
         console.log(
-            "%c🌸 まる家計 Ver40",
+            "%c🌸 まる家計 Ver41",
             "color:#4CAF50;font-size:16px;font-weight:bold;"
         );
 
         console.log({
 
-            version:"40.0",
+            version:"41.0",
 
             fiscalYear:currentYear,
 
