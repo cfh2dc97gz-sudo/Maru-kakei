@@ -1,4 +1,4 @@
-        /* まる家計 Ver29｜デザインリフレッシュ */
+        /* まる家計 Ver40｜デザインリフレッシュ */
 
         const DEFAULT_BUDGETS = [
 
@@ -181,6 +181,8 @@
 
             history:[],
 
+            memo:"",
+
             atm:{
                 amount:0,
                 coop:0,
@@ -294,6 +296,8 @@
                     JSON.stringify(app.incomeHistory)
                 ),
 
+                memo: String(app.memo || ""),
+
                 atm: JSON.parse(
                     JSON.stringify(app.atm)
                 )
@@ -398,6 +402,8 @@
 
             app.incomeHistory=[];
 
+            app.memo="";
+
             app.atm={
                 amount:0,
                 withdrawn:0,
@@ -428,6 +434,9 @@
 
                 app.incomeHistory =
                     data.incomeHistory || [];
+
+                app.memo =
+                    data.memo || "";
 
                 app.atm =
                     data.atm || app.atm;
@@ -668,12 +677,15 @@
                 app.income.mama+
                 app.income.extra;
 
-            const spent=
+            // 生協は食費として扱うため、支出合計にも含める。
+            const coopSpent =
+                Number(app.atm?.coop || 0);
 
+            const spent=
                 app.budgets.reduce(
                     (sum,b)=>sum+b.spent,
                     0
-                );
+                ) + coopSpent;
 
             const remain=
 
@@ -740,7 +752,7 @@
 
             drawCategories();
 
-            drawAI();
+            drawMemo();
 
             drawNewAnnualPage();
 
@@ -1591,6 +1603,7 @@
             const coop = Number(atm.coop || 0);
             const withdrawn = Number(atm.withdrawn || 0);
 
+            // 生協は独立カテゴリではないが、支出合計には食費として含める。
             return directSpent + coop + withdrawn;
 
         }
@@ -1635,6 +1648,54 @@
 
         }
 
+        function getCoachBankReference(){
+
+            const months = getFiscalMonths();
+            const currentIndex = Math.max(
+                months.indexOf(currentMonth),
+                0
+            );
+
+            // 今月の銀行残高を入力済みなら今月を使う。
+            if(app.bankConfirmed){
+                return {
+                    month: currentMonth,
+                    balance:
+                        Number(app.bank.mitake || 0) +
+                        Number(app.bank.takizawa || 0),
+                    index: currentIndex,
+                    isCurrent: true
+                };
+            }
+
+            // 今月が未入力なら、直前に確定している月を見る。
+            // 7月未入力なら6月の銀行残高を使う、という仕様。
+            for(let i=currentIndex - 1; i>=0; i--){
+
+                const month = months[i];
+                const balance = getKnownBankBalance(month);
+
+                if(balance !== null){
+                    return {
+                        month,
+                        balance: Number(balance),
+                        index: i,
+                        isCurrent: false
+                    };
+                }
+
+            }
+
+            // 4月も未入力なら年度開始残高を基準にする。
+            return {
+                month: 3,
+                balance: Number(app.startBank || 78142),
+                index: -1,
+                isCurrent: false
+            };
+
+        }
+
         function getAnnualCoachData(){
 
             const months = getFiscalMonths();
@@ -1656,17 +1717,20 @@
                実際に入力した銀行残高を使う。
                未入力のときだけ、これまで通り予測残高を使う。
             */
+            const bankReference =
+                getCoachBankReference();
+
             const currentBank =
-                app.bankConfirmed
-                    ? Number(app.bank.mitake || 0) +
-                      Number(app.bank.takizawa || 0)
-                    : getBankForecast();
+                Number(bankReference.balance || 0);
 
             const startBank =
                 Number(app.startBank || 0);
 
             const currentSaving =
-                currentBank - startBank;
+                Math.max(
+                    currentBank - startBank,
+                    0
+                );
 
             /*
                年度内に記録されている月から
@@ -1700,10 +1764,12 @@
                「未来の月」だけを加える。
             */
 
+            // 基準にした月の次の月から年度末までを「残り月数」にする。
+            // 7月未入力で6月残高を使う場合は、7月〜3月の9ヶ月。
             const futureMonths =
                 Math.max(
                     months.length -
-                    currentIndex -
+                    bankReference.index -
                     1,
                     0
                 );
@@ -1854,6 +1920,7 @@
                 currentBank,
                 startBank,
                 currentSaving,
+                bankReference,
 
                 naturalMonthly,
                 futureMonths,
@@ -2218,69 +2285,15 @@
         /* ===========================
            ⑦ AI分析
         =========================== */
-        function drawAI(){
+        function drawMemo(){
 
-            const ai = document.getElementById("aiComment");
-            if(!ai) return;
+            const memo = document.getElementById("homeMemo");
+            if(!memo) return;
 
-            const food = app.budgets.find(item=>item.id==="food");
-            const gas = app.budgets.find(item=>item.id==="gas");
-            const holidayCoach = getHolidayCoach();
-            const monthlyCoach = getMonthlyCoachProgress();
-
-            const atmPlan = getAtmPlan();
-
-            // 食費・ガソリン・休日は、ATMで確保した現金から残額を計算。
-            // 生協は現金ではないので、食費の残額から別に差し引く。
-            const foodRemaining = Math.max(
-                Number(atmPlan.foodCashBudget || 0) -
-                Number(food?.spent || 0),
-                0
-            );
-
-            const gasRemaining = Math.max(
-                Number(atmPlan.gasCashBudget || 0) -
-                Number(gas?.spent || 0),
-                0
-            );
-
-            if(monthlyCoach.target > 0){
-                const items = monthlyCoach.categories.map(item=>{
-                    const label = item.id === "food" ? "🍚 食費" : "🎉 休日";
-                    const remain = Math.max(Number(item.remainingToTarget || 0), 0);
-                    const over = Number(item.overTarget || 0);
-
-                    let extra = "";
-                    if(item.id === "holiday"){
-                        const count = Number(app.atm.holidayCount || 0);
-                        extra = count > 0 ? `・あと${count}回` : "";
-                    }
-
-                    return `
-                        <div class="ai-mini-row">
-                            <span>${label}${extra}</span>
-                            <strong>${over > 0
-                                ? `あと¥${over.toLocaleString()}調整`
-                                : `あと¥${remain.toLocaleString()}使える`
-                            }</strong>
-                        </div>
-                    `;
-                }).join("");
-
-                ai.innerHTML = `
-                    <div class="ai-section-title">🎯 節約チャレンジ</div>
-                    <div class="ai-challenge-target">今月 ¥${monthlyCoach.target.toLocaleString()}減らす</div>
-                    ${items}
-                `;
-                return;
+            if(document.activeElement !== memo){
+                memo.value = String(app.memo || "");
             }
 
-            ai.innerHTML = `
-                <div class="ai-section-title">👛 今月あと使える</div>
-                <div class="ai-mini-row"><span>🍚 食費</span><strong>¥${foodRemaining.toLocaleString()}</strong></div>
-                <div class="ai-mini-row"><span>🎉 休日${holidayCoach.remainingCount > 0 ? `・あと${holidayCoach.remainingCount}回` : ""}</span><strong>¥${holidayCoach.remaining.toLocaleString()}</strong></div>
-                <div class="ai-mini-row"><span>⛽ ガソリン</span><strong>¥${gasRemaining.toLocaleString()}</strong></div>
-            `;
         }
 
         /* ===========================
@@ -2323,7 +2336,7 @@
                         (sum,item)=>
                             sum + Number(item.spent || 0),
                         0
-                    );
+                    ) + Number(data.atm?.coop || 0);
 
             });
 
@@ -2635,6 +2648,29 @@
                     });
 
                 });
+
+                // 生協は独立カテゴリではなく「食費」として記録する。
+                const coop = Number(data.atm?.coop || 0);
+
+                if(coop > 0){
+
+                    const foodName =
+                        (data.budgets || []).find(
+                            item=>item.id==="food"
+                        )?.name || "🍚 食費";
+
+                    list.push({
+                        id:`coop-${year}-${month}`,
+                        date:data.atm?.date || "",
+                        category:foodName,
+                        amount:coop,
+                        memo:"生協",
+                        year,
+                        month,
+                        coop:true
+                    });
+
+                }
 
             });
 
@@ -4211,7 +4247,7 @@
                     <div>🎁 ボーナス実績　¥${detail.bonusActual.toLocaleString()}</div>
                     <div>⛄ 冬ボーナス予測　¥${detail.winterForecast.toLocaleString()}</div>
                     <div>🏦 夏ボーナスから銀行へ　¥${detail.bankKeep.toLocaleString()}</div>
-                    <div>🏦 銀行残高の増加 ${currentMonth}月時点　¥${detail.currentSaving.toLocaleString()}</div>
+                    <div>🏦 銀行残高の増加 ${detail.annual.bankReference.month}月時点　¥${detail.currentSaving.toLocaleString()}</div>
                     <div>👶 児童手当あと${detail.child.count}回　¥${detail.child.amount.toLocaleString()}（1回¥40,000・偶数月）</div>
                     <div class="coach-remaining">残り　¥${detail.remaining.toLocaleString()}</div>
                     <div>¥${detail.remaining.toLocaleString()} ÷ ${detail.monthsLeft}ヶ月 ＝ 1ヶ月 ¥${detail.monthlyNeed.toLocaleString()}の貯金が必要</div>
@@ -4255,13 +4291,13 @@
         );
 
         console.log(
-            "%c🌸 まる家計 Ver29",
+            "%c🌸 まる家計 Ver40",
             "color:#4CAF50;font-size:16px;font-weight:bold;"
         );
 
         console.log({
 
-            version:"29.0",
+            version:"40.0",
 
             fiscalYear:currentYear,
 
