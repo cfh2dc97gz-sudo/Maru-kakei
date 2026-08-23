@@ -144,17 +144,19 @@
             </div>
         </div>
 
-            <!-- AI -->
+            <!-- メモ -->
 
-            <div class="card ai-card">
+            <div class="card memo-card">
 
-                <h2>🤖 AIコンサルタント</h2>
+                <div class="memo-title">📝 メモ</div>
 
-               <div id="aiComment">
+                <textarea
+                    id="homeMemo"
+                    class="home-memo"
+                    placeholder="自由にメモできます"
+                    oninput="app.memo=this.value; save();"
+                ></textarea>
 
-            分析中...
-
-        </div>
             </div>
 
             <!-- カテゴリ -->
