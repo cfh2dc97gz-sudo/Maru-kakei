@@ -400,10 +400,12 @@
 
             app.atm={
                 amount:0,
+                withdrawn:0,
                 coop:0,
                 food:0,
                 gas:0,
                 holiday:0,
+                cashSpent:0,
                 date:null
             };
             
@@ -776,7 +778,9 @@
                 grid.innerHTML += `
                     <button
                         class="input-card"
-                        onclick="addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})">
+                        onclick="${item.id === "other"
+                            ? "addOtherExpense()"
+                            : `addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})`}">
 
                         <span class="input-name">${item.name}</span>
 
@@ -1086,6 +1090,94 @@
             );
 
         }
+        function addOtherExpense(){
+
+            const otherIndex =
+                app.budgets.findIndex(
+                    item => item.id === "other"
+                );
+
+            if(otherIndex < 0) return;
+
+            openNumberModal(
+                "📦 その他",
+                (amount,memo,dateValue)=>{
+
+                    if(amount<=0) return;
+
+                    openPaymentModal(
+                        (payment)=>{
+
+                            if(payment === "cash"){
+
+                                const cashBalance =
+                                    Number(
+                                        getAtmPlan().cashBalance || 0
+                                    );
+
+                                if(amount > cashBalance){
+
+                                    alert(
+                                        `ATM残高が足りません。\n現在 ¥${cashBalance.toLocaleString()} です。`
+                                    );
+
+                                    return;
+
+                                }
+
+                                app.atm.cashSpent =
+                                    Number(app.atm.cashSpent || 0) +
+                                    amount;
+
+                            }
+
+                            app.budgets[otherIndex].spent =
+                                Number(
+                                    app.budgets[otherIndex].spent || 0
+                                ) + amount;
+
+                            app.history.unshift({
+
+                                id: Date.now().toString(),
+
+                                date:
+                                    formatInputDate(
+                                        dateValue
+                                    ),
+
+                                category:
+                                    app.budgets[otherIndex].name,
+
+                                amount,
+
+                                memo,
+
+                                payment,
+
+                                paymentLabel:
+                                    payment === "cash"
+                                        ? "現金"
+                                        : "カード",
+
+                                annual:false,
+
+                                targetMonth:
+                                    getTargetMonthFromInputDate(
+                                        dateValue
+                                    )
+
+                            });
+
+                            update();
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
         /* ===========================
            ⑥ ページ切替・設定
         =========================== */
@@ -4545,6 +4637,53 @@
             return `${parts[0]}-${parts[1]}`;
 
         }
+
+        let paymentCallback = null;
+
+        function openPaymentModal(callback){
+
+            paymentCallback = callback;
+
+            document.getElementById("paymentModal").style.display =
+                "flex";
+
+        }
+
+        function closePaymentModal(){
+
+            document.getElementById("paymentModal").style.display =
+                "none";
+
+            paymentCallback = null;
+
+        }
+
+        document.getElementById("paymentCash").onclick = ()=>{
+
+            const callback = paymentCallback;
+
+            closePaymentModal();
+
+            if(callback){
+                callback("cash");
+            }
+
+        };
+
+        document.getElementById("paymentCard").onclick = ()=>{
+
+            const callback = paymentCallback;
+
+            closePaymentModal();
+
+            if(callback){
+                callback("card");
+            }
+
+        };
+
+        document.getElementById("paymentCancel").onclick =
+            closePaymentModal;
 
         function openNumberModal(title,callback){
 
