@@ -548,6 +548,48 @@
             </div>
 
         </div>
+        <div id="paymentModal" class="modal" style="display:none;">
+
+            <div class="modal-box payment-modal-box">
+
+                <h2>📦 支払い方法</h2>
+
+                <p class="payment-help">
+                    その他の支払い方法を選択
+                </p>
+
+                <div class="payment-choice-grid">
+
+                    <button
+                        type="button"
+                        id="paymentCash">
+                        🏧 現金
+                        <small>ATM残高から引く</small>
+                    </button>
+
+                    <button
+                        type="button"
+                        id="paymentCard">
+                        💳 カード
+                        <small>ATM残高は減らない</small>
+                    </button>
+
+                </div>
+
+                <div class="modal-buttons">
+
+                    <button
+                        type="button"
+                        id="paymentCancel">
+                        キャンセル
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
         <script src="app.js"></script>
 
         </body>
