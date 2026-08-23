@@ -394,3 +394,11 @@ white-space:nowrap; text-overflow:ellipsis; font-size:10px; } #homePage
 #gridArea button .input-left{ flex:0 0 auto; font-size:10.5px!important;
 white-space:nowrap; } #homePage .income-quick-card +
 .ai-card{margin-top:4px}
+
+/\* ===== 入力日付カレンダー ===== \*/ .number-date-label{
+display:block; margin:8px 0 5px; font-size:13px; font-weight:800;
+color:var(--brown); text-align:left; } .number-date{ display:block;
+width:100%; min-height:44px; box-sizing:border-box; padding:8px 10px;
+margin-bottom:8px; border:1.5px solid #ead38a; border-radius:12px;
+background:#fffdf7; color:var(--brown); font-size:16px; font-weight:700;
+}
