@@ -436,3 +436,11 @@ line-height:1.5; padding:8px 10px; outline:none; } .home-memo:focus{
 border-color:#e8be45; } @media (max-width:430px){ .memo-card{padding:9px
 10px!important} .memo-title{font-size:15px;margin-bottom:4px}
 .home-memo{ min-height:68px; font-size:12px; padding:7px 9px; } }
+
+/\* v41: ホームメモを大きく \*/ .home-memo{ min-height:150px; } @media
+(max-width:430px){ .home-memo{ min-height:140px; } }
+
+/\* カード固定・変動メモ \*/ .card-budget-note{ margin-top:8px;
+padding:9px 11px; border:1px solid #f0d98a; border-radius:12px;
+background:#fffdf7; color:#4a3832; font-size:13px; line-height:1.45; }
+.card-budget-note strong{ font-size:14px; }
