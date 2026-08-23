@@ -376,3 +376,21 @@
     button{min-height:54px;padding:10px} #settingsPage
     .card{padding-top:16px;padding-bottom:16px} #settingsPage
     input,#settingsPage select,#settingsPage button{min-height:44px}
+
+/\* ===== v36: ホーム収入＋カテゴリ3列の収まり改善 ===== \*/
+.income-quick-card{padding:7px 9px!important;margin:4px 0!important}
+.income-quick-title{font-size:12px;font-weight:900;color:var(--brown);margin-bottom:4px}
+.income-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.income-quick-grid button{ min-width:0; min-height:34px; padding:5px
+3px; border:1.5px solid var(--line); border-radius:10px;
+background:#fffaf0; color:var(--brown); font-size:11px; font-weight:900;
+} .income-quick-grid button:active{transform:scale(.985)}
+
+#homePage #gridArea{ grid-template-columns:repeat(3,minmax(0,1fr));
+gap:5px; } #homePage #gridArea button{ min-width:0; width:100%;
+min-height:38px; padding:5px 5px; gap:3px; overflow:hidden; } #homePage
+#gridArea button .input-name{ min-width:0; overflow:hidden;
+white-space:nowrap; text-overflow:ellipsis; font-size:10px; } #homePage
+#gridArea button .input-left{ flex:0 0 auto; font-size:10.5px!important;
+white-space:nowrap; } #homePage .income-quick-card +
+.ai-card{margin-top:4px}
