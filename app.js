@@ -760,7 +760,7 @@
             grid.innerHTML = `
                 <button class="input-card atm-card" onclick="openATM()">
                     <span class="input-name">🏧 ATM</span>
-                    <span class="input-left">¥${Number(app.atm.amount || 0).toLocaleString()}</span>
+                    <span class="input-left">¥${Number(getAtmPlan().cashBalance || 0).toLocaleString()}</span>
                 </button>
             `;
 
@@ -1068,6 +1068,17 @@
 
                         app.budgets[index].spent += amount;
 
+                    }
+
+                    // ATMで確保した現金から使うカテゴリだけ、ATM残高も減らす。
+                    const categoryId = app.budgets[index].id;
+                    if(
+                        categoryId === "food" ||
+                        categoryId === "gas" ||
+                        categoryId === "holiday"
+                    ){
+                        app.atm.cashSpent =
+                            Number(app.atm.cashSpent || 0) + amount;
                     }
 
                     app.history.unshift({
