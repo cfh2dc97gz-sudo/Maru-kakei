@@ -425,3 +425,14 @@ grid-template-columns:1fr; }
     }
 
 }
+
+/\* ===== v39：AIコンサルを自由入力メモへ ===== \*/ .memo-card{
+border-left:4px solid #f5c94a; } .memo-title{ font-size:17px;
+font-weight:900; color:#6f554b; margin-bottom:5px; } .home-memo{
+display:block; width:100%; min-height:74px; box-sizing:border-box;
+resize:none; border:1px solid #f0d98a; border-radius:12px;
+background:#fffdf7; color:#4a3832; font:inherit; font-size:13px;
+line-height:1.5; padding:8px 10px; outline:none; } .home-memo:focus{
+border-color:#e8be45; } @media (max-width:430px){ .memo-card{padding:9px
+10px!important} .memo-title{font-size:15px;margin-bottom:4px}
+.home-memo{ min-height:68px; font-size:12px; padding:7px 9px; } }
