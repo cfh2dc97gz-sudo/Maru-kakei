@@ -450,3 +450,22 @@ font-weight:700; color:#8a776f; } .holiday-plan-home{ margin-top:8px;
 padding:9px 11px; border-radius:12px; background:#fff8df; border:1px
 solid #f0d98a; color:#4a3832; font-size:13px; font-weight:700; }
 .holiday-plan-home strong{ font-size:15px; }
+
+/\* ===== v43: 現金3カテゴリを最下部へ ===== \*/
+.cash-budget-section{grid-column:1 /
+-1;margin-top:8px;padding-top:10px;border-top:1px solid #f0e3c7}
+.cash-budget-title{font-size:15px;font-weight:900;color:#6f554b;margin-bottom:7px}
+.cash-budget-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.cash-budget-card{min-width:0;border:1px solid
+#f0d98a;border-radius:13px;background:#fffdf7;padding:9px
+7px;text-align:left;color:#4a3832}
+.cash-budget-name{font-size:13px;font-weight:900;white-space:nowrap}
+.cash-budget-numbers{display:flex;flex-direction:column;gap:2px;margin-top:5px;font-size:11px}
+.cash-budget-numbers strong{font-size:13px}
+.cash-budget-sub{margin-top:4px;font-size:10px;color:#8d7b72}
+.history-row{display:flex;gap:5px;align-items:stretch;margin-bottom:6px}
+.history-main{flex:1} .history-delete{width:42px;border:1px solid
+#f0d98a;border-radius:10px;background:#fffdf7;font-size:16px}
+@media(max-width:430px){.cash-budget-grid{gap:6px}.cash-budget-card{padding:8px
+6px}.cash-budget-name{font-size:12px}.cash-budget-numbers{font-size:10px}.cash-budget-numbers
+strong{font-size:12px}}
