@@ -1,4 +1,4 @@
-        /* まる家計 Ver41｜デザインリフレッシュ */
+        /* まる家計 Ver42｜デザインリフレッシュ */
 
         const DEFAULT_BUDGETS = [
 
@@ -643,6 +643,93 @@
             });
 
         }
+        function getCashSpendingState(){
+
+            const food =
+                app.budgets.find(item=>item.id==="food");
+
+            const gas =
+                app.budgets.find(item=>item.id==="gas");
+
+            const holiday =
+                app.budgets.find(item=>item.id==="holiday");
+
+            const coop =
+                Number(app.atm?.coop || 0);
+
+            const plan =
+                getAtmPlan();
+
+            const foodActual =
+                Number(food?.spent || 0) + coop;
+
+            const gasActual =
+                Number(gas?.spent || 0);
+
+            const holidayActual =
+                Number(holiday?.spent || 0);
+
+            // そのカテゴリを1回でも入力したら、そのカテゴリだけ実測へ切り替える。
+            const foodHasActual =
+                foodActual > 0;
+
+            const gasHasActual =
+                gasActual > 0;
+
+            const holidayHasActual =
+                holidayActual > 0;
+
+            const foodDisplay =
+                foodHasActual
+                    ? foodActual
+                    : plan.foodCashBudget + coop;
+
+            const gasDisplay =
+                gasHasActual
+                    ? gasActual
+                    : plan.gasCashBudget;
+
+            const holidayDisplay =
+                holidayHasActual
+                    ? holidayActual
+                    : plan.holidayBudget;
+
+            const fixedActual =
+                app.budgets
+                    .filter(item =>
+                        !["food","gas","holiday"].includes(item.id)
+                    )
+                    .reduce(
+                        (sum,item)=>
+                            sum + Number(item.spent || 0),
+                        0
+                    );
+
+            const total =
+                fixedActual +
+                foodDisplay +
+                gasDisplay +
+                holidayDisplay;
+
+            const hasForecast =
+                (!foodHasActual && plan.foodCashBudget > 0) ||
+                (!gasHasActual && plan.gasCashBudget > 0) ||
+                (!holidayHasActual && plan.holidayBudget > 0);
+
+            return {
+                foodActual,
+                gasActual,
+                holidayActual,
+                foodDisplay,
+                gasDisplay,
+                holidayDisplay,
+                fixedActual,
+                total,
+                hasForecast
+            };
+
+        }
+
         function update(){
 
             if(yearSelect){
@@ -677,24 +764,16 @@
                 app.income.mama+
                 app.income.extra;
 
-            // 生協は食費として扱うため、支出合計にも含める。
-            const coopSpent =
-                Number(app.atm?.coop || 0);
-
-            // ATM引出は銀行→現金の移動なので支出には含めない。
-            // 生協は食費として支出に含める。
-            const categorySpent =
-                app.budgets.reduce(
-                    (sum,b)=>sum+Number(b.spent || 0),
-                    0
-                );
+            // ATM入力直後は、食費・ガソリン・休日を予測として支出に反映。
+            // そのカテゴリを入力したら、そのカテゴリだけ実測へ切り替える。
+            const spending =
+                getCashSpendingState();
 
             const spent =
-                categorySpent + coopSpent;
+                spending.total;
 
-            const remain=
-
-                income-spent;
+            const remain =
+                income - spent;
 
             const incomeSummaryEl = document.getElementById("incomeSummary");
             if(incomeSummaryEl){
@@ -705,6 +784,16 @@
                 .getElementById("spent")
                 .textContent=
                 "¥"+spent.toLocaleString();
+
+            const spentStatusEl =
+                document.getElementById("spentStatus");
+
+            if(spentStatusEl){
+                spentStatusEl.textContent =
+                    spending.hasForecast
+                        ? "ATM入力分を予測中"
+                        : "実測";
+            }
 
             const remainEl=
                 document.getElementById("remain");
@@ -824,85 +913,159 @@
                         "🛒 生協引落額（食費）",
                         (coop,coopMemo,coopDate)=>{
 
-                            coop =
-                                Math.max(
-                                    0,
-                                    Number(coop || 0)
-                                );
+                            coop = Math.max(Number(coop || 0),0);
 
-                            /*
-                               食費80,000円から
-                               生協引落分を先に差し引く
-                            */
+                            openNumberModal(
+                                "🎉 休日はあと何回？",
+                                (holidayCount)=>{
 
-                            const foodNeed =
-                                Math.max(
-                                    80000 - coop,
-                                    0
-                                );
+                                    holidayCount =
+                                        Math.max(
+                                            Math.floor(Number(holidayCount || 0)),
+                                            0
+                                        );
 
-                            let remaining = amount;
+                                    openNumberModal(
+                                        "🎉 休日は1回いくら？",
+                                        (holidayPerBudget)=>{
 
-                            /*
-                               ① 食費
-                            */
+                                            holidayPerBudget =
+                                                Math.max(
+                                                    Number(holidayPerBudget || 0),
+                                                    0
+                                                );
 
-                            const food =
-                                Math.min(
-                                    foodNeed,
-                                    remaining
-                                );
+                                            const foodBudget =
+                                                Number(
+                                                    app.budgets.find(
+                                                        item=>item.id==="food"
+                                                    )?.budget || 80000
+                                                );
 
-                            remaining -= food;
+                                            const gasBudget =
+                                                Number(
+                                                    app.budgets.find(
+                                                        item=>item.id==="gas"
+                                                    )?.budget || 17000
+                                                );
 
-                            /*
-                               ② ガソリン
-                               最大17,000円
-                            */
+                                            const previousCoop =
+                                                Number(app.atm.coop || 0);
 
-                            const gas =
-                                Math.min(
-                                    17000,
-                                    remaining
-                                );
+                                            const previousFood =
+                                                Number(app.atm.food || 0);
 
-                            remaining -= gas;
+                                            const previousGas =
+                                                Number(app.atm.gas || 0);
 
-                            /*
-                               ③ 休日
-                               残った金額を全部入れる
-                            */
+                                            const previousHoliday =
+                                                Number(app.atm.holiday || 0);
 
-                            const holiday =
-                                Math.max(
-                                    remaining,
-                                    0
-                                );
+                                            const previousHolidayBudget =
+                                                Number(
+                                                    app.atm.holidayBudgetTotal || 0
+                                                );
 
-                            app.atm = {
+                                            const totalCoop =
+                                                previousCoop + coop;
 
-                                amount,
+                                            const foodRemaining =
+                                                Math.max(
+                                                    foodBudget -
+                                                    totalCoop -
+                                                    previousFood,
+                                                    0
+                                                );
 
-                                withdrawn: amount,
+                                            const gasRemaining =
+                                                Math.max(
+                                                    gasBudget -
+                                                    previousGas,
+                                                    0
+                                                );
 
-                                coop,
+                                            // 最新の「回数×1回予算」を休日予算として保持。
+                                            // すでに確保した金額を下回らない。
+                                            const holidayBudgetTotal =
+                                                Math.max(
+                                                    holidayCount *
+                                                    holidayPerBudget,
+                                                    previousHolidayBudget
+                                                );
 
-                                food,
+                                            const holidayRemaining =
+                                                Math.max(
+                                                    holidayBudgetTotal -
+                                                    previousHoliday,
+                                                    0
+                                                );
 
-                                gas,
+                                            let remaining =
+                                                Number(amount);
 
-                                holiday,
+                                            const foodAdd =
+                                                Math.min(
+                                                    foodRemaining,
+                                                    remaining
+                                                );
 
-                                cashSpent: 0,
+                                            remaining -= foodAdd;
 
-                                date:
-                                    formatInputDate(
-                                        atmDate || coopDate
-                                    )
+                                            const gasAdd =
+                                                Math.min(
+                                                    gasRemaining,
+                                                    remaining
+                                                );
 
-                            };
+                                            remaining -= gasAdd;
 
-                            update();
+                                            const holidayAdd =
+                                                Math.min(
+                                                    holidayRemaining,
+                                                    remaining
+                                                );
+
+                                            app.atm.amount =
+                                                Number(app.atm.amount || 0) +
+                                                Number(amount);
+
+                                            app.atm.withdrawn =
+                                                Number(app.atm.withdrawn || 0) +
+                                                Number(amount);
+
+                                            app.atm.coop =
+                                                totalCoop;
+
+                                            app.atm.food =
+                                                previousFood + foodAdd;
+
+                                            app.atm.gas =
+                                                previousGas + gasAdd;
+
+                                            app.atm.holiday =
+                                                previousHoliday + holidayAdd;
+
+                                            app.atm.holidayCount =
+                                                holidayCount;
+
+                                            app.atm.holidayPerBudget =
+                                                holidayPerBudget;
+
+                                            app.atm.holidayBudgetTotal =
+                                                holidayBudgetTotal;
+
+                                            app.atm.date =
+                                                formatInputDate(
+                                                    atmDate || coopDate
+                                                );
+
+                                            update();
+
+                                        }
+                                    );
+
+                                }
+                            );
 
                         }
                     );
@@ -911,6 +1074,7 @@
             );
 
         }
+
         function addIncome(type){
 
             openNumberModal("収入金額",(amount,memo,dateValue)=>{
@@ -1019,6 +1183,12 @@
                 gas:0,
 
                 holiday:0,
+
+                holidayCount:0,
+
+                holidayPerBudget:0,
+
+                holidayBudgetTotal:0,
 
                 cashSpent:0,
 
@@ -1392,9 +1562,6 @@
             const coop =
                 Number(app.atm.coop || 0);
 
-            const foodCashBudget =
-                Math.max(foodBudget - coop, 0);
-
             const withdrawn =
                 Number(
                     app.atm.withdrawn ??
@@ -1402,12 +1569,17 @@
                     0
                 );
 
+            // ATMを何回入力しても、今月の累計として扱う。
+            const foodCashBudget =
+                Number(app.atm.food || 0);
+
             const gasCashBudget =
-                Math.min(gasBudget, Math.max(withdrawn - foodCashBudget, 0));
+                Number(app.atm.gas || 0);
 
             const holidayBudget =
-                Math.max(
-                    withdrawn - foodCashBudget - gasCashBudget,
+                Number(
+                    app.atm.holidayBudgetTotal ??
+                    app.atm.holiday ??
                     0
                 );
 
@@ -1421,6 +1593,7 @@
                 foodBudget,
                 gasBudget,
                 coop,
+                withdrawn,
                 foodCashBudget,
                 gasCashBudget,
                 holidayBudget,
@@ -2293,10 +2466,37 @@
         function drawMemo(){
 
             const memo = document.getElementById("homeMemo");
-            if(!memo) return;
 
-            if(document.activeElement !== memo){
+            if(memo && document.activeElement !== memo){
                 memo.value = String(app.memo || "");
+            }
+
+            const planEl =
+                document.getElementById("holidayPlanHome");
+
+            if(planEl){
+
+                const count =
+                    Number(app.atm?.holidayCount || 0);
+
+                const per =
+                    Number(app.atm?.holidayPerBudget || 0);
+
+                const remainingCount =
+                    getRemainingHolidayCount();
+
+                if(count > 0 && per > 0){
+
+                    planEl.innerHTML =
+                        `🎉 休日　あと <strong>${remainingCount}回</strong> × ¥${per.toLocaleString()}（1回）`;
+
+                }else{
+
+                    planEl.innerHTML =
+                        "🎉 休日プラン：ATM入力時に設定できます";
+
+                }
+
             }
 
         }
@@ -4297,13 +4497,13 @@
         );
 
         console.log(
-            "%c🌸 まる家計 Ver41",
+            "%c🌸 まる家計 Ver42",
             "color:#4CAF50;font-size:16px;font-weight:bold;"
         );
 
         console.log({
 
-            version:"41.0",
+            version:"42.0",
 
             fiscalYear:currentYear,
 
