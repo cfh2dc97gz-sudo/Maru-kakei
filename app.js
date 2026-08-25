@@ -1,4 +1,4 @@
-        /* まる家計 Ver42｜デザインリフレッシュ */
+        /* まる家計 Ver43｜デザインリフレッシュ */
 
         const DEFAULT_BUDGETS = [
 
@@ -730,6 +730,43 @@
 
         }
 
+        function getCashBudgetStatus(id){
+
+            const item =
+                app.budgets.find(b=>b.id===id);
+
+            if(!item){
+                return {
+                    budget:0,
+                    used:0,
+                    remaining:0
+                };
+            }
+
+            let used =
+                Number(item.spent || 0);
+
+            if(id==="food"){
+                used += Number(app.atm?.coop || 0);
+            }
+
+            const budget =
+                id==="holiday"
+                    ? Number(
+                        app.atm?.holidayBudgetTotal ??
+                        item.budget ??
+                        0
+                    )
+                    : Number(item.budget || 0);
+
+            return {
+                budget,
+                used,
+                remaining:budget-used
+            };
+
+        }
+
         function update(){
 
             if(yearSelect){
@@ -865,6 +902,8 @@
             const grid = document.getElementById("gridArea");
             if(!grid) return;
 
+            const cashIds = ["food","holiday","gas"];
+
             grid.innerHTML = `
                 <button class="input-card atm-card" onclick="openATM()">
                     <span class="input-name">🏧 ATM</span>
@@ -872,14 +911,12 @@
                 </button>
             `;
 
+            // 通常カテゴリ
             app.budgets.forEach((item,index)=>{
 
-                let used = Number(item.spent || 0);
+                if(cashIds.includes(item.id)) return;
 
-                // 生協引落はATM入力時点で食費として確定している。
-                if(item.id === "food"){
-                    used += Number(app.atm.coop || 0);
-                }
+                const used = Number(item.spent || 0);
 
                 grid.innerHTML += `
                     <button
@@ -889,15 +926,79 @@
                             : `addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})`}">
 
                         <span class="input-name">${item.name}</span>
-
                         <span class="input-left ${used > Number(item.budget || 0) ? "over" : ""}">
                             ¥${used.toLocaleString()}
                         </span>
-
                     </button>
                 `;
 
             });
+
+            // 現金で管理する3カテゴリは一番下へ
+            const food = app.budgets.find(item=>item.id==="food");
+            const holiday = app.budgets.find(item=>item.id==="holiday");
+            const gas = app.budgets.find(item=>item.id==="gas");
+
+            const coop = Number(app.atm?.coop || 0);
+
+            const rows = [
+                {
+                    id:"food",
+                    index:app.budgets.findIndex(item=>item.id==="food"),
+                    name:"🍚 食費",
+                    budget:Number(food?.budget || 80000),
+                    used:Number(food?.spent || 0) + coop
+                },
+                {
+                    id:"holiday",
+                    index:app.budgets.findIndex(item=>item.id==="holiday"),
+                    name:"🎉 休日",
+                    budget:Number(
+                        app.atm?.holidayBudgetTotal ??
+                        holiday?.budget ??
+                        40000
+                    ),
+                    used:Number(holiday?.spent || 0)
+                },
+                {
+                    id:"gas",
+                    index:app.budgets.findIndex(item=>item.id==="gas"),
+                    name:"⛽ ガソリン",
+                    budget:Number(gas?.budget || 17000),
+                    used:Number(gas?.spent || 0)
+                }
+            ];
+
+            grid.innerHTML += `
+                <div class="cash-budget-section">
+                    <div class="cash-budget-title">💰 現金で管理</div>
+                    <div class="cash-budget-grid">
+                        ${rows.map(row=>{
+
+                            const remaining =
+                                row.budget - row.used;
+
+                            return `
+                                <button
+                                    class="cash-budget-card"
+                                    onclick="addSpent(${row.index},false)"
+                                >
+                                    <div class="cash-budget-name">${row.name}</div>
+                                    <div class="cash-budget-numbers">
+                                        <span>現在 ¥${row.used.toLocaleString()}</span>
+                                        <strong class="${remaining < 0 ? "over" : ""}">
+                                            あと ¥${Math.max(remaining,0).toLocaleString()}
+                                        </strong>
+                                    </div>
+                                    <div class="cash-budget-sub">
+                                        予算 ¥${row.budget.toLocaleString()}
+                                    </div>
+                                </button>
+                            `;
+                        }).join("")}
+                    </div>
+                </div>
+            `;
 
         }
 
@@ -987,11 +1088,9 @@
                                             // 最新の「回数×1回予算」を休日予算として保持。
                                             // すでに確保した金額を下回らない。
                                             const holidayBudgetTotal =
-                                                Math.max(
-                                                    holidayCount *
-                                                    holidayPerBudget,
-                                                    previousHolidayBudget
-                                                );
+                                                previousHolidayBudget > 0
+                                                    ? previousHolidayBudget
+                                                    : holidayCount * holidayPerBudget;
 
                                             const holidayRemaining =
                                                 Math.max(
@@ -1046,10 +1145,14 @@
                                                 previousHoliday + holidayAdd;
 
                                             app.atm.holidayCount =
-                                                holidayCount;
+                                                holidayCount > 0
+                                                    ? holidayCount
+                                                    : Number(app.atm.holidayCount || 0);
 
                                             app.atm.holidayPerBudget =
-                                                holidayPerBudget;
+                                                holidayPerBudget > 0
+                                                    ? holidayPerBudget
+                                                    : Number(app.atm.holidayPerBudget || 0);
 
                                             app.atm.holidayBudgetTotal =
                                                 holidayBudgetTotal;
@@ -3356,9 +3459,10 @@
 
                 historyList.innerHTML += `
 
+        <div class="history-row">
         <button
-        class="setting-item"
-        onclick="deleteCategoryHistory('${item.id}')">
+        class="setting-item history-main"
+        onclick="editCategoryHistory('${item.id}')">
 
             <span>
                 ${item.date}<br>
@@ -3370,6 +3474,13 @@
             </span>
 
         </button>
+
+        <button
+        class="history-delete"
+        onclick="deleteCategoryHistory('${item.id}')">
+            🗑
+        </button>
+        </div>
         `;
 
             });
@@ -3390,6 +3501,104 @@
             top:0,
             behavior:"smooth"
         });
+
+        }
+
+        function editCategoryHistory(historyId){
+
+            let found = null;
+            let foundData = null;
+            let foundBudget = null;
+
+            getFiscalMonths().forEach(month=>{
+
+                if(found) return;
+
+                const year =
+                    month <= 3
+                        ? currentYear + 1
+                        : currentYear;
+
+                const data = getMonthData(year,month);
+
+                if(!data) return;
+
+                const target =
+                    (data.history || []).find(
+                        item=>item.id===historyId
+                    );
+
+                if(target){
+                    found = target;
+                    foundData = data;
+                    foundBudget =
+                        (data.budgets || []).find(
+                            b=>b.name===target.category
+                        );
+                }
+
+            });
+
+            if(!found || !foundData) return;
+
+            openNumberModal(
+                `${found.category}を編集`,
+                (newAmount,newMemo,newDate)=>{
+
+                    newAmount = Number(newAmount || 0);
+                    if(newAmount<=0) return;
+
+                    const oldAmount = Number(found.amount || 0);
+                    const diff = newAmount - oldAmount;
+
+                    if(foundBudget){
+
+                        foundBudget.spent =
+                            Math.max(
+                                0,
+                                Number(foundBudget.spent || 0) + diff
+                            );
+
+                        if(["food","gas","holiday"].includes(foundBudget.id)){
+
+                            foundData.atm =
+                                foundData.atm || {};
+
+                            foundData.atm.cashSpent =
+                                Math.max(
+                                    0,
+                                    Number(foundData.atm.cashSpent || 0) + diff
+                                );
+
+                        }
+
+                    }
+
+                    found.amount = newAmount;
+
+                    if(newMemo !== undefined){
+                        found.memo = newMemo;
+                    }
+
+                    if(newDate){
+                        found.date = formatInputDate(newDate);
+                        found.targetMonth =
+                            getTargetMonthFromInputDate(newDate);
+                    }
+
+                    localStorage.setItem(
+                        getStorageKey(foundData.year,foundData.month),
+                        JSON.stringify(foundData)
+                    );
+
+                    load();
+                    update();
+
+                },
+                found.memo || "",
+                found.date || "",
+                found.amount || 0
+            );
 
         }
 
@@ -4497,13 +4706,13 @@
         );
 
         console.log(
-            "%c🌸 まる家計 Ver42",
+            "%c🌸 まる家計 Ver43",
             "color:#4CAF50;font-size:16px;font-weight:bold;"
         );
 
         console.log({
 
-            version:"42.0",
+            version:"43.0",
 
             fiscalYear:currentYear,
 
@@ -4927,16 +5136,23 @@
         document.getElementById("paymentCancel").onclick =
             closePaymentModal;
 
-        function openNumberModal(title,callback){
+        function openNumberModal(title,callback,initialMemo="",initialDate="",initialAmount=null){
 
-            numberValue = "";
+            numberValue =
+                initialAmount !== null
+                    ? String(initialAmount)
+                    : "";
 
-            document.getElementById("numberMemo").value = "";
+            document.getElementById("numberMemo").value =
+                String(initialMemo || "");
 
             const dateInput = document.getElementById("numberDate");
 
             if(dateInput){
-                dateInput.value = getTodayInputDate();
+                dateInput.value =
+                    initialDate
+                        ? String(initialDate).replaceAll("/","-")
+                        : getTodayInputDate();
             }
 
             document.activeElement?.blur();
