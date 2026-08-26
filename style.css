@@ -530,122 +530,73 @@ strong{font-size:12px}}
     .cash-budget-food-days{font-size:10px}
     .cash-budget-food-days strong{font-size:12px}
 }
-/* まる家計 v44 修正版
-   現金で管理（食費・休日・ガソリン）のレイアウト修正
 
-   既存の v44 CSS の一番下に追加してください。
-   3列指定を上書きして、スマホでは1列にします。
-*/
 
-.cash-budget-section{
-    grid-column:1 / -1;
-    width:100%;
-    margin-top:8px;
-    padding-top:10px;
-    border-top:1px solid #f0e3c7;
-}
-
-.cash-budget-grid{
-    width:100%;
-    display:grid;
-    grid-template-columns:1fr !important;
-    gap:9px !important;
-}
-
-.cash-budget-card{
-    width:100% !important;
-    min-width:0 !important;
-    min-height:0 !important;
-    box-sizing:border-box;
-    display:block !important;
-    overflow:visible !important;
-    padding:14px 15px !important;
-    border:1px solid #f0d98a;
-    border-radius:16px;
+/* ===== v45: 食費「この先使う予定」 ===== */
+.food-budget-card{
+    padding:0 !important;
+    overflow:hidden !important;
     background:#fffdf7;
+}
+.cash-budget-main{
+    width:100%;
+    border:0;
+    background:transparent;
     text-align:left;
-    color:#4a3832;
+    padding:14px 15px 9px;
+    color:inherit;
 }
-
-.cash-budget-name{
-    width:100%;
-    font-size:17px !important;
+.cash-budget-plan-button{
+    width:calc(100% - 30px);
+    margin:0 15px 13px;
+    min-height:42px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    background:#fff8dc;
+    color:var(--brown);
+    font-size:13px;
     font-weight:900;
-    white-space:normal !important;
-    margin-bottom:7px;
 }
-
-.cash-budget-numbers{
-    width:100%;
+.cash-budget-planned{
     display:flex;
-    flex-direction:row !important;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
     gap:10px;
-    margin-top:0 !important;
-    font-size:14px !important;
+    margin-top:9px;
+    padding:8px 10px;
+    border-radius:11px;
+    background:#fff4d1;
+    font-size:12px;
+    font-weight:850;
 }
-
-.cash-budget-numbers span{
-    white-space:nowrap !important;
-}
-
-.cash-budget-numbers strong{
-    font-size:16px !important;
-    white-space:nowrap !important;
-}
-
-.cash-budget-sub{
+.cash-budget-planned strong{font-size:14px}
+.cash-budget-plan-list{
     margin-top:6px;
-    font-size:12px !important;
-    color:#8d7b72;
+    border-top:1px dashed #e7d49b;
 }
-
-.cash-budget-food-days{
-    margin-top:7px !important;
-    font-size:13px !important;
-    line-height:1.45 !important;
+.cash-budget-plan-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:5px 2px;
+    font-size:11px;
     color:#6f554b;
-    font-weight:800;
 }
-
-.cash-budget-food-days strong{
-    font-size:15px !important;
+.cash-budget-plan-item button{
+    border:0;
+    background:transparent;
+    padding:0 3px;
+    font-size:17px;
+    line-height:1;
+    color:#b56b5b;
 }
-
 @media(max-width:430px){
-    .cash-budget-grid{
-        grid-template-columns:1fr !important;
-        gap:9px !important;
-    }
-
-    .cash-budget-card{
-        width:100% !important;
-        min-height:0 !important;
-        padding:14px 14px !important;
-    }
-
-    .cash-budget-name{
-        font-size:16px !important;
-    }
-
-    .cash-budget-numbers{
-        font-size:13px !important;
-    }
-
-    .cash-budget-numbers strong{
-        font-size:15px !important;
-    }
-
-    .cash-budget-sub{
-        font-size:11px !important;
-    }
-
-    .cash-budget-food-days{
-        font-size:12px !important;
-    }
-
-    .cash-budget-food-days strong{
-        font-size:14px !important;
+    .cash-budget-main{padding:13px 13px 8px}
+    .cash-budget-plan-button{
+        width:calc(100% - 26px);
+        margin-left:13px;
+        margin-right:13px;
+        min-height:40px;
     }
 }
