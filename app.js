@@ -1,4 +1,4 @@
-        /* まる家計 Ver43｜デザインリフレッシュ */
+        /* まる家計 Ver44｜デザインリフレッシュ */
 
         const DEFAULT_BUDGETS = [
 
@@ -183,6 +183,8 @@
 
             memo:"",
 
+            recurringOthers:[],
+
             atm:{
                 amount:0,
                 coop:0,
@@ -273,6 +275,10 @@
 
                 annualCategories: JSON.parse(
                     JSON.stringify(app.annualCategories)
+                ),
+
+                recurringOthers: JSON.parse(
+                    JSON.stringify(app.recurringOthers || [])
                 )
 
             };
@@ -475,6 +481,11 @@
                     data.annualCategories ||
                     app.annualCategories;
 
+                app.recurringOthers =
+                    Array.isArray(data.recurringOthers)
+                        ? data.recurringOthers
+                        : [];
+
             }
 
             // 年度スタート残高は2026年度の基準として固定。
@@ -489,6 +500,21 @@
                 }
 
             });
+
+            app.recurringOthers =
+                Array.isArray(app.recurringOthers)
+                    ? app.recurringOthers
+                    : [];
+
+            if(!app.atm || typeof app.atm !== "object"){
+                app.atm = {};
+            }
+
+            if(app.atm.foodDays === undefined){
+                app.atm.foodDays = 0;
+            }
+
+            ensureRecurringOthersApplied();
 
         }
         /* ===========================
@@ -767,6 +793,166 @@
 
         }
 
+        function ensureRecurringOthersApplied(){
+
+            const otherIndex =
+                app.budgets.findIndex(item=>item.id==="other");
+
+            if(otherIndex < 0) return;
+
+            if(!Array.isArray(app.history)){
+                app.history = [];
+            }
+
+            const monthKey =
+                `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
+
+            (app.recurringOthers || []).forEach(item=>{
+
+                const id = String(item.id || "");
+
+                if(app.history.some(h =>
+                    String(h.recurringOtherId || "") === id &&
+                    String(h.targetMonth || "") === monthKey
+                )){
+                    return;
+                }
+
+                const amount = Math.max(Number(item.amount || 0),0);
+                if(amount <= 0) return;
+
+                app.budgets[otherIndex].spent =
+                    Number(app.budgets[otherIndex].spent || 0) + amount;
+
+                app.history.unshift({
+                    id:`recurring-${id}-${monthKey}`,
+                    date:`${getDisplayYear()}/${String(currentMonth).padStart(2,"0")}/01`,
+                    category:app.budgets[otherIndex].name,
+                    amount,
+                    memo:`毎月自動：${item.name}`,
+                    annual:false,
+                    targetMonth:monthKey,
+                    recurringOtherId:id
+                });
+
+            });
+
+        }
+
+        function drawRecurringOthers(){
+
+            const el = document.getElementById("recurringOthersList");
+            if(!el) return;
+
+            const list = Array.isArray(app.recurringOthers)
+                ? app.recurringOthers
+                : [];
+
+            if(list.length === 0){
+                el.innerHTML =
+                    `<div class="summary-sub">まだ登録されていません。登録すると毎月「その他」に自動計上します。</div>`;
+                return;
+            }
+
+            el.innerHTML = list.map(item=>{
+                const safeId = String(item.id || "").replaceAll("'","\\'");
+                return `
+                    <div class="recurring-other-item">
+                        <span>📦 ${escapeHtml(item.name)}　¥${Number(item.amount||0).toLocaleString()}/月</span>
+                        <span class="recurring-other-actions">
+                            <button type="button" onclick="editRecurringOther('${safeId}')">編集</button>
+                            <button type="button" onclick="deleteRecurringOther('${safeId}')">削除</button>
+                        </span>
+                    </div>
+                `;
+            }).join("");
+
+        }
+
+        function addRecurringOther(){
+
+            const name = prompt("毎月かかる項目名を入力してください。");
+            if(!name || !name.trim()) return;
+
+            openNumberModal(`📦 ${name.trim()} の月額`, (amount)=>{
+
+                amount = Math.max(Number(amount || 0),0);
+                if(amount <= 0) return;
+
+                if(!Array.isArray(app.recurringOthers)){
+                    app.recurringOthers = [];
+                }
+
+                app.recurringOthers.push({
+                    id:`ro-${Date.now()}`,
+                    name:name.trim(),
+                    amount
+                });
+
+                ensureRecurringOthersApplied();
+                update();
+
+            });
+
+        }
+
+        function editRecurringOther(id){
+
+            const item = (app.recurringOthers || []).find(
+                entry=>String(entry.id)===String(id)
+            );
+            if(!item) return;
+
+            const name = prompt("項目名を変更できます。", item.name);
+            if(!name || !name.trim()) return;
+
+            openNumberModal(
+                `📦 ${name.trim()} の月額`,
+                (amount)=>{
+                    amount = Math.max(Number(amount || 0),0);
+                    if(amount <= 0) return;
+
+                    item.name = name.trim();
+                    item.amount = amount;
+
+                    update();
+                },
+                "",
+                "",
+                Number(item.amount || 0)
+            );
+
+        }
+
+        function deleteRecurringOther(id){
+
+            const item = (app.recurringOthers || []).find(
+                entry=>String(entry.id)===String(id)
+            );
+            if(!item) return;
+
+            if(!confirm(`「${item.name}」を毎月の自動入力から外しますか？\nすでに入力済みの月の支出はそのまま残ります。`)){
+                return;
+            }
+
+            app.recurringOthers = (app.recurringOthers || []).filter(
+                entry=>String(entry.id)!==String(id)
+            );
+
+            save();
+            drawRecurringOthers();
+
+        }
+
+        function escapeHtml(value){
+            return String(value ?? "")
+                .replaceAll("&","&amp;")
+                .replaceAll("<","&lt;")
+                .replaceAll(">","&gt;")
+                .replaceAll('"',"&quot;")
+                .replaceAll("'","&#039;");
+        }
+
         function update(){
 
             if(yearSelect){
@@ -885,6 +1071,8 @@
 
             drawMemo();
 
+            drawRecurringOthers();
+
             drawNewAnnualPage();
 
             drawAnnualManage();
@@ -993,6 +1181,19 @@
                                     <div class="cash-budget-sub">
                                         予算 ¥${row.budget.toLocaleString()}
                                     </div>
+                                    ${
+                                        row.id==="food"
+                                            ? (() => {
+                                                const days = Number(app.atm?.foodDays || 0);
+                                                const daily = days > 0
+                                                    ? Math.floor(Math.max(remaining,0) / days)
+                                                    : 0;
+                                                return days > 0
+                                                    ? `<div class="cash-budget-food-days">あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong></div>`
+                                                    : `<div class="cash-budget-food-days">🗓 食費の日数をATM入力で設定</div>`;
+                                            })()
+                                            : ""
+                                    }
                                 </button>
                             `;
                         }).join("")}
@@ -1033,6 +1234,12 @@
                                             holidayPerBudget =
                                                 Math.max(
                                                     Number(holidayPerBudget || 0),
+                                                    0
+                                                );
+
+                                            const finishATMInput = (foodDays)=>{
+                                                foodDays = Math.max(
+                                                    Math.floor(Number(foodDays || 0)),
                                                     0
                                                 );
 
@@ -1157,12 +1364,28 @@
                                             app.atm.holidayBudgetTotal =
                                                 holidayBudgetTotal;
 
+                                            app.atm.foodDays =
+                                                foodDays > 0
+                                                    ? foodDays
+                                                    : Number(app.atm.foodDays || 0);
+
                                             app.atm.date =
                                                 formatInputDate(
                                                     atmDate || coopDate
                                                 );
 
                                             update();
+
+                                            };
+
+                                            if(Number(app.atm.foodDays || 0) > 0){
+                                                finishATMInput(Number(app.atm.foodDays || 0));
+                                            }else{
+                                                openNumberModal(
+                                                    "🍚 食費はあと何日？",
+                                                    finishATMInput
+                                                );
+                                            }
 
                                         }
                                     );
@@ -1292,6 +1515,8 @@
                 holidayPerBudget:0,
 
                 holidayBudgetTotal:0,
+
+                foodDays:0,
 
                 cashSpent:0,
 
