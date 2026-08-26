@@ -600,3 +600,46 @@ strong{font-size:12px}}
         min-height:40px;
     }
 }
+
+
+/* ===== v45.1: 現金3カテゴリの幅修正 ===== */
+/* 親のホーム3列グリッドから独立して、現金管理エリアを横幅いっぱいにする */
+#homePage #gridArea .cash-budget-section{
+    grid-column:1 / -1 !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    display:block !important;
+}
+
+#homePage #gridArea .cash-budget-grid{
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:8px !important;
+}
+
+#homePage #gridArea .cash-budget-grid > .cash-budget-card{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:none !important;
+    box-sizing:border-box !important;
+}
+
+#homePage #gridArea .cash-budget-main,
+#homePage #gridArea .cash-budget-plan-button{
+    box-sizing:border-box !important;
+}
+
+@media(max-width:430px){
+    #homePage #gridArea .cash-budget-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+        gap:7px !important;
+    }
+
+    #homePage #gridArea .cash-budget-card{
+        min-width:0 !important;
+    }
+}
