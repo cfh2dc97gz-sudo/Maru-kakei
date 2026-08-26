@@ -185,14 +185,32 @@
 
             recurringOthers:[],
 
+            foodPlanned:[],
+
+            cardConfig:{
+                iwagin:{
+                    shoppingCutoff:15,
+                    shoppingPayDay:10,
+                    cashingCutoff:0,
+                    cashingPayDay:27,
+                    fixedItems:[
+                        {name:"FWD保険",amount:1228},
+                        {name:"ソフトバンクまとめて支払い",amount:1100},
+                        {name:"がん保険（パパ）",amount:1368},
+                        {name:"ウォーターサーバー",amount:4194},
+                        {name:"タブレット保険",amount:700},
+                        {name:"チューリッヒ",amount:2014},
+                        {name:"スマホ代",amount:14000}
+                    ]
+                }
+            },
+
             atm:{
                 amount:0,
                 coop:0,
                 food:0,
                 gas:0,
                 holiday:0,
-                foodDays:0,
-                foodPlans:[],
                 date:null
             }
 
@@ -281,6 +299,10 @@
 
                 recurringOthers: JSON.parse(
                     JSON.stringify(app.recurringOthers || [])
+                ),
+
+                cardConfig: JSON.parse(
+                    JSON.stringify(app.cardConfig || {})
                 )
 
             };
@@ -412,6 +434,8 @@
 
             app.memo="";
 
+            app.foodPlanned=[];
+
             app.atm={
                 amount:0,
                 withdrawn:0,
@@ -420,8 +444,6 @@
                 gas:0,
                 holiday:0,
                 cashSpent:0,
-                foodDays:0,
-                foodPlans:[],
                 date:null
             };
             
@@ -448,16 +470,13 @@
                 app.memo =
                     data.memo || "";
 
-                app.atm =
-                    data.atm || app.atm;
-
-                app.atm.foodPlans =
-                    Array.isArray(app.atm.foodPlans)
-                        ? app.atm.foodPlans
+                app.foodPlanned =
+                    Array.isArray(data.foodPlanned)
+                        ? data.foodPlanned
                         : [];
 
-                app.atm.foodDays =
-                    Number(app.atm.foodDays || 0);
+                app.atm =
+                    data.atm || app.atm;
                 
                 
             }
@@ -497,6 +516,17 @@
                     Array.isArray(data.recurringOthers)
                         ? data.recurringOthers
                         : [];
+
+                if(data.cardConfig){
+                    app.cardConfig = {
+                        ...app.cardConfig,
+                        ...data.cardConfig,
+                        iwagin:{
+                            ...app.cardConfig.iwagin,
+                            ...(data.cardConfig.iwagin || {})
+                        }
+                    };
+                }
 
             }
 
@@ -965,6 +995,18 @@
                 .replaceAll("'","&#039;");
         }
 
+
+        function drawIwaginCardSummary(){
+            const el=document.getElementById("iwaginCardSettings");
+            if(!el) return;
+
+            const c=app.cardConfig.iwagin;
+            el.innerHTML=
+                `ショッピング：毎月${c.shoppingCutoff}日締め → 翌月${c.shoppingPayDay}日払い<br>`+
+                `キャッシング：毎月末日締め → 翌月${c.cashingPayDay}日払い<br>`+
+                `固定費：¥${getFixedIwaginTotal().toLocaleString()} / 月`;
+        }
+
         function update(){
 
             if(yearSelect){
@@ -1085,6 +1127,8 @@
 
             drawRecurringOthers();
 
+            drawIwaginCardSummary();
+
             drawNewAnnualPage();
 
             drawAnnualManage();
@@ -1097,67 +1141,129 @@
         /* ===========================
            ⑤ カテゴリ・収入・支出
         =========================== */
-        function getFoodPlannedTotal(){
-
-            return (app.atm?.foodPlans || [])
-                .reduce(
-                    (sum,item)=>
-                        sum + Math.max(Number(item.amount || 0),0),
-                    0
-                );
-
+        function getFixedIwaginTotal(){
+            return (app.cardConfig?.iwagin?.fixedItems || [])
+                .reduce((sum,item)=>sum + Number(item.amount || 0),0);
         }
 
-        function addFoodPlan(){
+        function addMonthsToYearMonth(year,month,delta){
+            const d = new Date(Number(year), Number(month)-1+delta, 1);
+            return {
+                year:d.getFullYear(),
+                month:d.getMonth()+1
+            };
+        }
 
-            const name = prompt("買う予定のものを入力してください。");
-            if(!name || !name.trim()) return;
+        function getIwaginCardChargeMonth(dateValue, type="shopping"){
+            const parts = String(dateValue || "").split("-");
+            if(parts.length !== 3){
+                return `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
+            }
 
+            const y=Number(parts[0]);
+            const m=Number(parts[1]);
+            const day=Number(parts[2]);
+
+            if(type==="cashing"){
+                const next=addMonthsToYearMonth(y,m,1);
+                return `${next.year}-${String(next.month).padStart(2,"0")}`;
+            }
+
+            const cutoff=Number(app.cardConfig?.iwagin?.shoppingCutoff || 15);
+            const add=day <= cutoff ? 1 : 2;
+            const target=addMonthsToYearMonth(y,m,add);
+            return `${target.year}-${String(target.month).padStart(2,"0")}`;
+        }
+
+        function getAllStoredMonthHistories(){
+            const result=[];
+            for(let i=0;i<localStorage.length;i++){
+                const key=localStorage.key(i);
+                if(!key || !key.startsWith("maru-kakei-") || key.startsWith("maru-kakei-year-") || key==="maru-kakei-session"){
+                    continue;
+                }
+                try{
+                    const data=JSON.parse(localStorage.getItem(key));
+                    if(Array.isArray(data?.history)){
+                        result.push(...data.history);
+                    }
+                }catch(e){}
+            }
+            result.push(...(app.history || []));
+            return result;
+        }
+
+        function getIwaginCardForecast(targetYear=getDisplayYear(),targetMonth=currentMonth){
+            const key=`${targetYear}-${String(targetMonth).padStart(2,"0")}`;
+            const seen=new Set();
+            let total=0;
+
+            getAllStoredMonthHistories().forEach(item=>{
+                if(!item || item.payment!=="card") return;
+                if(item.cardChargeMonth!==key) return;
+                const unique=item.id || `${item.date}-${item.amount}-${item.memo}`;
+                if(seen.has(unique)) return;
+                seen.add(unique);
+                total += Number(item.amount || 0);
+            });
+
+            return total;
+        }
+
+        function getFoodPlannedTotal(){
+            return (app.foodPlanned || [])
+                .reduce((sum,item)=>sum+Number(item.amount || 0),0);
+        }
+
+        function addFoodPlanned(){
             openNumberModal(
-                `🍚 ${name.trim()} の予定額`,
-                (amount)=>{
-                    amount = Math.max(Number(amount || 0),0);
-                    if(amount <= 0) return;
+                "🍚 この先使うお金",
+                (amount,memo)=>{
+                    if(amount<=0) return;
 
-                    if(!Array.isArray(app.atm.foodPlans)){
-                        app.atm.foodPlans = [];
+                    if(!Array.isArray(app.foodPlanned)){
+                        app.foodPlanned=[];
                     }
 
-                    app.atm.foodPlans.push({
+                    app.foodPlanned.unshift({
                         id:`food-plan-${Date.now()}`,
-                        name:name.trim(),
-                        amount
+                        name:memo || "食費の予定",
+                        amount:Number(amount)
                     });
 
                     update();
-                }
+                },
+                "",
+                "",
+                null
             );
-
         }
 
-        function deleteFoodPlan(id){
-
-            const plans = Array.isArray(app.atm?.foodPlans)
-                ? app.atm.foodPlans
-                : [];
-
-            const item = plans.find(
-                plan=>String(plan.id)===String(id)
+        function deleteFoodPlanned(id){
+            app.foodPlanned=(app.foodPlanned || []).filter(
+                item=>String(item.id)!==String(id)
             );
-
-            if(!item) return;
-
-            if(!confirm(
-                `「${item.name} ¥${Number(item.amount).toLocaleString()}」の予定を削除しますか？`
-            )) return;
-
-            app.atm.foodPlans =
-                plans.filter(
-                    plan=>String(plan.id)!==String(id)
-                );
-
             update();
+        }
 
+        function showIwaginCardDetails(){
+            const c=app.cardConfig?.iwagin;
+            const fixed=(c?.fixedItems || [])
+                .map(item=>`${item.name} ¥${Number(item.amount).toLocaleString()}`)
+                .join("\n");
+
+            alert(
+`🏦 岩銀カード
+
+ショッピング
+毎月${c.shoppingCutoff}日締め → 翌月${c.shoppingPayDay}日払い
+
+キャッシング
+毎月末日締め → 翌月${c.cashingPayDay}日払い
+
+固定費（月 ¥${getFixedIwaginTotal().toLocaleString()}）
+${fixed}`
+            );
         }
 
         function drawCategories(){
@@ -1174,12 +1280,26 @@
                 </button>
             `;
 
-            // 通常カテゴリ
             app.budgets.forEach((item,index)=>{
 
                 if(cashIds.includes(item.id)) return;
 
                 const used = Number(item.spent || 0);
+
+                let extra="";
+                if(item.id==="iwagin"){
+                    const forecast=getIwaginCardForecast();
+                    const fixed=getFixedIwaginTotal();
+
+                    extra=`
+                        <div class="card-forecast-line">
+                            固定 ¥${fixed.toLocaleString()}
+                            ${forecast>0
+                                ? `｜次回カード予測 <span class="card-forecast">¥${forecast.toLocaleString()}</span>`
+                                : ""}
+                        </div>
+                    `;
+                }
 
                 grid.innerHTML += `
                     <button
@@ -1192,18 +1312,18 @@
                         <span class="input-left ${used > Number(item.budget || 0) ? "over" : ""}">
                             ¥${used.toLocaleString()}
                         </span>
+                        ${extra}
                     </button>
                 `;
 
             });
 
-            // 現金で管理する3カテゴリは一番下へ
             const food = app.budgets.find(item=>item.id==="food");
             const holiday = app.budgets.find(item=>item.id==="holiday");
             const gas = app.budgets.find(item=>item.id==="gas");
 
             const coop = Number(app.atm?.coop || 0);
-            const foodPlanned = getFoodPlannedTotal();
+            const plannedFood = getFoodPlannedTotal();
 
             const rows = [
                 {
@@ -1211,8 +1331,7 @@
                     index:app.budgets.findIndex(item=>item.id==="food"),
                     name:"🍚 食費",
                     budget:Number(food?.budget || 80000),
-                    used:Number(food?.spent || 0) + coop,
-                    planned:foodPlanned
+                    used:Number(food?.spent || 0) + coop
                 },
                 {
                     id:"holiday",
@@ -1223,16 +1342,14 @@
                         holiday?.budget ??
                         40000
                     ),
-                    used:Number(holiday?.spent || 0),
-                    planned:0
+                    used:Number(holiday?.spent || 0)
                 },
                 {
                     id:"gas",
                     index:app.budgets.findIndex(item=>item.id==="gas"),
                     name:"⛽ ガソリン",
                     budget:Number(gas?.budget || 17000),
-                    used:Number(gas?.spent || 0),
-                    planned:0
+                    used:Number(gas?.spent || 0)
                 }
             ];
 
@@ -1242,90 +1359,63 @@
                     <div class="cash-budget-grid">
                         ${rows.map(row=>{
 
-                            const remaining =
-                                row.budget - row.used - row.planned;
+                            const remaining=row.budget-row.used;
 
                             if(row.id==="food"){
-
-                                const days = Number(app.atm?.foodDays || 0);
-                                const daily = days > 0
-                                    ? Math.floor(Math.max(remaining,0) / days)
+                                const days=Number(app.atm?.foodDays || 0);
+                                const dailyBase=days>0
+                                    ? Math.floor(Math.max(remaining-plannedFood,0)/days)
                                     : 0;
 
-                                const plans = Array.isArray(app.atm?.foodPlans)
-                                    ? app.atm.foodPlans
-                                    : [];
+                                const plannedList=(app.foodPlanned || [])
+                                    .map(item=>`
+                                        <div style="display:flex;justify-content:space-between;gap:6px;">
+                                            <span>${escapeHtml(item.name)}</span>
+                                            <span>¥${Number(item.amount||0).toLocaleString()}</span>
+                                            <button type="button"
+                                                onclick="event.stopPropagation();deleteFoodPlanned('${String(item.id).replaceAll("'","\\'")}')"
+                                                style="border:0;background:transparent;font-weight:900;">×</button>
+                                        </div>
+                                    `).join("");
 
                                 return `
-                                    <div class="cash-budget-card food-budget-card">
+                                    <div class="cash-budget-card">
+                                        <div class="cash-budget-name">${row.name}</div>
+                                        <div class="cash-budget-numbers">
+                                            <span>現在 ¥${row.used.toLocaleString()}</span>
+                                            <strong class="${remaining < 0 ? "over" : ""}">
+                                                あと ¥${Math.max(remaining,0).toLocaleString()}
+                                            </strong>
+                                        </div>
+                                        <div class="cash-budget-sub">
+                                            予算 ¥${row.budget.toLocaleString()}
+                                        </div>
 
-                                        <button
-                                            type="button"
-                                            class="cash-budget-main"
-                                            onclick="addSpent(${row.index},false)"
-                                        >
-                                            <div class="cash-budget-name">${row.name}</div>
+                                        <div class="cash-budget-planned">
+                                            この先使うお金
+                                            <strong>¥${plannedFood.toLocaleString()}</strong>
+                                            <button type="button"
+                                                class="cash-budget-plan-btn"
+                                                onclick="event.stopPropagation();addFoodPlanned()">
+                                                ＋予定を追加
+                                            </button>
+                                            ${plannedList}
+                                        </div>
 
-                                            <div class="cash-budget-numbers">
-                                                <span>現在 ¥${row.used.toLocaleString()}</span>
-                                                <strong class="${remaining < 0 ? "over" : ""}">
-                                                    あと ¥${Math.max(remaining,0).toLocaleString()}
-                                                </strong>
-                                            </div>
-
-                                            <div class="cash-budget-sub">
-                                                予算 ¥${row.budget.toLocaleString()}
-                                            </div>
-
-                                            <div class="cash-budget-planned">
-                                                <span>🛒 この先使う予定</span>
-                                                <strong>¥${row.planned.toLocaleString()}</strong>
-                                            </div>
-
-                                            ${
-                                                plans.length
-                                                    ? `<div class="cash-budget-plan-list">
-                                                        ${plans.map(plan=>`
-                                                            <div class="cash-budget-plan-item">
-                                                                <span>${escapeHtml(plan.name)}</span>
-                                                                <span>
-                                                                    ¥${Number(plan.amount).toLocaleString()}
-                                                                    <button
-                                                                        type="button"
-                                                                        onclick="event.stopPropagation();deleteFoodPlan('${String(plan.id).replaceAll("'","\\'")}')"
-                                                                    >×</button>
-                                                                </span>
-                                                            </div>
-                                                        `).join("")}
-                                                       </div>`
-                                                    : ""
-                                            }
-
-                                            <div class="cash-budget-food-days">
-                                                ${
-                                                    days > 0
-                                                        ? `あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong>`
-                                                        : `🗓 食費の日数をATM入力で設定`
-                                                }
-                                            </div>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="cash-budget-plan-button"
-                                            onclick="addFoodPlan()"
-                                        >
-                                            ＋ この先使う予定を追加
-                                        </button>
-
+                                        ${
+                                            days>0
+                                                ? `<div class="cash-budget-food-days">
+                                                    予定を引いたあと → あと ${days}日
+                                                    → 1日 <strong>¥${dailyBase.toLocaleString()}</strong>
+                                                   </div>`
+                                                : `<div class="cash-budget-food-days">🗓 食費の日数をATM入力で設定</div>`
+                                        }
                                     </div>
                                 `;
-
                             }
 
                             return `
                                 <button
-                                    type="button"
                                     class="cash-budget-card"
                                     onclick="addSpent(${row.index},false)"
                                 >
@@ -1339,9 +1429,18 @@
                                     <div class="cash-budget-sub">
                                         予算 ¥${row.budget.toLocaleString()}
                                     </div>
+                                    ${
+                                        row.id==="holiday"
+                                            ? `<div class="cash-budget-food-days">
+                                                残り ${getRemainingHolidayCount()}回
+                                                ${Number(app.atm?.holidayPerBudget || 0)>0
+                                                    ? `→ 1回 ¥${Number(app.atm.holidayPerBudget).toLocaleString()}`
+                                                    : ""}
+                                              </div>`
+                                            : ""
+                                    }
                                 </button>
                             `;
-
                         }).join("")}
                     </div>
                 </div>
@@ -1754,9 +1853,7 @@
         function addOtherExpense(){
 
             const otherIndex =
-                app.budgets.findIndex(
-                    item => item.id === "other"
-                );
+                app.budgets.findIndex(item=>item.id==="other");
 
             if(otherIndex < 0) return;
 
@@ -1772,62 +1869,58 @@
                             if(payment === "cash"){
 
                                 const cashBalance =
-                                    Number(
-                                        getAtmPlan().cashBalance || 0
-                                    );
+                                    Number(getAtmPlan().cashBalance || 0);
 
                                 if(amount > cashBalance){
-
                                     alert(
                                         `ATM残高が足りません。\n現在 ¥${cashBalance.toLocaleString()} です。`
                                     );
-
                                     return;
-
                                 }
 
                                 app.atm.cashSpent =
-                                    Number(app.atm.cashSpent || 0) +
-                                    amount;
+                                    Number(app.atm.cashSpent || 0) + amount;
+
+                                app.budgets[otherIndex].spent =
+                                    Number(app.budgets[otherIndex].spent || 0) + amount;
+
+                                app.history.unshift({
+                                    id:Date.now().toString(),
+                                    date:formatInputDate(dateValue),
+                                    category:app.budgets[otherIndex].name,
+                                    amount,
+                                    memo,
+                                    payment:"cash",
+                                    paymentLabel:"現金",
+                                    annual:false,
+                                    targetMonth:getTargetMonthFromInputDate(dateValue)
+                                });
+
+                            }else{
+
+                                // カードは「使った月」には支出計上しない。
+                                // 岩銀ショッピングの締め日に応じて、支払月へ予測を持っていく。
+                                const chargeMonth =
+                                    getIwaginCardChargeMonth(
+                                        dateValue,
+                                        "shopping"
+                                    );
+
+                                app.history.unshift({
+                                    id:Date.now().toString(),
+                                    date:formatInputDate(dateValue),
+                                    category:app.budgets[otherIndex].name,
+                                    amount,
+                                    memo,
+                                    payment:"card",
+                                    paymentLabel:"岩銀カード",
+                                    cardType:"shopping",
+                                    cardChargeMonth:chargeMonth,
+                                    annual:false,
+                                    targetMonth:chargeMonth
+                                });
 
                             }
-
-                            app.budgets[otherIndex].spent =
-                                Number(
-                                    app.budgets[otherIndex].spent || 0
-                                ) + amount;
-
-                            app.history.unshift({
-
-                                id: Date.now().toString(),
-
-                                date:
-                                    formatInputDate(
-                                        dateValue
-                                    ),
-
-                                category:
-                                    app.budgets[otherIndex].name,
-
-                                amount,
-
-                                memo,
-
-                                payment,
-
-                                paymentLabel:
-                                    payment === "cash"
-                                        ? "現金"
-                                        : "カード",
-
-                                annual:false,
-
-                                targetMonth:
-                                    getTargetMonthFromInputDate(
-                                        dateValue
-                                    )
-
-                            });
 
                             update();
 
