@@ -944,20 +944,14 @@
 
         }
 
-function addFoodPlannedPurchase(){
-if(!Array.isArray(app.atm.foodPlanned)) app.atm.foodPlanned=[]; const
-name=prompt(“これから買う大きな買い物の名前”); if(!name||!name.trim())
-return; openNumberModal(🛒 ${name.trim()} の予定金額, amount=>{
-amount=Math.max(Number(amount||0),0); if(!amount) return;
-app.atm.foodPlanned.push({id:food-plan-${Date.now()},name:name.trim(),amount});
-update(); }); } function removeFoodPlannedPurchase(id){
-if(!Array.isArray(app.atm.foodPlanned)) return;
-app.atm.foodPlanned=app.atm.foodPlanned.filter(x=>String(x.id)!==String(id));
-update(); }
-
-function escapeHtml(value){ return String(value ?? ““)
-.replaceAll(”&“,”&“) .replaceAll(”<“,”<“) .replaceAll(”>“,”>“)
-.replaceAll(’”‘,“"“) .replaceAll(”’“,”'“); }
+        function escapeHtml(value){
+            return String(value ?? "")
+                .replaceAll("&","&amp;")
+                .replaceAll("<","&lt;")
+                .replaceAll(">","&gt;")
+                .replaceAll('"',"&quot;")
+                .replaceAll("'","&#039;");
+        }
 
         function update(){
 
@@ -1128,112 +1122,81 @@ function escapeHtml(value){ return String(value ?? ““)
 
             });
 
-            // 現金で管理する3カテゴリは一番下へ。
-            // 外側をbuttonにしないことで、食費の＋ボタンや予定購入の削除ボタンを安全に配置する。
+            // 現金で管理する3カテゴリは一番下へ
             const food = app.budgets.find(item=>item.id==="food");
             const holiday = app.budgets.find(item=>item.id==="holiday");
             const gas = app.budgets.find(item=>item.id==="gas");
 
             const coop = Number(app.atm?.coop || 0);
 
-            const foodBudget = Number(food?.budget || 80000);
-            const foodUsed = Number(food?.spent || 0) + coop;
-            const foodRemaining = Math.max(foodBudget - foodUsed, 0);
-
-            const foodDays = Number(app.atm?.foodDays || 0);
-            const foodDaily = foodDays > 0
-                ? Math.floor(foodRemaining / foodDays)
-                : 0;
-
-            const holidayBudget = Number(
-                app.atm?.holidayBudgetTotal ??
-                holiday?.budget ??
-                40000
-            );
-            const holidayUsed = Number(holiday?.spent || 0);
-            const holidayRemaining = Math.max(holidayBudget - holidayUsed, 0);
-
-            const holidayRemainingCount = Number(
-                app.atm?.holidayRemainingCount ??
-                app.atm?.holidayCount ??
-                0
-            );
-            const holidayPerBudget = Number(app.atm?.holidayPerBudget || 0);
-
-            const gasBudget = Number(gas?.budget || 17000);
-            const gasUsed = Number(gas?.spent || 0);
-            const gasRemaining = Math.max(gasBudget - gasUsed, 0);
-
-            const foodPlanned = Array.isArray(app.atm?.foodPlanned)
-                ? app.atm.foodPlanned
-                : [];
+            const rows = [
+                {
+                    id:"food",
+                    index:app.budgets.findIndex(item=>item.id==="food"),
+                    name:"🍚 食費",
+                    budget:Number(food?.budget || 80000),
+                    used:Number(food?.spent || 0) + coop
+                },
+                {
+                    id:"holiday",
+                    index:app.budgets.findIndex(item=>item.id==="holiday"),
+                    name:"🎉 休日",
+                    budget:Number(
+                        app.atm?.holidayBudgetTotal ??
+                        holiday?.budget ??
+                        40000
+                    ),
+                    used:Number(holiday?.spent || 0)
+                },
+                {
+                    id:"gas",
+                    index:app.budgets.findIndex(item=>item.id==="gas"),
+                    name:"⛽ ガソリン",
+                    budget:Number(gas?.budget || 17000),
+                    used:Number(gas?.spent || 0)
+                }
+            ];
 
             grid.innerHTML += `
                 <div class="cash-budget-section">
                     <div class="cash-budget-title">💰 現金で管理</div>
-
                     <div class="cash-budget-grid">
+                        ${rows.map(row=>{
 
-                        <div class="cash-budget-card">
-                            <div class="cash-budget-name-row">
-                                <div class="cash-budget-name">🍚 食費</div>
+                            const remaining =
+                                row.budget - row.used;
+
+                            return `
                                 <button
-                                    type="button"
-                                    class="food-planned-add"
-                                    onclick="event.stopPropagation(); addFoodPlannedPurchase()"
-                                    aria-label="食費の今後の買い物を追加">
-                                    ＋
+                                    class="cash-budget-card"
+                                    onclick="addSpent(${row.index},false)"
+                                >
+                                    <div class="cash-budget-name">${row.name}</div>
+                                    <div class="cash-budget-numbers">
+                                        <span>現在 ¥${row.used.toLocaleString()}</span>
+                                        <strong class="${remaining < 0 ? "over" : ""}">
+                                            あと ¥${Math.max(remaining,0).toLocaleString()}
+                                        </strong>
+                                    </div>
+                                    <div class="cash-budget-sub">
+                                        予算 ¥${row.budget.toLocaleString()}
+                                    </div>
+                                    ${
+                                        row.id==="food"
+                                            ? (() => {
+                                                const days = Number(app.atm?.foodDays || 0);
+                                                const daily = days > 0
+                                                    ? Math.floor(Math.max(remaining,0) / days)
+                                                    : 0;
+                                                return days > 0
+                                                    ? `<div class="cash-budget-food-days">あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong></div>`
+                                                    : `<div class="cash-budget-food-days">🗓 食費の日数をATM入力で設定</div>`;
+                                            })()
+                                            : ""
+                                    }
                                 </button>
-                            </div>
-
-                            <div class="cash-budget-current">現在 ¥${foodUsed.toLocaleString()}</div>
-                            <div class="cash-budget-remaining">あと ¥${foodRemaining.toLocaleString()}</div>
-                            <div class="cash-budget-total">予算 ¥${foodBudget.toLocaleString()}</div>
-
-                            <div class="cash-budget-food-days">
-                                ${foodDays > 0
-                                    ? `残り ${foodDays}日 → 1日 <strong>¥${foodDaily.toLocaleString()}</strong>`
-                                    : `🗓 食費の日数をATM入力で設定`}
-                            </div>
-
-                            ${foodPlanned.length
-                                ? `<div class="food-planned-list">
-                                    <div class="food-planned-title">これから買う予定</div>
-                                    ${foodPlanned.map(item=>`
-                                        <div class="food-planned-item">
-                                            <span>${escapeHtml(item.name)}　¥${Number(item.amount||0).toLocaleString()}</span>
-                                            <button
-                                                type="button"
-                                                onclick="event.stopPropagation();removeFoodPlannedPurchase('${String(item.id).replaceAll("'","\\'")}')">
-                                                ×
-                                            </button>
-                                        </div>`).join("")}
-                                  </div>`
-                                : ""}
-                        </div>
-
-                        <div
-                            class="cash-budget-card cash-budget-clickable"
-                            onclick="addSpent(${app.budgets.findIndex(item=>item.id==="holiday")},false)">
-                            <div class="cash-budget-name">🎉 休日</div>
-                            <div class="cash-budget-current">現在 ¥${holidayUsed.toLocaleString()}</div>
-                            <div class="cash-budget-remaining">あと ¥${holidayRemaining.toLocaleString()}</div>
-                            <div class="cash-budget-total">予算 ¥${holidayBudget.toLocaleString()}</div>
-                            <div class="cash-budget-holiday-count">
-                                あと <strong>${holidayRemainingCount}回</strong>
-                                ${holidayPerBudget > 0 ? ` → 1回 <strong>¥${holidayPerBudget.toLocaleString()}</strong>` : ""}
-                            </div>
-                        </div>
-
-                        <div
-                            class="cash-budget-card cash-budget-clickable"
-                            onclick="addSpent(${app.budgets.findIndex(item=>item.id==="gas")},false)">
-                            <div class="cash-budget-name">⛽ ガソリン</div>
-                            <div class="cash-budget-current">現在 ¥${gasUsed.toLocaleString()}</div>
-                            <div class="cash-budget-remaining">あと ¥${gasRemaining.toLocaleString()}</div>
-                            <div class="cash-budget-total">予算 ¥${gasBudget.toLocaleString()}</div>
-                        </div>
-
+                            `;
+                        }).join("")}
                     </div>
                 </div>
             `;
