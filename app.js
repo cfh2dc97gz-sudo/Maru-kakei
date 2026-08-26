@@ -1,4 +1,4 @@
-        /* まる家計 Ver44｜デザインリフレッシュ */
+        /* まる家計 Ver45｜デザインリフレッシュ */
 
         const DEFAULT_BUDGETS = [
 
@@ -191,6 +191,8 @@
                 food:0,
                 gas:0,
                 holiday:0,
+                foodDays:0,
+                foodPlans:[],
                 date:null
             }
 
@@ -418,6 +420,8 @@
                 gas:0,
                 holiday:0,
                 cashSpent:0,
+                foodDays:0,
+                foodPlans:[],
                 date:null
             };
             
@@ -446,6 +450,14 @@
 
                 app.atm =
                     data.atm || app.atm;
+
+                app.atm.foodPlans =
+                    Array.isArray(app.atm.foodPlans)
+                        ? app.atm.foodPlans
+                        : [];
+
+                app.atm.foodDays =
+                    Number(app.atm.foodDays || 0);
                 
                 
             }
@@ -1085,6 +1097,69 @@
         /* ===========================
            ⑤ カテゴリ・収入・支出
         =========================== */
+        function getFoodPlannedTotal(){
+
+            return (app.atm?.foodPlans || [])
+                .reduce(
+                    (sum,item)=>
+                        sum + Math.max(Number(item.amount || 0),0),
+                    0
+                );
+
+        }
+
+        function addFoodPlan(){
+
+            const name = prompt("買う予定のものを入力してください。");
+            if(!name || !name.trim()) return;
+
+            openNumberModal(
+                `🍚 ${name.trim()} の予定額`,
+                (amount)=>{
+                    amount = Math.max(Number(amount || 0),0);
+                    if(amount <= 0) return;
+
+                    if(!Array.isArray(app.atm.foodPlans)){
+                        app.atm.foodPlans = [];
+                    }
+
+                    app.atm.foodPlans.push({
+                        id:`food-plan-${Date.now()}`,
+                        name:name.trim(),
+                        amount
+                    });
+
+                    update();
+                }
+            );
+
+        }
+
+        function deleteFoodPlan(id){
+
+            const plans = Array.isArray(app.atm?.foodPlans)
+                ? app.atm.foodPlans
+                : [];
+
+            const item = plans.find(
+                plan=>String(plan.id)===String(id)
+            );
+
+            if(!item) return;
+
+            if(!confirm(
+                `「${item.name} ¥${Number(item.amount).toLocaleString()}」の予定を削除しますか？`
+            )) return;
+
+            app.atm.foodPlans =
+                plans.filter(
+                    plan=>String(plan.id)!==String(id)
+                );
+
+            update();
+
+        }
+
         function drawCategories(){
 
             const grid = document.getElementById("gridArea");
@@ -1128,6 +1203,7 @@
             const gas = app.budgets.find(item=>item.id==="gas");
 
             const coop = Number(app.atm?.coop || 0);
+            const foodPlanned = getFoodPlannedTotal();
 
             const rows = [
                 {
@@ -1135,7 +1211,8 @@
                     index:app.budgets.findIndex(item=>item.id==="food"),
                     name:"🍚 食費",
                     budget:Number(food?.budget || 80000),
-                    used:Number(food?.spent || 0) + coop
+                    used:Number(food?.spent || 0) + coop,
+                    planned:foodPlanned
                 },
                 {
                     id:"holiday",
@@ -1146,14 +1223,16 @@
                         holiday?.budget ??
                         40000
                     ),
-                    used:Number(holiday?.spent || 0)
+                    used:Number(holiday?.spent || 0),
+                    planned:0
                 },
                 {
                     id:"gas",
                     index:app.budgets.findIndex(item=>item.id==="gas"),
                     name:"⛽ ガソリン",
                     budget:Number(gas?.budget || 17000),
-                    used:Number(gas?.spent || 0)
+                    used:Number(gas?.spent || 0),
+                    planned:0
                 }
             ];
 
@@ -1164,10 +1243,89 @@
                         ${rows.map(row=>{
 
                             const remaining =
-                                row.budget - row.used;
+                                row.budget - row.used - row.planned;
+
+                            if(row.id==="food"){
+
+                                const days = Number(app.atm?.foodDays || 0);
+                                const daily = days > 0
+                                    ? Math.floor(Math.max(remaining,0) / days)
+                                    : 0;
+
+                                const plans = Array.isArray(app.atm?.foodPlans)
+                                    ? app.atm.foodPlans
+                                    : [];
+
+                                return `
+                                    <div class="cash-budget-card food-budget-card">
+
+                                        <button
+                                            type="button"
+                                            class="cash-budget-main"
+                                            onclick="addSpent(${row.index},false)"
+                                        >
+                                            <div class="cash-budget-name">${row.name}</div>
+
+                                            <div class="cash-budget-numbers">
+                                                <span>現在 ¥${row.used.toLocaleString()}</span>
+                                                <strong class="${remaining < 0 ? "over" : ""}">
+                                                    あと ¥${Math.max(remaining,0).toLocaleString()}
+                                                </strong>
+                                            </div>
+
+                                            <div class="cash-budget-sub">
+                                                予算 ¥${row.budget.toLocaleString()}
+                                            </div>
+
+                                            <div class="cash-budget-planned">
+                                                <span>🛒 この先使う予定</span>
+                                                <strong>¥${row.planned.toLocaleString()}</strong>
+                                            </div>
+
+                                            ${
+                                                plans.length
+                                                    ? `<div class="cash-budget-plan-list">
+                                                        ${plans.map(plan=>`
+                                                            <div class="cash-budget-plan-item">
+                                                                <span>${escapeHtml(plan.name)}</span>
+                                                                <span>
+                                                                    ¥${Number(plan.amount).toLocaleString()}
+                                                                    <button
+                                                                        type="button"
+                                                                        onclick="event.stopPropagation();deleteFoodPlan('${String(plan.id).replaceAll("'","\\'")}')"
+                                                                    >×</button>
+                                                                </span>
+                                                            </div>
+                                                        `).join("")}
+                                                       </div>`
+                                                    : ""
+                                            }
+
+                                            <div class="cash-budget-food-days">
+                                                ${
+                                                    days > 0
+                                                        ? `あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong>`
+                                                        : `🗓 食費の日数をATM入力で設定`
+                                                }
+                                            </div>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="cash-budget-plan-button"
+                                            onclick="addFoodPlan()"
+                                        >
+                                            ＋ この先使う予定を追加
+                                        </button>
+
+                                    </div>
+                                `;
+
+                            }
 
                             return `
                                 <button
+                                    type="button"
                                     class="cash-budget-card"
                                     onclick="addSpent(${row.index},false)"
                                 >
@@ -1181,21 +1339,9 @@
                                     <div class="cash-budget-sub">
                                         予算 ¥${row.budget.toLocaleString()}
                                     </div>
-                                    ${
-                                        row.id==="food"
-                                            ? (() => {
-                                                const days = Number(app.atm?.foodDays || 0);
-                                                const daily = days > 0
-                                                    ? Math.floor(Math.max(remaining,0) / days)
-                                                    : 0;
-                                                return days > 0
-                                                    ? `<div class="cash-budget-food-days">あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong></div>`
-                                                    : `<div class="cash-budget-food-days">🗓 食費の日数をATM入力で設定</div>`;
-                                            })()
-                                            : ""
-                                    }
                                 </button>
                             `;
+
                         }).join("")}
                     </div>
                 </div>
