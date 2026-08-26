@@ -944,7 +944,25 @@
 
         }
 
-        function escapeHtml(value){
+        
+function addFoodPlannedPurchase(){
+    if(!Array.isArray(app.atm.foodPlanned)) app.atm.foodPlanned=[];
+    const name=prompt("これから買う大きな買い物の名前");
+    if(!name||!name.trim()) return;
+    openNumberModal(`🛒 ${name.trim()} の予定金額`, amount=>{
+        amount=Math.max(Number(amount||0),0);
+        if(!amount) return;
+        app.atm.foodPlanned.push({id:`food-plan-${Date.now()}`,name:name.trim(),amount});
+        update();
+    });
+}
+function removeFoodPlannedPurchase(id){
+    if(!Array.isArray(app.atm.foodPlanned)) return;
+    app.atm.foodPlanned=app.atm.foodPlanned.filter(x=>String(x.id)!==String(id));
+    update();
+}
+
+function escapeHtml(value){
             return String(value ?? "")
                 .replaceAll("&","&amp;")
                 .replaceAll("<","&lt;")
@@ -1181,6 +1199,17 @@
                                     <div class="cash-budget-sub">
                                         予算 ¥${row.budget.toLocaleString()}
                                     </div>
+                                    ${row.id==="food" && Array.isArray(app.atm?.foodPlanned) && app.atm.foodPlanned.length
+                                        ? `<div class="food-planned-list">
+                                            <div class="food-planned-title">これから買う予定</div>
+                                            ${app.atm.foodPlanned.map(item=>`
+                                                <div class="food-planned-item">
+                                                    <span>${escapeHtml(item.name)}　¥${Number(item.amount||0).toLocaleString()}</span>
+                                                    <button type="button" onclick="event.stopPropagation();removeFoodPlannedPurchase('${String(item.id).replaceAll("'","\\'")}')">×</button>
+                                                </div>`).join("")}
+                                          </div>`
+                                        : ""}
+
                                     ${
                                         row.id==="food"
                                             ? (() => {
@@ -1192,7 +1221,9 @@
                                                     ? `<div class="cash-budget-food-days">あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong></div>`
                                                     : `<div class="cash-budget-food-days">🗓 食費の日数をATM入力で設定</div>`;
                                             })()
-                                            : ""
+                                            : row.id==="holiday"
+                                                ? `<div class="cash-budget-holiday-count">あと <strong>${Number(app.atm?.holidayRemainingCount||0)}回</strong> → 1回 <strong>¥${Number(app.atm?.holidayPerBudget||0).toLocaleString()}</strong></div>`
+                                                : ""
                                     }
                                 </button>
                             `;
