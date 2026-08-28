@@ -649,3 +649,157 @@ strong{font-size:12px}}
         font-size:14px !important;
     }
 }
+
+
+/* ===== v45：現金・カード管理の更新 ===== */
+.cash-budget-name{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+}
+.cash-budget-count{
+    flex:0 0 auto;
+    font-size:13px;
+    font-weight:900;
+    color:#8a6a35;
+    white-space:nowrap;
+}
+
+.card-budget-section{
+    grid-column:1 / -1;
+    width:100%;
+    margin-top:10px;
+    padding-top:12px;
+    border-top:1px solid #f0e3c7;
+    box-sizing:border-box;
+}
+.card-budget-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:8px;
+}
+.card-budget-title{
+    font-size:15px;
+    font-weight:900;
+    color:#6f554b;
+}
+.card-variable-add{
+    border:1px solid #f0d98a;
+    border-radius:10px;
+    background:#fff8df;
+    color:#6f554b;
+    padding:7px 9px;
+    font-size:11px;
+    font-weight:900;
+    white-space:nowrap;
+}
+.card-fixed-summary{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+.card-fixed-summary>div{
+    border:1px solid #f0d98a;
+    border-radius:13px;
+    background:#fffdf7;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+.card-fixed-summary span{
+    font-size:11px;
+    color:#8d7b72;
+    font-weight:800;
+}
+.card-fixed-summary strong{
+    font-size:16px;
+    color:#4a3832;
+}
+.card-budget-sub{
+    margin-top:7px;
+    font-size:11px;
+    color:#8d7b72;
+    font-weight:700;
+}
+.card-fixed-list{
+    margin-top:7px;
+    border:1px solid #f0d98a;
+    border-radius:13px;
+    overflow:hidden;
+    background:#fffdf7;
+}
+.card-fixed-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:8px 10px;
+    border-bottom:1px solid #f1eadf;
+    font-size:12px;
+    font-weight:800;
+}
+.card-fixed-row:last-child{border-bottom:0}
+.card-fixed-row strong{white-space:nowrap}
+.card-variable-history-title{
+    margin:10px 2px 5px;
+    font-size:12px;
+    font-weight:900;
+    color:#6f554b;
+}
+.card-variable-row{
+    display:grid;
+    grid-template-columns:1fr auto auto;
+    align-items:center;
+    gap:7px;
+    padding:7px 8px;
+    margin:4px 0;
+    border:1px solid #f0d98a;
+    border-radius:11px;
+    background:#fffdf7;
+    font-size:11px;
+    font-weight:800;
+}
+.card-variable-row small{
+    color:#8d7b72;
+    font-weight:700;
+}
+.card-variable-row strong{
+    white-space:nowrap;
+    font-size:13px;
+}
+.card-variable-row button{
+    border:1px solid #f0d98a;
+    border-radius:8px;
+    background:#fffaf0;
+    padding:5px 7px;
+    font-size:10px;
+    font-weight:800;
+}
+.card-variable-empty{
+    margin-top:8px;
+    padding:8px;
+    border-radius:10px;
+    background:#fffaf0;
+    color:#8d7b72;
+    font-size:11px;
+    font-weight:700;
+    text-align:center;
+}
+@media(max-width:430px){
+    .card-budget-header{align-items:flex-start}
+    .card-budget-title{font-size:15px}
+    .card-variable-add{font-size:10px;padding:6px 8px}
+    .cash-budget-count{font-size:12px}
+    .card-fixed-row{font-size:11px;padding:7px 9px}
+}
+
+.card-cutoff-note{
+    margin-top:4px;
+    font-size:10px;
+    color:#8d7b72;
+    font-weight:700;
+}
