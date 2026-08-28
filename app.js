@@ -1094,7 +1094,12 @@
 
             }
 
-            drawCategories();
+            try{
+                drawCategories();
+            }catch(error){
+                console.error("カテゴリ描画エラー", error);
+                drawCategoriesFallback();
+            }
 
             drawMemo();
 
@@ -1116,6 +1121,14 @@
 
             const grid = document.getElementById("gridArea");
             if(!grid) return;
+
+            // 古い保存データや空データでもホームを壊さないように正規化。
+            if(!Array.isArray(app.budgets)){
+                app.budgets = createDefaultBudgets();
+            }
+            if(!app.atm || typeof app.atm !== "object"){
+                app.atm = {amount:0,withdrawn:0,coop:0,food:0,gas:0,holiday:0,cashSpent:0,date:null,foodDays:0};
+            }
 
             const cashIds = ["food","holiday","gas"];
 
@@ -1249,11 +1262,38 @@
 
         }
 
+        function drawCategoriesFallback(){
+            const grid = document.getElementById("gridArea");
+            if(!grid) return;
+            if(!Array.isArray(app.budgets)) app.budgets = createDefaultBudgets();
+            const atm = app.atm || {};
+            const cashIds = ["food","holiday","gas"];
+            const parts = [];
+            parts.push(`<button class="input-card atm-card" onclick="openATM()"><span class="input-name">🏧 ATM</span><span class="input-left">¥${Number(atm.withdrawn ?? atm.amount ?? 0).toLocaleString()}</span></button>`);
+            app.budgets.forEach((item,index)=>{
+                if(cashIds.includes(item.id)) return;
+                const used=Number(item.spent||0);
+                const action=item.id==="other"?"addOtherExpense()":`addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})`;
+                parts.push(`<button class="input-card" onclick="${action}"><span class="input-name">${escapeHtml(item.name)}</span><span class="input-left ${used>Number(item.budget||0)?"over":""}">¥${used.toLocaleString()}</span></button>`);
+            });
+            const food=app.budgets.find(x=>x.id==="food"), holiday=app.budgets.find(x=>x.id==="holiday"), gas=app.budgets.find(x=>x.id==="gas");
+            const rows=[
+                ["food","🍚 食費",Number(food?.budget||80000),Number(food?.spent||0)+Number(atm.coop||0)],
+                ["holiday","🎉 休日",Number(atm.holidayBudgetTotal ?? holiday?.budget ?? 40000),Number(holiday?.spent||0)],
+                ["gas","⛽ ガソリン",Number(gas?.budget||17000),Number(gas?.spent||0)]
+            ];
+            parts.push(`<div class="cash-budget-section"><div class="cash-budget-title">💰 現金で管理</div><div class="cash-budget-grid">${rows.map(([id,name,budget,used])=>{const rem=budget-used; const count=id==="holiday"?getRemainingHolidayCount():0; return `<button class="cash-budget-card" onclick="addSpent(${app.budgets.findIndex(x=>x.id===id)},false)"><div class="cash-budget-name">${name}${id==="holiday"?` <span class="cash-budget-count">あと ${count}回</span>`:""}</div><div class="cash-budget-numbers"><span>現在 ¥${used.toLocaleString()}</span><strong class="${rem<0?"over":""}">あと ¥${Math.max(rem,0).toLocaleString()}</strong></div><div class="cash-budget-sub">予算 ¥${budget.toLocaleString()}</div></button>`;}).join("")}</div></div>`);
+            grid.innerHTML=parts.join("");
+            try{ drawCardManagement(grid); }catch(e){ console.error("カード管理描画エラー",e); }
+        }
+
         function getCardVariableEntries(){
 
-            return Array.isArray(app.cardVariableEntries)
+            const entries = Array.isArray(app.cardVariableEntries)
                 ? app.cardVariableEntries
                 : [];
+            const currentKey = `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
+            return entries.filter(item => !item.targetMonth || item.targetMonth === currentKey);
 
         }
 
@@ -1550,13 +1590,13 @@
                                                 );
 
                                             const previousCoop =
-                                                Number(app.atm.coop || 0);
+                                                Number(app.atm?.coop || 0);
 
                                             const previousFood =
-                                                Number(app.atm.food || 0);
+                                                Number(app.atm?.food || 0);
 
                                             const previousGas =
-                                                Number(app.atm.gas || 0);
+                                                Number(app.atm?.gas || 0);
 
                                             const previousHoliday =
                                                 Number(app.atm.holiday || 0);
@@ -2181,26 +2221,26 @@
                 Number(app.budgets.find(item=>item.id==="gas")?.budget || 17000);
 
             const coop =
-                Number(app.atm.coop || 0);
+                Number(app.atm?.coop || 0);
 
             const withdrawn =
                 Number(
-                    app.atm.withdrawn ??
-                    app.atm.amount ??
+                    app.atm?.withdrawn ??
+                    app.atm?.amount ??
                     0
                 );
 
             // ATMを何回入力しても、今月の累計として扱う。
             const foodCashBudget =
-                Number(app.atm.food || 0);
+                Number(app.atm?.food || 0);
 
             const gasCashBudget =
-                Number(app.atm.gas || 0);
+                Number(app.atm?.gas || 0);
 
             const holidayBudget =
                 Number(
-                    app.atm.holidayBudgetTotal ??
-                    app.atm.holiday ??
+                    app.atm?.holidayBudgetTotal ??
+                    app.atm?.holiday ??
                     0
                 );
 
