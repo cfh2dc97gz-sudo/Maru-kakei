@@ -1495,6 +1495,795 @@
 
         }
 
+        function openATM(){
+
+            openNumberModal(
+                "🏧 ATM引出額",
+                (amount,atmMemo,atmDate)=>{
+
+                    if(amount<=0) return;
+
+                    openNumberModal(
+                        "🛒 生協引落額（食費）",
+                        (coop,coopMemo,coopDate)=>{
+
+                            coop = Math.max(Number(coop || 0),0);
+
+                            openNumberModal(
+                                "🎉 休日はあと何回？",
+                                (holidayCount)=>{
+
+                                    holidayCount =
+                                        Math.max(
+                                            Math.floor(Number(holidayCount || 0)),
+                                            0
+                                        );
+
+                                    openNumberModal(
+                                        "🎉 休日は1回いくら？",
+                                        (holidayPerBudget)=>{
+
+                                            holidayPerBudget =
+                                                Math.max(
+                                                    Number(holidayPerBudget || 0),
+                                                    0
+                                                );
+
+                                            const finishATMInput = (foodDays)=>{
+                                                foodDays = Math.max(
+                                                    Math.floor(Number(foodDays || 0)),
+                                                    0
+                                                );
+
+                                            const foodBudget =
+                                                Number(
+                                                    app.budgets.find(
+                                                        item=>item.id==="food"
+                                                    )?.budget || 80000
+                                                );
+
+                                            const gasBudget =
+                                                Number(
+                                                    app.budgets.find(
+                                                        item=>item.id==="gas"
+                                                    )?.budget || 17000
+                                                );
+
+                                            const previousCoop =
+                                                Number(app.atm.coop || 0);
+
+                                            const previousFood =
+                                                Number(app.atm.food || 0);
+
+                                            const previousGas =
+                                                Number(app.atm.gas || 0);
+
+                                            const previousHoliday =
+                                                Number(app.atm.holiday || 0);
+
+                                            const previousHolidayBudget =
+                                                Number(
+                                                    app.atm.holidayBudgetTotal || 0
+                                                );
+
+                                            const totalCoop =
+                                                previousCoop + coop;
+
+                                            const foodRemaining =
+                                                Math.max(
+                                                    foodBudget -
+                                                    totalCoop -
+                                                    previousFood,
+                                                    0
+                                                );
+
+                                            const gasRemaining =
+                                                Math.max(
+                                                    gasBudget -
+                                                    previousGas,
+                                                    0
+                                                );
+
+                                            // 最新の「回数×1回予算」を休日予算として保持。
+                                            // すでに確保した金額を下回らない。
+                                            const holidayBudgetTotal =
+                                                previousHolidayBudget > 0
+                                                    ? previousHolidayBudget
+                                                    : holidayCount * holidayPerBudget;
+
+                                            const holidayRemaining =
+                                                Math.max(
+                                                    holidayBudgetTotal -
+                                                    previousHoliday,
+                                                    0
+                                                );
+
+                                            let remaining =
+                                                Number(amount);
+
+                                            const foodAdd =
+                                                Math.min(
+                                                    foodRemaining,
+                                                    remaining
+                                                );
+
+                                            remaining -= foodAdd;
+
+                                            const gasAdd =
+                                                Math.min(
+                                                    gasRemaining,
+                                                    remaining
+                                                );
+
+                                            remaining -= gasAdd;
+
+                                            const holidayAdd =
+                                                Math.min(
+                                                    holidayRemaining,
+                                                    remaining
+                                                );
+
+                                            app.atm.amount =
+                                                Number(app.atm.amount || 0) +
+                                                Number(amount);
+
+                                            app.atm.withdrawn =
+                                                Number(app.atm.withdrawn || 0) +
+                                                Number(amount);
+
+                                            app.atm.coop =
+                                                totalCoop;
+
+                                            app.atm.food =
+                                                previousFood + foodAdd;
+
+                                            app.atm.gas =
+                                                previousGas + gasAdd;
+
+                                            app.atm.holiday =
+                                                previousHoliday + holidayAdd;
+
+                                            app.atm.holidayCount =
+                                                holidayCount > 0
+                                                    ? holidayCount
+                                                    : Number(app.atm.holidayCount || 0);
+
+                                            app.atm.holidayPerBudget =
+                                                holidayPerBudget > 0
+                                                    ? holidayPerBudget
+                                                    : Number(app.atm.holidayPerBudget || 0);
+
+                                            app.atm.holidayBudgetTotal =
+                                                holidayBudgetTotal;
+
+                                            app.atm.foodDays =
+                                                foodDays > 0
+                                                    ? foodDays
+                                                    : Number(app.atm.foodDays || 0);
+
+                                            app.atm.date =
+                                                formatInputDate(
+                                                    atmDate || coopDate
+                                                );
+
+                                            update();
+
+                                            };
+
+                                            if(Number(app.atm.foodDays || 0) > 0){
+                                                finishATMInput(Number(app.atm.foodDays || 0));
+                                            }else{
+                                                openNumberModal(
+                                                    "🍚 食費はあと何日？",
+                                                    finishATMInput
+                                                );
+                                            }
+
+                                        }
+                                    );
+
+                                }
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+        function addIncome(type){
+
+            openNumberModal("収入金額",(amount,memo,dateValue)=>{
+
+                if(amount<=0) return;
+
+                switch(type){
+
+                    case "パパ":
+
+                        app.income.papa += amount;
+                        break;
+
+                    case "ママ":
+
+                        app.income.mama += amount;
+                        break;
+
+                    case "臨時":
+
+                        app.income.extra += amount;
+
+                        app.history.unshift({
+
+                            date:formatInputDate(dateValue),
+
+                            category:"🎁 臨時収入",
+
+                            amount,
+
+                            memo,
+
+                            income:true,
+
+                            annual:false
+
+                        });
+
+                        break;
+
+                }
+
+                app.incomeHistory.unshift({
+
+            id: Date.now().toString(),
+
+            date: formatInputDate(dateValue),
+
+            type,
+
+            amount,
+
+            memo,
+
+            targetMonth:getTargetMonthFromInputDate(dateValue)
+
+        });
+
+                update();
+
+            });
+
+        }
+
+        const incomePapaBtn = document.getElementById("incomePapa");
+        if(incomePapaBtn) incomePapaBtn.onclick = ()=>addIncome("パパ");
+
+        const incomeMamaBtn = document.getElementById("incomeMama");
+        if(incomeMamaBtn) incomeMamaBtn.onclick = ()=>addIncome("ママ");
+
+        const incomeExtraBtn = document.getElementById("incomeExtra");
+        if(incomeExtraBtn) incomeExtraBtn.onclick = ()=>addIncome("臨時");
+
+        document
+        .getElementById("resetMonth")
+        .onclick = ()=>{
+
+            if(!confirm("今月をリセットしますか？"))
+                return;
+
+            app.income = {
+
+                papa:0,
+
+                mama:0,
+
+                extra:0
+
+            };
+
+              app.budgets =
+                createDefaultBudgets();
+
+            app.history = [];
+
+            app.atm = {
+
+                amount:0,
+
+                withdrawn:0,
+
+                coop:0,
+
+                food:0,
+
+                gas:0,
+
+                holiday:0,
+
+                holidayCount:0,
+
+                holidayPerBudget:0,
+
+                holidayBudgetTotal:0,
+
+                foodDays:0,
+
+                cashSpent:0,
+
+                date:null
+
+            };
+
+            update();
+
+        };
+
+        function editBank(){
+
+            openNumberModal("みたけ銀行残高",(mitake)=>{
+
+                openNumberModal("滝沢銀行残高",(takizawa)=>{
+
+                    app.bank.mitake = mitake;
+
+                    app.bank.takizawa = takizawa;
+                    app.bankConfirmed = true;
+
+                    // 年度スタート残高は固定（78,142円）。
+                    // 月ごとの銀行残高を入力しても、年度の基準額は変えない。
+
+                    update();
+
+                });
+
+            });
+
+        }
+        function addSpent(index,isOverwrite=false){
+
+            openNumberModal(
+
+                app.budgets[index].name,
+
+                (amount,memo,dateValue)=>{
+
+                    if(amount<=0) return;
+
+                    if(isOverwrite){
+
+                        app.budgets[index].spent = amount;
+
+                    }else{
+
+                        app.budgets[index].spent += amount;
+
+                    }
+
+                    // ATMで確保した現金から使うカテゴリだけ、ATM残高も減らす。
+                    const categoryId = app.budgets[index].id;
+                    if(
+                        categoryId === "food" ||
+                        categoryId === "gas" ||
+                        categoryId === "holiday"
+                    ){
+                        app.atm.cashSpent =
+                            Number(app.atm.cashSpent || 0) + amount;
+                    }
+
+                    app.history.unshift({
+
+                        id: Date.now().toString(),
+
+                        date: formatInputDate(dateValue),
+
+                        category: app.budgets[index].name,
+
+                        amount,
+
+                        memo,
+
+                        annual: false,
+
+                        targetMonth: getTargetMonthFromInputDate(dateValue)
+
+                    });
+
+                    update();
+
+                }
+
+            );
+
+        }
+        function addOtherExpense(){
+
+            const otherIndex =
+                app.budgets.findIndex(
+                    item => item.id === "other"
+                );
+
+            if(otherIndex < 0) return;
+
+            openNumberModal(
+                "📦 その他",
+                (amount,memo,dateValue)=>{
+
+                    if(amount<=0) return;
+
+                    openPaymentModal(
+                        (payment)=>{
+
+                            if(payment === "cash"){
+
+                                const cashBalance =
+                                    Number(
+                                        getAtmPlan().cashBalance || 0
+                                    );
+
+                                if(amount > cashBalance){
+
+                                    alert(
+                                        `ATM残高が足りません。\n現在 ¥${cashBalance.toLocaleString()} です。`
+                                    );
+
+                                    return;
+
+                                }
+
+                                app.atm.cashSpent =
+                                    Number(app.atm.cashSpent || 0) +
+                                    amount;
+
+                            }
+
+                            app.budgets[otherIndex].spent =
+                                Number(
+                                    app.budgets[otherIndex].spent || 0
+                                ) + amount;
+
+                            app.history.unshift({
+
+                                id: Date.now().toString(),
+
+                                date:
+                                    formatInputDate(
+                                        dateValue
+                                    ),
+
+                                category:
+                                    app.budgets[otherIndex].name,
+
+                                amount,
+
+                                memo,
+
+                                payment,
+
+                                paymentLabel:
+                                    payment === "cash"
+                                        ? "現金"
+                                        : "カード",
+
+                                annual:false,
+
+                                targetMonth:
+                                    getTargetMonthFromInputDate(
+                                        dateValue
+                                    )
+
+                            });
+
+                            update();
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+        /* ===========================
+           ⑥ ページ切替・設定
+        =========================== */
+
+        const homePage =
+            document.getElementById("homePage");
+
+        const yearPage =
+            document.getElementById("yearPage");
+
+        const annualPage =
+            document.getElementById("annualPage");
+
+        const categoryPage =
+            document.getElementById("categoryPage");
+
+        const settingPage =
+            document.getElementById("settingPage");
+
+        const bonusPage =
+            document.getElementById("bonusPage");
+
+        const incomePage =
+            document.getElementById("incomePage");
+
+        const pages = [
+            homePage,
+            yearPage,
+            annualPage,
+            categoryPage,
+            settingPage,
+            bonusPage,
+            incomePage
+        ];
+
+        const navButtons =
+            document.querySelectorAll(".bottom-nav button");
+
+        let lastPage = "home";
+
+        function showPage(page){
+
+            pages.forEach(p=>{
+
+                if(p){
+
+                    p.style.display = "none";
+
+                }
+
+            });
+
+            navButtons.forEach(btn=>
+                btn.classList.remove("active")
+            );
+
+            switch(page){
+
+                case "home":
+
+                    homePage.style.display = "block";
+                    navButtons[0].classList.add("active");
+
+                    lastPage = "home";
+                    break;
+
+                case "year":
+
+                    yearPage.style.display = "block";
+                    navButtons[1].classList.add("active");
+
+                    drawNewAnnualPage();
+
+                    lastPage = "year";
+                    break;
+
+                case "annual":
+
+                    annualPage.style.display = "block";
+                    navButtons[2].classList.add("active");
+
+                    drawAnnualManage();
+
+                    lastPage = "annual";
+                    break;
+
+            case "setting":
+
+            settingPage.style.display = "block";
+            navButtons[3].classList.add("active");
+
+            lastPage = "setting";
+            break;
+
+              case "bonus":
+
+            currentAnnualCategory = -1;
+
+            bonusPage.style.display = "block";
+
+            drawBonusPage();
+
+            lastPage = "setting";
+            break;
+
+        case "category":
+
+            categoryPage.style.display = "block";
+            break;
+                    
+        case "income":
+
+            incomePage.style.display = "block";
+
+            navButtons[3].classList.add("active");
+
+            drawIncomeHistory();
+
+            lastPage = "setting";
+
+            break;
+
+            }
+
+            if(page !== "category"){
+
+                const session =
+                    JSON.parse(
+                        localStorage.getItem(getSessionKey())
+                        || "{}"
+                    );
+
+                session.page = page;
+
+                localStorage.setItem(
+                    getSessionKey(),
+                    JSON.stringify(session)
+                );
+
+            }
+
+        }
+
+        function backPage(){
+
+            app.categoryFilter = null;
+            currentAnnualCategory = -1;
+
+            showPage(window.lastPage || "home");
+
+        }
+
+        navButtons[0].onclick =
+            ()=>showPage("home");
+
+        navButtons[1].onclick =
+            ()=>showPage("year");
+
+        navButtons[2].onclick =
+            ()=>showPage("annual");
+
+        navButtons[3].onclick =
+            ()=>showPage("setting");
+
+        const prevMonthBtn =
+            document.getElementById("prevMonth");
+
+        const nextMonthBtn =
+            document.getElementById("nextMonth");
+
+        if(prevMonthBtn){
+
+            prevMonthBtn.onclick =
+                ()=>changeMonth(-1);
+
+        }
+
+        if(nextMonthBtn){
+
+            nextMonthBtn.onclick =
+                ()=>changeMonth(1);
+
+        }
+        /* ===========================
+           ⑦ AI分析
+        =========================== */
+
+        function getAtmPlan(){
+
+            const foodBudget =
+                Number(app.budgets.find(item=>item.id==="food")?.budget || 80000);
+
+            const gasBudget =
+                Number(app.budgets.find(item=>item.id==="gas")?.budget || 17000);
+
+            const coop =
+                Number(app.atm.coop || 0);
+
+            const withdrawn =
+                Number(
+                    app.atm.withdrawn ??
+                    app.atm.amount ??
+                    0
+                );
+
+            // ATMを何回入力しても、今月の累計として扱う。
+            const foodCashBudget =
+                Number(app.atm.food || 0);
+
+            const gasCashBudget =
+                Number(app.atm.gas || 0);
+
+            const holidayBudget =
+                Number(
+                    app.atm.holidayBudgetTotal ??
+                    app.atm.holiday ??
+                    0
+                );
+
+            const cashBalance =
+                Math.max(
+                    withdrawn - Number(app.atm.cashSpent || 0),
+                    0
+                );
+
+            return {
+                foodBudget,
+                gasBudget,
+                coop,
+                withdrawn,
+                foodCashBudget,
+                gasCashBudget,
+                holidayBudget,
+                cashBalance
+            };
+
+        }
+
+        function getTodayCategoryTotal(categoryId){
+
+            const today = getTodayString();
+
+            return (app.history || [])
+                .filter(item =>
+                    item.category ===
+                    app.budgets.find(b=>b.id===categoryId)?.name
+                    && item.date === today
+                    && !item.annual
+                    && !item.income
+                )
+                .reduce(
+                    (sum,item)=>sum + Number(item.amount || 0),
+                    0
+                );
+
+        }
+
+        function getDistinctHolidaySpendDays(){
+
+            const holidayName =
+                app.budgets.find(
+                    item=>item.id==="holiday"
+                )?.name;
+
+            return new Set(
+                (app.history || [])
+                    .filter(item =>
+                        item.category === holidayName &&
+                        !item.annual &&
+                        !item.income
+                    )
+                    .map(item=>item.date)
+            ).size;
+
+        }
+
+        function getRemainingHolidayCount(){
+
+            const total =
+                Number(app.atm.holidayCount || 0);
+
+            if(total<=0) return 0;
+
+            return Math.max(
+                total - getDistinctHolidaySpendDays(),
+                0
+            );
+
+        }
+
+
+        function getTodayString(){
+
+            const d = new Date();
+
+            return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+
+        }
+
         function drawMemo(){
 
             const memo = document.getElementById("homeMemo");
