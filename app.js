@@ -1118,148 +1118,73 @@
            ⑤ カテゴリ・収入・支出
         =========================== */
         function drawCategories(){
-
             const grid = document.getElementById("gridArea");
             if(!grid) return;
 
-            // 古い保存データや空データでもホームを壊さないように正規化。
-            if(!Array.isArray(app.budgets)){
-                app.budgets = createDefaultBudgets();
+            try{
+                if(!Array.isArray(app.budgets)) app.budgets = createDefaultBudgets();
+                if(!app.atm || typeof app.atm !== "object") app.atm = {};
+
+                const cashIds = ["food","holiday","gas"];
+                const parts = [];
+                const atmAmount = Number(app.atm.withdrawn ?? app.atm.amount ?? 0);
+
+                parts.push(`
+                    <button class="input-card atm-card" onclick="openATM()">
+                        <span class="input-name">🏧 ATM</span>
+                        <span class="input-left">¥${atmAmount.toLocaleString()}</span>
+                    </button>`);
+
+                app.budgets.forEach((item,index)=>{
+                    if(cashIds.includes(item.id)) return;
+                    const used = Number(item.spent || 0);
+                    const action = item.id === "other"
+                        ? "addOtherExpense()"
+                        : `addSpent(${index},${item.id === "iwagin" || item.id === "rakuten"})`;
+                    parts.push(`
+                        <button class="input-card" onclick="${action}">
+                            <span class="input-name">${escapeHtml(item.name || "")}</span>
+                            <span class="input-left ${used > Number(item.budget || 0) ? "over" : ""}">¥${used.toLocaleString()}</span>
+                        </button>`);
+                });
+
+                const food = app.budgets.find(x=>x.id==="food");
+                const holiday = app.budgets.find(x=>x.id==="holiday");
+                const gas = app.budgets.find(x=>x.id==="gas");
+                const holidayCount = Number(app.atm.holidayCount || 0);
+
+                const rows = [
+                    {id:"food", name:"🍚 食費", budget:Number(food?.budget || 80000), used:Number(food?.spent || 0)+Number(app.atm.coop || 0)},
+                    {id:"holiday", name:"🎉 休日", budget:Number(app.atm.holidayBudgetTotal ?? holiday?.budget ?? 40000), used:Number(holiday?.spent || 0)},
+                    {id:"gas", name:"⛽ ガソリン", budget:Number(gas?.budget || 17000), used:Number(gas?.spent || 0)}
+                ];
+
+                parts.push(`
+                    <div class="cash-budget-section">
+                        <div class="cash-budget-title">💰 現金で管理</div>
+                        <div class="cash-budget-grid">
+                            ${rows.map(row=>{
+                                const remaining = row.budget - row.used;
+                                const count = row.id === "holiday" && holidayCount > 0 ? ` <span class="cash-budget-count">あと ${Math.max(holidayCount - getDistinctHolidaySpendDays(),0)}回</span>` : "";
+                                return `
+                                    <button class="cash-budget-card" onclick="addSpent(${app.budgets.findIndex(x=>x.id===row.id)},false)">
+                                        <div class="cash-budget-name">${row.name}${count}</div>
+                                        <div class="cash-budget-numbers">
+                                            <span>現在 ¥${row.used.toLocaleString()}</span>
+                                            <strong class="${remaining < 0 ? "over" : ""}">あと ¥${Math.max(remaining,0).toLocaleString()}</strong>
+                                        </div>
+                                        <div class="cash-budget-sub">予算 ¥${row.budget.toLocaleString()}</div>
+                                    </button>`;
+                            }).join("")}
+                        </div>
+                    </div>`);
+
+                grid.innerHTML = parts.join("");
+                try{ drawCardManagement(grid); }catch(error){ console.error("カード管理描画エラー",error); }
+            }catch(error){
+                console.error("カテゴリ描画エラー", error);
+                drawCategoriesFallback();
             }
-            if(!app.atm || typeof app.atm !== "object"){
-                app.atm = {amount:0,withdrawn:0,coop:0,food:0,gas:0,holiday:0,cashSpent:0,date:null,foodDays:0};
-            }
-
-            const cashIds = ["food","holiday","gas"];
-
-            grid.innerHTML = `
-                <button class="input-card atm-card" onclick="openATM()">
-                    <span class="input-name">🏧 ATM</span>
-                    <span class="input-left">¥${Number(getAtmPlan().cashBalance || 0).toLocaleString()}</span>
-                </button>
-            `;
-
-            // 通常カテゴリ
-            app.budgets.forEach((item,index)=>{
-
-                if(cashIds.includes(item.id)) return;
-
-                const used = Number(item.spent || 0);
-
-                grid.innerHTML += `
-                    <button
-                        class="input-card"
-                        onclick="${item.id === "other"
-                            ? "addOtherExpense()"
-                            : `addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})`}">
-
-                        <span class="input-name">${item.name}</span>
-                        <span class="input-left ${used > Number(item.budget || 0) ? "over" : ""}">
-                            ¥${used.toLocaleString()}
-                        </span>
-                    </button>
-                `;
-
-            });
-
-            // 現金で管理する3カテゴリ
-            const food = app.budgets.find(item=>item.id==="food");
-            const holiday = app.budgets.find(item=>item.id==="holiday");
-            const gas = app.budgets.find(item=>item.id==="gas");
-
-            const coop = Number(app.atm?.coop || 0);
-
-            const rows = [
-                {
-                    id:"food",
-                    index:app.budgets.findIndex(item=>item.id==="food"),
-                    name:"🍚 食費",
-                    budget:Number(food?.budget || 80000),
-                    used:Number(food?.spent || 0) + coop
-                },
-                {
-                    id:"holiday",
-                    index:app.budgets.findIndex(item=>item.id==="holiday"),
-                    name:"🎉 休日",
-                    budget:Number(
-                        app.atm?.holidayBudgetTotal ??
-                        holiday?.budget ??
-                        40000
-                    ),
-                    used:Number(holiday?.spent || 0)
-                },
-                {
-                    id:"gas",
-                    index:app.budgets.findIndex(item=>item.id==="gas"),
-                    name:"⛽ ガソリン",
-                    budget:Number(gas?.budget || 17000),
-                    used:Number(gas?.spent || 0)
-                }
-            ];
-
-            grid.innerHTML += `
-                <div class="cash-budget-section">
-                    <div class="cash-budget-title">💰 現金で管理</div>
-                    <div class="cash-budget-grid">
-                        ${rows.map(row=>{
-
-                            const remaining =
-                                row.budget - row.used;
-
-                            const holidayCount =
-                                row.id==="holiday"
-                                    ? Number(app.atm?.holidayCount || 0)
-                                    : 0;
-
-                            const holidayRemaining =
-                                row.id==="holiday"
-                                    ? getRemainingHolidayCount()
-                                    : 0;
-
-                            return `
-                                <button
-                                    class="cash-budget-card"
-                                    onclick="addSpent(${row.index},false)"
-                                >
-                                    <div class="cash-budget-name">
-                                        ${row.name}
-                                        ${
-                                            row.id==="holiday" && holidayCount > 0
-                                                ? `<span class="cash-budget-count">あと ${holidayRemaining}回</span>`
-                                                : ""
-                                        }
-                                    </div>
-                                    <div class="cash-budget-numbers">
-                                        <span>現在 ¥${row.used.toLocaleString()}</span>
-                                        <strong class="${remaining < 0 ? "over" : ""}">
-                                            あと ¥${Math.max(remaining,0).toLocaleString()}
-                                        </strong>
-                                    </div>
-                                    <div class="cash-budget-sub">
-                                        予算 ¥${row.budget.toLocaleString()}
-                                    </div>
-                                    ${
-                                        row.id==="food"
-                                            ? (() => {
-                                                const days = Number(app.atm?.foodDays || 0);
-                                                const daily = days > 0
-                                                    ? Math.floor(Math.max(remaining,0) / days)
-                                                    : 0;
-                                                return days > 0
-                                                    ? `<div class="cash-budget-food-days">あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong></div>`
-                                                    : `<div class="cash-budget-food-days">🗓 食費の日数をATM入力で設定</div>`;
-                                            })()
-                                            : ""
-                                    }
-                                </button>
-                            `;
-                        }).join("")}
-                    </div>
-                </div>
-            `;
-
-            drawCardManagement(grid);
-
         }
 
         function drawCategoriesFallback(){
