@@ -1,4 +1,4 @@
-        /* まる家計 Ver49｜デザインリフレッシュ */
+        /* まる家計 Ver44｜デザインリフレッシュ */
 
         const DEFAULT_BUDGETS = [
 
@@ -59,22 +59,6 @@
         },
         ];
 
-        // カード管理
-        // 月40,000円の枠のうち、下記は毎月の固定分。
-        const CARD_MONTHLY_BUDGET = 40000;
-
-        const CARD_FIXED_ITEMS = [
-            { id:"fwd", name:"FWD保険", amount:1228 },
-            { id:"softbank", name:"ソフトバンクまとめて支払い", amount:1100 },
-            { id:"papaLife", name:"がん保険（パパ）", amount:1368 },
-            { id:"waterServer", name:"ウォーターサーバー", amount:4194 },
-            { id:"ipad", name:"iPad保険", amount:700 },
-            { id:"smartphone", name:"スマホ代", amount:14000 }
-        ];
-
-        const CARD_FIXED_TOTAL =
-            CARD_FIXED_ITEMS.reduce((sum,item)=>sum+item.amount,0);
-
         function createDefaultBudgets(){
 
             return JSON.parse(
@@ -120,7 +104,6 @@
 
             },
         incomeHistory:[],
-        cardVariableEntries:[],
 
         bonus:{
 
@@ -319,10 +302,6 @@
                     JSON.stringify(app.incomeHistory)
                 ),
 
-                cardVariableEntries: JSON.parse(
-                    JSON.stringify(app.cardVariableEntries || [])
-                ),
-
                 memo: String(app.memo || ""),
 
                 atm: JSON.parse(
@@ -428,7 +407,6 @@
              app.history=[];
 
             app.incomeHistory=[];
-            app.cardVariableEntries=[];
 
             app.memo="";
 
@@ -462,11 +440,6 @@
 
                 app.incomeHistory =
                     data.incomeHistory || [];
-
-                app.cardVariableEntries =
-                    Array.isArray(data.cardVariableEntries)
-                        ? data.cardVariableEntries
-                        : [];
 
                 app.memo =
                     data.memo || "";
@@ -1094,12 +1067,7 @@
 
             }
 
-            try{
-                drawCategories();
-            }catch(error){
-                console.error("カテゴリ描画エラー", error);
-                drawCategoriesFallback();
-            }
+            drawCategories();
 
             drawMemo();
 
@@ -1118,345 +1086,120 @@
            ⑤ カテゴリ・収入・支出
         =========================== */
         function drawCategories(){
+
             const grid = document.getElementById("gridArea");
             if(!grid) return;
 
-            try{
-                if(!Array.isArray(app.budgets)) app.budgets = createDefaultBudgets();
-                if(!app.atm || typeof app.atm !== "object") app.atm = {};
-
-                const cashIds = ["food","holiday","gas"];
-                const parts = [];
-                const atmAmount = Number(app.atm.withdrawn ?? app.atm.amount ?? 0);
-
-                parts.push(`
-                    <button class="input-card atm-card" onclick="openATM()">
-                        <span class="input-name">🏧 ATM</span>
-                        <span class="input-left">¥${atmAmount.toLocaleString()}</span>
-                    </button>`);
-
-                app.budgets.forEach((item,index)=>{
-                    if(cashIds.includes(item.id)) return;
-                    const used = Number(item.spent || 0);
-                    const action = item.id === "other"
-                        ? "addOtherExpense()"
-                        : `addSpent(${index},${item.id === "iwagin" || item.id === "rakuten"})`;
-                    parts.push(`
-                        <button class="input-card" onclick="${action}">
-                            <span class="input-name">${escapeHtml(item.name || "")}</span>
-                            <span class="input-left ${used > Number(item.budget || 0) ? "over" : ""}">¥${used.toLocaleString()}</span>
-                        </button>`);
-                });
-
-                const food = app.budgets.find(x=>x.id==="food");
-                const holiday = app.budgets.find(x=>x.id==="holiday");
-                const gas = app.budgets.find(x=>x.id==="gas");
-                const holidayCount = Number(app.atm.holidayCount || 0);
-
-                const rows = [
-                    {id:"food", name:"🍚 食費", budget:Number(food?.budget || 80000), used:Number(food?.spent || 0)+Number(app.atm.coop || 0)},
-                    {id:"holiday", name:"🎉 休日", budget:Number(app.atm.holidayBudgetTotal ?? holiday?.budget ?? 40000), used:Number(holiday?.spent || 0)},
-                    {id:"gas", name:"⛽ ガソリン", budget:Number(gas?.budget || 17000), used:Number(gas?.spent || 0)}
-                ];
-
-                parts.push(`
-                    <div class="cash-budget-section">
-                        <div class="cash-budget-title">💰 現金で管理</div>
-                        <div class="cash-budget-grid">
-                            ${rows.map(row=>{
-                                const remaining = row.budget - row.used;
-                                const count = row.id === "holiday" && holidayCount > 0 ? ` <span class="cash-budget-count">あと ${Math.max(holidayCount - getDistinctHolidaySpendDays(),0)}回</span>` : "";
-                                return `
-                                    <button class="cash-budget-card" onclick="addSpent(${app.budgets.findIndex(x=>x.id===row.id)},false)">
-                                        <div class="cash-budget-name">${row.name}${count}</div>
-                                        <div class="cash-budget-numbers">
-                                            <span>現在 ¥${row.used.toLocaleString()}</span>
-                                            <strong class="${remaining < 0 ? "over" : ""}">あと ¥${Math.max(remaining,0).toLocaleString()}</strong>
-                                        </div>
-                                        <div class="cash-budget-sub">予算 ¥${row.budget.toLocaleString()}</div>
-                                    </button>`;
-                            }).join("")}
-                        </div>
-                    </div>`);
-
-                grid.innerHTML = parts.join("");
-                try{ drawCardManagement(grid); }catch(error){ console.error("カード管理描画エラー",error); }
-            }catch(error){
-                console.error("カテゴリ描画エラー", error);
-                drawCategoriesFallback();
-            }
-        }
-
-        function drawCategoriesFallback(){
-            const grid = document.getElementById("gridArea");
-            if(!grid) return;
-            if(!Array.isArray(app.budgets)) app.budgets = createDefaultBudgets();
-            const atm = app.atm || {};
             const cashIds = ["food","holiday","gas"];
-            const parts = [];
-            parts.push(`<button class="input-card atm-card" onclick="openATM()"><span class="input-name">🏧 ATM</span><span class="input-left">¥${Number(atm.withdrawn ?? atm.amount ?? 0).toLocaleString()}</span></button>`);
-            app.budgets.forEach((item,index)=>{
-                if(cashIds.includes(item.id)) return;
-                const used=Number(item.spent||0);
-                const action=item.id==="other"?"addOtherExpense()":`addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})`;
-                parts.push(`<button class="input-card" onclick="${action}"><span class="input-name">${escapeHtml(item.name)}</span><span class="input-left ${used>Number(item.budget||0)?"over":""}">¥${used.toLocaleString()}</span></button>`);
-            });
-            const food=app.budgets.find(x=>x.id==="food"), holiday=app.budgets.find(x=>x.id==="holiday"), gas=app.budgets.find(x=>x.id==="gas");
-            const rows=[
-                ["food","🍚 食費",Number(food?.budget||80000),Number(food?.spent||0)+Number(atm.coop||0)],
-                ["holiday","🎉 休日",Number(atm.holidayBudgetTotal ?? holiday?.budget ?? 40000),Number(holiday?.spent||0)],
-                ["gas","⛽ ガソリン",Number(gas?.budget||17000),Number(gas?.spent||0)]
-            ];
-            parts.push(`<div class="cash-budget-section"><div class="cash-budget-title">💰 現金で管理</div><div class="cash-budget-grid">${rows.map(([id,name,budget,used])=>{const rem=budget-used; const count=id==="holiday"?getRemainingHolidayCount():0; return `<button class="cash-budget-card" onclick="addSpent(${app.budgets.findIndex(x=>x.id===id)},false)"><div class="cash-budget-name">${name}${id==="holiday"?` <span class="cash-budget-count">あと ${count}回</span>`:""}</div><div class="cash-budget-numbers"><span>現在 ¥${used.toLocaleString()}</span><strong class="${rem<0?"over":""}">あと ¥${Math.max(rem,0).toLocaleString()}</strong></div><div class="cash-budget-sub">予算 ¥${budget.toLocaleString()}</div></button>`;}).join("")}</div></div>`);
-            grid.innerHTML=parts.join("");
-            try{ drawCardManagement(grid); }catch(e){ console.error("カード管理描画エラー",e); }
-        }
 
-        function getCardVariableEntries(){
-
-            const entries = Array.isArray(app.cardVariableEntries)
-                ? app.cardVariableEntries
-                : [];
-            const currentKey = `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
-            return entries.filter(item => !item.targetMonth || item.targetMonth === currentKey);
-
-        }
-
-        function getCardVariableUsed(){
-
-            return getCardVariableEntries().reduce(
-                (sum,item)=>sum + Number(item.amount || 0),
-                0
-            );
-
-        }
-
-        function drawCardManagement(grid){
-
-            if(!grid) return;
-
-            const variableUsed = getCardVariableUsed();
-            const variableBudget =
-                Math.max(CARD_MONTHLY_BUDGET - CARD_FIXED_TOTAL,0);
-            const variableRemaining =
-                variableBudget - variableUsed;
-
-            const entries = getCardVariableEntries();
-
-            grid.innerHTML += `
-                <div class="card-budget-section">
-                    <div class="card-budget-header">
-                        <div class="card-budget-title">💳 カードで管理</div>
-                        <button
-                            type="button"
-                            class="card-variable-add"
-                            onclick="addCardVariable()"
-                        >＋ 変動費を入力</button>
-                    </div>
-
-                    <div class="card-fixed-summary">
-                        <div>
-                            <span>固定</span>
-                            <strong>¥${CARD_FIXED_TOTAL.toLocaleString()}</strong>
-                        </div>
-                        <div>
-                            <span>変動</span>
-                            <strong class="${variableRemaining < 0 ? "over" : ""}">
-                                あと ¥${Math.max(variableRemaining,0).toLocaleString()}
-                            </strong>
-                        </div>
-                    </div>
-
-                    <div class="card-budget-sub">
-                        月のカード枠 ¥${CARD_MONTHLY_BUDGET.toLocaleString()}
-                        ／ 変動枠 ¥${variableBudget.toLocaleString()}
-                    </div>
-                    <div class="card-cutoff-note">
-                        15日締め：1〜15日入力 → 翌月 ／ 16日以降 → 翌々月
-                    </div>
-
-                    <div class="card-fixed-list">
-                        ${CARD_FIXED_ITEMS.map(item=>`
-                            <div class="card-fixed-row">
-                                <span>${item.name}</span>
-                                <strong>¥${item.amount.toLocaleString()}</strong>
-                            </div>
-                        `).join("")}
-                    </div>
-
-                    ${
-                        entries.length
-                            ? `
-                                <div class="card-variable-history-title">
-                                    ${getDisplayYear()}年${currentMonth}月の変動費
-                                </div>
-                                ${entries.slice().reverse().map(item=>`
-                                    <div class="card-variable-row">
-                                        <span>
-                                            ${escapeHtml(item.date || "")}<br>
-                                            <small>${escapeHtml(item.memo || "")}</small>
-                                        </span>
-                                        <strong>¥${Number(item.amount || 0).toLocaleString()}</strong>
-                                        <button
-                                            type="button"
-                                            onclick="deleteCardVariable('${String(item.id).replaceAll("'","\\'")}')"
-                                        >削除</button>
-                                    </div>
-                                `).join("")}
-                            `
-                            : `<div class="card-variable-empty">この月の変動費はまだありません</div>`
-                    }
-                </div>
+            grid.innerHTML = `
+                <button class="input-card atm-card" onclick="openATM()">
+                    <span class="input-name">🏧 ATM</span>
+                    <span class="input-left">¥${Number(getAtmPlan().cashBalance || 0).toLocaleString()}</span>
+                </button>
             `;
 
-        }
+            // 通常カテゴリ
+            app.budgets.forEach((item,index)=>{
 
-        function getCardTargetMonthFromInputDate(dateValue){
+                if(cashIds.includes(item.id)) return;
 
-            if(!dateValue){
-                dateValue = getTodayInputDate();
-            }
+                const used = Number(item.spent || 0);
 
-            const parts = String(dateValue).split("-");
-            if(parts.length !== 3){
-                dateValue = getTodayInputDate();
-            }
+                grid.innerHTML += `
+                    <button
+                        class="input-card"
+                        onclick="${item.id === "other"
+                            ? "addOtherExpense()"
+                            : `addSpent(${index},${item.id==="iwagin"||item.id==="rakuten"})`}">
 
-            const safeParts = String(dateValue).split("-");
-            let year = Number(safeParts[0]);
-            let month = Number(safeParts[1]);
-            let day = Number(safeParts[2]);
+                        <span class="input-name">${item.name}</span>
+                        <span class="input-left ${used > Number(item.budget || 0) ? "over" : ""}">
+                            ¥${used.toLocaleString()}
+                        </span>
+                    </button>
+                `;
 
-            if(!year || !month || !day){
-                const now = new Date();
-                year = now.getFullYear();
-                month = now.getMonth()+1;
-                day = now.getDate();
-            }
+            });
 
-            // 15日締め：1〜15日入力 → 翌月、16日以降 → 翌々月
-            const addMonths = day <= 15 ? 1 : 2;
-            const target = new Date(year,month-1+addMonths,1);
+            // 現金で管理する3カテゴリは一番下へ
+            const food = app.budgets.find(item=>item.id==="food");
+            const holiday = app.budgets.find(item=>item.id==="holiday");
+            const gas = app.budgets.find(item=>item.id==="gas");
 
-            return {
-                year: target.getFullYear(),
-                month: target.getMonth()+1
-            };
+            const coop = Number(app.atm?.coop || 0);
 
-        }
-
-        function getFiscalYearForCalendarMonth(year,month){
-
-            return month <= 3 ? year - 1 : year;
-
-        }
-
-        function getMonthDataForCardTarget(year,month){
-
-            const saved =
-                localStorage.getItem(
-                    `maru-kakei-${year}-${String(month).padStart(2,"0")}`
-                );
-
-            if(saved){
-                try{
-                    return JSON.parse(saved);
-                }catch(e){
-                    console.error("カード対象月データの読込に失敗しました",e);
+            const rows = [
+                {
+                    id:"food",
+                    index:app.budgets.findIndex(item=>item.id==="food"),
+                    name:"🍚 食費",
+                    budget:Number(food?.budget || 80000),
+                    used:Number(food?.spent || 0) + coop
+                },
+                {
+                    id:"holiday",
+                    index:app.budgets.findIndex(item=>item.id==="holiday"),
+                    name:"🎉 休日",
+                    budget:Number(
+                        app.atm?.holidayBudgetTotal ??
+                        holiday?.budget ??
+                        40000
+                    ),
+                    used:Number(holiday?.spent || 0)
+                },
+                {
+                    id:"gas",
+                    index:app.budgets.findIndex(item=>item.id==="gas"),
+                    name:"⛽ ガソリン",
+                    budget:Number(gas?.budget || 17000),
+                    used:Number(gas?.spent || 0)
                 }
-            }
+            ];
 
-            return {
-                bank:{mitake:0,takizawa:0},
-                bankConfirmed:false,
-                income:{papa:0,mama:0,extra:0},
-                budgets:createDefaultBudgets(),
-                history:[],
-                incomeHistory:[],
-                cardVariableEntries:[],
-                memo:"",
-                atm:{
-                    amount:0,
-                    withdrawn:0,
-                    coop:0,
-                    food:0,
-                    gas:0,
-                    holiday:0,
-                    cashSpent:0,
-                    date:null
-                }
-            };
+            grid.innerHTML += `
+                <div class="cash-budget-section">
+                    <div class="cash-budget-title">💰 現金で管理</div>
+                    <div class="cash-budget-grid">
+                        ${rows.map(row=>{
 
-        }
+                            const remaining =
+                                row.budget - row.used;
 
-        function saveCardVariableEntriesToMonth(year,month,entries){
-
-            const data = getMonthDataForCardTarget(year,month);
-            data.cardVariableEntries = entries;
-
-            localStorage.setItem(
-                `maru-kakei-${year}-${String(month).padStart(2,"0")}`,
-                JSON.stringify(data)
-            );
-
-        }
-
-        function addCardVariable(){
-
-            openNumberModal(
-                "💳 カード変動費",
-                (amount,memo,dateValue)=>{
-
-                    if(amount<=0) return;
-
-                    const target =
-                        getCardTargetMonthFromInputDate(dateValue);
-
-                    const targetData =
-                        getMonthDataForCardTarget(target.year,target.month);
-
-                    const entries =
-                        Array.isArray(targetData.cardVariableEntries)
-                            ? targetData.cardVariableEntries
-                            : [];
-
-                    entries.push({
-                        id:`card-${Date.now()}`,
-                        date:formatInputDate(dateValue),
-                        amount,
-                        memo,
-                        inputMonth:`${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`,
-                        targetMonth:`${target.year}-${String(target.month).padStart(2,"0")}`
-                    });
-
-                    saveCardVariableEntriesToMonth(
-                        target.year,
-                        target.month,
-                        entries
-                    );
-
-                    alert(
-                        `${target.year}年${target.month}月分のカード変動費として登録しました。`
-                    );
-
-                    // 入力元の月を維持したまま再描画
-                    update();
-
-                }
-            );
-
-        }
-
-        function deleteCardVariable(id){
-
-            if(!confirm("このカード変動費を削除しますか？")) return;
-
-            app.cardVariableEntries =
-                getCardVariableEntries().filter(
-                    item=>String(item.id) !== String(id)
-                );
-
-            update();
+                            return `
+                                <button
+                                    class="cash-budget-card"
+                                    onclick="addSpent(${row.index},false)"
+                                >
+                                    <div class="cash-budget-name">${row.name}</div>
+                                    <div class="cash-budget-numbers">
+                                        <span>現在 ¥${row.used.toLocaleString()}</span>
+                                        <strong class="${remaining < 0 ? "over" : ""}">
+                                            あと ¥${Math.max(remaining,0).toLocaleString()}
+                                        </strong>
+                                    </div>
+                                    <div class="cash-budget-sub">
+                                        予算 ¥${row.budget.toLocaleString()}
+                                    </div>
+                                    ${
+                                        row.id==="food"
+                                            ? (() => {
+                                                const days = Number(app.atm?.foodDays || 0);
+                                                const daily = days > 0
+                                                    ? Math.floor(Math.max(remaining,0) / days)
+                                                    : 0;
+                                                return days > 0
+                                                    ? `<div class="cash-budget-food-days">あと ${days}日 → 1日 <strong>¥${daily.toLocaleString()}</strong></div>`
+                                                    : `<div class="cash-budget-food-days">🗓 食費の日数をATM入力で設定</div>`;
+                                            })()
+                                            : ""
+                                    }
+                                </button>
+                            `;
+                        }).join("")}
+                    </div>
+                </div>
+            `;
 
         }
 
@@ -1515,13 +1258,13 @@
                                                 );
 
                                             const previousCoop =
-                                                Number(app.atm?.coop || 0);
+                                                Number(app.atm.coop || 0);
 
                                             const previousFood =
-                                                Number(app.atm?.food || 0);
+                                                Number(app.atm.food || 0);
 
                                             const previousGas =
-                                                Number(app.atm?.gas || 0);
+                                                Number(app.atm.gas || 0);
 
                                             const previousHoliday =
                                                 Number(app.atm.holiday || 0);
@@ -2136,7 +1879,6 @@
         /* ===========================
            ⑦ AI分析
         =========================== */
-
         function getAtmPlan(){
 
             const foodBudget =
@@ -2146,26 +1888,26 @@
                 Number(app.budgets.find(item=>item.id==="gas")?.budget || 17000);
 
             const coop =
-                Number(app.atm?.coop || 0);
+                Number(app.atm.coop || 0);
 
             const withdrawn =
                 Number(
-                    app.atm?.withdrawn ??
-                    app.atm?.amount ??
+                    app.atm.withdrawn ??
+                    app.atm.amount ??
                     0
                 );
 
             // ATMを何回入力しても、今月の累計として扱う。
             const foodCashBudget =
-                Number(app.atm?.food || 0);
+                Number(app.atm.food || 0);
 
             const gasCashBudget =
-                Number(app.atm?.gas || 0);
+                Number(app.atm.gas || 0);
 
             const holidayBudget =
                 Number(
-                    app.atm?.holidayBudgetTotal ??
-                    app.atm?.holiday ??
+                    app.atm.holidayBudgetTotal ??
+                    app.atm.holiday ??
                     0
                 );
 
@@ -2240,15 +1982,815 @@
 
         }
 
+        function getHolidayCoach(){
 
-        function getTodayString(){
+            const plan = getAtmPlan();
 
-            const d = new Date();
+            const totalCount =
+                Number(app.atm.holidayCount || 0);
 
-            return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+            if(totalCount<=0){
+                return {
+                    hasPlan:false,
+                    budget:plan.holidayBudget,
+                    remaining:plan.holidayBudget,
+                    remainingCount:0,
+                    daily:0,
+                    today:0,
+                    todayOver:0
+                };
+            }
+
+            const today =
+                getTodayCategoryTotal("holiday");
+
+            const remaining =
+                Math.max(
+                    plan.holidayBudget -
+                    Number(
+                        app.budgets.find(
+                            item=>item.id==="holiday"
+                        )?.spent || 0
+                    ),
+                    0
+                );
+
+            const remainingCount =
+                getRemainingHolidayCount();
+
+            const daily =
+                remainingCount > 0
+                    ? Math.floor(
+                        remaining / remainingCount
+                    )
+                    : 0;
+
+            const firstDaily =
+                Math.floor(
+                    plan.holidayBudget / totalCount
+                );
+
+            return {
+                hasPlan:true,
+                budget:plan.holidayBudget,
+                remaining,
+                remainingCount,
+                daily,
+                today,
+                todayOver:Math.max(today-firstDaily,0)
+            };
 
         }
 
+        function getFiscalMonthInfo(month){
+
+            return {
+                year: month <= 3 ? currentYear + 1 : currentYear,
+                month
+            };
+
+        }
+
+        function isBankConfirmedData(data){
+
+            if(!data) return false;
+            if(data.bankConfirmed === true) return true;
+
+            const bank = data.bank || {};
+
+            return (
+                Number(bank.mitake || 0) +
+                Number(bank.takizawa || 0)
+            ) > 0;
+
+        }
+
+        function getMonthIncomeTotal(data){
+
+            if(!data || !data.income) return 0;
+
+            return (
+                Number(data.income.papa || 0) +
+                Number(data.income.mama || 0) +
+                Number(data.income.extra || 0)
+            );
+
+        }
+
+        function getMonthBankOutflow(data){
+
+            if(!data) return 0;
+
+            const budgets = data.budgets || [];
+
+            let directSpent = budgets.reduce((sum,item)=>{
+
+                if(["food","holiday","gas"].includes(item.id)) return sum;
+                return sum + Number(item.spent || 0);
+
+            },0);
+
+            const cashOther = (data.history || []).reduce((sum,item)=>{
+
+                if(
+                    item.category === "📦 その他" &&
+                    item.paymentMethod === "cash"
+                ){
+                    return sum + Number(item.amount || 0);
+                }
+
+                return sum;
+
+            },0);
+
+            directSpent = Math.max(0, directSpent - cashOther);
+
+            const atm = data.atm || {};
+            const coop = Number(atm.coop || 0);
+            const withdrawn = Number(atm.withdrawn || 0);
+
+            // 生協は独立カテゴリではないが、支出合計には食費として含める。
+            return directSpent + coop + withdrawn;
+
+        }
+
+        function getBankForecast(){
+
+            const months = getFiscalMonths();
+            const currentIndex = months.indexOf(currentMonth);
+
+            let balance = Number(app.startBank || 0);
+            let baseIndex = -1;
+
+            for(let i=0; i<currentIndex; i++){
+
+                const info = getFiscalMonthInfo(months[i]);
+                const data = getMonthData(info.year,info.month);
+
+                if(isBankConfirmedData(data)){
+
+                    balance =
+                        Number(data.bank?.mitake || 0) +
+                        Number(data.bank?.takizawa || 0);
+
+                    baseIndex = i;
+                }
+
+            }
+
+            for(let i=baseIndex + 1; i<=currentIndex; i++){
+
+                const info = getFiscalMonthInfo(months[i]);
+                const data = getMonthData(info.year,info.month);
+
+                if(!data) continue;
+
+                balance += getMonthIncomeTotal(data);
+                balance -= getMonthBankOutflow(data);
+
+            }
+
+            return Math.round(balance);
+
+        }
+
+        function getCoachBankReference(){
+
+            const months = getFiscalMonths();
+            const currentIndex = Math.max(
+                months.indexOf(currentMonth),
+                0
+            );
+
+            // 今月の銀行残高を入力済みなら今月を使う。
+            if(app.bankConfirmed){
+                return {
+                    month: currentMonth,
+                    balance:
+                        Number(app.bank.mitake || 0) +
+                        Number(app.bank.takizawa || 0),
+                    index: currentIndex,
+                    isCurrent: true
+                };
+            }
+
+            // 今月が未入力なら、直前に確定している月を見る。
+            // 7月未入力なら6月の銀行残高を使う、という仕様。
+            for(let i=currentIndex - 1; i>=0; i--){
+
+                const month = months[i];
+                const balance = getKnownBankBalance(month);
+
+                if(balance !== null){
+                    return {
+                        month,
+                        balance: Number(balance),
+                        index: i,
+                        isCurrent: false
+                    };
+                }
+
+            }
+
+            // 4月も未入力なら年度開始残高を基準にする。
+            return {
+                month: 3,
+                balance: Number(app.startBank || 78142),
+                index: -1,
+                isCurrent: false
+            };
+
+        }
+
+        function getAnnualCoachData(){
+
+            const months = getFiscalMonths();
+
+            const currentIndex =
+                Math.max(
+                    months.indexOf(currentMonth),
+                    0
+                );
+
+            /*
+               現在月までの銀行予測を「今ここにあるお金」として扱う。
+               ここから先だけを未来予測するので、
+               今月分を二重計上しない。
+            */
+
+            /*
+               銀行残高を入力済みなら、年間コーチも
+               実際に入力した銀行残高を使う。
+               未入力のときだけ、これまで通り予測残高を使う。
+            */
+            const bankReference =
+                getCoachBankReference();
+
+            const currentBank =
+                Number(bankReference.balance || 0);
+
+            const startBank =
+                Number(app.startBank || 0);
+
+            const currentSaving =
+                Math.max(
+                    currentBank - startBank,
+                    0
+                );
+
+            /*
+               年度内に記録されている月から
+               「自然に残る金額」の平均を出す。
+
+               ボーナスは別管理なので、
+               ここでは通常収入・通常支出だけを見る。
+            */
+
+            /*
+               「自然に貯まりそうな額」は、
+               今は過去データの単純平均から出さない。
+
+               この年度は実際の銀行残高の増加が小さく、
+               過去データと現在の入力ルールも違うため、
+               まずは「月収約42万円 − 生活費約35万円」
+               という現実的な基準、月70,000円を使う。
+
+               今後データが十分に蓄積したら、
+               実績ベースへ切り替える。
+            */
+
+            const NATURAL_MONTHLY_BASELINE = 70000;
+
+            const naturalMonthly =
+                NATURAL_MONTHLY_BASELINE;
+
+            /*
+               残り月数。
+               現在月はすでに currentBank に反映済みなので、
+               「未来の月」だけを加える。
+            */
+
+            // 基準にした月の次の月から年度末までを「残り月数」にする。
+            // 7月未入力で6月残高を使う場合は、7月〜3月の9ヶ月。
+            const futureMonths =
+                Math.max(
+                    months.length -
+                    bankReference.index -
+                    1,
+                    0
+                );
+
+            const naturalFuture =
+                naturalMonthly *
+                futureMonths;
+
+            /*
+               ボーナスは「実際に積み立てる金額」だけを
+               年間目標に加える。
+               まだ実績がないものは予測値を使う。
+            */
+
+            const summerActual =
+                Number(app.bonus.papaSummerActual || 0) +
+                Number(app.bonus.mamaSummerActual || 0);
+
+            const winterActual =
+                Number(app.bonus.papaWinterActual || 0) +
+                Number(app.bonus.mamaWinterActual || 0);
+
+            const winterForecast =
+                Number(app.bonus.papaWinterForecast || 0) +
+                Number(app.bonus.mamaWinterForecast || 0);
+
+            // 夏ボーナス実績はまだ銀行残高に入っていない。
+            // 「銀行へ」は今後銀行に入る金額として予測へ加える。
+            const summerBankFuture =
+                Number(app.bonus.summerKeep || 0);
+
+            // 冬ボーナスは未実績なら予測額を全額、
+            // 実績があれば銀行へ入れる実績額を使う。
+            const winterForForecast =
+                winterActual > 0
+                    ? Number(app.bonus.winterKeep || 0)
+                    : winterForecast;
+
+            const childForecast =
+                Number(getRemainingChildAllowance().amount || 0);
+
+            const bonusFuture =
+                summerBankFuture +
+                winterForForecast +
+                childForecast;
+
+            // 年間予測の構成要素を固定：
+            // 現在の銀行残高増加 + 夏ボーナス銀行分 + 冬ボーナス + 児童手当
+            const annualForecast =
+                currentSaving +
+                summerBankFuture +
+                winterForForecast +
+                childForecast;
+
+            /*
+               現在の自然な貯金
+               ＋ 今後の自然な貯金
+               ＋ ボーナス
+               ＝ 今のままの年間予測
+            */
+
+            // 年間コーチの予測は、
+            // 「7月時点で実際に増えた銀行残高」
+            // ＋「これから銀行へ入れるボーナス」
+            // ＋「これから受け取る児童手当」
+            // だけで計算する。
+            // 未来の通常月貯金70,000円はここには先に足さない。
+            const noBonusForecast =
+                currentSaving;
+
+            const withBonusForecast =
+                annualForecast;
+
+            const goal =
+                Number(app.goal || 0);
+
+            const noBonusGap =
+                Math.max(
+                    goal - noBonusForecast,
+                    0
+                );
+
+            const noBonusSurplus =
+                Math.max(
+                    noBonusForecast - goal,
+                    0
+                );
+
+            const withBonusGap =
+                Math.max(
+                    goal - withBonusForecast,
+                    0
+                );
+
+            const withBonusSurplus =
+                Math.max(
+                    withBonusForecast - goal,
+                    0
+                );
+
+            // 既存の計算部分との互換性を保つため、従来名は「ボーナス込み」を指す。
+            const noChangeForecast = withBonusForecast;
+            const gap = withBonusGap;
+            const surplus = withBonusSurplus;
+
+            // 1円未満を残さず、目標を確実に達成できるよう切り上げ。
+            const monthlyExtra =
+                futureMonths > 0
+                    ? Math.ceil(
+                        gap /
+                        futureMonths
+                    )
+                    : gap;
+
+            let status = "green";
+            let statusText =
+                "🟢 このままなら達成できそう";
+
+            if(gap>0){
+
+                /*
+                   自然な月間貯金額に対して
+                   必要な追加額がどれくらい重いかで判定。
+                */
+
+                if(
+                    naturalMonthly > 0 &&
+                    monthlyExtra <=
+                        naturalMonthly * 0.3
+                ){
+
+                    status = "yellow";
+                    statusText =
+                        "🟡 少し頑張れば達成できそう";
+
+                }else{
+
+                    status = "red";
+                    statusText =
+                        "🔴 今のペースではかなり厳しい";
+
+                }
+
+            }
+
+            return {
+
+                currentBank,
+                startBank,
+                currentSaving,
+                bankReference,
+
+                naturalMonthly,
+                futureMonths,
+                naturalFuture,
+
+                bonusFuture,
+
+                noChangeForecast,
+                noBonusForecast,
+                withBonusForecast,
+
+                goal,
+                gap,
+                surplus,
+                noBonusGap,
+                noBonusSurplus,
+                withBonusGap,
+                withBonusSurplus,
+
+                monthlyExtra,
+
+                status,
+                statusText
+
+            };
+
+        }
+
+        function getAnnualCutPlan(extraNeed){
+
+            if(extraNeed<=0){
+                return [];
+            }
+
+            const food =
+                app.budgets.find(
+                    item=>item.id==="food"
+                );
+
+            const holiday =
+                app.budgets.find(
+                    item=>item.id==="holiday"
+                );
+
+            /*
+               「残り予算」ではなく、
+               現実に減らせる余地を見て
+               食費・休日へ分ける。
+
+               ガソリンは今の段階では
+               節約計画に強く入れない。
+            */
+
+            const candidates = [
+
+                {
+                    id:"food",
+                    name:"🍚 食費",
+                    max:
+                        Math.floor(
+                            Number(food?.budget || 0)
+                            * 0.15 /
+                            1000
+                        ) * 1000
+                },
+
+                {
+                    id:"holiday",
+                    name:"🎉 休日",
+                    max:
+                        Math.floor(
+                            Number(holiday?.budget || 0)
+                            * 0.15 /
+                            1000
+                        ) * 1000
+                }
+
+            ];
+
+            let rest =
+                Math.max(
+                    extraNeed,
+                    0
+                );
+
+            const result = [];
+
+            /*
+               まず食費と休日を半分ずつに近づける。
+               片方だけに無理をさせない。
+            */
+
+            const firstTarget =
+                Math.ceil(
+                    rest / 2 / 1000
+                ) * 1000;
+
+            candidates.forEach(candidate=>{
+
+                if(rest<=0) return;
+
+                const cut =
+                    Math.min(
+                        firstTarget,
+                        candidate.max,
+                        Math.ceil(rest/1000)*1000
+                    );
+
+                if(cut>0){
+
+                    result.push({
+                        name:candidate.name,
+                        amount:cut
+                    });
+
+                    rest -= cut;
+
+                }
+
+            });
+
+            /*
+               まだ足りなければ残った余地から補う。
+            */
+
+            candidates.forEach(candidate=>{
+
+                if(rest<=0) return;
+
+                const already =
+                    result.find(
+                        item=>item.name===candidate.name
+                    )?.amount || 0;
+
+                const available =
+                    Math.max(
+                        candidate.max - already,
+                        0
+                    );
+
+                const cut =
+                    Math.min(
+                        available,
+                        Math.ceil(rest/1000)*1000
+                    );
+
+                if(cut>0){
+
+                    const existing =
+                        result.find(
+                            item=>item.name===candidate.name
+                        );
+
+                    if(existing){
+
+                        existing.amount += cut;
+
+                    }else{
+
+                        result.push({
+                            name:candidate.name,
+                            amount:cut
+                        });
+
+                    }
+
+                    rest -= cut;
+
+                }
+
+            });
+
+            return result;
+
+        }
+
+        function getMonthlyCoachPlan(){
+
+            const annual = getAnnualCoachData();
+            const cuts = getAnnualCutPlan(annual.monthlyExtra);
+
+            const plan = {
+                target: cuts.reduce(
+                    (sum,item)=>sum + Number(item.amount || 0),
+                    0
+                ),
+                categories:{}
+            };
+
+            cuts.forEach(item=>{
+
+                const id =
+                    item.name.includes("食費")
+                        ? "food"
+                        : item.name.includes("休日")
+                            ? "holiday"
+                            : null;
+
+                if(id){
+                    plan.categories[id] =
+                        Number(item.amount || 0);
+                }
+
+            });
+
+            return plan;
+        }
+
+        function getMonthlyCoachProgress(){
+
+            const plan = getMonthlyCoachPlan();
+
+            const result = {
+                target: plan.target,
+                achieved: 0,
+                remaining: plan.target,
+                categories:[]
+            };
+
+            /*
+               年間コーチの「○円減らす」は、
+               通常予算からその金額を減らした
+               「今月の目標使用額」として扱う。
+
+               例：
+               食費 80,000円
+               節約目標 12,000円
+               → 今月は68,000円以内
+
+               現在1,000円使っているなら、
+               → 目標まであと67,000円使える
+
+               「まだ使っていない＝節約達成」
+               とは扱わないのがポイント。
+            */
+
+            ["food","holiday"].forEach(id=>{
+
+                const target =
+                    Number(plan.categories[id] || 0);
+
+                if(target <= 0) return;
+
+                const budget =
+                    Number(
+                        app.budgets.find(
+                            item=>item.id===id
+                        )?.budget || 0
+                    );
+
+                const spent =
+                    Number(
+                        app.budgets.find(
+                            item=>item.id===id
+                        )?.spent || 0
+                    );
+
+                const targetSpend =
+                    Math.max(
+                        budget - target,
+                        0
+                    );
+
+                const remainingToTarget =
+                    Math.max(
+                        targetSpend - spent,
+                        0
+                    );
+
+                /*
+                   目標使用額を超えた場合は、
+                   その超過額を「追加で抑える必要がある額」とする。
+                */
+
+                const overTarget =
+                    Math.max(
+                        spent - targetSpend,
+                        0
+                    );
+
+                result.categories.push({
+                    id,
+                    target,
+                    budget,
+                    spent,
+                    targetSpend,
+                    remainingToTarget,
+                    overTarget
+                });
+
+            });
+
+            /*
+               「今月あと減らす額」ではなく、
+               現在の目標使用額との差を
+               チャレンジの進捗として扱う。
+
+               目標使用額以内なら、
+               まだその金額まで使える状態。
+               月末に使わなかった分が
+               最終的な節約額になる。
+            */
+
+            result.remaining =
+                result.categories.reduce(
+                    (sum,item)=>sum + item.remainingToTarget,
+                    0
+                );
+
+            result.achieved =
+                result.categories.reduce(
+                    (sum,item)=>{
+                        return sum +
+                            Math.max(
+                                item.targetSpend -
+                                item.spent,
+                                0
+                            );
+                    },
+                    0
+                );
+
+            return result;
+        }
+
+        function getGoalContinuationForecast(annual, monthlyCoach){
+
+            const monthlyImprovement =
+                Number(monthlyCoach.target || 0);
+
+            const continuedImprovement =
+                monthlyImprovement *
+                Number(annual.futureMonths || 0);
+
+            const continuedForecast =
+                Number(annual.noChangeForecast || 0) +
+                continuedImprovement;
+
+            const remainingGap =
+                Math.max(
+                    Number(annual.goal || 0) -
+                    continuedForecast,
+                    0
+                );
+
+            const remainingSurplus =
+                Math.max(
+                    continuedForecast -
+                    Number(annual.goal || 0),
+                    0
+                );
+
+            return {
+                monthlyImprovement,
+                continuedImprovement,
+                continuedForecast,
+                remainingGap,
+                remainingSurplus
+            };
+        }
+
+        /* ===========================
+           ⑦ AI分析
+        =========================== */
         function drawMemo(){
 
             const memo = document.getElementById("homeMemo");
@@ -2257,7 +2799,39 @@
                 memo.value = String(app.memo || "");
             }
 
+            const planEl =
+                document.getElementById("holidayPlanHome");
+
+            if(planEl){
+
+                const count =
+                    Number(app.atm?.holidayCount || 0);
+
+                const per =
+                    Number(app.atm?.holidayPerBudget || 0);
+
+                const remainingCount =
+                    getRemainingHolidayCount();
+
+                if(count > 0 && per > 0){
+
+                    planEl.innerHTML =
+                        `🎉 休日　あと <strong>${remainingCount}回</strong> × ¥${per.toLocaleString()}（1回）`;
+
+                }else{
+
+                    planEl.innerHTML =
+                        "🎉 休日プラン：ATM入力時に設定できます";
+
+                }
+
+            }
+
         }
+
+        /* ===========================
+           ⑧ 年間サマリー
+        =========================== */
 
         function drawYearSummary(){
 
