@@ -91,6 +91,8 @@
 
             },
 
+            bankHistory:[],
+
             startBank:78142,
             bankConfirmed:false,
 
@@ -287,6 +289,9 @@
 
                 bank: { ...app.bank },
                 bankConfirmed: app.bankConfirmed === true,
+                bankHistory: JSON.parse(
+                    JSON.stringify(app.bankHistory || [])
+                ),
 
                 income: { ...app.income },
 
@@ -358,6 +363,7 @@
                 takizawa:0
 
             };
+            app.bankHistory=[];
 
             app.income={
 
@@ -431,6 +437,25 @@
 
                 app.bank=data.bank || app.bank;
                 app.bankConfirmed = data.bankConfirmed === true || (Number(app.bank.mitake || 0) + Number(app.bank.takizawa || 0) > 0);
+                app.bankHistory = Array.isArray(data.bankHistory)
+                    ? data.bankHistory
+                    : [];
+
+                // 既存データに履歴がない場合、保存済みの残高を過去データとして引き継ぐ。
+                if(
+                    app.bankConfirmed &&
+                    app.bankHistory.length === 0
+                ){
+                    const legacyYear = getDisplayYear();
+                    app.bankHistory.push({
+                        id:`bank-legacy-${legacyYear}-${currentMonth}`,
+                        date:"",
+                        label:`${legacyYear}年${currentMonth}月（既存データ）`,
+                        mitake:Number(app.bank.mitake || 0),
+                        takizawa:Number(app.bank.takizawa || 0),
+                        total:Number(app.bank.mitake || 0) + Number(app.bank.takizawa || 0)
+                    });
+                }
 
                 app.income=data.income || app.income;
 
@@ -1534,10 +1559,35 @@
 
                 openNumberModal("滝沢銀行残高",(takizawa)=>{
 
-                    app.bank.mitake = mitake;
+                    const nextMitake = Number(mitake || 0);
+                    const nextTakizawa = Number(takizawa || 0);
+                    const previousTotal =
+                        Number(app.bank.mitake || 0) +
+                        Number(app.bank.takizawa || 0);
+                    const nextTotal = nextMitake + nextTakizawa;
 
-                    app.bank.takizawa = takizawa;
+                    app.bank.mitake = nextMitake;
+                    app.bank.takizawa = nextTakizawa;
                     app.bankConfirmed = true;
+
+                    if(
+                        previousTotal !== nextTotal ||
+                        Number(app.bankHistory?.[0]?.mitake) !== nextMitake ||
+                        Number(app.bankHistory?.[0]?.takizawa) !== nextTakizawa
+                    ){
+                        if(!Array.isArray(app.bankHistory)){
+                            app.bankHistory = [];
+                        }
+
+                        app.bankHistory.unshift({
+                            id:`bank-${Date.now()}`,
+                            date:getTodayInputDate(),
+                            label:"",
+                            mitake:nextMitake,
+                            takizawa:nextTakizawa,
+                            total:nextTotal
+                        });
+                    }
 
                     // 年度スタート残高は固定（78,142円）。
                     // 月ごとの銀行残高を入力しても、年度の基準額は変えない。
@@ -1549,6 +1599,56 @@
             });
 
         }
+
+        function openBankHistory(){
+
+            const modal = document.getElementById("bankHistoryModal");
+            const period = document.getElementById("bankHistoryPeriod");
+            const list = document.getElementById("bankHistoryList");
+            if(!modal || !list) return;
+
+            period.textContent =
+                `${getDisplayYear()}年${currentMonth}月の入力履歴`;
+
+            const history = Array.isArray(app.bankHistory)
+                ? app.bankHistory
+                : [];
+
+            if(history.length === 0){
+                list.innerHTML = '<div class="bank-history-empty">まだ履歴はありません。</div>';
+            }else{
+                list.innerHTML = history.map(item=>{
+                    const label = item.label ||
+                        (item.date ? item.date.replaceAll("-","/") : "日付不明");
+                    const mitake = Number(item.mitake || 0);
+                    const takizawa = Number(item.takizawa || 0);
+                    const total = Number(item.total ?? (mitake + takizawa));
+
+                    return `
+                        <div class="bank-history-item">
+                            <div class="bank-history-date">${escapeHtml(label)}</div>
+                            <div class="bank-history-line">
+                                <span>みたけ銀行</span><strong>¥${mitake.toLocaleString()}</strong>
+                            </div>
+                            <div class="bank-history-line">
+                                <span>滝沢銀行</span><strong>¥${takizawa.toLocaleString()}</strong>
+                            </div>
+                            <div class="bank-history-total">
+                                <span>合計</span><strong>¥${total.toLocaleString()}</strong>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+            }
+
+            modal.style.display = "flex";
+        }
+
+        function closeBankHistory(){
+            const modal = document.getElementById("bankHistoryModal");
+            if(modal) modal.style.display = "none";
+        }
+
         function addSpent(index,isOverwrite=false){
 
             openNumberModal(
