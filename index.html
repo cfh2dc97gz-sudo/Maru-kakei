@@ -134,6 +134,10 @@
 
             </div>
 
+            <button type="button" class="bank-history-button" onclick="openBankHistory()">
+                📜 銀行残高の履歴を見る
+            </button>
+
         </div>
 
         <!-- 収入入力 -->
@@ -516,6 +520,18 @@
             </button>
 
         </nav>
+        <!-- 銀行残高履歴 -->
+        <div id="bankHistoryModal" class="modal bank-history-modal" style="display:none;">
+            <div class="modal-box bank-history-box">
+                <h2>🏦 銀行残高の履歴</h2>
+                <p id="bankHistoryPeriod" class="bank-history-period"></p>
+                <div id="bankHistoryList"></div>
+                <div class="modal-buttons">
+                    <button type="button" onclick="closeBankHistory()">閉じる</button>
+                </div>
+            </div>
+        </div>
+
         <!-- 数字入力モーダル -->
         <div id="numberModal" class="modal" style="display:none;">
 
