@@ -3523,6 +3523,11 @@
             save();
 
         }
+        function setUtilityHistoryView(view){
+            window.utilityHistoryView = view === "water" ? "water" : "electric";
+            drawCategoryDetail();
+        }
+
         function drawCategoryDetail(categoryId){
 
         if(categoryId){
@@ -3670,90 +3675,87 @@
 
         if(budget?.id === "utility"){
 
+            // カテゴリ履歴を開いたときは電気代を初期表示。
+            if(!["electric", "water"].includes(window.utilityHistoryView)){
+                window.utilityHistoryView = "electric";
+            }
+            const selectedUtility = window.utilityHistoryView;
+            const selectedIsElectric = selectedUtility === "electric";
+            const selectedLabel = selectedIsElectric ? "電気代" : "水道代";
+            const selectedIcon = selectedIsElectric ? "⚡" : "💧";
+            const previousLabel = `${currentYear - 1}年度`;
+            const currentLabel = `${currentYear}年度`;
+
             const comparisonMonths = fiscalOrder.map(month => {
                 const previousYear = month <= 3 ? currentYear : currentYear - 1;
                 const thisYear = month <= 3 ? currentYear + 1 : currentYear;
 
-                const getUtilityTotal = (year, electric) => {
+                const getUtilityTotal = year => {
                     const data = getMonthData(year, month);
                     if(!data) return null;
-
                     const items = (data.history || []).filter(item =>
                         !item.income &&
                         item.category === app.categoryFilter &&
-                        isElectricUtilityEntry(item) === electric
+                        isElectricUtilityEntry(item) === selectedIsElectric
                     );
-
                     if(items.length === 0) return null;
                     return items.reduce((sum, item) => sum + Number(item.amount || 0), 0);
                 };
 
                 return {
                     month,
-                    electricPrevious: getUtilityTotal(previousYear, true),
-                    electricCurrent: getUtilityTotal(thisYear, true),
-                    waterPrevious: getUtilityTotal(previousYear, false),
-                    waterCurrent: getUtilityTotal(thisYear, false)
+                    previous: getUtilityTotal(previousYear),
+                    current: getUtilityTotal(thisYear)
                 };
             });
 
             const totalFor = key => comparisonMonths.reduce((sum, row) => sum + (row[key] ?? 0), 0);
-            const electricPreviousTotal = totalFor("electricPrevious");
-            const electricCurrentTotal = totalFor("electricCurrent");
-            const waterPreviousTotal = totalFor("waterPrevious");
-            const waterCurrentTotal = totalFor("waterCurrent");
+            const previousTotal = totalFor("previous");
+            const currentTotal = totalFor("current");
             const money = value => value === null ? "—" : `¥${Number(value).toLocaleString()}`;
             const deltaText = (previous, current) => {
                 if(previous === null || current === null) return "—";
                 const delta = current - previous;
                 return `${delta > 0 ? "+" : delta < 0 ? "−" : ""}¥${Math.abs(delta).toLocaleString()}`;
             };
-            const totalDeltaText = (previous, current) => {
-                const delta = current - previous;
-                return `${delta > 0 ? "+" : delta < 0 ? "−" : ""}¥${Math.abs(delta).toLocaleString()}`;
-            };
+            const totalDelta = currentTotal - previousTotal;
+            const totalDeltaText = `${totalDelta > 0 ? "+" : totalDelta < 0 ? "−" : ""}¥${Math.abs(totalDelta).toLocaleString()}`;
 
             historyList.innerHTML += `
+                <div class="utility-history-switch" style="display:flex;gap:10px;margin:0 0 14px;">
+                    <button type="button" onclick="setUtilityHistoryView('electric')" aria-pressed="${selectedIsElectric}"
+                        style="flex:1;padding:12px 8px;border-radius:12px;border:2px solid ${selectedIsElectric ? '#d7a52d' : '#e5dfd7'};background:${selectedIsElectric ? '#fff0c2' : '#fff'};font-weight:bold;color:#624b22;">
+                        ⚡ 電気代の前年比
+                    </button>
+                    <button type="button" onclick="setUtilityHistoryView('water')" aria-pressed="${!selectedIsElectric}"
+                        style="flex:1;padding:12px 8px;border-radius:12px;border:2px solid ${!selectedIsElectric ? '#579bc5' : '#e5dfd7'};background:${!selectedIsElectric ? '#e2f3fc' : '#fff'};font-weight:bold;color:#285b78;">
+                        💧 水道代の前年比
+                    </button>
+                </div>
                 <div class="card utility-comparison-card" style="margin-bottom:16px;">
-                    <h3 style="margin:0 0 10px;">⚡ 電気代・水道代の年度比較</h3>
+                    <h3 style="margin:0 0 10px;">${selectedIcon} ${selectedLabel}・前年比</h3>
                     <div style="overflow-x:auto;">
                         <table class="utility-history-table">
-                            <thead>
-                                <tr>
-                                    <th>月分</th>
-                                    <th>電気 ${currentYear - 1}年度</th>
-                                    <th>電気 ${currentYear}年度</th>
-                                    <th>電気 増減</th>
-                                    <th>水道 ${currentYear - 1}年度</th>
-                                    <th>水道 ${currentYear}年度</th>
-                                    <th>水道 増減</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>月分</th><th class="utility-year-previous">${previousLabel}</th><th class="utility-year-current">${currentLabel}（今年）</th><th>増減</th></tr></thead>
                             <tbody>
                                 ${comparisonMonths.map(row => `
                                     <tr>
                                         <td>${row.month}月</td>
-                                        <td class="utility-amount">${money(row.electricPrevious)}</td>
-                                        <td class="utility-amount">${money(row.electricCurrent)}</td>
-                                        <td class="utility-amount">${deltaText(row.electricPrevious, row.electricCurrent)}</td>
-                                        <td class="utility-amount">${money(row.waterPrevious)}</td>
-                                        <td class="utility-amount">${money(row.waterCurrent)}</td>
-                                        <td class="utility-amount">${deltaText(row.waterPrevious, row.waterCurrent)}</td>
+                                        <td class="utility-amount utility-year-previous">${money(row.previous)}</td>
+                                        <td class="utility-amount utility-year-current">${money(row.current)}</td>
+                                        <td class="utility-amount">${deltaText(row.previous, row.current)}</td>
                                     </tr>
                                 `).join("")}
-                                <tr style="font-weight:bold;border-top:2px solid #ddd;">
+                                <tr class="utility-year-total" style="font-weight:bold;border-top:2px solid #ddd;">
                                     <td>年度合計</td>
-                                    <td class="utility-amount">¥${electricPreviousTotal.toLocaleString()}</td>
-                                    <td class="utility-amount">¥${electricCurrentTotal.toLocaleString()}</td>
-                                    <td class="utility-amount">${totalDeltaText(electricPreviousTotal, electricCurrentTotal)}</td>
-                                    <td class="utility-amount">¥${waterPreviousTotal.toLocaleString()}</td>
-                                    <td class="utility-amount">¥${waterCurrentTotal.toLocaleString()}</td>
-                                    <td class="utility-amount">${totalDeltaText(waterPreviousTotal, waterCurrentTotal)}</td>
+                                    <td class="utility-amount utility-year-previous">¥${previousTotal.toLocaleString()}</td>
+                                    <td class="utility-amount utility-year-current">¥${currentTotal.toLocaleString()}</td>
+                                    <td class="utility-amount">${totalDeltaText}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="utility-history-hint">8,000円以上を電気代、8,000円未満を水道代として自動集計します。未入力の月は「—」で表示します。</div>
+                    <div class="utility-history-hint">8,000円以上を電気代、8,000円未満を水道代として自動判定しています。未入力の月は「—」で表示します。</div>
                 </div>
             `;
         }
