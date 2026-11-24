@@ -970,8 +970,15 @@
 
             if(period){
 
-                const nextPeriodMonth = currentMonth === 12 ? 1 : currentMonth + 1;
-                period.textContent = `${currentMonth}/25〜${nextPeriodMonth}/25`;
+                // 各月分は前月25日〜当月24日（24日締め）。
+                const displayYear = getDisplayYear();
+                const periodStart = new Date(displayYear, currentMonth - 2, 25);
+                const periodEnd = new Date(displayYear, currentMonth - 1, 24);
+                const formatPeriodDate = date =>
+                    `${date.getMonth() + 1}/${date.getDate()}`;
+
+                period.textContent =
+                    `${formatPeriodDate(periodStart)}〜${formatPeriodDate(periodEnd)}`;
 
             }
 
@@ -5281,7 +5288,13 @@
 
             if(parts.length !== 3) return `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
 
-            return `${parts[0]}-${parts[1]}`;
+            // 25日から翌月分として扱う（例：4/25〜5/24は5月分）。
+            const year = Number(parts[0]);
+            const month = Number(parts[1]);
+            const day = Number(parts[2]);
+            const target = new Date(year, month - 1 + (day >= 25 ? 1 : 0), 1);
+
+            return `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2,"0")}`;
 
         }
 
