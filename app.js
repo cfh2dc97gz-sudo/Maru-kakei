@@ -970,10 +970,10 @@
 
             if(period){
 
-                // 各月分は前月25日〜当月24日（24日締め）。
+                // 各月分は当月25日〜翌月24日（24日締め）。
                 const displayYear = getDisplayYear();
-                const periodStart = new Date(displayYear, currentMonth - 2, 25);
-                const periodEnd = new Date(displayYear, currentMonth - 1, 24);
+                const periodStart = new Date(displayYear, currentMonth - 1, 25);
+                const periodEnd = new Date(displayYear, currentMonth, 24);
                 const formatPeriodDate = date =>
                     `${date.getMonth() + 1}/${date.getDate()}`;
 
@@ -5288,11 +5288,12 @@
 
             if(parts.length !== 3) return `${getDisplayYear()}-${String(currentMonth).padStart(2,"0")}`;
 
-            // 25日から翌月分として扱う（例：4/25〜5/24は5月分）。
+            // 25日から当月分、1〜24日は前月分として扱う。
+            // 例：2026/4/25〜2026/5/24は2026年4月分。
             const year = Number(parts[0]);
             const month = Number(parts[1]);
             const day = Number(parts[2]);
-            const target = new Date(year, month - 1 + (day >= 25 ? 1 : 0), 1);
+            const target = new Date(year, month - 1 - (day <= 24 ? 1 : 0), 1);
 
             return `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2,"0")}`;
 
