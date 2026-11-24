@@ -216,6 +216,12 @@
 
         }
 
+        function getStorageKey(year,month){
+
+            return `maru-kakei-${year}-${String(month).padStart(2,"0")}`;
+
+        }
+
         function getMonthData(year,month){
 
             const saved = localStorage.getItem(
@@ -1538,7 +1544,7 @@
 
                 app.budgets[index].name,
 
-                (amount,memo,dateValue)=>{
+                (amount,memo,dateValue,extraMemo,shop)=>{
 
                     if(amount<=0) return;
 
@@ -1575,6 +1581,8 @@
 
                         memo,
 
+                        shop: shop || "",
+
                         annual: false,
 
                         targetMonth: getTargetMonthFromInputDate(dateValue)
@@ -1583,7 +1591,14 @@
 
                     update();
 
-                }
+                },
+                "",
+                "",
+                null,
+                false,
+                "",
+                app.budgets[index].id === "food",
+                ""
 
             );
 
@@ -3649,6 +3664,83 @@
         historyList.innerHTML = "";
         const fiscalOrder = [4,5,6,7,8,9,10,11,12,1,2,3];
 
+        // 電気代：前年度と今年度を月ごとに比較
+        // utilityカテゴリに登録されている履歴を、現時点では電気代として集計する。
+        if(budget?.id === "utility"){
+
+            const comparisonMonths = fiscalOrder.map(month => {
+                const previousYear = month <= 3 ? currentYear : currentYear - 1;
+                const thisYear = month <= 3 ? currentYear + 1 : currentYear;
+
+                const getUtilityTotal = (year) => {
+                    const data = getMonthData(year, month);
+                    if(!data) return null;
+
+                    const items = (data.history || []).filter(item =>
+                        !item.income && item.category === app.categoryFilter
+                    );
+
+                    if(items.length === 0) return null;
+                    return items.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+                };
+
+                return {
+                    month,
+                    previous: getUtilityTotal(previousYear),
+                    current: getUtilityTotal(thisYear)
+                };
+            });
+
+            const previousTotal = comparisonMonths.reduce((sum, row) => sum + (row.previous ?? 0), 0);
+            const currentTotal = comparisonMonths.reduce((sum, row) => sum + (row.current ?? 0), 0);
+            const money = value => value === null ? "—" : `¥${Number(value).toLocaleString()}`;
+            const difference = currentTotal - previousTotal;
+            const differenceText = `${difference > 0 ? "+" : difference < 0 ? "−" : ""}¥${Math.abs(difference).toLocaleString()}`;
+
+            historyList.innerHTML += `
+                <div class="card utility-comparison-card" style="margin-bottom:16px;">
+                    <h3 style="margin:0 0 10px;">⚡ 電気代・前年度比較</h3>
+                    <div style="overflow-x:auto;">
+                        <table class="utility-history-table">
+                            <thead>
+                                <tr>
+                                    <th>月分</th>
+                                    <th>${currentYear - 1}年度</th>
+                                    <th>${currentYear}年度</th>
+                                    <th>増減</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${comparisonMonths.map(row => {
+                                    const delta = row.previous === null || row.current === null
+                                        ? null
+                                        : row.current - row.previous;
+                                    const deltaText = delta === null
+                                        ? "—"
+                                        : `${delta > 0 ? "+" : delta < 0 ? "−" : ""}¥${Math.abs(delta).toLocaleString()}`;
+                                    return `
+                                        <tr>
+                                            <td>${row.month}月</td>
+                                            <td class="utility-amount">${money(row.previous)}</td>
+                                            <td class="utility-amount">${money(row.current)}</td>
+                                            <td class="utility-amount">${deltaText}</td>
+                                        </tr>
+                                    `;
+                                }).join("")}
+                                <tr style="font-weight:bold;border-top:2px solid #ddd;">
+                                    <td>年度合計</td>
+                                    <td class="utility-amount">¥${previousTotal.toLocaleString()}</td>
+                                    <td class="utility-amount">¥${currentTotal.toLocaleString()}</td>
+                                    <td class="utility-amount">${differenceText}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="utility-history-hint">未入力の月は「—」で表示します。水道代は含めていません。</div>
+                </div>
+            `;
+        }
+
         Object.keys(monthMap)
         .sort((a,b)=>
             fiscalOrder.indexOf(Number(b)) -
@@ -3656,41 +3748,81 @@
         )
         .forEach(month=>{
 
-            historyList.innerHTML += `
-        <div class="card">
-        <h3>${month}月</h3>
-        </div>
-        `;
+            const monthItems = monthMap[month];
 
-            monthMap[month].forEach(item=>{
+            if(budget?.id === "utility"){
+
+                const monthTotal = monthItems.reduce(
+                    (sum,item)=>sum + Number(item.amount || 0),
+                    0
+                );
 
                 historyList.innerHTML += `
+                    <div class="card utility-history-card">
+                        <div class="utility-history-heading">
+                            <h3>${month}月分</h3>
+                            <strong>合計 ¥${monthTotal.toLocaleString()}</strong>
+                        </div>
+                        <div class="utility-history-table-wrap">
+                            <table class="utility-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>日付</th>
+                                        <th>メモ</th>
+                                        <th>金額</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${monthItems.map(item=>`
+                                        <tr onclick="editCategoryHistory('${item.id}')">
+                                            <td>${item.date || "—"}</td>
+                                            <td>${item.memo || "—"}</td>
+                                            <td class="utility-amount">¥${Number(item.amount || 0).toLocaleString()}</td>
+                                            <td class="utility-delete-cell"><button onclick="event.stopPropagation();deleteCategoryHistory('${item.id}')" aria-label="削除">🗑</button></td>
+                                        </tr>
+                                    `).join("")}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="utility-history-hint">行を押すと金額・メモを編集できます</div>
+                    </div>
+                `;
 
-        <div class="history-row">
-        <button
-        class="setting-item history-main"
-        onclick="editCategoryHistory('${item.id}')">
+            }else{
 
-            <span>
-                ${item.date}<br>
-                <small>${item.memo || ""}</small>
-            </span>
+                historyList.innerHTML += `
+                    <div class="card">
+                        <h3>${month}月</h3>
+                    </div>
+                `;
 
-            <span style="font-weight:bold;">
-                ¥${Number(item.amount).toLocaleString()}
-            </span>
+                monthItems.forEach(item=>{
 
-        </button>
+                    historyList.innerHTML += `
+                        <div class="history-row">
+                            <button
+                                class="setting-item history-main"
+                                onclick="editCategoryHistory('${item.id}')">
+                                <span>
+                                    ${item.date}<br>
+                                    <small>${item.shop ? `🏬 ${escapeHtml(item.shop)}　` : ""}${escapeHtml(item.memo || "")}</small>
+                                </span>
+                                <span style="font-weight:bold;">
+                                    ¥${Number(item.amount).toLocaleString()}
+                                </span>
+                            </button>
+                            <button
+                                class="history-delete"
+                                onclick="deleteCategoryHistory('${item.id}')">
+                                🗑
+                            </button>
+                        </div>
+                    `;
 
-        <button
-        class="history-delete"
-        onclick="deleteCategoryHistory('${item.id}')">
-            🗑
-        </button>
-        </div>
-        `;
+                });
 
-            });
+            }
 
         });
 
@@ -3750,7 +3882,7 @@
 
             openNumberModal(
                 `${found.category}を編集`,
-                (newAmount,newMemo,newDate)=>{
+                (newAmount,newMemo,newDate,extraMemo,shop)=>{
 
                     newAmount = Number(newAmount || 0);
                     if(newAmount<=0) return;
@@ -3786,6 +3918,9 @@
                     if(newMemo !== undefined){
                         found.memo = newMemo;
                     }
+                    if(foundBudget?.id === "food"){
+                        found.shop = shop || "";
+                    }
 
                     if(newDate){
                         found.date = formatInputDate(newDate);
@@ -3804,7 +3939,11 @@
                 },
                 found.memo || "",
                 found.date || "",
-                found.amount || 0
+                found.amount || 0,
+                false,
+                "",
+                foundBudget?.id === "food",
+                found.shop || ""
             );
 
         }
@@ -5241,6 +5380,29 @@
 
         let numberCallback = null;
         let numberMemo = "";
+        let numberShopEnabled = false;
+        let numberSelectedShop = "";
+        const FOOD_SHOPS = ["トライアル","薬王堂、ツルハ等","アークス","イトク","マルイチ","イオン"];
+
+        function renderNumberShopSelector(){
+            const selector = document.getElementById("numberShopSelector");
+            if(!selector) return;
+            selector.style.display = numberShopEnabled ? "block" : "none";
+            if(!numberShopEnabled) return;
+            selector.innerHTML = `
+                <div class="number-shop-label">🏬 お店（選択しなくてもOK）</div>
+                <div class="number-shop-grid">
+                    ${FOOD_SHOPS.map(shop=>`
+                        <button type="button" class="number-shop-button ${numberSelectedShop===shop ? "active" : ""}" onclick="selectNumberShop('${shop}')">${shop}</button>
+                    `).join("")}
+                </div>
+            `;
+        }
+
+        function selectNumberShop(shop){
+            numberSelectedShop = FOOD_SHOPS.includes(shop) ? shop : "";
+            renderNumberShopSelector();
+        }
 
         function updateNumberDisplay(){
 
@@ -5346,7 +5508,7 @@
         document.getElementById("paymentCancel").onclick =
             closePaymentModal;
 
-        function openNumberModal(title,callback,initialMemo="",initialDate="",initialAmount=null,showExtraMemo=false,initialExtraMemo=""){
+        function openNumberModal(title,callback,initialMemo="",initialDate="",initialAmount=null,showExtraMemo=false,initialExtraMemo="",showShopSelector=false,initialShop=""){
 
             numberValue =
                 initialAmount !== null
@@ -5362,6 +5524,10 @@
                 extraMemoInput.style.display = showExtraMemo ? "block" : "none";
                 extraMemoInput.value = String(initialExtraMemo || "");
             }
+
+            numberShopEnabled = showShopSelector === true;
+            numberSelectedShop = FOOD_SHOPS.includes(String(initialShop || "")) ? String(initialShop) : "";
+            renderNumberShopSelector();
 
             const dateInput = document.getElementById("numberDate");
 
@@ -5451,7 +5617,8 @@
                 value,
                 memo,
                 dateValue,
-                extraMemo
+                extraMemo,
+                numberSelectedShop
             );
 
         }
