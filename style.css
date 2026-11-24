@@ -651,62 +651,29 @@ strong{font-size:12px}}
 }
 
 
-/* ===== 銀行残高の履歴 ===== */
-.bank-history-button{
-  display:block;
-  width:100%;
-  margin:5px 0 0;
-  padding:7px 8px 2px;
-  border:0;
-  border-top:1px solid #f1eadf;
-  background:transparent;
-  color:var(--brown);
-  font-size:11px;
-  font-weight:800;
-  text-align:center;
+/* ===== 個別選択メニュー ===== */
+.choice-modal-box h2{
+    margin:0 0 14px;
+    text-align:center;
 }
-.bank-history-box h2{
-  margin:0 0 5px;
-  text-align:center;
+.choice-list{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
 }
-.bank-history-period{
-  margin:0 0 12px;
-  color:var(--muted);
-  font-size:12px;
-  text-align:center;
+.choice-list .setting-item{
+    min-height:58px;
+    margin:0;
 }
-.bank-history-item{
-  margin:8px 0;
-  padding:11px 12px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:#fffaf0;
+.choice-list .setting-item strong{
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
 }
-.bank-history-date{
-  margin-bottom:7px;
-  color:var(--brown);
-  font-size:12px;
-  font-weight:900;
-}
-.bank-history-line,.bank-history-total{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding:3px 0;
-  font-size:13px;
-}
-.bank-history-line strong,.bank-history-total strong{
-  font-variant-numeric:tabular-nums;
-}
-.bank-history-total{
-  margin-top:5px;
-  padding-top:7px;
-  border-top:1px solid #eadfca;
-  font-weight:900;
-}
-.bank-history-empty{
-  padding:22px 10px;
-  color:var(--muted);
-  text-align:center;
-  font-size:13px;
+.annual-history-memo{
+    display:block;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:600;
+    white-space:normal;
 }
