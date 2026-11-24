@@ -717,3 +717,25 @@ strong{font-size:12px}}
 .number-extra-memo{display:block}
 .annual-history-memo{display:block;margin-top:4px;color:var(--muted);font-size:11px;font-weight:600;white-space:normal}
 @media(max-width:390px){.number-shop-button{font-size:12px;min-height:40px;padding:6px 5px}}
+
+/* 前年・今年の比較列を色分けして見やすくする */
+.utility-history-table th.utility-year-previous,
+.utility-history-table td.utility-year-previous{
+    background:#f0f3f6;
+    color:#52616d;
+}
+.utility-history-table th.utility-year-current,
+.utility-history-table td.utility-year-current{
+    background:#fff0c2;
+    color:#634b18;
+    font-weight:900;
+}
+.utility-history-table th.utility-year-current{
+    box-shadow:inset 0 3px 0 #d7a52d;
+}
+.utility-history-table .utility-year-total td.utility-year-current{
+    background:#ffe39a;
+}
+.utility-history-table .utility-year-total td.utility-year-previous{
+    background:#e5ebf0;
+}
