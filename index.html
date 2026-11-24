@@ -134,10 +134,6 @@
 
             </div>
 
-            <button type="button" class="bank-history-button" onclick="openBankHistory()">
-                📜 銀行残高の履歴を見る
-            </button>
-
         </div>
 
         <!-- 収入入力 -->
@@ -520,14 +516,24 @@
             </button>
 
         </nav>
-        <!-- 銀行残高履歴 -->
-        <div id="bankHistoryModal" class="modal bank-history-modal" style="display:none;">
-            <div class="modal-box bank-history-box">
-                <h2>🏦 銀行残高の履歴</h2>
-                <p id="bankHistoryPeriod" class="bank-history-period"></p>
-                <div id="bankHistoryList"></div>
+        <!-- 銀行残高の個別選択 -->
+        <div id="bankEditModal" class="modal choice-modal" style="display:none;">
+            <div class="modal-box choice-modal-box">
+                <h2>🏦 変更する銀行を選択</h2>
+                <div id="bankEditOptions" class="choice-list"></div>
                 <div class="modal-buttons">
-                    <button type="button" onclick="closeBankHistory()">閉じる</button>
+                    <button type="button" onclick="closeBankSelector()">閉じる</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATM項目の個別選択 -->
+        <div id="atmEditModal" class="modal choice-modal" style="display:none;">
+            <div class="modal-box choice-modal-box">
+                <h2>🏧 ATM項目を選択</h2>
+                <div id="atmEditOptions" class="choice-list"></div>
+                <div class="modal-buttons">
+                    <button type="button" onclick="closeATMMenu()">閉じる</button>
                 </div>
             </div>
         </div>
@@ -557,6 +563,12 @@
             class="number-memo"
             type="text"
             placeholder="メモ（任意）">
+        <input
+            id="numberExtraMemo"
+            class="number-memo number-extra-memo"
+            type="text"
+            placeholder="追加メモ（任意）"
+            style="display:none;">
                 
                 <div class="number-grid">
 
