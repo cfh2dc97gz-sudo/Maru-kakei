@@ -3528,6 +3528,21 @@
             drawCategoryDetail();
         }
 
+        // 電気・水道の前年比表から、選んだ年度・月の家計簿へ移動する。
+        function goToUtilityComparisonMonth(month, fiscalYear){
+            currentMonth = Number(month);
+            currentYear = Number(fiscalYear);
+
+            load();
+            update();
+            window.lastPage = "home";
+            showPage("home");
+
+            requestAnimationFrame(()=>{
+                window.scrollTo({ top:0, behavior:"smooth" });
+            });
+        }
+
         function drawCategoryDetail(categoryId){
 
         if(categoryId){
@@ -3704,6 +3719,8 @@
 
                 return {
                     month,
+                    previousYear,
+                    thisYear,
                     previous: getUtilityTotal(previousYear),
                     current: getUtilityTotal(thisYear)
                 };
@@ -3740,9 +3757,9 @@
                             <tbody>
                                 ${comparisonMonths.map(row => `
                                     <tr>
-                                        <td>${row.month}月</td>
-                                        <td class="utility-amount utility-year-previous">${money(row.previous)}</td>
-                                        <td class="utility-amount utility-year-current">${money(row.current)}</td>
+                                        <td onclick="goToUtilityComparisonMonth(${row.month}, ${row.thisYear})" style="cursor:pointer;text-decoration:underline;">${row.month}月</td>
+                                        <td class="utility-amount utility-year-previous" onclick="goToUtilityComparisonMonth(${row.month}, ${row.previousYear})" style="cursor:pointer;text-decoration:underline;">${money(row.previous)}</td>
+                                        <td class="utility-amount utility-year-current" onclick="goToUtilityComparisonMonth(${row.month}, ${row.thisYear})" style="cursor:pointer;text-decoration:underline;">${money(row.current)}</td>
                                         <td class="utility-amount">${deltaText(row.previous, row.current)}</td>
                                     </tr>
                                 `).join("")}
